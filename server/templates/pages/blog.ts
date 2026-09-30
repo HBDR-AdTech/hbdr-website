@@ -1,3 +1,4 @@
+import { SITE_URL } from "../../config";
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
@@ -220,11 +221,11 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
       "publisher": {
         "@type": "Organization",
         "name": "HBDR",
-        "logo": { "@type": "ImageObject", "url": "https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" }
+        "logo": { "@type": "ImageObject", "url": `${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg` }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": `https://hbdr-website.matt-ortolani.workers.dev/blog/${post.slug}`
+        "@id": `${SITE_URL}/blog/${post.slug}`
       }
     },
   });

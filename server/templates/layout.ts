@@ -1,3 +1,4 @@
+import { SITE_URL } from "../config";
 export interface LayoutOptions {
   title: string;
   description: string;
@@ -22,8 +23,9 @@ function renderHead(options: LayoutOptions): string {
   <meta property="og:title" content="${options.ogTitle || options.title}" />
   <meta property="og:description" content="${options.ogDescription || options.description}" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" />
-  <meta property="og:url" content="https://hbdr-website.matt-ortolani.workers.dev${options.canonicalPath || '/'}" />
+  <meta property="og:image" content="${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" />
+  <meta property="og:url" content="${SITE_URL}${options.canonicalPath || '/'}" />
+  <link rel="canonical" href="${SITE_URL}${options.canonicalPath || '/'}" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="${options.ogTitle || options.title}" />
   <meta name="twitter:description" content="${options.ogDescription || options.description}" />
@@ -40,8 +42,8 @@ function renderHead(options: LayoutOptions): string {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "HBDR",
-      "url": "https://hbdr-website.matt-ortolani.workers.dev",
-      "logo": "https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg",
+      "url": SITE_URL,
+      "logo": `${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg`,
       "description": "Global leader in ad monetization and header bidding solutions.",
       "sameAs": [
         "https://linkedin.com/company/hbdr",
@@ -57,7 +59,7 @@ function renderHead(options: LayoutOptions): string {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "HBDR",
-      "url": "https://hbdr-website.matt-ortolani.workers.dev"
+      "url": SITE_URL
     },
     ...(Array.isArray(options.jsonLd) ? options.jsonLd : options.jsonLd ? [options.jsonLd] : [])
   ])}</script>
