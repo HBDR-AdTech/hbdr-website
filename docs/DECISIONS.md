@@ -26,3 +26,11 @@ Supersedes: the rollback note in D-001 that relied on Resend.
 ## D-005 — 2026-09-30 — Matt — Company claims used on the site
 
 HBDR was founded in 2015. "25+ years" refers only to the team's combined experience. HBDR serves 1B+ impressions per month (never "daily"); 1T+ is total ads served through HBDR's pipes. Comparisons never name a competitor; use generic alternatives ("Typical Ad Network", "DIY In-House Setup"). The partner logo strip is titled "Integrated Demand Partners".
+
+## D-006 — 2026-09-30 — Matt — Weekly blog backfill, bylined HBDR Research
+
+The blog carries one post per week from January 2025 on. New posts are bylined "HBDR Research" (no invented people). Every named event, figure or ruling must be verifiable and dated on or before the post's date; posts never invent HBDR news, clients or performance figures (D-005 facts only). This is a one-time backfill through 2026-09-28; there is no scheduled writer for future weeks.
+
+## D-007 — 2026-09-30 — Matt — Resend DNS removed
+
+The Resend sending records on hbdr.com (`resend._domainkey` TXT, `send.hbdr.com` MX and SPF to Amazon SES) were deleted. Only Cloudflare Email Sending (`cf-bounce`) remains as an outbound path for the website (D-004).
