@@ -31,7 +31,7 @@ export function renderCtvOttPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Capabilities</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">End-to-End CTV Monetization</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">From ad pod management to audience targeting, everything you need to monetize streaming content.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">From ad pod management to audience targeting, everything you need to monetize streaming content.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8">
@@ -40,10 +40,10 @@ export function renderCtvOttPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Server-Side Ad Insertion (SSAI)</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
             Ads are stitched directly into the content stream at the manifest level, delivering a seamless viewing experience identical to linear TV. SSAI eliminates buffering between content and ads, prevents ad blocking, and supports all major streaming protocols including HLS and DASH.
           </p>
-          <ul class="space-y-2 text-white/40 text-[0.9375rem]">
+          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Broadcast-quality ad transitions</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Ad-block resistant delivery</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> HLS, DASH, and CMAF support</li>
@@ -54,10 +54,10 @@ export function renderCtvOttPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Ad Pod Management</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
             Intelligent ad pod construction with competitive separation, frequency capping, and optimal pod length configuration. Our system dynamically adjusts pre-roll, mid-roll, and post-roll positions based on content duration, viewer engagement, and revenue optimization models.
           </p>
-          <ul class="space-y-2 text-white/40 text-[0.9375rem]">
+          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Dynamic pod length optimization</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Competitive separation rules</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Viewer-centric frequency capping</li>
@@ -74,7 +74,7 @@ export function renderCtvOttPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Platform Features</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Built for Streaming Scale</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Enterprise features that power the biggest names in streaming.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Enterprise features that power the biggest names in streaming.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -88,7 +88,7 @@ export function renderCtvOttPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

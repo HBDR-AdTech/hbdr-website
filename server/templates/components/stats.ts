@@ -11,7 +11,7 @@ export function renderStatsSection(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6">
           <span class="text-gradient">Delivering Results</span> <span class="text-gradient-accent italic">at Scale</span>
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           Numbers that speak for themselves.
         </p>
       </div>
@@ -37,7 +37,7 @@ export function renderStatsSection(): string {
             ${stat.value}
           </div>
           <div class="text-[var(--accent)] font-semibold mb-1">${stat.label}</div>
-          <div class="text-sm text-white/30">${stat.sub}</div>
+          <div class="text-sm text-white/50">${stat.sub}</div>
         </div>`
           )
           .join("")}

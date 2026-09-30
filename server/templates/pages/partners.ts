@@ -70,7 +70,7 @@ export function renderPartnersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">World-Class Demand Ecosystem</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">HBDR connects publishers to the world's largest demand sources, ensuring maximum competition for every impression and the highest possible CPMs.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">HBDR connects publishers to the world's largest demand sources, ensuring maximum competition for every impression and the highest possible CPMs.</p>
       </div>
 
       <div class="mb-16 animate-on-scroll">
@@ -79,7 +79,7 @@ export function renderPartnersPage(): string {
           ${sspPartners.map((p, i) => `
           <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="partner-ssp-${i}">
             <h4 class="text-lg font-semibold text-white mb-2">${p.name}</h4>
-            <p class="text-white/40 text-sm leading-relaxed">${p.desc}</p>
+            <p class="text-white/55 text-sm leading-relaxed">${p.desc}</p>
           </div>`).join("")}
         </div>
       </div>
@@ -90,7 +90,7 @@ export function renderPartnersPage(): string {
           ${dspPartners.map((p, i) => `
           <div class="glass-card p-6 animate-on-scroll stagger-${(i % 4) + 1}" data-testid="partner-dsp-${i}">
             <h4 class="text-lg font-semibold text-white mb-2">${p.name}</h4>
-            <p class="text-white/40 text-sm leading-relaxed">${p.desc}</p>
+            <p class="text-white/55 text-sm leading-relaxed">${p.desc}</p>
           </div>`).join("")}
         </div>
       </div>
@@ -103,13 +103,13 @@ export function renderPartnersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Identity & Data Integrations</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Privacy-first identity solutions that help publishers maintain addressability and maximize revenue in a cookieless world.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Privacy-first identity solutions that help publishers maintain addressability and maximize revenue in a cookieless world.</p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${identityPartners.map((p, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="partner-identity-${i}">
           <h4 class="text-lg font-semibold text-white mb-2">${p.name}</h4>
-          <p class="text-white/40 text-sm leading-relaxed">${p.desc}</p>
+          <p class="text-white/55 text-sm leading-relaxed">${p.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -126,7 +126,7 @@ export function renderPartnersPage(): string {
         ${compliancePartners.map((p, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="partner-compliance-${i}">
           <h4 class="text-lg font-semibold text-white mb-2">${p.name}</h4>
-          <p class="text-white/40 text-sm leading-relaxed">${p.desc}</p>
+          <p class="text-white/55 text-sm leading-relaxed">${p.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -143,7 +143,7 @@ export function renderPartnersPage(): string {
         ${techPartners.map((p, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 4) + 1}" data-testid="partner-tech-${i}">
           <h4 class="text-lg font-semibold text-white mb-2">${p.name}</h4>
-          <p class="text-white/40 text-sm leading-relaxed">${p.desc}</p>
+          <p class="text-white/55 text-sm leading-relaxed">${p.desc}</p>
         </div>`).join("")}
       </div>
     </div>

@@ -31,7 +31,7 @@ export function renderHeaderBiddingPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Our Approach</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Client-Side & Server-Side Bidding</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">We deploy a hybrid architecture that combines the transparency of client-side auctions with the speed and scale of server-to-server connections.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">We deploy a hybrid architecture that combines the transparency of client-side auctions with the speed and scale of server-to-server connections.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8">
@@ -40,10 +40,10 @@ export function renderHeaderBiddingPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Client-Side (Prebid.js)</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
             Our optimized Prebid.js wrapper runs directly in the browser, enabling full auction transparency. We configure bid adapters for each demand partner, implement smart timeout management, and utilize price granularity settings tailored to your inventory.
           </p>
-          <ul class="space-y-2 text-white/40 text-[0.9375rem]">
+          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Full bid-level reporting and transparency</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Cookie-based audience targeting support</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Real-time bid debugging and analytics</li>
@@ -54,10 +54,10 @@ export function renderHeaderBiddingPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Server-Side (Prebid Server)</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
             Our Prebid Server infrastructure handles high-volume server-to-server connections, dramatically reducing page latency. This enables more demand partners to participate without impacting user experience or Core Web Vitals scores.
           </p>
-          <ul class="space-y-2 text-white/40 text-[0.9375rem]">
+          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Sub-100ms auction completion times</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Unlimited demand partner connections</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Zero impact on page load performance</li>
@@ -74,7 +74,7 @@ export function renderHeaderBiddingPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Key Features</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Enterprise-Grade Header Bidding</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Every feature designed to maximize yield and simplify operations.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every feature designed to maximize yield and simplify operations.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +91,7 @@ export function renderHeaderBiddingPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

@@ -34,7 +34,7 @@ export function renderManageAccountPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">How It Works</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">The MCM Parent-Child Structure</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">A transparent relationship where HBDR provides the AdX connection and you stay in the driver's seat.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">A transparent relationship where HBDR provides the AdX connection and you stay in the driver's seat.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -43,7 +43,7 @@ export function renderManageAccountPage(): string {
             <span class="text-2xl font-bold text-white/90">1</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">MCM Invitation</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             HBDR sends an MCM invitation from our Google Ad Manager 360 parent account to your GAM network. You accept the invitation directly inside your own GAM — a simple, one-click approval.
           </p>
         </div>
@@ -52,7 +52,7 @@ export function renderManageAccountPage(): string {
             <span class="text-2xl font-bold text-white/90">2</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">AdX Demand Flows In</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             Once the MCM link is active, Google Ad Exchange demand from HBDR's parent account is made available to compete in your ad auctions. AdX line items appear inside your GAM, competing alongside your existing header bidding, direct deals, and other programmatic partners.
           </p>
         </div>
@@ -61,7 +61,7 @@ export function renderManageAccountPage(): string {
             <span class="text-2xl font-bold text-white/90">3</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">You Stay in Control</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             You continue to manage your own GAM — your ad units, line item priorities, targeting, reporting, and yield strategy remain entirely under your control. HBDR provides the AdX connection; you run the show.
           </p>
         </div>
@@ -76,7 +76,7 @@ export function renderManageAccountPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Benefits</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why Publishers Choose HBDR MA</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Access premium Google AdX demand without changing how you run your ads.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Access premium Google AdX demand without changing how you run your ads.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -93,7 +93,7 @@ export function renderManageAccountPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -148,7 +148,7 @@ export function renderManageAccountPage(): string {
         ].map((faq, i) => `
         <div class="glass-card p-6 animate-on-scroll" data-testid="ma-faq-${i}">
           <h3 class="text-lg font-semibold text-white mb-3">${faq.q}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${faq.a}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${faq.a}</p>
         </div>`).join("")}
       </div>
     </div>

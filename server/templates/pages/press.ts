@@ -26,7 +26,7 @@ export function renderPressPage(): string {
             <span class="glass-tag text-xs">${pr.date}</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">${pr.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${pr.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${pr.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -41,7 +41,7 @@ export function renderPressPage(): string {
         <div class="glass-card p-8 animate-on-scroll" data-testid="card-media-contact">
           <div class="glass-tag mb-6">Media Contact</div>
           <h3 class="text-2xl font-bold text-white mb-4">Get in Touch</h3>
-          <p class="text-white/40 leading-relaxed mb-6">
+          <p class="text-white/55 leading-relaxed mb-6">
             For press inquiries, interview requests, or media partnerships, please reach out to our communications team.
           </p>
           <div class="space-y-4">
@@ -59,10 +59,10 @@ export function renderPressPage(): string {
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-brand-assets">
           <div class="glass-tag mb-6">Brand Assets</div>
           <h3 class="text-2xl font-bold text-white mb-4">Media Kit</h3>
-          <p class="text-white/40 leading-relaxed mb-6">
+          <p class="text-white/55 leading-relaxed mb-6">
             Download our official logos, brand guidelines, and media assets for use in press coverage and publications. All assets are available in multiple formats and resolutions.
           </p>
-          <p class="text-white/40 leading-relaxed">
+          <p class="text-white/55 leading-relaxed">
             For custom brand asset requests or high-resolution images, please contact our media team at press@hbdr.com.
           </p>
         </div>

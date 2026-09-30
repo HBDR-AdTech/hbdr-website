@@ -31,7 +31,7 @@ export function renderInAppAdsPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Ad Formats</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Formats That Perform</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Every format optimized for engagement, revenue, and user retention.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every format optimized for engagement, revenue, and user retention.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -46,7 +46,7 @@ export function renderInAppAdsPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
