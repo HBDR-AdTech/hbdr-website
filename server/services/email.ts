@@ -1,5 +1,4 @@
-// Unified email notification service
-// Works via direct Resend API fetch (no npm dependency needed in Workers)
+// Lead/support notifications via the Cloudflare Email Sending binding (see wrangler.toml [[send_email]])
 
 import { sanitizeText } from "../middleware/sanitize";
 import { EMAIL_FROM, CONTACT_NOTIFY_EMAIL, SUPPORT_NOTIFY_EMAIL } from "../config";
@@ -57,7 +56,7 @@ function buildDetailRows(data: ContactNotificationData): string {
 }
 
 export async function sendContactNotification(
-  apiKey: string,
+  mailer: SendEmail,
   data: ContactNotificationData
 ): Promise<boolean> {
   try {
@@ -92,29 +91,18 @@ export async function sendContactNotification(
 
     const toAddress = isSupport ? SUPPORT_NOTIFY_EMAIL : CONTACT_NOTIFY_EMAIL;
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: EMAIL_FROM,
-        to: [toAddress],
-        reply_to: data.email,
-        subject: emailSubject,
-        html: htmlContent,
-      }),
+    const { messageId } = await mailer.send({
+      from: EMAIL_FROM,
+      to: toAddress,
+      replyTo: data.email,
+      subject: emailSubject,
+      html: htmlContent,
     });
 
-    if (!res.ok) {
-      const body = await res.text();
-      console.error(`Resend API error (${res.status}): ${body}`);
-      console.error(`From: ${EMAIL_FROM}, To: ${toAddress}`);
-      return false;
-    }
-
-    console.log(`Email sent: ${sourceLabel} from ${safeSubjectName} (${sanitizeText(data.email)}) → ${toAddress}`);
+    console.log(`Email sent ${messageId}: ${sourceLabel} from ${safeSubjectName} (${sanitizeText(data.email)}) → ${toAddress}`);
     return true;
   } catch (error) {
-    console.error("Failed to send email notification:", error);
+    console.error(`Failed to send email notification (from ${EMAIL_FROM}):`, error);
     return false;
   }
 }
