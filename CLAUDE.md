@@ -153,6 +153,7 @@ wrangler secret put ADMIN_PASSWORD
 - Blog read time estimates (WPM-based, shown on cards and post pages)
 - Blog cover image support (cards + post hero)
 - Blog related posts (up to 3, same-category prioritized)
+- Blog backfill: 87 weekly posts 2025-02-03..2026-09-28 in `seed/blog-backfill-2025-2026.sql` (idempotent on slug; D-006)
 - CI/CD: production deploy workflow for main branch
 - Tailwind CSS v4 build step (replaces CDN — `src/styles/main.css` → `public/assets/styles.css`)
 - DaisyUI v5 (via `@plugin` directive, replaces CDN)
