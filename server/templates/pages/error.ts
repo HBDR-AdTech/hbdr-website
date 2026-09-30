@@ -13,14 +13,14 @@ export function render404Page(): string {
   const linkGrid = links.map(link => `
     <a href="${link.href}" class="glass-card p-5 flex items-center gap-3 group" data-testid="link-404-${link.label.toLowerCase()}">
       <div class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--accent)]/10 transition-colors">
-        <svg class="w-5 h-5 text-white/40 group-hover:text-[var(--accent)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">${link.icon}</svg>
+        <svg class="w-5 h-5 text-white/55 group-hover:text-[var(--accent)] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">${link.icon}</svg>
       </div>
       <span class="text-sm font-medium text-white/60 group-hover:text-white transition-colors">${link.label}</span>
     </a>
   `).join("");
 
   const content = `
-  <section class="relative min-h-[80vh] flex items-center justify-center py-24" data-testid="error-404">
+  <section class="relative min-h-[80vh] flex items-center justify-center py-24 overflow-hidden" data-testid="error-404">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -31,7 +31,7 @@ export function render404Page(): string {
         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4" style="animation: fadeInUp 0.6s 0.1s ease both">
           Page Not Found
         </h1>
-        <p class="text-lg text-white/40 max-w-lg mx-auto mb-12" style="animation: fadeInUp 0.6s 0.2s ease both">
+        <p class="text-lg text-white/55 max-w-lg mx-auto mb-12" style="animation: fadeInUp 0.6s 0.2s ease both">
           The page you're looking for doesn't exist or has been moved. Here are some helpful links to get you back on track.
         </p>
       </div>
@@ -58,7 +58,7 @@ export function render404Page(): string {
 
 export function render500Page(): string {
   const content = `
-  <section class="relative min-h-[80vh] flex items-center justify-center py-24" data-testid="error-500">
+  <section class="relative min-h-[80vh] flex items-center justify-center py-24 overflow-hidden" data-testid="error-500">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -69,7 +69,7 @@ export function render500Page(): string {
         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4" style="animation: fadeInUp 0.6s 0.1s ease both">
           Something Went Wrong
         </h1>
-        <p class="text-lg text-white/40 max-w-lg mx-auto mb-12" style="animation: fadeInUp 0.6s 0.2s ease both">
+        <p class="text-lg text-white/55 max-w-lg mx-auto mb-12" style="animation: fadeInUp 0.6s 0.2s ease both">
           We're experiencing a temporary issue. Please try again in a moment, or reach out to our support team if the problem persists.
         </p>
       </div>

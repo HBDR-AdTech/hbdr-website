@@ -1,12 +1,9 @@
 // Site-wide configuration constants
-export const SITE_URL = "https://hbdr-website.matt-ortolani.workers.dev";
+export const SITE_URL = "https://hbdr.com";
 export const SITE_NAME = "HBDR";
 export const CONTACT_EMAIL = "contact@hbdr.com";
-// IMPORTANT: Using Resend sandbox sender until hbdr.com domain is verified in Resend dashboard.
-// Sandbox sender (onboarding@resend.dev) only delivers to the Resend account owner's email.
-// Once hbdr.com is verified with DNS records (SPF, DKIM), change this to:
-//   export const EMAIL_FROM = "HBDR Leads <leads@hbdr.com>";
-export const EMAIL_FROM = "HBDR Leads <onboarding@resend.dev>";
+// hbdr.com is onboarded for Cloudflare Email Sending (DKIM selector cf-bounce)
+export const EMAIL_FROM = "HBDR Website <noreply@hbdr.com>";
 
 // Where notification emails are sent (these receive the lead notifications)
 export const CONTACT_NOTIFY_EMAIL = "contact@hbdr.com";

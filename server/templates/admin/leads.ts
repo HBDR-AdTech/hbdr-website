@@ -25,7 +25,7 @@ export function renderAdminLoginPage(error?: string, csrfToken?: string): string
           </svg>
         </div>
         <h1 class="text-3xl font-bold text-white mb-2">HBDR Admin</h1>
-        <p class="text-white/40">Sign in to manage your leads and content</p>
+        <p class="text-white/55">Sign in to manage your leads and content</p>
       </div>
 
       <div class="glass-card p-8">
@@ -37,12 +37,12 @@ export function renderAdminLoginPage(error?: string, csrfToken?: string): string
         <form method="POST" action="/admin/login" class="space-y-6" data-testid="admin-login-form">
           ${csrfToken ? `<input type="hidden" name="_csrf" value="${csrfToken}" />` : ""}
           <div>
-            <label class="block text-sm font-medium text-white/60 mb-2">Username</label>
-            <input type="text" name="username" required autocomplete="username" class="glass-input w-full px-4 py-3" placeholder="admin" data-testid="input-admin-username" />
+            <label for="input-admin-username" class="block text-sm font-medium text-white/60 mb-2">Username</label>
+            <input id="input-admin-username" type="text" name="username" required autocomplete="username" class="glass-input w-full px-4 py-3" placeholder="admin" data-testid="input-admin-username" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-white/60 mb-2">Password</label>
-            <input type="password" name="password" required autocomplete="current-password" class="glass-input w-full px-4 py-3" placeholder="Enter password" data-testid="input-admin-password" />
+            <label for="input-admin-password" class="block text-sm font-medium text-white/60 mb-2">Password</label>
+            <input id="input-admin-password" type="password" name="password" required autocomplete="current-password" class="glass-input w-full px-4 py-3" placeholder="Enter password" data-testid="input-admin-password" />
           </div>
           <button type="submit" class="glass-btn w-full py-3 text-center" data-testid="button-admin-login">
             Sign In
@@ -50,8 +50,8 @@ export function renderAdminLoginPage(error?: string, csrfToken?: string): string
         </form>
       </div>
 
-      <p class="text-center text-white/20 text-sm mt-6">
-        <a href="/" class="hover:text-white/40 transition-colors">Back to HBDR.com</a>
+      <p class="text-center text-white/45 text-sm mt-6">
+        <a href="/" class="hover:text-white/55 transition-colors">Back to HBDR.com</a>
       </p>
     </div>
   </div>`;
@@ -91,7 +91,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="lead-row-${lead.id}">
       <td class="py-4 px-4">
         <div class="font-medium text-white">${lead.name}</div>
-        <div class="text-sm text-white/40">${lead.email}</div>
+        <div class="text-sm text-white/55">${lead.email}</div>
       </td>
       <td class="py-4 px-4 text-white/60">${lead.company}</td>
       <td class="py-4 px-4 text-white/60 text-sm">${impressions}</td>
@@ -124,7 +124,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           </select>
         </div>
       </td>
-      <td class="py-4 px-4 text-white/40 text-sm">${date}</td>
+      <td class="py-4 px-4 text-white/55 text-sm">${date}</td>
       <td class="py-4 px-4">
         ${lead.message ? `
         <button
@@ -133,7 +133,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           data-testid="button-view-message-${lead.id}"
         >
           View
-        </button>` : '<span class="text-white/20 text-sm">-</span>'}
+        </button>` : '<span class="text-white/45 text-sm">-</span>'}
       </td>
     </tr>`;
   }).join("");
@@ -153,14 +153,14 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-6">
             <a href="/" class="text-xl font-bold text-white" data-testid="link-admin-home">HBDR</a>
-            <span class="text-white/20">|</span>
+            <span class="text-white/45">|</span>
             <span class="text-white/60 font-medium">Admin Panel</span>
           </div>
           <div class="flex items-center gap-4">
             <a href="/admin/leads" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-white/50 hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
             <span class="text-white/10">|</span>
-            <a href="/admin/logout" class="text-sm text-white/40 hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
+            <a href="/admin/logout" class="text-sm text-white/55 hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 class="text-3xl font-bold text-white" data-testid="heading-leads">Contact Leads</h1>
-          <p class="text-white/40 mt-1">${totalLeads} total leads</p>
+          <p class="text-white/55 mt-1">${totalLeads} total leads</p>
         </div>
         <a href="/admin/leads/export" class="inline-flex items-center gap-2 glass-btn px-5 py-2.5 text-sm" data-testid="button-export-csv">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,23 +184,23 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
         <div class="glass-card p-4 text-center" data-testid="stat-total">
           <div class="text-2xl font-bold text-white">${totalLeads}</div>
-          <div class="text-xs text-white/40 mt-1">Total</div>
+          <div class="text-xs text-white/55 mt-1">Total</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-new">
           <div class="text-2xl font-bold text-blue-400">${newLeads}</div>
-          <div class="text-xs text-white/40 mt-1">New</div>
+          <div class="text-xs text-white/55 mt-1">New</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-contacted">
           <div class="text-2xl font-bold text-yellow-400">${contactedLeads}</div>
-          <div class="text-xs text-white/40 mt-1">Contacted</div>
+          <div class="text-xs text-white/55 mt-1">Contacted</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-qualified">
           <div class="text-2xl font-bold text-[#2BDE73]">${qualifiedLeads}</div>
-          <div class="text-xs text-white/40 mt-1">Qualified</div>
+          <div class="text-xs text-white/55 mt-1">Qualified</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-converted">
           <div class="text-2xl font-bold text-purple-400">${convertedLeads}</div>
-          <div class="text-xs text-white/40 mt-1">Converted</div>
+          <div class="text-xs text-white/55 mt-1">Converted</div>
         </div>
       </div>
 
@@ -231,7 +231,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
         <div class="overflow-x-auto">
           <table class="w-full text-left" data-testid="table-leads">
             <thead>
-              <tr class="border-b border-white/5 text-white/40 text-xs uppercase tracking-wider">
+              <tr class="border-b border-white/5 text-white/55 text-xs uppercase tracking-wider">
                 <th class="py-3 px-4 font-medium">Contact</th>
                 <th class="py-3 px-4 font-medium">Company</th>
                 <th class="py-3 px-4 font-medium">Volume</th>
@@ -242,7 +242,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
               </tr>
             </thead>
             <tbody>
-              ${leadRows || '<tr><td colspan="7" class="py-12 text-center text-white/30">No leads yet. They will appear here when someone fills out a contact form.</td></tr>'}
+              ${leadRows || '<tr><td colspan="7" class="py-12 text-center text-white/50">No leads yet. They will appear here when someone fills out a contact form.</td></tr>'}
             </tbody>
           </table>
         </div>
@@ -260,7 +260,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <div class="glass-card p-8 max-w-lg w-full" @click.stop data-testid="modal-message">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-white" x-text="'Message from ' + modalName"></h3>
-          <button @click="showMessageModal = false" class="text-white/40 hover:text-white transition-colors" data-testid="button-close-modal">
+          <button @click="showMessageModal = false" class="text-white/55 hover:text-white transition-colors" data-testid="button-close-modal">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>

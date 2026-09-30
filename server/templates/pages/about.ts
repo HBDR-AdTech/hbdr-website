@@ -33,7 +33,7 @@ export function renderAboutPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Our Journey</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Story</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Key milestones that shaped who we are today.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Key milestones that shaped who we are today.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8 relative">
@@ -46,7 +46,7 @@ export function renderAboutPage(): string {
         <div class="glass-card p-8 text-center relative animate-on-scroll stagger-${i + 1}" data-testid="timeline-card-${i}">
           <div class="step-number mx-auto mb-6">${item.step}</div>
           <h3 class="text-xl font-semibold text-white mb-4">${item.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${item.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${item.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -60,7 +60,7 @@ export function renderAboutPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">What We Stand For</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Values</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">The principles that guide everything we do.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">The principles that guide everything we do.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -75,7 +75,7 @@ export function renderAboutPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${v.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${v.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${v.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${v.description}</p>
         </div>`).join("")}
       </div>
     </div>

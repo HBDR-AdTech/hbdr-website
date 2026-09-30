@@ -10,9 +10,12 @@ directory = "./public"
 [vars]
 ENVIRONMENT = "production"
 # ADMIN_PASSWORD is set as a secret — run: wrangler secret put ADMIN_PASSWORD
-# RESEND_API_KEY is set as a secret — run: wrangler secret put RESEND_API_KEY
 
 [[d1_databases]]
 binding = "DB"
 database_name = "hbdr-website-database"
 database_id = "141aed40-1a51-46ac-a795-31e1c913a626"
+
+# Cloudflare Email Sending; hbdr.com onboarded as sending domain
+[[send_email]]
+name = "EMAIL"

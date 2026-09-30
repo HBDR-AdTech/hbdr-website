@@ -14,7 +14,7 @@ type Env = {
   DB: D1Database;
   ADMIN_PASSWORD: string;
   ENVIRONMENT: string;
-  RESEND_API_KEY?: string;
+  EMAIL: SendEmail;
 };
 
 const app = new Hono<{ Bindings: Env }>();
@@ -29,7 +29,7 @@ function getStorage(c: any) {
 // Register all routes from shared modules
 registerPageRoutes(app, getStorage);
 registerApiRoutes(app, getStorage, (c) => ({
-  resendApiKey: c.env.RESEND_API_KEY,
+  email: c.env.EMAIL,
   db: c.env.DB,
 }));
 registerAdminRoutes(app, getStorage, (c) => ({

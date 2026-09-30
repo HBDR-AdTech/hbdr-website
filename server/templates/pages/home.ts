@@ -5,13 +5,13 @@ export function renderPage(): string {
   const homepageContent = `
 
   <!-- ========== HERO ========== -->
-  <section class="relative min-h-screen flex items-center overflow-hidden liquid-gradient" data-testid="hero-section">
+  <section class="relative lg:min-h-screen flex items-center overflow-hidden liquid-gradient" data-testid="hero-section">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 lg:pt-32 lg:pb-28">
-      <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 lg:pt-32 lg:pb-28">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div class="text-center lg:text-left">
           <div class="glass-tag mb-8" style="animation: fadeInUp 0.6s ease forwards">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,16 +44,16 @@ export function renderPage(): string {
 
           <div class="grid grid-cols-3 gap-6 mt-14" style="animation: fadeInUp 0.6s 0.5s ease both">
             <div class="text-center lg:text-left">
-              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-revenue"><span data-count="50" data-suffix="%+">0%+</span></div>
-              <div class="text-xs sm:text-sm text-white/40 mt-1">Revenue Increase</div>
+              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-revenue"><span data-count="50" data-suffix="%+">50%+</span></div>
+              <div class="text-xs sm:text-sm text-white/55 mt-1">Revenue Increase</div>
             </div>
             <div class="text-center lg:text-left">
-              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-publishers"><span data-count="500" data-suffix="+">0+</span></div>
-              <div class="text-xs sm:text-sm text-white/40 mt-1">Publishers</div>
+              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-publishers"><span data-count="500" data-suffix="+">500+</span></div>
+              <div class="text-xs sm:text-sm text-white/55 mt-1">Publishers</div>
             </div>
             <div class="text-center lg:text-left">
-              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-impressions"><span data-count="1" data-suffix="B+">0B+</span></div>
-              <div class="text-xs sm:text-sm text-white/40 mt-1">Daily Impressions</div>
+              <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-impressions"><span data-count="1" data-suffix="B+">1B+</span></div>
+              <div class="text-xs sm:text-sm text-white/55 mt-1">Daily Impressions</div>
             </div>
           </div>
         </div>
@@ -70,23 +70,23 @@ export function renderPage(): string {
 
             <div class="grid grid-cols-2 gap-3 mb-6">
               <div class="metric-card">
-                <div class="text-white/40 text-xs mb-1">Today's Revenue</div>
-                <div class="text-xl font-bold text-white"><span data-count="12847" data-prefix="$">$0</span></div>
+                <div class="text-white/55 text-xs mb-1">Today's Revenue</div>
+                <div class="text-xl font-bold text-white"><span data-count="12847" data-prefix="$">$12,847</span></div>
                 <div class="text-green-400 text-xs mt-1">+23%</div>
               </div>
               <div class="metric-card">
-                <div class="text-white/40 text-xs mb-1">Fill Rate</div>
-                <div class="text-xl font-bold text-white"><span data-count="94.2" data-suffix="%">0.0%</span></div>
+                <div class="text-white/55 text-xs mb-1">Fill Rate</div>
+                <div class="text-xl font-bold text-white"><span data-count="94.2" data-suffix="%">94.2%</span></div>
                 <div class="text-green-400 text-xs mt-1">+5.1%</div>
               </div>
               <div class="metric-card">
-                <div class="text-white/40 text-xs mb-1">eCPM</div>
-                <div class="text-xl font-bold text-white"><span data-count="4.82" data-prefix="$">$0.00</span></div>
+                <div class="text-white/55 text-xs mb-1">eCPM</div>
+                <div class="text-xl font-bold text-white"><span data-count="4.82" data-prefix="$">$4.82</span></div>
                 <div class="text-green-400 text-xs mt-1">+18%</div>
               </div>
               <div class="metric-card">
-                <div class="text-white/40 text-xs mb-1">Impressions</div>
-                <div class="text-xl font-bold text-white"><span data-count="2.7" data-suffix="M">0.0M</span></div>
+                <div class="text-white/55 text-xs mb-1">Impressions</div>
+                <div class="text-xl font-bold text-white"><span data-count="2.7" data-suffix="M">2.7M</span></div>
                 <div class="text-green-400 text-xs mt-1">+31%</div>
               </div>
             </div>
@@ -117,99 +117,96 @@ export function renderPage(): string {
   <!-- ========== LOGO CAROUSEL ========== -->
   <section class="py-16 overflow-hidden" data-testid="logo-carousel">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-      <p class="text-center text-white/30 text-sm font-medium uppercase tracking-widest animate-on-scroll">
+      <p class="text-center text-white/50 text-sm font-medium uppercase tracking-widest animate-on-scroll">
         Trusted by Leading Advertisers Worldwide
       </p>
     </div>
     <div class="space-y-4">
       ${(() => {
         const row1 = [
-          { name: "Verve", domain: "verve.com", color: "#6C5CE7" },
-          { name: "AppLovin", domain: "applovin.com", color: "#1A73E8" },
-          { name: "Sovrn", domain: "sovrn.com", color: "#00C9A7" },
-          { name: "Xandr", domain: "xandr.com", color: "#E94E77" },
-          { name: "OpenX", domain: "openx.com", color: "#39B54A" },
-          { name: "Index Exchange", domain: "indexexchange.com", color: "#4A90D9" },
-          { name: "Magnite", domain: "magnite.com", color: "#8B5CF6" },
-          { name: "Google AdX", domain: "google.com", color: "#FBBC04" },
-          { name: "TripleLift", domain: "triplelift.com", color: "#00BCD4" },
-          { name: "ShareThrough", domain: "sharethrough.com", color: "#FF6B6B" },
-          { name: "Equativ", domain: "equativ.com", color: "#2ECC71" },
+          { name: "Verve", color: "#6C5CE7" },
+          { name: "AppLovin", color: "#1A73E8" },
+          { name: "Sovrn", color: "#00C9A7" },
+          { name: "Xandr", color: "#E94E77" },
+          { name: "OpenX", color: "#39B54A" },
+          { name: "Index Exchange", color: "#4A90D9" },
+          { name: "Magnite", color: "#8B5CF6" },
+          { name: "Google AdX", color: "#FBBC04" },
+          { name: "TripleLift", color: "#00BCD4" },
+          { name: "ShareThrough", color: "#FF6B6B" },
+          { name: "Equativ", color: "#2ECC71" },
         ];
         const row2 = [
-          { name: "BidSwitch", domain: "bidswitch.com", color: "#3498DB" },
-          { name: "InMobi", domain: "inmobi.com", color: "#1ABC9C" },
-          { name: "Amazon Publisher Services", domain: "amazon.com", color: "#FF9900" },
-          { name: "Taboola", domain: "taboola.com", color: "#0066FF" },
-          { name: "Dianomi", domain: "dianomi.com", color: "#E74C3C" },
-          { name: "Criteo", domain: "criteo.com", color: "#F47521" },
-          { name: "PubMatic", domain: "pubmatic.com", color: "#00B8D9" },
-          { name: "MGID", domain: "mgid.com", color: "#9B59B6" },
-          { name: "Digital Turbine", domain: "digitalturbine.com", color: "#2980B9" },
-          { name: "Liftoff", domain: "liftoff.io", color: "#E91E63" },
-          { name: "Bidmachine", domain: "bidmachine.io", color: "#27AE60" },
+          { name: "BidSwitch", color: "#3498DB" },
+          { name: "InMobi", color: "#1ABC9C" },
+          { name: "Amazon Publisher Services", color: "#FF9900" },
+          { name: "Taboola", color: "#0066FF" },
+          { name: "Dianomi", color: "#E74C3C" },
+          { name: "Criteo", color: "#F47521" },
+          { name: "PubMatic", color: "#00B8D9" },
+          { name: "MGID", color: "#9B59B6" },
+          { name: "Digital Turbine", color: "#2980B9" },
+          { name: "Liftoff", color: "#E91E63" },
+          { name: "Bidmachine", color: "#27AE60" },
         ];
         const row3 = [
-          { name: "Affinity Global", domain: "affinityglobal.com", color: "#F39C12" },
-          { name: "Pubpower", domain: "pubpower.io", color: "#00ACC1" },
-          { name: "AdMile", domain: "admile.com", color: "#E67E22" },
-          { name: "Mobilefuse", domain: "mobilefuse.com", color: "#3498DB" },
-          { name: "Bigo Ads", domain: "bigo.tv", color: "#2ECC71" },
-          { name: "Nexxen", domain: "nexxen.com", color: "#9B59B6" },
-          { name: "Freewheel", domain: "freewheel.com", color: "#1ABC9C" },
-          { name: "Beachfront", domain: "beachfront.com", color: "#E74C3C" },
-          { name: "Playbuzz", domain: "ex.co", color: "#F1C40F" },
-          { name: "Amagi", domain: "amagi.com", color: "#00BCD4" },
-          { name: "MediaFuse", domain: "mediafuse.com", color: "#FF6B6B" },
+          { name: "Affinity Global", color: "#F39C12" },
+          { name: "Pubpower", color: "#00ACC1" },
+          { name: "AdMile", color: "#E67E22" },
+          { name: "Mobilefuse", color: "#3498DB" },
+          { name: "Bigo Ads", color: "#2ECC71" },
+          { name: "Nexxen", color: "#9B59B6" },
+          { name: "Freewheel", color: "#1ABC9C" },
+          { name: "Beachfront", color: "#E74C3C" },
+          { name: "Playbuzz", color: "#F1C40F" },
+          { name: "Amagi", color: "#00BCD4" },
+          { name: "MediaFuse", color: "#FF6B6B" },
         ];
         const row4 = [
-          { name: "Mintegral", domain: "mintegral.com", color: "#6C5CE7" },
-          { name: "Improve Digital", domain: "improvedigital.com", color: "#27AE60" },
-          { name: "Algorix", domain: "algorix.co", color: "#3F51B5" },
-          { name: "Edge226", domain: "edge226.com", color: "#FF5722" },
-          { name: "SportX", domain: "sportxmedia.com", color: "#009688" },
-          { name: "Unity Technology", domain: "unity.com", color: "#E91E63" },
-          { name: "Perion", domain: "perion.com", color: "#FF9800" },
-          { name: "Optima", domain: "optimadigital.com", color: "#00ACC1" },
-          { name: "Seedtag", domain: "seedtag.com", color: "#4CAF50" },
-          { name: "Sun Media", domain: "sunmedia.tv", color: "#FFC107" },
-          { name: "TaurusX", domain: "taurusx.com", color: "#7C4DFF" },
+          { name: "Mintegral", color: "#6C5CE7" },
+          { name: "Improve Digital", color: "#27AE60" },
+          { name: "Algorix", color: "#3F51B5" },
+          { name: "Edge226", color: "#FF5722" },
+          { name: "SportX", color: "#009688" },
+          { name: "Unity Technology", color: "#E91E63" },
+          { name: "Perion", color: "#FF9800" },
+          { name: "Optima", color: "#00ACC1" },
+          { name: "Seedtag", color: "#4CAF50" },
+          { name: "Sun Media", color: "#FFC107" },
+          { name: "TaurusX", color: "#7C4DFF" },
         ];
         const row5 = [
-          { name: "SilverMob", domain: "silvermob.com", color: "#607D8B" },
-          { name: "CPMStar", domain: "cpmstar.com", color: "#FF4081" },
-          { name: "LoopMe", domain: "loopme.com", color: "#00E676" },
-          { name: "TopOn", domain: "topon.com", color: "#536DFE" },
-          { name: "Actirise", domain: "actirise.com", color: "#FF6D00" },
-          { name: "Gadsme", domain: "gadsme.com", color: "#76FF03" },
-          { name: "Nimbus Ads", domain: "adsbynimbus.com", color: "#448AFF" },
-          { name: "Pixalate", domain: "pixalate.com", color: "#D500F9" },
-          { name: "Media.net", domain: "media.net", color: "#00B0FF" },
-          { name: "AdYouLike", domain: "adyoulike.com", color: "#FF3D00" },
-          { name: "33Across", domain: "33across.com", color: "#1DE9B6" },
+          { name: "SilverMob", color: "#607D8B" },
+          { name: "CPMStar", color: "#FF4081" },
+          { name: "LoopMe", color: "#00E676" },
+          { name: "TopOn", color: "#536DFE" },
+          { name: "Actirise", color: "#FF6D00" },
+          { name: "Gadsme", color: "#76FF03" },
+          { name: "Nimbus Ads", color: "#448AFF" },
+          { name: "Pixalate", color: "#D500F9" },
+          { name: "Media.net", color: "#00B0FF" },
+          { name: "AdYouLike", color: "#FF3D00" },
+          { name: "33Across", color: "#1DE9B6" },
         ];
         const row6 = [
-          { name: "Gannett", domain: "gannett.com", color: "#2979FF" },
-          { name: "Teads.tv", domain: "teads.com", color: "#651FFF" },
-          { name: "ConnectAd", domain: "connectad.io", color: "#F50057" },
-          { name: "Vistar Media", domain: "vistarmedia.com", color: "#00C853" },
-          { name: "GumGum", domain: "gumgum.com", color: "#AA00FF" },
-          { name: "Nativo Edge", domain: "nativo.com", color: "#0091EA" },
-          { name: "E-Planning", domain: "e-planning.net", color: "#DD2C00" },
-          { name: "AdMob", domain: "admob.google.com", color: "#FFD600" },
-          { name: "AdColony", domain: "adcolony.com", color: "#304FFE" },
-          { name: "Adform", domain: "adform.com", color: "#C51162" },
-          { name: "Kevel", domain: "kevel.com", color: "#00BFA5" },
-          { name: "Underdog Media", domain: "underdogmedia.com", color: "#6200EA" },
+          { name: "Gannett", color: "#2979FF" },
+          { name: "Teads.tv", color: "#651FFF" },
+          { name: "ConnectAd", color: "#F50057" },
+          { name: "Vistar Media", color: "#00C853" },
+          { name: "GumGum", color: "#AA00FF" },
+          { name: "Nativo Edge", color: "#0091EA" },
+          { name: "E-Planning", color: "#DD2C00" },
+          { name: "AdMob", color: "#FFD600" },
+          { name: "AdColony", color: "#304FFE" },
+          { name: "Adform", color: "#C51162" },
+          { name: "Kevel", color: "#00BFA5" },
+          { name: "Underdog Media", color: "#6200EA" },
         ];
 
-        const renderPartnerCard = (p: {name: string; domain: string; color: string}) => `
+        const renderPartnerCard = (p: {name: string; color: string}) => `
           <div class="flex-shrink-0 mx-3">
             <div class="glass-card px-4 py-3 flex items-center gap-3" style="border-radius: 12px;">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden relative" style="background: ${p.color}10;">
-                <img src="https://logo.clearbit.com/${p.domain}" alt="${p.name}" class="w-7 h-7 object-contain" style="filter: brightness(1.1);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-                <div class="w-8 h-8 rounded-lg items-center justify-center text-xs font-bold absolute inset-0" style="background: ${p.color}20; color: ${p.color}; display: none;">${p.name.substring(0, 2).toUpperCase()}</div>
-              </div>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold" style="background: ${p.color}20; color: ${p.color};" aria-hidden="true">${p.name.substring(0, 2).toUpperCase()}</div>
               <span class="text-sm font-semibold text-white/60 whitespace-nowrap">${p.name}</span>
             </div>
           </div>`;
@@ -245,7 +242,7 @@ export function renderPage(): string {
           <span class="text-gradient font-bold">Complete Ad Monetization</span><br/>
           <span class="text-gradient-accent font-display italic">Platform</span>
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           From header bidding to CTV, we provide end-to-end solutions to maximize your advertising revenue.
         </p>
       </div>
@@ -308,7 +305,7 @@ export function renderPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${s.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${s.title}</h3>
-          <p class="text-white/40 mb-5 leading-relaxed text-[0.9375rem]">${s.description}</p>
+          <p class="text-white/55 mb-5 leading-relaxed text-[0.9375rem]">${s.description}</p>
           <ul class="space-y-2 mb-5">
             ${s.features.map((f) => `<li class="flex items-center gap-2.5 text-sm text-white/50"><div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>${f}</li>`).join("")}
           </ul>
@@ -334,7 +331,7 @@ export function renderPage(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
           The HBDR Advantage
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           See how our comprehensive platform compares to other solutions.
         </p>
       </div>
@@ -348,8 +345,8 @@ export function renderPage(): string {
                 <th class="p-4 lg:p-5 text-center">
                   <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent)]/20 text-[var(--accent)] text-sm font-semibold">HBDR</span>
                 </th>
-                <th class="p-4 lg:p-5 text-center text-sm text-white/30 font-medium">Competitor A</th>
-                <th class="p-4 lg:p-5 text-center text-sm text-white/30 font-medium">Competitor B</th>
+                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">Competitor A</th>
+                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">Competitor B</th>
               </tr>
             </thead>
             <tbody>
@@ -397,7 +394,7 @@ export function renderPage(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
           How It Works
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           Getting started with HBDR is simple. Our streamlined process gets you monetizing faster.
         </p>
       </div>
@@ -430,7 +427,7 @@ export function renderPage(): string {
         <div class="glass-card p-8 text-center relative animate-scale-in stagger-${i + 1}" data-testid="step-card-${i}">
           <div class="step-number mx-auto mb-6">${step.step}</div>
           <h3 class="text-xl font-semibold text-white mb-4">${step.title}</h3>
-          <p class="text-white/40 mb-6 leading-relaxed text-[0.9375rem]">${step.description}</p>
+          <p class="text-white/55 mb-6 leading-relaxed text-[0.9375rem]">${step.description}</p>
           <ul class="space-y-3">
             ${step.details
               .map(
@@ -471,7 +468,7 @@ export function renderPage(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6">
           <span class="text-gradient">Delivering Results</span> <span class="text-gradient-accent italic">at Scale</span>
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           Numbers that speak for themselves.
         </p>
       </div>
@@ -487,10 +484,10 @@ export function renderPage(): string {
             (stat, i) => `
         <div class="glass-card p-8 text-center animate-scale-in stagger-${i + 1}" data-testid="stat-card-${i}">
           <div class="text-4xl sm:text-5xl font-bold text-white mb-2">
-            <span data-count="${stat.count}" data-suffix="${stat.suffix}">0${stat.suffix}</span>
+            <span data-count="${stat.count}" data-suffix="${stat.suffix}">${stat.count}${stat.suffix}</span>
           </div>
           <div class="text-[var(--accent)] font-semibold mb-1">${stat.label}</div>
-          <div class="text-sm text-white/30">${stat.sub}</div>
+          <div class="text-sm text-white/50">${stat.sub}</div>
         </div>`
           )
           .join("")}
@@ -528,7 +525,7 @@ export function renderPage(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
           What Publishers Say
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           Don't just take our word for it.
         </p>
       </div>
@@ -554,7 +551,7 @@ export function renderPage(): string {
                   <div class="w-12 h-12 rounded-full bg-[var(--accent)]/10 flex items-center justify-center text-[var(--accent)] font-semibold text-sm" x-text="t.initials"></div>
                   <div>
                     <div class="font-semibold text-white" x-text="t.author"></div>
-                    <div class="text-sm text-white/40" x-text="t.title"></div>
+                    <div class="text-sm text-white/55" x-text="t.title"></div>
                     <div class="text-sm text-[var(--accent)]" x-text="t.company"></div>
                   </div>
                 </div>

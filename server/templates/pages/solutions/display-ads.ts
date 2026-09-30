@@ -31,7 +31,7 @@ export function renderDisplayAdsPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Ad Formats</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Premium Display Formats</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Optimized ad units that balance user experience with maximum revenue potential.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Optimized ad units that balance user experience with maximum revenue potential.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -45,7 +45,7 @@ export function renderDisplayAdsPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.desc}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -58,7 +58,7 @@ export function renderDisplayAdsPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Key Capabilities</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Intelligent Display Optimization</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Every tool you need to maximize display revenue while protecting user experience.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every tool you need to maximize display revenue while protecting user experience.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -73,7 +73,7 @@ export function renderDisplayAdsPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

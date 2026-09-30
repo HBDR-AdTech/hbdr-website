@@ -1,3 +1,4 @@
+import { SITE_URL } from "../config";
 export interface LayoutOptions {
   title: string;
   description: string;
@@ -22,8 +23,9 @@ function renderHead(options: LayoutOptions): string {
   <meta property="og:title" content="${options.ogTitle || options.title}" />
   <meta property="og:description" content="${options.ogDescription || options.description}" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" />
-  <meta property="og:url" content="https://hbdr-website.matt-ortolani.workers.dev${options.canonicalPath || '/'}" />
+  <meta property="og:image" content="${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" />
+  <meta property="og:url" content="${SITE_URL}${options.canonicalPath || '/'}" />
+  <link rel="canonical" href="${SITE_URL}${options.canonicalPath || '/'}" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="${options.ogTitle || options.title}" />
   <meta name="twitter:description" content="${options.ogDescription || options.description}" />
@@ -33,6 +35,7 @@ function renderHead(options: LayoutOptions): string {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
+  <noscript><style>.animate-on-scroll,.animate-scale-in,.comparison-row{opacity:1!important;transform:none!important}.check-animate svg path{stroke-dashoffset:0!important}</style></noscript>
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <script type="application/ld+json">${JSON.stringify([
@@ -40,8 +43,8 @@ function renderHead(options: LayoutOptions): string {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "HBDR",
-      "url": "https://hbdr-website.matt-ortolani.workers.dev",
-      "logo": "https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg",
+      "url": SITE_URL,
+      "logo": `${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg`,
       "description": "Global leader in ad monetization and header bidding solutions.",
       "sameAs": [
         "https://linkedin.com/company/hbdr",
@@ -57,7 +60,7 @@ function renderHead(options: LayoutOptions): string {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "HBDR",
-      "url": "https://hbdr-website.matt-ortolani.workers.dev"
+      "url": SITE_URL
     },
     ...(Array.isArray(options.jsonLd) ? options.jsonLd : options.jsonLd ? [options.jsonLd] : [])
   ])}</script>
@@ -68,7 +71,7 @@ function renderHead(options: LayoutOptions): string {
 // (removed ~600 lines of inline CSS — see src/styles/main.css)
 function renderNav(): string {
   return `
-  <nav class="glass-nav fixed top-0 left-0 right-0 z-50" x-data="{ mobileOpen: false, scrolled: false }"
+  <nav class="glass-nav fixed top-0 left-0 right-0 z-50" x-data="{ mobileOpen: false, scrolled: false }" x-effect="document.body.classList.toggle('overflow-hidden', mobileOpen)" @keydown.escape.window="mobileOpen = false"
        x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 20 })"
        :class="{ 'shadow-lg': scrolled }"
        data-testid="navigation">
@@ -78,9 +81,9 @@ function renderNav(): string {
           <img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" class="h-8 w-auto" data-testid="img-nav-logo" />
         </a>
 
-        <div class="hidden lg:flex items-center gap-8">
-          <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-            <button class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1 cursor-pointer" data-testid="link-solutions">
+        <div class="hidden lg:flex items-center gap-5 xl:gap-8">
+          <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.outside="open = false" @keydown.escape="open = false">
+            <button type="button" @click="open = true" :aria-expanded="open" aria-haspopup="true" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1 cursor-pointer" data-testid="link-solutions">
               Solutions
               <svg class="w-3.5 h-3.5 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
@@ -91,7 +94,7 @@ function renderNav(): string {
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 translate-y-1"
-                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg border border-white/12 bg-black/92 backdrop-blur-xl shadow-2xl py-2 z-50" data-testid="solutions-dropdown">
+                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-64 rounded-lg border border-white/12 bg-black/92 backdrop-blur-xl shadow-2xl py-2 z-50" data-testid="solutions-dropdown">
               <a href="/solutions/header-bidding" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-header-bidding">Header Bidding</a>
               <a href="/solutions/display-ads" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-display-ads">Display Ads</a>
               <a href="/solutions/video-player" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-video-player">Video Player</a>
@@ -108,8 +111,8 @@ function renderNav(): string {
           <a href="/advertisers" class="nav-link text-sm text-white/60 hover:text-white transition-colors" data-testid="link-advertisers">Advertisers</a>
           <a href="/tools" class="nav-link text-sm text-white/60 hover:text-white transition-colors" data-testid="link-tools">Tools</a>
           <a href="/partners" class="nav-link text-sm text-white/60 hover:text-white transition-colors" data-testid="link-partners">Partners</a>
-          <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-            <button class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1 cursor-pointer" data-testid="link-company">
+          <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.outside="open = false" @keydown.escape="open = false">
+            <button type="button" @click="open = true" :aria-expanded="open" aria-haspopup="true" class="text-sm text-white/60 hover:text-white transition-colors flex items-center gap-1 cursor-pointer" data-testid="link-company">
               Company
               <svg class="w-3.5 h-3.5 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
@@ -120,7 +123,7 @@ function renderNav(): string {
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 translate-y-1"
-                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 rounded-lg border border-white/12 bg-black/92 backdrop-blur-xl shadow-2xl py-2 z-50" data-testid="company-dropdown">
+                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-52 rounded-lg border border-white/12 bg-black/92 backdrop-blur-xl shadow-2xl py-2 z-50" data-testid="company-dropdown">
               <a href="/about" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-about">About Us</a>
               <a href="/how-it-works" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-how-it-works">How It Works</a>
               <a href="/trust" class="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors" data-testid="link-trust">Trust & Compliance</a>
@@ -135,11 +138,11 @@ function renderNav(): string {
 
         <div class="hidden lg:flex items-center gap-3">
           <a href="https://dashboard.hbdr.com" class="nav-link text-sm text-white/60 hover:text-white transition-colors" data-testid="link-login">Login</a>
-          <a href="/contact" class="glass-btn-outline text-sm" data-testid="button-schedule-call">Schedule a Call</a>
-          <a href="/contact" class="glass-btn text-sm" data-testid="button-get-started">Get Started</a>
+          <a href="/contact" class="glass-btn-outline text-sm whitespace-nowrap hidden xl:inline-flex" data-testid="button-schedule-call">Schedule a Call</a>
+          <a href="/contact" class="glass-btn text-sm whitespace-nowrap" data-testid="button-get-started">Get Started</a>
         </div>
 
-        <button class="lg:hidden p-2 text-white/80" @click="mobileOpen = !mobileOpen" data-testid="button-mobile-menu">
+        <button type="button" class="lg:hidden p-2 text-white/80" @click="mobileOpen = !mobileOpen" aria-label="Menu" aria-controls="mobile-menu" :aria-expanded="mobileOpen" data-testid="button-mobile-menu">
           <svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
@@ -157,10 +160,10 @@ function renderNav(): string {
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2"
-         class="lg:hidden border-t border-white/8 bg-black/92 backdrop-blur-lg overflow-y-auto" style="max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px);"
+         id="mobile-menu" class="lg:hidden border-t border-white/8 bg-black/92 backdrop-blur-lg overflow-y-auto" style="max-height: calc(100vh - 64px); max-height: calc(100dvh - 64px);"
          data-testid="mobile-menu">
       <div class="px-4 py-6 space-y-1" x-data="{ solOpen: false }">
-        <button @click="solOpen = !solOpen" class="w-full text-left py-3 text-lg text-white/80 hover:text-white transition-colors flex items-center justify-between cursor-pointer" data-testid="mobile-link-solutions">
+        <button type="button" @click="solOpen = !solOpen" :aria-expanded="solOpen" class="w-full text-left py-3 text-lg text-white/80 hover:text-white transition-colors flex items-center justify-between cursor-pointer" data-testid="mobile-link-solutions">
           Solutions
           <svg class="w-4 h-4 transition-transform" :class="solOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
@@ -185,6 +188,8 @@ function renderNav(): string {
         <a href="/trust" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-trust">Trust & Compliance</a>
         <a href="/dashboard" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-dashboard">Dashboard</a>
         <a href="/blog" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-blog">Blog</a>
+        <a href="/careers" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-careers">Careers</a>
+        <a href="/press" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-press">Press</a>
         <a href="/contact" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-contact">Contact</a>
         <a href="https://dashboard.hbdr.com" @click="mobileOpen = false" class="block py-3 text-lg text-white/80 hover:text-white transition-colors" data-testid="mobile-link-login">Login</a>
         <div class="pt-4 flex flex-col gap-3">
@@ -205,17 +210,17 @@ function renderFooter(): string {
           <div class="flex items-center mb-4">
             <img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" class="h-9 w-auto" data-testid="img-footer-logo" />
           </div>
-          <p class="text-white/30 leading-relaxed max-w-xs text-sm mb-6">
+          <p class="text-white/50 leading-relaxed max-w-xs text-sm mb-6">
             Global leader in ad monetization and header bidding solutions. Maximize your revenue with our enterprise-grade platform.
           </p>
           <div class="flex gap-3">
-            <a href="https://linkedin.com/company/hbdr" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all" data-testid="button-social-linkedin">
+            <a href="https://linkedin.com/company/hbdr" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/55 hover:text-white hover:bg-white/10 transition-all" aria-label="HBDR on LinkedIn" data-testid="button-social-linkedin">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </a>
-            <a href="https://x.com/haborMedia" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all" data-testid="button-social-twitter">
+            <a href="https://x.com/haborMedia" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/55 hover:text-white hover:bg-white/10 transition-all" aria-label="HBDR on X" data-testid="button-social-twitter">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
-            <a href="mailto:contact@hbdr.com" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all" data-testid="button-social-email">
+            <a href="mailto:contact@hbdr.com" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/55 hover:text-white hover:bg-white/10 transition-all" aria-label="Email HBDR" data-testid="button-social-email">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </a>
           </div>
@@ -235,7 +240,7 @@ function renderFooter(): string {
               { label: "MCM", href: "/solutions/mcm" },
               { label: "Manage Account", href: "/solutions/manage-account" },
               { label: "Manage Inventory", href: "/solutions/manage-inventory" },
-            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/30 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.replace(/\//g, '-').slice(1)}">${l.label}</a></li>`).join("")}
+            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/50 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.replace(/\//g, '-').slice(1)}">${l.label}</a></li>`).join("")}
           </ul>
         </div>
         <div>
@@ -249,7 +254,7 @@ function renderFooter(): string {
               { label: "Contact", href: "/contact" },
               { label: "Dashboard", href: "/dashboard" },
               { label: "Login", href: "https://dashboard.hbdr.com" },
-            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/30 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
+            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/50 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
           </ul>
         </div>
         <div>
@@ -263,7 +268,7 @@ function renderFooter(): string {
               { label: "Trust & Compliance", href: "/trust" },
               { label: "Blog", href: "/blog" },
               { label: "FAQ & Support", href: "/support" },
-            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/30 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
+            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/50 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
           </ul>
         </div>
         <div>
@@ -273,14 +278,14 @@ function renderFooter(): string {
               { label: "Privacy Policy", href: "/privacy-policy" },
               { label: "Terms & Conditions", href: "/terms" },
               { label: "GDPR & Cookie Policy", href: "/gdpr-cookie-policy" },
-            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/30 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
+            ].map((l) => `<li><a href="${l.href}" class="text-sm text-white/50 hover:text-white/60 transition-colors" data-testid="link-footer-${l.href.slice(1)}">${l.label}</a></li>`).join("")}
           </ul>
         </div>
       </div>
 
       <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-white/20 text-sm">&copy; ${new Date().getFullYear()} HBDR. All rights reserved.</p>
-        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer" data-testid="button-scroll-top">
+        <p class="text-white/45 text-sm">&copy; ${new Date().getFullYear()} HBDR. All rights reserved.</p>
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white/55 hover:text-white hover:bg-white/10 transition-all cursor-pointer" data-testid="button-scroll-top">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
         </button>
       </div>
@@ -322,13 +327,14 @@ function renderScripts(options: LayoutOptions): string {
         if (isNaN(num)) { el.textContent = target; return; }
         var duration = 2000;
         var start = performance.now();
-        var isDecimal = target.indexOf('.') !== -1;
+        var decimals = (target.split('.')[1] || '').length;
+        if (num < 10 && !decimals) return;
         function update(now) {
           var elapsed = now - start;
           var progress = Math.min(elapsed / duration, 1);
           var ease = 1 - Math.pow(1 - progress, 3);
           var current = num * ease;
-          el.textContent = prefix + (isDecimal ? current.toFixed(1) : Math.round(current).toLocaleString()) + suffix;
+          el.textContent = prefix + (decimals ? current.toFixed(decimals) : Math.round(current).toLocaleString()) + suffix;
           if (progress < 1) requestAnimationFrame(update);
         }
         requestAnimationFrame(update);

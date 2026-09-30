@@ -31,7 +31,7 @@ export function renderAdExchangePage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">AdX vs AdSense</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why AdX Outperforms AdSense</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">The key differences that drive 2-3x higher revenue for publishers.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">The key differences that drive 2-3x higher revenue for publishers.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8">
@@ -40,7 +40,7 @@ export function renderAdExchangePage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Google Ad Exchange Advantages</h3>
-          <ul class="space-y-3 text-white/40 text-[0.9375rem]">
+          <ul class="space-y-3 text-white/55 text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Real-time auction with thousands of competing buyers</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Access to premium brand and agency demand</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Granular floor pricing and blocking controls</li>
@@ -54,13 +54,13 @@ export function renderAdExchangePage(): string {
             <svg class="w-7 h-7 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 12H6"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white/60 mb-3">Google AdSense Limitations</h3>
-          <ul class="space-y-3 text-white/30 text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> Fixed pricing with limited competition</li>
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> Smaller pool of advertisers</li>
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> Limited pricing and blocking controls</li>
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> No private marketplace support</li>
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> No programmatic deal capabilities</li>
-            <li class="flex items-start gap-2"><span class="text-white/20 mt-1">&#8722;</span> Basic reporting with limited transparency</li>
+          <ul class="space-y-3 text-white/50 text-[0.9375rem]">
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Fixed pricing with limited competition</li>
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Smaller pool of advertisers</li>
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Limited pricing and blocking controls</li>
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> No private marketplace support</li>
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> No programmatic deal capabilities</li>
+            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Basic reporting with limited transparency</li>
           </ul>
         </div>
       </div>
@@ -74,7 +74,7 @@ export function renderAdExchangePage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">HBDR + AdX</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Maximize Your AdX Revenue</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Our expertise turns AdX access into maximum revenue.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Our expertise turns AdX access into maximum revenue.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +91,7 @@ export function renderAdExchangePage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

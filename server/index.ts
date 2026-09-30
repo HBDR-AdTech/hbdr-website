@@ -53,9 +53,8 @@ app.get("/assets/:filename", (c) => {
 
 // Register all routes from shared modules
 registerPageRoutes(app, getStorage);
-registerApiRoutes(app, getStorage, () => ({
-  resendApiKey: process.env.RESEND_API_KEY,
-}));
+// No email binding under Node dev; notifications only send from the Worker
+registerApiRoutes(app, getStorage, () => ({}));
 registerAdminRoutes(app, getStorage, () => ({
   adminPassword: process.env.ADMIN_PASSWORD || "hbdr2025!",
 }));

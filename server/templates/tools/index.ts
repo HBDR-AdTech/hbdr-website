@@ -9,18 +9,18 @@ function renderToolCard(id: string, title: string, description: string, icon: st
       </div>
       <div>
         <h3 class="text-2xl font-bold text-white mb-1" data-testid="title-${id}">${title}</h3>
-        <p class="text-white/40 text-sm leading-relaxed">${description}</p>
+        <p class="text-white/55 text-sm leading-relaxed">${description}</p>
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-8">
-      <div class="space-y-5">
-        <div class="text-xs font-semibold uppercase tracking-wider text-white/30 mb-3">Inputs</div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="space-y-5 min-w-0">
+        <div class="text-xs font-semibold uppercase tracking-wider text-white/50 mb-3">Inputs</div>
         ${inputs}
       </div>
 
-      <div class="glass-card-inner p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
-        <div class="text-xs font-semibold uppercase tracking-wider text-white/30 mb-5">Estimated Results</div>
+      <div class="min-w-0 p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+        <div class="text-xs font-semibold uppercase tracking-wider text-white/50 mb-5">Estimated Results</div>
         ${outputs}
       </div>
     </div>
@@ -33,13 +33,13 @@ function renderSliderInput(model: string, label: string, min: string, max: strin
     <div class="flex items-center justify-between mb-2">
       <label class="text-sm text-white/60 flex items-center gap-1.5">
         ${label}
-        <span class="cursor-help text-white/20 hover:text-white/40 transition-colors" title="${tooltip}">
+        <span class="cursor-help text-white/45 hover:text-white/55 transition-colors" title="${tooltip}">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </span>
       </label>
       <span class="text-sm font-mono text-[var(--accent)]" x-text="Number(${model}).toLocaleString() + '${unit}'"></span>
     </div>
-    <input type="range" x-model.number="${model}" min="${min}" max="${max}" step="${step}"
+    <input type="range" aria-label="${label}" x-model.number="${model}" min="${min}" max="${max}" step="${step}"
       class="w-full h-1.5 rounded-full appearance-none cursor-pointer bg-white/10
       [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
       [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--accent)]
@@ -56,12 +56,12 @@ function renderSelectInput(model: string, label: string, options: {value: string
     <div class="flex items-center justify-between mb-2">
       <label class="text-sm text-white/60 flex items-center gap-1.5">
         ${label}
-        <span class="cursor-help text-white/20 hover:text-white/40 transition-colors" title="${tooltip}">
+        <span class="cursor-help text-white/45 hover:text-white/55 transition-colors" title="${tooltip}">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </span>
       </label>
     </div>
-    <select x-model="${model}" class="glass-select w-full">
+    <select aria-label="${label}" x-model="${model}" class="glass-select w-full">
       ${optionsHtml}
     </select>
   </div>`;
@@ -71,7 +71,7 @@ function renderOutputMetric(label: string, value: string, highlight: boolean = f
   const textClass = highlight ? 'text-3xl sm:text-4xl font-bold text-[var(--accent)]' : 'text-2xl sm:text-3xl font-bold text-white';
   return `
   <div data-testid="output-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}">
-    <div class="text-xs text-white/30 mb-1">${label}</div>
+    <div class="text-xs text-white/50 mb-1">${label}</div>
     <div class="${textClass}" x-text="${value}"></div>
   </div>`;
 }
@@ -85,7 +85,7 @@ function renderHbdrUplift(currentExpr: string, projectedExpr: string, fmtFn: str
     </div>
     <div class="grid grid-cols-[1fr_auto_1fr] gap-4 items-center">
       <div class="text-center">
-        <div class="text-xs text-white/30 mb-1">Current Revenue</div>
+        <div class="text-xs text-white/50 mb-1">Current Revenue</div>
         <div class="text-xl sm:text-2xl font-bold text-white/60" x-text="${fmtFn}(${currentExpr})"></div>
       </div>
       <div class="flex flex-col items-center gap-1">
@@ -93,7 +93,7 @@ function renderHbdrUplift(currentExpr: string, projectedExpr: string, fmtFn: str
         <span class="text-xs font-mono text-[var(--accent)]">+35%</span>
       </div>
       <div class="text-center">
-        <div class="text-xs text-white/30 mb-1">With HBDR</div>
+        <div class="text-xs text-white/50 mb-1">With HBDR</div>
         <div class="text-xl sm:text-2xl font-bold text-[var(--accent)]" x-text="${fmtFn}(${projectedExpr})"></div>
       </div>
     </div>
@@ -116,7 +116,7 @@ export function renderPublisherToolsPage(): string {
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display tracking-tight mb-6 text-gradient">
           Revenue Calculators
         </h1>
-        <p class="text-lg sm:text-xl text-white/40 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-lg sm:text-xl text-white/55 max-w-3xl mx-auto leading-relaxed">
           Model your ad revenue across every inventory type. Adjust the sliders to see real-time estimates for display, video, in-app, and CTV/OTT monetization.
         </p>
       </div>
@@ -241,7 +241,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="h-px bg-white/5"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-white/20 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-white/45 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
           </div>`
         )}
       </div>
@@ -300,11 +300,11 @@ export function renderPublisherToolsPage(): string {
           <div class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <div class="text-xs text-white/30 mb-1">Current Monthly Revenue</div>
+                <div class="text-xs text-white/50 mb-1">Current Monthly Revenue</div>
                 <div class="text-xl font-bold text-white/60 line-through" x-text="fmt(currentRevenue)"></div>
               </div>
               <div>
-                <div class="text-xs text-white/30 mb-1">With Header Bidding</div>
+                <div class="text-xs text-white/50 mb-1">With Header Bidding</div>
                 <div class="text-xl font-bold text-[var(--accent)]" x-text="fmt(hbRevenue)"></div>
               </div>
             </div>
@@ -322,7 +322,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Additional Annual Revenue', "'+' + fmt(upliftAmount * 12)", true)}
             <div class="h-px bg-white/5"></div>
             ${renderHbdrUplift('hbRevenue', 'hbRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-white/20 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-white/45 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
           </div>`
         )}
       </div>
@@ -400,7 +400,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="h-px bg-white/5"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-white/20 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-white/45 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
           </div>`
         )}
       </div>
@@ -478,7 +478,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="h-px bg-white/5"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-white/20 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-white/45 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
           </div>`
         )}
       </div>
@@ -555,7 +555,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="h-px bg-white/5"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-white/20 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-white/45 mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
           </div>`
         )}
       </div>
@@ -573,17 +573,17 @@ export function renderPublisherToolsPage(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
           Get Your Personalized Revenue Audit
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed mb-10">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed mb-10">
           These calculators provide useful estimates, but every publisher's setup is unique. Our team will analyze your specific inventory, traffic patterns, and demand stack to show you exactly how much more you could be earning with HBDR.
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="/contact" class="glass-btn-primary px-10 py-4 text-lg" data-testid="link-tools-contact">
+          <a href="/contact" class="glass-btn px-10 py-4 text-lg whitespace-nowrap" data-testid="link-tools-contact">
             Request a Free Audit
             <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
           </a>
-          <a href="/publishers" class="glass-btn px-8 py-4 text-lg" data-testid="link-tools-publishers">Learn More for Publishers</a>
+          <a href="/publishers" class="glass-btn-outline px-8 py-4 text-lg" data-testid="link-tools-publishers">Learn More for Publishers</a>
         </div>
-        <p class="text-sm text-white/20 mt-8">No commitment required. Results typically delivered within 48 hours.</p>
+        <p class="text-sm text-white/45 mt-8">No commitment required. Results typically delivered within 48 hours.</p>
       </div>
     </div>
   </section>`;

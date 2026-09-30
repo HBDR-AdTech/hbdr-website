@@ -12,7 +12,7 @@ export function renderHowItWorksPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Getting Started</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Three Simple Steps</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Getting started with HBDR is simple. Our streamlined process gets you monetizing faster.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Getting started with HBDR is simple. Our streamlined process gets you monetizing faster.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8 relative">
@@ -25,7 +25,7 @@ export function renderHowItWorksPage(): string {
         <div class="glass-card p-8 text-center relative animate-on-scroll stagger-${i + 1}" data-testid="hiw-step-card-${i}">
           <div class="step-number mx-auto mb-6">${step.step}</div>
           <h3 class="text-xl font-semibold text-white mb-4">${step.title}</h3>
-          <p class="text-white/40 mb-6 leading-relaxed text-[0.9375rem]">${step.description}</p>
+          <p class="text-white/55 mb-6 leading-relaxed text-[0.9375rem]">${step.description}</p>
           <ul class="space-y-3">
             ${step.details.map((d) => `
             <li class="flex items-center gap-3 text-sm text-white/50">
@@ -48,7 +48,7 @@ export function renderHowItWorksPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">After Launch</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">What Happens Next</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Our partnership doesn't end at implementation. Here's how we continue to drive results.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Our partnership doesn't end at implementation. Here's how we continue to drive results.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -62,7 +62,7 @@ export function renderHowItWorksPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${item.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${item.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${item.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -76,7 +76,7 @@ export function renderHowItWorksPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">FAQ</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Frequently Asked Questions</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Common questions about working with HBDR.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Common questions about working with HBDR.</p>
       </div>
 
       <div class="space-y-4" x-data="{ openFaq: null }">
@@ -90,10 +90,10 @@ export function renderHowItWorksPage(): string {
         <div class="glass-card animate-on-scroll stagger-${i + 1}" data-testid="faq-card-${i}">
           <button @click="openFaq === ${i} ? openFaq = null : openFaq = ${i}" class="w-full text-left p-6 flex items-center justify-between gap-4 cursor-pointer" data-testid="faq-toggle-${i}">
             <span class="font-semibold text-white text-lg">${faq.q}</span>
-            <svg :class="openFaq === ${i} ? 'rotate-180' : ''" class="w-5 h-5 text-white/40 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg :class="openFaq === ${i} ? 'rotate-180' : ''" class="w-5 h-5 text-white/55 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div x-show="openFaq === ${i}" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="px-6 pb-6">
-            <p class="text-white/40 leading-relaxed">${faq.a}</p>
+            <p class="text-white/55 leading-relaxed">${faq.a}</p>
           </div>
         </div>`).join("")}
       </div>

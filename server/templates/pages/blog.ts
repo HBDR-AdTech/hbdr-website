@@ -1,3 +1,5 @@
+import { SITE_URL } from "../../config";
+import { sanitizeText } from "../../middleware/sanitize";
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
@@ -10,7 +12,9 @@ export function renderBlogPage(posts: BlogPostData[]): string {
     const readTime = estimateReadTime(post.content);
     return `
     <article class="glass-card overflow-hidden group"
-             x-show="(!activeCategory || activeCategory === '${post.category}') && (!searchQuery || '${post.title.toLowerCase().replace(/'/g, "\\'")}' .includes(searchQuery.toLowerCase()) || '${post.excerpt.toLowerCase().replace(/'/g, "\\'")}' .includes(searchQuery.toLowerCase()))"
+             data-category="${sanitizeText(post.category)}"
+             data-search="${sanitizeText(`${post.title} ${post.excerpt}`.toLowerCase())}"
+             x-show="(!activeCategory || activeCategory === $el.dataset.category) && (!searchQuery || $el.dataset.search.includes(searchQuery.toLowerCase()))"
              x-transition:enter="transition ease-out duration-200"
              x-transition:enter-start="opacity-0 scale-95"
              x-transition:enter-end="opacity-100 scale-100"
@@ -23,8 +27,8 @@ export function renderBlogPage(posts: BlogPostData[]): string {
       <div class="p-6 sm:p-8">
         <div class="flex items-center gap-3 mb-4">
           <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}" data-testid="badge-category">${post.category}</span>
-          <span class="text-xs text-white/30">${formatDate(post.publishedAt)}</span>
-          <span class="text-xs text-white/30 flex items-center gap-1">
+          <span class="text-xs text-white/50">${formatDate(post.publishedAt)}</span>
+          <span class="text-xs text-white/50 flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             ${readTime} min read
           </span>
@@ -32,7 +36,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
         <a href="/blog/${post.slug}" class="block" data-testid="link-blog-post-${post.slug}">
           <h2 class="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-[var(--accent)] transition-colors leading-snug">${post.title}</h2>
         </a>
-        <p class="text-white/40 leading-relaxed mb-5 line-clamp-3">${post.excerpt}</p>
+        <p class="text-white/55 leading-relaxed mb-5 line-clamp-3">${post.excerpt}</p>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
@@ -51,8 +55,8 @@ export function renderBlogPage(posts: BlogPostData[]): string {
   }).join("");
 
   const categoryFilters = categories.map(cat => `
-    <button @click="activeCategory = activeCategory === '${cat}' ? '' : '${cat}'"
-            :class="activeCategory === '${cat}' ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-white/50 hover:text-white hover:border-white/20'"
+    <button data-cat="${sanitizeText(cat)}" @click="activeCategory = activeCategory === $el.dataset.cat ? '' : $el.dataset.cat"
+            :class="activeCategory === $el.dataset.cat ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-white/50 hover:text-white hover:border-white/20'"
             class="text-sm px-4 py-2 rounded-full border transition-all"
             data-testid="filter-${cat.toLowerCase().replace(/\s+/g, '-')}">
       ${cat}
@@ -66,8 +70,8 @@ export function renderBlogPage(posts: BlogPostData[]): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
         <div class="relative flex-1 max-w-md">
-          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input type="text" x-model="searchQuery" placeholder="Search articles..."
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="search" aria-label="Search articles" x-model="searchQuery" placeholder="Search articles..."
                  class="glass-input w-full pl-11 pr-4 py-3 text-sm" data-testid="input-blog-search" />
         </div>
       </div>
@@ -103,7 +107,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostData[]): string {
   const tagsList = post.tags ? post.tags.split(",").map(t => t.trim()).filter(Boolean) : [];
   const tagsHtml = tagsList.map(tag => `
-    <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/40">${tag}</span>
+    <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/55">${tag}</span>
   `).join("");
 
   const readTime = estimateReadTime(post.content);
@@ -124,8 +128,8 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
             ` : ""}
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border ${getCategoryColor(rp.category)} mb-3 inline-block">${rp.category}</span>
             <h3 class="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors leading-snug mb-2">${rp.title}</h3>
-            <p class="text-sm text-white/40 line-clamp-3">${rp.excerpt}</p>
-            <div class="flex items-center gap-2 mt-3 text-xs text-white/30">
+            <p class="text-sm text-white/55 line-clamp-3">${rp.excerpt}</p>
+            <div class="flex items-center gap-2 mt-3 text-xs text-white/50">
               <span>${formatDate(rp.publishedAt)}</span>
               <span>&middot;</span>
               <span>${estimateReadTime(rp.content)} min read</span>
@@ -140,15 +144,15 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
   <article class="pt-28 pb-16" data-testid="blog-post-${post.slug}">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8" style="animation: fadeInUp 0.6s ease forwards">
-        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[var(--accent)] transition-colors mb-6" data-testid="link-back-to-blog">
+        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-white/55 hover:text-[var(--accent)] transition-colors mb-6" data-testid="link-back-to-blog">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog
         </a>
         <div class="flex flex-wrap items-center gap-3 mb-6">
           <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
-          <span class="text-sm text-white/30">${formatDate(post.publishedAt)}</span>
+          <span class="text-sm text-white/50">${formatDate(post.publishedAt)}</span>
           ${showUpdated ? `<span class="text-sm text-white/25">Updated ${formatDate(post.updatedAt)}</span>` : ""}
-          <span class="text-sm text-white/30 flex items-center gap-1">
+          <span class="text-sm text-white/50 flex items-center gap-1">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             ${readTime} min read
           </span>
@@ -168,7 +172,7 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
           </div>
           <div>
             <div class="font-medium text-white" data-testid="text-post-author">${post.author}</div>
-            <div class="text-sm text-white/30">${formatDate(post.publishedAt)}</div>
+            <div class="text-sm text-white/50">${formatDate(post.publishedAt)}</div>
           </div>
         </div>
       </div>
@@ -180,7 +184,7 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
       ${tagsList.length > 0 ? `
       <div class="mt-12 pt-8 border-t border-white/5">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm text-white/30 mr-2">Tags:</span>
+          <span class="text-sm text-white/50 mr-2">Tags:</span>
           ${tagsHtml}
         </div>
       </div>
@@ -220,11 +224,11 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
       "publisher": {
         "@type": "Organization",
         "name": "HBDR",
-        "logo": { "@type": "ImageObject", "url": "https://hbdr-website.matt-ortolani.workers.dev/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" }
+        "logo": { "@type": "ImageObject", "url": `${SITE_URL}/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg` }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": `https://hbdr-website.matt-ortolani.workers.dev/blog/${post.slug}`
+        "@id": `${SITE_URL}/blog/${post.slug}`
       }
     },
   });

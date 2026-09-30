@@ -23,7 +23,7 @@ export function estimateReadTime(content: string): number {
 
 export function formatDate(date: Date | null): string {
   if (!date) return "";
-  return new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  return new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 }
 
 export function getCategoryColor(category: string): string {

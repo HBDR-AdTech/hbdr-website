@@ -94,7 +94,7 @@ export function renderPublishersPage(): string {
         ${valueProps.map((v, i) => `
         <div class="glass-card p-8 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="publisher-value-${i}">
           <h3 class="text-xl font-semibold text-white mb-3">${v.title}</h3>
-          <p class="text-white/40 leading-relaxed">${v.desc}</p>
+          <p class="text-white/55 leading-relaxed">${v.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -106,7 +106,7 @@ export function renderPublishersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Getting Started Is Simple</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Our onboarding process is designed to be fast and hassle-free. Most publishers are live within 5-7 business days.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Our onboarding process is designed to be fast and hassle-free. Most publishers are live within 5-7 business days.</p>
       </div>
       <div class="max-w-3xl mx-auto space-y-6">
         ${onboardingSteps.map((step, i) => `
@@ -119,7 +119,7 @@ export function renderPublishersPage(): string {
             <h3 class="text-xl font-semibold text-white mb-1">${step.title}</h3>
             ${step.subtitle ? `<span class="text-[var(--accent)] text-sm font-medium">${step.subtitle}</span>` : ""}
             <ul class="mt-3 space-y-2">
-              ${step.bullets.map(b => `<li class="flex items-start gap-2 text-white/40 text-sm leading-relaxed">
+              ${step.bullets.map(b => `<li class="flex items-start gap-2 text-white/55 text-sm leading-relaxed">
                 <svg class="w-4 h-4 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 ${b}
               </li>`).join("")}
@@ -142,7 +142,7 @@ export function renderPublishersPage(): string {
           <h3 class="text-xl font-semibold text-white mb-6">What HBDR Manages</h3>
           <ul class="space-y-3">
             ${hbdrManages.map(item => `
-            <li class="flex items-start gap-3 text-white/40 leading-relaxed">
+            <li class="flex items-start gap-3 text-white/55 leading-relaxed">
               <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               ${item}
             </li>`).join("")}
@@ -152,7 +152,7 @@ export function renderPublishersPage(): string {
           <h3 class="text-xl font-semibold text-white mb-6">What You Do</h3>
           <ul class="space-y-3">
             ${youDo.map(item => `
-            <li class="flex items-start gap-3 text-white/40 leading-relaxed">
+            <li class="flex items-start gap-3 text-white/55 leading-relaxed">
               <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               ${item}
             </li>`).join("")}
@@ -168,13 +168,13 @@ export function renderPublishersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-20 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Who We Work With</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">HBDR works with publishers of all sizes, from independent blogs to enterprise media companies. Here's what we look for:</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">HBDR works with publishers of all sizes, from independent blogs to enterprise media companies. Here's what we look for:</p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${requirements.map((r, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 5) + 1}" data-testid="publisher-req-${i}">
           <h3 class="text-lg font-semibold text-white mb-2">${r.title}</h3>
-          <p class="text-white/40 text-sm leading-relaxed">${r.desc}</p>
+          <p class="text-white/55 text-sm leading-relaxed">${r.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -198,10 +198,10 @@ export function renderPublishersPage(): string {
             data-testid="button-${faqId}"
           >
             <span class="font-semibold text-white/90">${faq.q}</span>
-            <svg class="w-5 h-5 text-white/40 flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="w-5 h-5 text-white/55 flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
           <div x-show="openFaq === '${faqId}'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-            <div class="px-6 pb-6 text-white/40 leading-relaxed border-t border-white/5 pt-4">${faq.a}</div>
+            <div class="px-6 pb-6 text-white/55 leading-relaxed border-t border-white/5 pt-4">${faq.a}</div>
           </div>
         </div>`;
         }).join("")}

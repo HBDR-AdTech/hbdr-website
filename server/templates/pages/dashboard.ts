@@ -34,7 +34,7 @@ export function renderDashboardPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Data Dimensions</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Slice Your Data Any Way You Need</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Drill down into performance across every dimension that matters to your business.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Drill down into performance across every dimension that matters to your business.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -51,7 +51,7 @@ export function renderDashboardPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -64,7 +64,7 @@ export function renderDashboardPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Revenue Views</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Complete Revenue Visibility</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Understand exactly where your revenue comes from with dedicated views for every monetization channel.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Understand exactly where your revenue comes from with dedicated views for every monetization channel.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -73,7 +73,7 @@ export function renderDashboardPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">AdX Revenue & Performance</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             Google Ad Exchange metrics including CPMs, fill rates, revenue, and impression-level data. Track your AdX performance in real time with full transparency into auction dynamics.
           </p>
         </div>
@@ -82,7 +82,7 @@ export function renderDashboardPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Ad Server Revenue & Performance</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             Overall ad server (GAM) metrics and delivery data. Monitor line item pacing, total impressions served, and overall ad server revenue across all demand channels.
           </p>
         </div>
@@ -91,7 +91,7 @@ export function renderDashboardPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">SSP Performance</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
             Individual SSP and demand partner performance comparison. Evaluate bid rates, win rates, CPMs, and revenue contribution from each partner to optimize your demand stack.
           </p>
         </div>
@@ -113,7 +113,7 @@ export function renderDashboardPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Platform Features</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Everything You Need in One Dashboard</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Built for publishers who demand speed, accuracy, and actionable insights.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Built for publishers who demand speed, accuracy, and actionable insights.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -132,7 +132,7 @@ export function renderDashboardPage(): string {
             <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/40 leading-relaxed text-sm">${f.description}</p>
+          <p class="text-white/55 leading-relaxed text-sm">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

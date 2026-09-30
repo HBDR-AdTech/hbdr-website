@@ -7,7 +7,7 @@ export function renderContactFormSection(): string {
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
           Start Monetizing Today
         </h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
           Ready to transform your ad revenue? Fill out the form and our team will reach out within 24 hours.
         </p>
       </div>
@@ -16,7 +16,7 @@ export function renderContactFormSection(): string {
         <div class="lg:col-span-2 space-y-8 animate-on-scroll">
           <div>
             <h3 class="text-2xl font-bold text-white mb-4">Let's Talk Revenue</h3>
-            <p class="text-white/40 leading-relaxed">
+            <p class="text-white/55 leading-relaxed">
               Whether you're optimizing existing ads or exploring new monetization opportunities, our experts are here to help.
             </p>
           </div>
@@ -28,7 +28,7 @@ export function renderContactFormSection(): string {
               </div>
               <div>
                 <div class="font-semibold text-white">Email Us</div>
-                <div class="text-white/40">contact@hbdr.com</div>
+                <div class="text-white/55">contact@hbdr.com</div>
               </div>
             </div>
 
@@ -38,7 +38,7 @@ export function renderContactFormSection(): string {
               </div>
               <div>
                 <div class="font-semibold text-white">Call Us</div>
-                <div class="text-white/40">(786) 675-6080</div>
+                <a href="tel:+17866756080" class="text-white/60 hover:text-white transition-colors">(786) 675-6080</a>
               </div>
             </div>
 
@@ -48,13 +48,13 @@ export function renderContactFormSection(): string {
               </div>
               <div>
                 <div class="font-semibold text-white">Visit Us</div>
-                <div class="text-white/40">1200 Brickell Ave Ste 1950<br/>Miami, FL 33131</div>
+                <div class="text-white/55">1200 Brickell Ave Ste 1950<br/>Miami, FL 33131</div>
               </div>
             </div>
           </div>
 
           <div class="pt-6 border-t border-white/5">
-            <div class="text-sm text-white/30 mb-3">Response time</div>
+            <div class="text-sm text-white/50 mb-3">Response time</div>
             <div class="flex items-center gap-2">
               <span class="relative flex h-3 w-3">
                 <span class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" style="animation: pulse-ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>
@@ -84,10 +84,10 @@ export function renderContactFormSection(): string {
                      if (res.ok) {
                        this.submitted = true;
                      } else {
-                       this.error = true;
+                       this.error = {400:'Please check your details and try again.',422:'Please use a permanent email address. Disposable addresses are not accepted.',429:'Too many submissions. Please wait a few minutes and try again.'}[res.status] || 'Something went wrong. Please try again or email us at contact@hbdr.com';
                      }
                    } catch (e) {
-                     this.error = true;
+                     this.error = 'Network error. Please try again or email us at contact@hbdr.com';
                    }
                    this.submitting = false;
                  }
@@ -105,9 +105,7 @@ export function renderContactFormSection(): string {
 
             <form x-show="!submitted" @submit.prevent="submitForm()" class="glass-card p-6 sm:p-8 space-y-6" data-testid="contact-form">
 
-              <div x-show="error" x-cloak class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-                Something went wrong. Please try again or email us at contact@hbdr.com
-              </div>
+              <div x-show="error" x-cloak x-text="error" role="alert" class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"></div>
 
               <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;" aria-hidden="true" tabindex="-1">
                 <label for="hp_website">Website</label>
@@ -116,23 +114,23 @@ export function renderContactFormSection(): string {
 
               <div class="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-medium text-white/60 mb-2">Full Name</label>
-                  <input type="text" x-model="formData.name" placeholder="John Smith" class="glass-input w-full px-4 py-3" required data-testid="input-name" />
+                  <label for="input-name" class="block text-sm font-medium text-white/60 mb-2">Full Name</label>
+                  <input id="input-name" type="text" x-model="formData.name" placeholder="John Smith" class="glass-input w-full px-4 py-3" required data-testid="input-name" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-white/60 mb-2">Email Address</label>
-                  <input type="email" x-model="formData.email" placeholder="john@company.com" class="glass-input w-full px-4 py-3" required data-testid="input-email" />
+                  <label for="input-email" class="block text-sm font-medium text-white/60 mb-2">Email Address</label>
+                  <input id="input-email" type="email" x-model="formData.email" placeholder="john@company.com" class="glass-input w-full px-4 py-3" required data-testid="input-email" />
                 </div>
               </div>
 
               <div class="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-medium text-white/60 mb-2">Company Name</label>
-                  <input type="text" x-model="formData.company" placeholder="Your Company" class="glass-input w-full px-4 py-3" required data-testid="input-company" />
+                  <label for="input-company" class="block text-sm font-medium text-white/60 mb-2">Company Name</label>
+                  <input id="input-company" type="text" x-model="formData.company" placeholder="Your Company" class="glass-input w-full px-4 py-3" required data-testid="input-company" />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-white/60 mb-2">Monthly Impressions</label>
-                  <select x-model="formData.impressions" class="glass-select w-full" required data-testid="select-impressions">
+                  <label for="select-impressions" class="block text-sm font-medium text-white/60 mb-2">Monthly Impressions</label>
+                  <select id="select-impressions" x-model="formData.impressions" class="glass-select w-full" required data-testid="select-impressions">
                     <option value="" disabled selected>Select volume</option>
                     <option value="under-10m">Under 10M</option>
                     <option value="10m-50m">10M - 50M</option>
@@ -145,8 +143,8 @@ export function renderContactFormSection(): string {
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-white/60 mb-2">Message (Optional)</label>
-                <textarea x-model="formData.message" placeholder="Tell us about your current ad setup and goals..." rows="4" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-message"></textarea>
+                <label for="textarea-message" class="block text-sm font-medium text-white/60 mb-2">Message (Optional)</label>
+                <textarea id="textarea-message" x-model="formData.message" placeholder="Tell us about your current ad setup and goals..." rows="4" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-message"></textarea>
               </div>
 
               <button type="submit" :disabled="submitting" class="glass-btn w-full py-4 text-base font-medium flex items-center justify-center gap-2 disabled:opacity-50" data-testid="button-submit-contact">
@@ -167,7 +165,7 @@ export function renderContactFormSection(): string {
                 </template>
               </button>
 
-              <p class="text-center text-sm text-white/30">
+              <p class="text-center text-sm text-white/50">
                 By submitting, you agree to our <a href="/privacy-policy" class="text-[var(--accent)] hover:underline">Privacy Policy</a>
               </p>
             </form>

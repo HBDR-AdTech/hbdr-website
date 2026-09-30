@@ -13,7 +13,7 @@ import { validateOrigin } from "../middleware/csrf";
 import { isDisposableEmail } from "../middleware/email-blocklist";
 
 interface ApiConfig {
-  resendApiKey?: string;
+  email?: SendEmail;
   db?: any;
 }
 
@@ -106,8 +106,9 @@ export function registerApiRoutes(
       const storage = getStorage(c);
       const lead = await storage.createContactLead({ ...sanitizedData, ip, source });
 
-      if (config.resendApiKey) {
-        sendContactNotification(config.resendApiKey, {
+      // waitUntil keeps the Worker alive for the send after the response returns; a bare promise gets cancelled
+      if (config.email) {
+        c.executionCtx.waitUntil(sendContactNotification(config.email, {
           name: sanitizedData.name,
           email: sanitizedData.email,
           company: sanitizedData.company,
@@ -115,7 +116,7 @@ export function registerApiRoutes(
           message: sanitizedData.message,
           source,
           ip,
-        }).catch((err) => console.error("Email send failed:", err));
+        }));
       }
 
       return c.html(`

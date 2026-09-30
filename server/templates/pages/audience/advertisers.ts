@@ -77,7 +77,7 @@ export function renderAdvertisersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Premium Access to Quality Inventory</h2>
-        <p class="text-lg text-white/40 max-w-3xl mx-auto leading-relaxed">HBDR manages monetization for thousands of premium publisher sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
+        <p class="text-lg text-white/55 max-w-3xl mx-auto leading-relaxed">HBDR manages monetization for thousands of premium publisher sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
       </div>
     </div>
   </section>
@@ -95,13 +95,13 @@ export function renderAdvertisersPage(): string {
           <h3 class="text-2xl font-bold text-white mb-4">${deal.title}</h3>
           <div class="mb-6">
             <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">What it is</span>
-            <p class="text-white/40 leading-relaxed mt-2">${deal.what}</p>
+            <p class="text-white/55 leading-relaxed mt-2">${deal.what}</p>
           </div>
           <div class="mb-6">
             <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">Benefits</span>
             <ul class="mt-3 space-y-2">
               ${deal.benefits.map(b => `
-              <li class="flex items-start gap-3 text-white/40 leading-relaxed">
+              <li class="flex items-start gap-3 text-white/55 leading-relaxed">
                 <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 ${b}
               </li>`).join("")}
@@ -109,7 +109,7 @@ export function renderAdvertisersPage(): string {
           </div>
           <div>
             <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">How it works</span>
-            <p class="text-white/40 leading-relaxed mt-2">${deal.how}</p>
+            <p class="text-white/55 leading-relaxed mt-2">${deal.how}</p>
           </div>
         </div>`).join("")}
       </div>
@@ -143,12 +143,12 @@ export function renderAdvertisersPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Brand Safety First</h2>
-        <p class="text-lg text-white/40 max-w-3xl mx-auto leading-relaxed">Every layer of our platform is built with brand safety and transparency at its core.</p>
+        <p class="text-lg text-white/55 max-w-3xl mx-auto leading-relaxed">Every layer of our platform is built with brand safety and transparency at its core.</p>
       </div>
       <div class="glass-card p-8 animate-on-scroll" data-testid="advertisers-brand-safety-card">
         <ul class="space-y-4">
           ${brandSafetyFeatures.map(f => `
-          <li class="flex items-start gap-3 text-white/40 leading-relaxed">
+          <li class="flex items-start gap-3 text-white/55 leading-relaxed">
             <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             ${f}
           </li>`).join("")}
@@ -169,7 +169,7 @@ export function renderAdvertisersPage(): string {
         <div class="glass-card p-6 animate-on-scroll stagger-${i + 1}" data-testid="advertiser-step-${i}">
           <div class="step-number mb-4">${s.num}</div>
           <h3 class="text-lg font-semibold text-white mb-2">${s.title}</h3>
-          <p class="text-white/40 text-sm leading-relaxed">${s.desc}</p>
+          <p class="text-white/55 text-sm leading-relaxed">${s.desc}</p>
         </div>`).join("")}
       </div>
     </div>

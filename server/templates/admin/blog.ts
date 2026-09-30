@@ -7,15 +7,15 @@ export function renderBlogAdminPage(posts: BlogPostData[]): string {
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="admin-row-${post.id}">
       <td class="py-4 px-4">
         <div class="font-medium text-white text-sm">${post.title}</div>
-        <div class="text-xs text-white/30 mt-1">/blog/${post.slug}</div>
+        <div class="text-xs text-white/50 mt-1">/blog/${post.slug}</div>
       </td>
       <td class="py-4 px-4 hidden sm:table-cell">
         <span class="text-xs font-medium px-2.5 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
       </td>
-      <td class="py-4 px-4 hidden md:table-cell text-sm text-white/40">${post.author}</td>
-      <td class="py-4 px-4 hidden md:table-cell text-sm text-white/40">${formatDate(post.publishedAt)}</td>
+      <td class="py-4 px-4 hidden md:table-cell text-sm text-white/55">${post.author}</td>
+      <td class="py-4 px-4 hidden md:table-cell text-sm text-white/55">${formatDate(post.publishedAt)}</td>
       <td class="py-4 px-4">
-        <span class="text-xs px-2.5 py-1 rounded-full ${post.published === 'true' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/10 text-white/40'}">${post.published === "true" ? "Published" : "Draft"}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full ${post.published === 'true' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/10 text-white/55'}">${post.published === "true" ? "Published" : "Draft"}</span>
       </td>
       <td class="py-4 px-4">
         <div class="flex items-center gap-2">
@@ -33,7 +33,7 @@ export function renderBlogAdminPage(posts: BlogPostData[]): string {
       <div class="flex items-center justify-between mb-10">
         <div>
           <h1 class="text-3xl font-bold text-white mb-2">Blog Manager</h1>
-          <p class="text-white/40">Create, edit, and manage your blog content.</p>
+          <p class="text-white/55">Create, edit, and manage your blog content.</p>
         </div>
         <a href="/admin/blog/new" class="glass-btn text-sm px-6" data-testid="button-new-post">New Post</a>
       </div>
@@ -56,7 +56,7 @@ export function renderBlogAdminPage(posts: BlogPostData[]): string {
         </table>
         ${posts.length === 0 ? `
         <div class="py-16 text-center">
-          <p class="text-white/40 mb-4">No blog posts yet.</p>
+          <p class="text-white/55 mb-4">No blog posts yet.</p>
           <a href="/admin/blog/new" class="glass-btn text-sm px-6">Create Your First Post</a>
         </div>
         ` : ""}
@@ -81,7 +81,7 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
   <section class="pt-28 pb-16" data-testid="blog-editor">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8">
-        <a href="/admin/blog" class="inline-flex items-center gap-2 text-sm text-white/40 hover:text-[var(--accent)] transition-colors mb-4" data-testid="link-back-to-admin">
+        <a href="/admin/blog" class="inline-flex items-center gap-2 text-sm text-white/55 hover:text-[var(--accent)] transition-colors mb-4" data-testid="link-back-to-admin">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog Manager
         </a>
@@ -175,7 +175,7 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
             <input type="url" x-model="formData.coverImage"
                    class="glass-input w-full px-4 py-3 rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50"
                    placeholder="https://example.com/image.jpg" data-testid="input-cover-image" />
-            <p class="text-xs text-white/30 mt-1.5">Optional. Displays as hero image on the post and thumbnail on cards.</p>
+            <p class="text-xs text-white/50 mt-1.5">Optional. Displays as hero image on the post and thumbnail on cards.</p>
             <div x-show="formData.coverImage" x-cloak class="mt-3 rounded-lg overflow-hidden border border-white/10 max-w-xs">
               <img :src="formData.coverImage" alt="Cover preview" class="w-full h-auto" @error="$el.style.display='none'" @load="$el.style.display='block'" />
             </div>
@@ -192,9 +192,9 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
             <div class="flex items-center justify-between mb-2">
               <label class="block text-sm font-medium text-white/60">Content (HTML)</label>
               <div class="flex items-center gap-1 bg-white/5 rounded-lg p-0.5" data-testid="view-mode-toggle">
-                <button @click="viewMode = 'edit'" :class="viewMode === 'edit' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer">Edit</button>
-                <button @click="viewMode = 'split'" :class="viewMode === 'split' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer hidden sm:block">Split</button>
-                <button @click="viewMode = 'preview'" :class="viewMode === 'preview' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer">Preview</button>
+                <button @click="viewMode = 'edit'" :class="viewMode === 'edit' ? 'bg-white/10 text-white' : 'text-white/55 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer">Edit</button>
+                <button @click="viewMode = 'split'" :class="viewMode === 'split' ? 'bg-white/10 text-white' : 'text-white/55 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer hidden sm:block">Split</button>
+                <button @click="viewMode = 'preview'" :class="viewMode === 'preview' ? 'bg-white/10 text-white' : 'text-white/55 hover:text-white/60'" class="text-xs px-3 py-1.5 rounded-md transition-all cursor-pointer">Preview</button>
               </div>
             </div>
             <div class="flex gap-4" :class="viewMode === 'split' ? 'flex-row' : 'flex-col'">
@@ -224,7 +224,7 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
               <span x-show="!saving">${isEdit ? "Update Post" : "Publish Post"}</span>
               <span x-show="saving" x-cloak>Saving...</span>
             </button>
-            <a href="/admin/blog" class="text-sm text-white/40 hover:text-white transition-colors" data-testid="link-cancel">Cancel</a>
+            <a href="/admin/blog" class="text-sm text-white/55 hover:text-white transition-colors" data-testid="link-cancel">Cancel</a>
           </div>
         </div>
       </div>

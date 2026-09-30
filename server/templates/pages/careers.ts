@@ -12,7 +12,7 @@ export function renderCareersPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Why Join Us</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why HBDR</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Join a team that's redefining digital advertising technology.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Join a team that's redefining digital advertising technology.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -26,7 +26,7 @@ export function renderCareersPage(): string {
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${item.title}</h3>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${item.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${item.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -40,7 +40,7 @@ export function renderCareersPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Perks & Benefits</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Benefits</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">We take care of our team so they can focus on doing their best work.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">We take care of our team so they can focus on doing their best work.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,7 +57,7 @@ export function renderCareersPage(): string {
             <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${b.icon}</svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-[var(--accent)] transition-colors">${b.title}</h3>
-          <p class="text-white/40 leading-relaxed text-sm">${b.description}</p>
+          <p class="text-white/55 leading-relaxed text-sm">${b.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -71,7 +71,7 @@ export function renderCareersPage(): string {
       <div class="text-center mb-20 animate-on-scroll">
         <div class="glass-tag mb-6 mx-auto w-fit">Open Roles</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Open Positions</h2>
-        <p class="text-lg text-white/40 max-w-2xl mx-auto leading-relaxed">Find your next opportunity at HBDR.</p>
+        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Find your next opportunity at HBDR.</p>
       </div>
 
       <div class="space-y-4">
@@ -87,12 +87,12 @@ export function renderCareersPage(): string {
               <h3 class="text-xl font-semibold text-white">${pos.title}</h3>
               <div class="flex items-center gap-3 mt-2">
                 <span class="glass-tag text-xs">${pos.dept}</span>
-                <span class="text-sm text-white/40">${pos.location}</span>
+                <span class="text-sm text-white/55">${pos.location}</span>
               </div>
             </div>
             <a href="/contact" class="glass-btn text-sm px-6 py-2.5 text-center flex-shrink-0" data-testid="button-apply-${i}">Apply Now</a>
           </div>
-          <p class="text-white/40 leading-relaxed text-[0.9375rem]">${pos.description}</p>
+          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${pos.description}</p>
         </div>`).join("")}
       </div>
     </div>
