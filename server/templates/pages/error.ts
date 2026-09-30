@@ -20,7 +20,7 @@ export function render404Page(): string {
   `).join("");
 
   const content = `
-  <section class="relative min-h-[80vh] flex items-center justify-center py-24 overflow-hidden" data-testid="error-404">
+  <section class="relative min-h-[80vh] flex items-center justify-center pt-32 pb-24 overflow-hidden" data-testid="error-404">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -58,7 +58,7 @@ export function render404Page(): string {
 
 export function render500Page(): string {
   const content = `
-  <section class="relative min-h-[80vh] flex items-center justify-center py-24 overflow-hidden" data-testid="error-500">
+  <section class="relative min-h-[80vh] flex items-center justify-center pt-32 pb-24 overflow-hidden" data-testid="error-500">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">

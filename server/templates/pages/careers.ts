@@ -18,7 +18,7 @@ export function renderCareersPage(): string {
       <div class="grid lg:grid-cols-3 gap-8">
         ${[
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>', title: "Cutting-Edge Technology", description: "Work with the latest in ad tech, real-time bidding systems, machine learning optimization, and distributed computing at massive scale." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', title: "Global Impact", description: "Your work impacts billions of ad impressions daily across 500+ publishers worldwide. Build systems that operate at truly global scale." },
+          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', title: "Global Impact", description: "Your work impacts billions of ad impressions every month across 500+ publishers worldwide. Build systems that operate at truly global scale." },
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>', title: "Growth & Learning", description: "Continuous learning opportunities, mentorship from industry veterans, and a clear career growth path in one of tech's fastest-growing sectors." },
         ].map((item, i) => `
         <div class="glass-card p-8 group animate-on-scroll stagger-${i + 1}" data-testid="careers-why-card-${i}">
@@ -76,7 +76,7 @@ export function renderCareersPage(): string {
 
       <div class="space-y-4">
         ${[
-          { title: "Senior Full-Stack Engineer", dept: "Engineering", location: "Remote", description: "Build and scale our ad-serving infrastructure handling billions of daily requests. Work with real-time bidding systems, distributed architectures, and performance-critical code." },
+          { title: "Senior Full-Stack Engineer", dept: "Engineering", location: "Remote", description: "Build and scale our ad-serving infrastructure handling billions of monthly requests. Work with real-time bidding systems, distributed architectures, and performance-critical code." },
           { title: "Ad Operations Manager", dept: "Operations", location: "New York", description: "Manage publisher relationships and optimize ad configurations for maximum revenue. Analyze performance data and implement strategic improvements across our publisher network." },
           { title: "Product Designer", dept: "Design", location: "Remote", description: "Shape the user experience of our publisher dashboard and internal tools. Design intuitive interfaces that make complex ad tech data accessible and actionable." },
           { title: "Data Scientist", dept: "Data", location: "San Francisco", description: "Develop ML models for bid optimization and revenue prediction. Build and iterate on algorithms that process billions of data points to maximize publisher yield." },

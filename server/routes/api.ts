@@ -142,7 +142,7 @@ export function registerApiRoutes(
           <h3 class="text-2xl font-semibold text-white mb-2">Something went wrong</h3>
           <p class="text-white/50">Please try again or email us directly at contact@hbdr.com</p>
         </div>
-      `);
+      `, 500);
     }
   });
 
