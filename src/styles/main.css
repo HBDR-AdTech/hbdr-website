@@ -69,7 +69,8 @@ body::after {
   opacity: 0.25;
 }
 
-body > * { position: relative; z-index: 1; }
+/* in base layer so utilities (nav fixed z-50) override it; unlayered CSS beats Tailwind v4 utilities */
+@layer base { body > * { position: relative; z-index: 1; } }
 
 .font-display { font-family: 'Instrument Serif', Georgia, serif; }
 
@@ -645,4 +646,19 @@ h2 .text-gradient-accent {
 @media (max-width: 768px) {
   .orb { opacity: 0.1; }
   .glass-card { border-radius: 10px; }
+}
+
+/* ── Reduced motion: show everything, no movement ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-on-scroll, .animate-scale-in, .comparison-row {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .check-animate svg path { stroke-dashoffset: 0 !important; }
 }
