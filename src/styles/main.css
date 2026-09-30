@@ -661,4 +661,6 @@ h2 .text-gradient-accent {
     transform: none !important;
   }
   .check-animate svg path { stroke-dashoffset: 0 !important; }
+  /* partner marquee keeps moving (slow, pauses on hover) */
+  .logo-scroll, .logo-scroll-reverse { animation-duration: 40s !important; animation-iteration-count: infinite !important; }
 }

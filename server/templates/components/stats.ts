@@ -22,7 +22,7 @@ export function renderStatsSection(): string {
         ${[
           { value: "1T+", label: "Ads Served", sub: "And counting every second" },
           { value: "50%+", label: "Revenue Increase", sub: "Average publisher improvement" },
-          { value: "1B+", label: "Daily Impressions", sub: "Across all platforms" },
+          { value: "1B+", label: "Monthly Impressions", sub: "Across all platforms" },
           { value: "500+", label: "Publishers", sub: "Trust us worldwide" },
         ]
           .map(

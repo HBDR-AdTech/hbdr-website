@@ -40,7 +40,7 @@ export function renderAboutPage(): string {
         <div class="hidden lg:block absolute top-8 left-[16%] right-[16%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         ${[
           { step: "2015", title: "Founded", description: "HBDR was founded with a vision to revolutionize ad monetization for digital publishers through advanced header bidding technology." },
-          { step: "2020", title: "1B Daily Impressions", description: "Reached the milestone of processing over 1 billion daily ad impressions across our global network of publishers." },
+          { step: "2020", title: "1B Monthly Impressions", description: "Reached the milestone of processing over 1 billion monthly ad impressions across our global network of publishers." },
           { step: "2025", title: "500+ Publishers Globally", description: "Expanded to serve over 500 publishers worldwide, processing more than 1 trillion ads served across all platforms." },
         ].map((item, i) => `
         <div class="glass-card p-8 text-center relative animate-on-scroll stagger-${i + 1}" data-testid="timeline-card-${i}">

@@ -17,7 +17,7 @@ export function renderPage(): string {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
-            25+ Years of Ad Tech Expertise
+            25+ Years of Combined Team Expertise
           </div>
 
           <h1 class="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-6xl leading-[1.15] tracking-tight mb-6" style="animation: fadeInUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both">
@@ -53,7 +53,7 @@ export function renderPage(): string {
             </div>
             <div class="text-center lg:text-left">
               <div class="text-2xl sm:text-3xl font-bold text-white" data-testid="text-stat-impressions"><span data-count="1" data-suffix="B+">1B+</span></div>
-              <div class="text-xs sm:text-sm text-white/55 mt-1">Daily Impressions</div>
+              <div class="text-xs sm:text-sm text-white/55 mt-1">Monthly Impressions</div>
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ export function renderPage(): string {
   <section class="py-16 overflow-hidden" data-testid="logo-carousel">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
       <p class="text-center text-white/50 text-sm font-medium uppercase tracking-widest animate-on-scroll">
-        Trusted by Leading Advertisers Worldwide
+        Integrated Demand Partners
       </p>
     </div>
     <div class="space-y-4">
@@ -332,7 +332,7 @@ export function renderPage(): string {
           The HBDR Advantage
         </h2>
         <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-          See how our comprehensive platform compares to other solutions.
+          See how HBDR compares to the usual alternatives.
         </p>
       </div>
 
@@ -345,8 +345,8 @@ export function renderPage(): string {
                 <th class="p-4 lg:p-5 text-center">
                   <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent)]/20 text-[var(--accent)] text-sm font-semibold">HBDR</span>
                 </th>
-                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">Competitor A</th>
-                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">Competitor B</th>
+                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">Typical Ad Network</th>
+                <th class="p-4 lg:p-5 text-center text-sm text-white/50 font-medium">DIY In-House Setup</th>
               </tr>
             </thead>
             <tbody>
@@ -477,7 +477,7 @@ export function renderPage(): string {
         ${[
           { count: "1", suffix: "T+", label: "Ads Served", sub: "And counting every second" },
           { count: "50", suffix: "%+", label: "Revenue Increase", sub: "Average publisher improvement" },
-          { count: "1", suffix: "B+", label: "Daily Impressions", sub: "Across all platforms" },
+          { count: "1", suffix: "B+", label: "Monthly Impressions", sub: "Across all platforms" },
           { count: "500", suffix: "+", label: "Publishers", sub: "Trust us worldwide" },
         ]
           .map(

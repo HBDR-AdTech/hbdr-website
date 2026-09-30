@@ -17,3 +17,12 @@ Supersedes: Resend API notifications (`RESEND_API_KEY` secret, sandbox sender).
 
 Work lands on a `feat/` or `fix/` branch with a PR carrying screenshots and test output; Matt reviews and merges. A merge to main deploys production through CI.
 
+
+## D-004 — 2026-09-30 — Matt — Email goes through Cloudflare only
+
+All site email is sent with Cloudflare Email Sending. No Resend or other third-party sender: the `RESEND_API_KEY` Worker secret was deleted on 2026-09-30 and no code path references Resend.
+Supersedes: the rollback note in D-001 that relied on Resend.
+
+## D-005 — 2026-09-30 — Matt — Company claims used on the site
+
+HBDR was founded in 2015. "25+ years" refers only to the team's combined experience. HBDR serves 1B+ impressions per month (never "daily"); 1T+ is total ads served through HBDR's pipes. Comparisons never name a competitor; use generic alternatives ("Typical Ad Network", "DIY In-House Setup"). The partner logo strip is titled "Integrated Demand Partners".
