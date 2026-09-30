@@ -35,7 +35,7 @@ registerApiRoutes(app, getStorage, (c) => ({
 registerAdminRoutes(app, getStorage, (c) => ({
   adminPassword: c.env.ADMIN_PASSWORD || "hbdr2025!",
 }));
-registerSeoRoutes(app);
+registerSeoRoutes(app, getStorage);
 registerErrorHandlers(app);
 
 export default app;

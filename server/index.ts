@@ -58,7 +58,7 @@ registerApiRoutes(app, getStorage, () => ({}));
 registerAdminRoutes(app, getStorage, () => ({
   adminPassword: process.env.ADMIN_PASSWORD || "hbdr2025!",
 }));
-registerSeoRoutes(app);
+registerSeoRoutes(app, getStorage);
 registerErrorHandlers(app);
 
 const port = parseInt(process.env.PORT || "5000", 10);
