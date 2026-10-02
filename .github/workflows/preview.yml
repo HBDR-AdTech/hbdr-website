@@ -23,13 +23,17 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm install
+      - run: npm ci
+
+      - run: npm run css:build
 
       - run: npm run check
+
+      - run: npm test
 
       - name: Deploy preview to Cloudflare Workers
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3.15.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --name hbdr-website-preview
+          command: deploy --env preview

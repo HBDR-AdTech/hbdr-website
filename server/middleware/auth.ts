@@ -1,38 +1,36 @@
-// Shared authentication middleware
-// Used by both worker.ts (Cloudflare) and server/index.ts (Node.js dev)
+// Admin auth is Cloudflare Access (D-008). The Worker re-verifies the Access JWT on every admin request,
+// so a hostname Access doesn't cover, or a misconfigured Access app, still can't reach admin routes.
+import type { Hono, MiddlewareHandler } from "hono";
+import { verifyWithJwks } from "hono/jwt";
+import type { HonoJsonWebKey } from "hono/utils/jwt/jws";
 
-const sessions = new Map<string, { username: string; expiresAt: number }>();
+export const ADMIN_PATHS = ["/admin", "/admin/*", "/api/blog", "/api/blog/*", "/api/leads", "/api/leads/*"];
 
-export function generateSessionId(): string {
-  const bytes = new Uint8Array(32);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+export interface AccessConfig {
+  teamDomain?: string; // e.g. securehbdr.cloudflareaccess.com
+  aud?: string; // the Access application's AUD tag
+  keys?: HonoJsonWebKey[]; // tests only; production fetches the team's JWKS
 }
 
-export function getSessionFromCookie(cookieHeader: string | undefined): string | null {
-  if (!cookieHeader) return null;
-  const match = cookieHeader.match(/hbdr_admin_session=([^;]+)/);
-  return match ? match[1] : null;
+export function accessGuard(getConfig: (c: any) => AccessConfig): MiddlewareHandler {
+  return async (c, next) => {
+    const { teamDomain, aud, keys } = getConfig(c);
+    const token = c.req.header("Cf-Access-Jwt-Assertion");
+    // Missing config fails closed: no Access configuration means no admin access
+    if (!teamDomain || !aud || !token) return c.text("Forbidden", 403);
+    try {
+      await verifyWithJwks(token, {
+        ...(keys ? { keys } : { jwks_uri: `https://${teamDomain}/cdn-cgi/access/certs` }),
+        allowedAlgorithms: ["RS256"],
+        verification: { iss: `https://${teamDomain}`, aud },
+      });
+    } catch {
+      return c.text("Forbidden", 403);
+    }
+    await next();
+  };
 }
 
-export function isAuthenticated(cookieHeader: string | undefined): boolean {
-  const sessionId = getSessionFromCookie(cookieHeader);
-  if (!sessionId) return false;
-  const session = sessions.get(sessionId);
-  if (!session || session.expiresAt < Date.now()) {
-    if (sessionId) sessions.delete(sessionId);
-    return false;
-  }
-  return true;
-}
-
-export function createSession(username: string): string {
-  const sessionId = generateSessionId();
-  sessions.set(sessionId, { username, expiresAt: Date.now() + 86400000 });
-  return sessionId;
-}
-
-export function destroySession(cookieHeader: string | undefined): void {
-  const sessionId = getSessionFromCookie(cookieHeader);
-  if (sessionId) sessions.delete(sessionId);
+export function protectAdmin(app: Hono<any>, guard: MiddlewareHandler) {
+  for (const path of ADMIN_PATHS) app.use(path, guard);
 }

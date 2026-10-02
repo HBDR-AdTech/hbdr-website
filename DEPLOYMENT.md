@@ -137,34 +137,7 @@ Key points:
 
 ## Environment Variables
 
-### Current State: None
-
-The application has **no environment variables**. All configuration is hardcoded. No `[vars]` section in `wrangler.toml`. No `.dev.vars` file.
-
-### Planned (After Auth Implementation)
-
-For Cloudflare Workers secrets:
-```bash
-npx wrangler secret put ADMIN_USERNAME
-npx wrangler secret put ADMIN_PASSWORD
-npx wrangler secret put SITE_URL
-```
-
-For local development, create a `.dev.vars` file (already in `.gitignore`):
-```
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your-dev-password
-SITE_URL=http://localhost:5000
-```
-
-For production `wrangler.toml` vars (non-secret):
-```toml
-[vars]
-ENVIRONMENT = "production"
-SITE_URL = "https://hbdr.com"
-```
-
----
+No Worker secrets. Non-secret vars (`ENVIRONMENT`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`) live in `wrangler.toml`. Admin auth is Cloudflare Access; see `docs/SECURITY.md`.
 
 ## Static Assets
 

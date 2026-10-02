@@ -38,3 +38,8 @@ The Resend sending records on hbdr.com (`resend._domainkey` TXT, `send.hbdr.com`
 ## D-008 — 2026-09-30 — Matt — Cloudflare Access in front of the site admin
 
 Access app "HBDR Website Admin" (id `ed8b2081-38dc-487d-a816-5be437b2606d`, team domain securehbdr.cloudflareaccess.com) covers `hbdr.com/admin`, `hbdr.com/api/blog` and `hbdr.com/api/leads`: one-time PIN, 24h session, allow matt.ortolani@gmail.com and matt@hbdr.com. The app's own cookie login stays behind it. `GET /api/contact` (lead list) shares its path with the public form POST, so Access cannot cover it; it stays on the app's cookie auth.
+
+## D-009 — 2026-10-02 — Matt — Cloudflare Access is the only admin login
+
+The app password, login page, in-memory sessions and CSRF tokens are removed. Every admin path (`/admin*`, `/api/blog*`, `/api/leads*`) requires a valid Cloudflare Access JWT, verified in the Worker against the team JWKS, issuer and the app AUD; missing configuration fails closed. The lead list moved from `GET /api/contact` to `GET /api/leads` so Access covers it. Access also covers both Workers' workers.dev hostnames. Branch previews deploy with `--env preview` to their own D1 with no email binding. The `EMAIL` binding is allowlisted to send from noreply@ to contact@/support@ only. Threat model: `docs/SECURITY.md`.
+Supersedes: the `ADMIN_PASSWORD` login (and its public default).

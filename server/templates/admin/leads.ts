@@ -13,58 +13,6 @@ interface LeadData {
   createdAt: Date | null;
 }
 
-export function renderAdminLoginPage(error?: string, csrfToken?: string): string {
-  const isSuccess = error === "success";
-  const content = `
-  <div class="min-h-screen flex items-center justify-center px-4">
-    <div class="w-full max-w-md">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2BDE73]/20 to-[#2BDE73]/5 mb-4">
-          <svg class="w-8 h-8 text-[#2BDE73]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-          </svg>
-        </div>
-        <h1 class="text-3xl font-bold text-white mb-2">HBDR Admin</h1>
-        <p class="text-white/55">Sign in to manage your leads and content</p>
-      </div>
-
-      <div class="glass-card p-8">
-        ${error && !isSuccess ? `
-        <div class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-          ${error}
-        </div>` : ''}
-
-        <form method="POST" action="/admin/login" class="space-y-6" data-testid="admin-login-form">
-          ${csrfToken ? `<input type="hidden" name="_csrf" value="${csrfToken}" />` : ""}
-          <div>
-            <label for="input-admin-username" class="block text-sm font-medium text-white/60 mb-2">Username</label>
-            <input id="input-admin-username" type="text" name="username" required autocomplete="username" class="glass-input w-full px-4 py-3" placeholder="admin" data-testid="input-admin-username" />
-          </div>
-          <div>
-            <label for="input-admin-password" class="block text-sm font-medium text-white/60 mb-2">Password</label>
-            <input id="input-admin-password" type="password" name="password" required autocomplete="current-password" class="glass-input w-full px-4 py-3" placeholder="Enter password" data-testid="input-admin-password" />
-          </div>
-          <button type="submit" class="glass-btn w-full py-3 text-center" data-testid="button-admin-login">
-            Sign In
-          </button>
-        </form>
-      </div>
-
-      <p class="text-center text-white/45 text-sm mt-6">
-        <a href="/" class="hover:text-white/55 transition-colors">Back to HBDR.com</a>
-      </p>
-    </div>
-  </div>`;
-
-  return renderLayout({
-    title: "Login - HBDR Admin",
-    description: "HBDR Admin Login",
-    canonicalPath: "/admin/login",
-    bodyContent: content,
-    adminPage: true,
-  });
-}
-
 export function renderAdminLeadsPage(leads: LeadData[]): string {
   const totalLeads = leads.length;
   const newLeads = leads.filter(l => l.status === "new" || !l.status).length;
@@ -160,7 +108,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
             <a href="/admin/leads" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-white/50 hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
             <span class="text-white/10">|</span>
-            <a href="/admin/logout" class="text-sm text-white/55 hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
+            <a href="/cdn-cgi/access/logout" class="text-sm text-white/55 hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>
         </div>
       </div>
