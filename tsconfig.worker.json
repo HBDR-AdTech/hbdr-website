@@ -7,7 +7,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": ["ES2022"],
-    "baseUrl": ".",
     "paths": {
       "@shared/*": ["./shared/*"]
     },

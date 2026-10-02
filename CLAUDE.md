@@ -19,7 +19,7 @@ HBDR Website is a server-rendered marketing site for HBDR, an ad-tech company sp
 ## Key Commands
 
 ```bash
-npm install              # Install all dependencies (5 prod + 7 dev)
+npm install              # Install all dependencies (3 prod + 10 dev; Node 24)
 npm run dev              # CSS watch + dev server on port 5000
 npm run css:build        # One-shot Tailwind CSS build (minified)
 npm test                 # Run test suite (vitest)
