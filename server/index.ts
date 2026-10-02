@@ -4,6 +4,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
+import { siteSecurityHeaders } from "./middleware/security-headers";
 import { registerPageRoutes } from "./routes/pages";
 import { registerApiRoutes } from "./routes/api";
 import { registerAdminRoutes } from "./routes/admin";
@@ -17,6 +18,8 @@ import * as path from "path";
 const app = new Hono();
 
 app.use("*", logger());
+app.use("*", siteSecurityHeaders);
+// Admin is open in local dev only; the server binds to 127.0.0.1 below. Production verifies Cloudflare Access (worker.ts).
 
 // Single shared storage instance for dev
 const storage = new MemStorage();
@@ -55,16 +58,14 @@ app.get("/assets/:filename", (c) => {
 registerPageRoutes(app, getStorage);
 // No email binding under Node dev; notifications only send from the Worker
 registerApiRoutes(app, getStorage, () => ({}));
-registerAdminRoutes(app, getStorage, () => ({
-  adminPassword: process.env.ADMIN_PASSWORD || "hbdr2025!",
-}));
+registerAdminRoutes(app, getStorage);
 registerSeoRoutes(app, getStorage);
 registerErrorHandlers(app);
 
 const port = parseInt(process.env.PORT || "5000", 10);
 
 serve(
-  { fetch: app.fetch, port, hostname: "0.0.0.0" },
+  { fetch: app.fetch, port, hostname: "127.0.0.1" },
   (info) => {
     const time = new Date().toLocaleTimeString("en-US", {
       hour: "numeric",

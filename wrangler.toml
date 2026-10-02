@@ -9,7 +9,9 @@ directory = "./public"
 
 [vars]
 ENVIRONMENT = "production"
-# ADMIN_PASSWORD is set as a secret — run: wrangler secret put ADMIN_PASSWORD
+# Cloudflare Access app "HBDR Website Admin" (D-008); the Worker verifies its JWT on admin routes
+ACCESS_TEAM_DOMAIN = "securehbdr.cloudflareaccess.com"
+ACCESS_AUD = "e943f1f0f868134c4646f460deba4dc71b5b39374eca54b49a0da5ba8c7aec26"
 
 [[d1_databases]]
 binding = "DB"
@@ -19,3 +21,21 @@ database_id = "141aed40-1a51-46ac-a795-31e1c913a626"
 # Cloudflare Email Sending; hbdr.com onboarded as sending domain
 [[send_email]]
 name = "EMAIL"
+# least privilege: a compromised Worker still can only mail the team, from noreply@
+allowed_sender_addresses = ["noreply@hbdr.com"]
+allowed_destination_addresses = ["contact@hbdr.com", "support@hbdr.com"]
+
+# Branch previews (preview.yml deploys with --env preview). Own D1 so unreviewed code never touches
+# production leads, and no send_email binding so previews never email the team.
+[env.preview]
+name = "hbdr-website-preview"
+
+[env.preview.vars]
+ENVIRONMENT = "preview"
+ACCESS_TEAM_DOMAIN = "securehbdr.cloudflareaccess.com"
+ACCESS_AUD = "e943f1f0f868134c4646f460deba4dc71b5b39374eca54b49a0da5ba8c7aec26"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "hbdr-website-preview"
+database_id = "109060b2-e489-4c6b-bc39-1bcfc40c213a"

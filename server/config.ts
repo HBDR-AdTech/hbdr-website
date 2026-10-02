@@ -3,7 +3,8 @@ export const SITE_URL = "https://hbdr.com";
 export const SITE_NAME = "HBDR";
 export const CONTACT_EMAIL = "contact@hbdr.com";
 // hbdr.com is onboarded for Cloudflare Email Sending (DKIM selector cf-bounce)
-export const EMAIL_FROM = "HBDR Website <noreply@hbdr.com>";
+// Object form: the binding's allowed_sender_addresses matches the bare address, not "Name <addr>"
+export const EMAIL_FROM = { name: "HBDR Website", email: "noreply@hbdr.com" };
 
 // Where notification emails are sent (these receive the lead notifications)
 export const CONTACT_NOTIFY_EMAIL = "contact@hbdr.com";

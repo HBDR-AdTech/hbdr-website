@@ -20,7 +20,7 @@ describe("sendContactNotification", () => {
     const m = mailer();
     expect(await sendContactNotification(m, lead)).toBe(true);
     const msg = m.send.mock.calls[0][0];
-    expect(msg).toMatchObject({ from: "HBDR Website <noreply@hbdr.com>", to: "contact@hbdr.com", replyTo: "jane@publisher.com" });
+    expect(msg).toMatchObject({ from: { name: "HBDR Website", email: "noreply@hbdr.com" }, to: "contact@hbdr.com", replyTo: "jane@publisher.com" });
     expect(msg.subject).toBe("New Lead: Jane Doe - Publisher Inc");
     expect(msg.html).toContain("10M - 50M");
   });

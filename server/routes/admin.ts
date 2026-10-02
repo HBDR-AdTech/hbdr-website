@@ -1,65 +1,26 @@
-// Admin routes — login, logout, leads panel, blog admin, CSV export
+// Admin routes — leads panel, blog admin, CSV export. Auth: protectAdmin() in the entry point (Cloudflare Access)
 // Single source of truth for both entry points
 
 import type { Hono } from "hono";
 import type { IStorage } from "../services/storage";
-import { isAuthenticated, createSession, destroySession } from "../middleware/auth";
-import { renderAdminLoginPage, renderAdminLeadsPage } from "../templates/admin/leads";
+import { renderAdminLeadsPage } from "../templates/admin/leads";
 import { renderBlogAdminPage, renderBlogEditorPage } from "../templates/admin/blog";
 import { render404Page } from "../templates/pages/error";
-import { generateCsrfToken, validateCsrfToken } from "../middleware/csrf";
 
-interface AdminConfig {
-  adminPassword: string;
+// Quote every cell; a leading = + - @ would run as a formula when the export is opened in Excel/Sheets
+export function csvCell(value: unknown): string {
+  const text = String(value ?? "").replace(/^[=+\-@\t\r]/, "'$&");
+  return `"${text.replace(/"/g, '""')}"`;
 }
 
 export function registerAdminRoutes(
   app: Hono<any>,
-  getStorage: (c: any) => IStorage,
-  getConfig: (c: any) => AdminConfig
+  getStorage: (c: any) => IStorage
 ) {
-  // Auth routes
-  app.get("/admin/login", (c) => {
-    if (isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/leads");
-    const token = generateCsrfToken();
-    c.header("Set-Cookie", `hbdr_csrf=${token}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=3600`);
-    return c.html(renderAdminLoginPage(undefined, token));
-  });
-
-  app.post("/admin/login", async (c) => {
-    const body = await c.req.parseBody();
-
-    // Validate CSRF token
-    const csrfToken = body._csrf as string;
-    if (!validateCsrfToken(c.req.header("cookie"), csrfToken)) {
-      const newToken = generateCsrfToken();
-      c.header("Set-Cookie", `hbdr_csrf=${newToken}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=3600`);
-      return c.html(renderAdminLoginPage("Invalid request. Please try again.", newToken), 403);
-    }
-
-    const username = body.username as string;
-    const password = body.password as string;
-    const config = getConfig(c);
-
-    if (username === "admin" && password === config.adminPassword) {
-      const sessionId = createSession(username);
-      c.header("Set-Cookie", `hbdr_admin_session=${sessionId}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=86400`);
-      return c.redirect("/admin/leads", 302);
-    }
-
-    const newToken = generateCsrfToken();
-    c.header("Set-Cookie", `hbdr_csrf=${newToken}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age=3600`);
-    return c.html(renderAdminLoginPage("Invalid username or password", newToken), 401);
-  });
-
-  app.get("/admin/logout", (c) => {
-    destroySession(c.req.header("cookie"));
-    return c.redirect("/admin/login", 302);
-  });
+  app.get("/admin", (c) => c.redirect("/admin/leads"));
 
   // Leads panel
   app.get("/admin/leads", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/login");
     const storage = getStorage(c);
     const leads = await storage.getContactLeads();
     return c.html(renderAdminLeadsPage(leads));
@@ -67,24 +28,16 @@ export function registerAdminRoutes(
 
   // CSV export
   app.get("/admin/leads/export", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/login");
     const storage = getStorage(c);
     const leads = await storage.getContactLeads();
     const headers = ["ID", "Name", "Email", "Company", "Impressions", "Message", "Source", "Status", "IP", "Date"];
     const csvRows = [headers.join(",")];
     for (const lead of leads) {
       csvRows.push([
-        lead.id,
-        `"${(lead.name || "").replace(/"/g, '""')}"`,
-        lead.email,
-        `"${(lead.company || "").replace(/"/g, '""')}"`,
-        lead.impressions,
-        `"${(lead.message || "").replace(/"/g, '""')}"`,
-        lead.source || "contact",
-        lead.status || "new",
-        lead.ip || "",
+        lead.id, lead.name, lead.email, lead.company, lead.impressions, lead.message,
+        lead.source || "contact", lead.status || "new", lead.ip,
         lead.createdAt ? new Date(lead.createdAt).toISOString() : "",
-      ].join(","));
+      ].map(csvCell).join(","));
     }
     return new Response(csvRows.join("\n"), {
       headers: {
@@ -96,19 +49,16 @@ export function registerAdminRoutes(
 
   // Blog admin
   app.get("/admin/blog", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/login");
     const storage = getStorage(c);
     const posts = await storage.getBlogPosts(false);
     return c.html(renderBlogAdminPage(posts));
   });
 
   app.get("/admin/blog/new", (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/login");
     return c.html(renderBlogEditorPage());
   });
 
   app.get("/admin/blog/edit/:id", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.redirect("/admin/login");
     const storage = getStorage(c);
     const id = c.req.param("id");
     const post = await storage.getBlogPostById(id);

@@ -7,7 +7,6 @@ import { insertContactLeadSchema, insertBlogPostSchema } from "@shared/schema";
 import { fromError } from "zod-validation-error";
 import { sanitizeHtml, sanitizeText } from "../middleware/sanitize";
 import { checkRateLimit, getClientIp } from "../middleware/rate-limit";
-import { isAuthenticated } from "../middleware/auth";
 import { sendContactNotification } from "../services/email";
 import { validateOrigin } from "../middleware/csrf";
 import { isDisposableEmail } from "../middleware/email-blocklist";
@@ -148,7 +147,6 @@ export function registerApiRoutes(
 
   // Blog CRUD API
   app.post("/api/blog", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.json({ message: "Unauthorized" }, 401);
     try {
       const storage = getStorage(c);
       const body = await c.req.json();
@@ -169,7 +167,6 @@ export function registerApiRoutes(
   });
 
   app.put("/api/blog/:id", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.json({ message: "Unauthorized" }, 401);
     try {
       const storage = getStorage(c);
       const id = c.req.param("id");
@@ -196,7 +193,6 @@ export function registerApiRoutes(
   });
 
   app.delete("/api/blog/:id", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.json({ message: "Unauthorized" }, 401);
     try {
       const storage = getStorage(c);
       const id = c.req.param("id");
@@ -209,9 +205,8 @@ export function registerApiRoutes(
     }
   });
 
-  // Protected contact leads API
-  app.get("/api/contact", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.json({ message: "Unauthorized" }, 401);
+  // Lead list lives under /api/leads so Cloudflare Access covers it; /api/contact stays public for the form POST
+  app.get("/api/leads", async (c) => {
     try {
       const storage = getStorage(c);
       const leads = await storage.getContactLeads();
@@ -224,7 +219,6 @@ export function registerApiRoutes(
 
   // Lead status update
   app.post("/api/leads/:id/status", async (c) => {
-    if (!isAuthenticated(c.req.header("cookie"))) return c.json({ message: "Unauthorized" }, 401);
     const storage = getStorage(c);
     const id = c.req.param("id");
     const body = await c.req.json();

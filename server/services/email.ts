@@ -91,7 +91,8 @@ export async function sendContactNotification(
 
     const toAddress = isSupport ? SUPPORT_NOTIFY_EMAIL : CONTACT_NOTIFY_EMAIL;
 
-    const { messageId } = await mailer.send({
+    // local wrangler dev simulates the binding and returns undefined
+    const result = await mailer.send({
       from: EMAIL_FROM,
       to: toAddress,
       replyTo: data.email,
@@ -99,10 +100,10 @@ export async function sendContactNotification(
       html: htmlContent,
     });
 
-    console.log(`Email sent ${messageId}: ${sourceLabel} from ${safeSubjectName} (${sanitizeText(data.email)}) → ${toAddress}`);
+    console.log(`Email sent ${result?.messageId ?? "(simulated)"}: ${sourceLabel} from ${safeSubjectName} (${sanitizeText(data.email)}) → ${toAddress}`);
     return true;
   } catch (error) {
-    console.error(`Failed to send email notification (from ${EMAIL_FROM}):`, error);
+    console.error(`Failed to send email notification (from ${EMAIL_FROM.email}):`, error);
     return false;
   }
 }
