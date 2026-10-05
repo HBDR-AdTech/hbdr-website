@@ -33,10 +33,10 @@ export function renderFaqSupportPage(): string {
   ${renderPageHero("Support", "FAQ & Support", "Find answers to common questions or reach out to our dedicated support team for personalized assistance.")}
 
   <section class="py-20 lg:py-28" data-testid="faq-section">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Frequently Asked Questions</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Browse our most common questions organized by category.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Browse our most common questions organized by category.</p>
       </div>
 
       ${faqs.map((cat, ci) => `
@@ -53,10 +53,10 @@ export function renderFaqSupportPage(): string {
               data-testid="button-${faqId}"
             >
               <span class="font-semibold text-white/90">${item.q}</span>
-              <svg class="w-5 h-5 text-white/55 flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              <svg class="w-5 h-5 text-[var(--text-muted)] flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div x-show="openFaq === '${faqId}'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-              <div class="px-6 pb-6 text-white/55 leading-relaxed border-t border-white/5 pt-4">${item.a}</div>
+              <div class="px-6 pb-6 text-[var(--text-muted)] leading-relaxed border-t border-white/5 pt-4">${item.a}</div>
             </div>
           </div>`;
           }).join("")}
@@ -68,35 +68,35 @@ export function renderFaqSupportPage(): string {
   <div class="section-divider max-w-5xl mx-auto"></div>
 
   <section class="py-20 lg:py-28" data-testid="support-channels-section">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Support Channels</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Multiple ways to get the help you need, when you need it.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Multiple ways to get the help you need, when you need it.</p>
       </div>
       <div class="grid sm:grid-cols-3 gap-6 mb-16">
         <div class="glass-card p-8 text-center animate-on-scroll stagger-1" data-testid="support-channel-email">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mx-auto mb-5">
+          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2">Email Support</h3>
           <a href="mailto:support@hbdr.com" class="text-[var(--accent)] hover:underline text-sm" data-testid="link-support-email">support@hbdr.com</a>
-          <p class="text-white/50 text-sm mt-2">Response within 24 hours</p>
+          <p class="text-[var(--text-muted)] text-sm mt-2">Response within 24 hours</p>
         </div>
         <div class="glass-card p-8 text-center animate-on-scroll stagger-2" data-testid="support-channel-phone">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mx-auto mb-5">
+          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2">Phone Support</h3>
           <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline text-sm" data-testid="link-support-phone">(786) 675-6080</a>
-          <p class="text-white/50 text-sm mt-2">Mon-Fri, 9am-6pm EST</p>
+          <p class="text-[var(--text-muted)] text-sm mt-2">Mon-Fri, 9am-6pm EST</p>
         </div>
         <div class="glass-card p-8 text-center animate-on-scroll stagger-3" data-testid="support-channel-priority">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mx-auto mb-5">
+          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2">Priority Support</h3>
-          <p class="text-white/50 text-sm">Enterprise clients</p>
-          <p class="text-white/50 text-sm mt-2">Response within 4 hours</p>
+          <p class="text-[var(--text-muted)] text-sm">Enterprise clients</p>
+          <p class="text-[var(--text-muted)] text-sm mt-2">Response within 4 hours</p>
         </div>
       </div>
     </div>
@@ -105,10 +105,10 @@ export function renderFaqSupportPage(): string {
   <div class="section-divider max-w-5xl mx-auto"></div>
 
   <section class="py-20 lg:py-28" data-testid="support-form-section">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-3xl">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Submit a Support Request</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Fill out the form below and our support team will get back to you as soon as possible.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Fill out the form below and our support team will get back to you as soon as possible.</p>
       </div>
 
       <div class="glass-card p-8 sm:p-12 animate-on-scroll stagger-1" data-testid="support-form-card"
@@ -205,7 +205,7 @@ export function renderFaqSupportPage(): string {
             <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
           </div>
           <h3 class="text-2xl font-display text-white mb-2">Request Submitted</h3>
-          <p class="text-white/55">Our support team will get back to you within 24 hours. Thank you for reaching out.</p>
+          <p class="text-[var(--text-muted)]">Our support team will get back to you within 24 hours. Thank you for reaching out.</p>
         </div>
       </div>
     </div>

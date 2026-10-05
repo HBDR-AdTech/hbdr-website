@@ -1,17 +1,14 @@
 export function renderPageHero(tag: string, title: string, description: string): string {
   return `
-  <section class="relative overflow-hidden liquid-gradient pt-36 pb-20" data-testid="hero">
-    <div class="orb orb-1" style="opacity: 0.2;"></div>
-    <div class="orb orb-2" style="opacity: 0.12;"></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="glass-tag mb-6 mx-auto w-fit" style="animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards">${tag}</div>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display tracking-tight mb-6 text-gradient" style="animation: fadeInUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both">
+  <section class="relative overflow-hidden hero-glow pt-36 pb-20 lg:pt-44 lg:pb-24 border-b border-white/[0.06]" data-testid="hero">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-tag mb-6" style="animation: fadeInUp 0.5s var(--ease-out) both">${tag}</div>
+      <h1 class="text-4xl sm:text-5xl lg:text-[4rem] lg:leading-[1.05] font-display mb-6 max-w-4xl" style="animation: fadeInUp 0.6s 0.05s var(--ease-out) both">
         ${title}
       </h1>
-      <p class="text-lg sm:text-xl text-white/45 leading-relaxed max-w-2xl mx-auto" style="animation: fadeInUp 0.7s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both">
+      <p class="text-lg sm:text-xl text-[var(--text-muted)] leading-relaxed max-w-2xl" style="animation: fadeInUp 0.6s 0.1s var(--ease-out) both">
         ${description}
       </p>
     </div>
-    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--surface)] to-transparent"></div>
   </section>`;
 }

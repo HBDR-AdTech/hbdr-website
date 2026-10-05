@@ -9,14 +9,14 @@ export function renderDisplayAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="display-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-display-overview">
           <div class="glass-tag mb-6">Display Monetization</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Beyond the Banner</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Beyond the Banner</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Display advertising remains the backbone of digital monetization, but the landscape has evolved far beyond simple banners. HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers achieve 30-50% higher display revenue.
           </p>
         </div>
@@ -28,10 +28,10 @@ export function renderDisplayAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="display-formats-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Ad Formats</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Ad Formats</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Premium Display Formats</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Optimized ad units that balance user experience with maximum revenue potential.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Optimized ad units that balance user experience with maximum revenue potential.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -41,11 +41,11 @@ export function renderDisplayAdsPage(): string {
           { title: "Rich Media & Interstitials", desc: "High-impact interstitial and expandable formats for premium campaigns. Web interstitials fire between page navigations with compliant close controls and frequency capping per IAB and Google standards.", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>' },
         ].map((f, i) => `
         <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="display-format-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.desc}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -55,10 +55,10 @@ export function renderDisplayAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="display-features-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Key Capabilities</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Key Capabilities</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Intelligent Display Optimization</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every tool you need to maximize display revenue while protecting user experience.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Every tool you need to maximize display revenue while protecting user experience.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -69,11 +69,11 @@ export function renderDisplayAdsPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>', title: "Core Web Vitals", description: "Optimized ad delivery that protects CLS, LCP, and FID scores, preserving SEO rankings and user experience." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="display-feature-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

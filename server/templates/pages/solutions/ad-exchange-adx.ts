@@ -9,14 +9,14 @@ export function renderAdExchangePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="adx-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-adx-overview">
           <div class="glass-tag mb-6">Premium Exchange</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">What is Google Ad Exchange?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What is Google Ad Exchange?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Google Ad Exchange (AdX) is a premium programmatic marketplace that connects publishers with the world's largest pool of brand advertisers and agency demand. Unlike Google AdSense, which serves as an ad network with fixed pricing, AdX operates as a real-time auction exchange where thousands of buyers compete for every impression — resulting in significantly higher CPMs and fill rates.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Access to Google AdX requires either direct qualification through Google or partnership with a certified Google MCM or reseller partner like HBDR. Through our partnership, publishers of all sizes gain access to AdX's premium demand, advanced reporting, and granular controls that are otherwise only available to the largest media companies.
           </p>
         </div>
@@ -28,19 +28,19 @@ export function renderAdExchangePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="adx-comparison-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">AdX vs AdSense</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">AdX vs AdSense</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why AdX Outperforms AdSense</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">The key differences that drive 2-3x higher revenue for publishers.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">The key differences that drive 2-3x higher revenue for publishers.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8">
         <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-adx-benefits">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Google Ad Exchange Advantages</h3>
-          <ul class="space-y-3 text-white/55 text-[0.9375rem]">
+          <ul class="space-y-3 text-[var(--text-muted)] text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Real-time auction with thousands of competing buyers</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Access to premium brand and agency demand</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Granular floor pricing and blocking controls</li>
@@ -50,17 +50,17 @@ export function renderAdExchangePage(): string {
           </ul>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-adsense-comparison">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 12H6"/></svg>
+          <div class="icon-tile flex items-center justify-center mb-5">
+            <svg class="w-7 h-7 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 12H6"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white/60 mb-3">Google AdSense Limitations</h3>
-          <ul class="space-y-3 text-white/50 text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Fixed pricing with limited competition</li>
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Smaller pool of advertisers</li>
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Limited pricing and blocking controls</li>
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> No private marketplace support</li>
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> No programmatic deal capabilities</li>
-            <li class="flex items-start gap-2"><span class="text-white/45 mt-1">&#8722;</span> Basic reporting with limited transparency</li>
+          <ul class="space-y-3 text-[var(--text-muted)] text-[0.9375rem]">
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> Fixed pricing with limited competition</li>
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> Smaller pool of advertisers</li>
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> Limited pricing and blocking controls</li>
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> No private marketplace support</li>
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> No programmatic deal capabilities</li>
+            <li class="flex items-start gap-2"><span class="text-[var(--text-muted)] mt-1">&#8722;</span> Basic reporting with limited transparency</li>
           </ul>
         </div>
       </div>
@@ -71,10 +71,10 @@ export function renderAdExchangePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="adx-features-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">HBDR + AdX</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">HBDR + AdX</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Maximize Your AdX Revenue</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Our expertise turns AdX access into maximum revenue.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Our expertise turns AdX access into maximum revenue.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -87,11 +87,11 @@ export function renderAdExchangePage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>', title: "Dedicated Support", description: "Priority escalation to Google for account reviews, policy questions, and feature access. Our direct relationship with Google ensures faster resolution times." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="adx-feature-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

@@ -9,14 +9,14 @@ export function renderInAppAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inapp-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-inapp-overview">
           <div class="glass-tag mb-6">Mobile Monetization</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Revenue Without Friction</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Revenue Without Friction</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution offers lightweight, SDK-less integration via server-side APIs, eliminating the bloat and complexity of traditional SDK stacks while connecting your app to the full breadth of programmatic demand.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Our platform supports all major in-app ad formats — including rewarded video, interstitials, banners, and native ads — with intelligent mediation that maximizes eCPM across every user session. Advanced frequency capping and placement optimization ensure ads enhance rather than interrupt the user experience.
           </p>
         </div>
@@ -28,10 +28,10 @@ export function renderInAppAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inapp-formats-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Ad Formats</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Ad Formats</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Formats That Perform</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every format optimized for engagement, revenue, and user retention.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Every format optimized for engagement, revenue, and user retention.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -42,11 +42,11 @@ export function renderInAppAdsPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/>', title: "Banner Ads", description: "Standard and adaptive banner placements optimized for mobile viewports. Smart refresh cycles maximize revenue per session while maintaining quality." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="inapp-format-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -56,14 +56,14 @@ export function renderInAppAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inapp-integration-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-inapp-integration">
           <div class="glass-tag mb-6">Integration</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">SDK-Less Architecture</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">SDK-Less Architecture</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Unlike traditional mediation platforms that require heavy SDK integrations, HBDR's server-side approach connects your app to our auction engine via lightweight API calls. This means smaller app binary sizes, fewer crashes, faster app review cycles, and the ability to update demand configurations without app store submissions.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork/Privacy Sandbox compatibility for post-IDFA attribution.
           </p>
         </div>

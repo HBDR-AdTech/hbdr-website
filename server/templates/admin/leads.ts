@@ -39,7 +39,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="lead-row-${lead.id}">
       <td class="py-4 px-4">
         <div class="font-medium text-white">${lead.name}</div>
-        <div class="text-sm text-white/55">${lead.email}</div>
+        <div class="text-sm text-[var(--text-muted)]">${lead.email}</div>
       </td>
       <td class="py-4 px-4 text-white/60">${lead.company}</td>
       <td class="py-4 px-4 text-white/60 text-sm">${impressions}</td>
@@ -72,7 +72,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           </select>
         </div>
       </td>
-      <td class="py-4 px-4 text-white/55 text-sm">${date}</td>
+      <td class="py-4 px-4 text-[var(--text-muted)] text-sm">${date}</td>
       <td class="py-4 px-4">
         ${lead.message ? `
         <button
@@ -81,7 +81,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           data-testid="button-view-message-${lead.id}"
         >
           View
-        </button>` : '<span class="text-white/45 text-sm">-</span>'}
+        </button>` : '<span class="text-[var(--text-muted)] text-sm">-</span>'}
       </td>
     </tr>`;
   }).join("");
@@ -100,15 +100,15 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-6">
-            <a href="/" class="text-xl font-bold text-white" data-testid="link-admin-home">HBDR</a>
-            <span class="text-white/45">|</span>
+            <a href="/" class="text-xl font-semibold text-white" data-testid="link-admin-home">HBDR</a>
+            <span class="text-[var(--text-muted)]">|</span>
             <span class="text-white/60 font-medium">Admin Panel</span>
           </div>
           <div class="flex items-center gap-4">
             <a href="/admin/leads" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-leads">Leads</a>
-            <a href="/admin/blog" class="text-sm text-white/50 hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
+            <a href="/admin/blog" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
             <span class="text-white/10">|</span>
-            <a href="/cdn-cgi/access/logout" class="text-sm text-white/55 hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
+            <a href="/cdn-cgi/access/logout" class="text-sm text-[var(--text-muted)] hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>
         </div>
       </div>
@@ -118,8 +118,8 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
 
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-white" data-testid="heading-leads">Contact Leads</h1>
-          <p class="text-white/55 mt-1">${totalLeads} total leads</p>
+          <h1 class="text-3xl font-semibold text-white" data-testid="heading-leads">Contact Leads</h1>
+          <p class="text-[var(--text-muted)] mt-1">${totalLeads} total leads</p>
         </div>
         <a href="/admin/leads/export" class="inline-flex items-center gap-2 glass-btn px-5 py-2.5 text-sm" data-testid="button-export-csv">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,24 +131,24 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
 
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
         <div class="glass-card p-4 text-center" data-testid="stat-total">
-          <div class="text-2xl font-bold text-white">${totalLeads}</div>
-          <div class="text-xs text-white/55 mt-1">Total</div>
+          <div class="text-2xl font-semibold text-white">${totalLeads}</div>
+          <div class="text-xs text-[var(--text-muted)] mt-1">Total</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-new">
-          <div class="text-2xl font-bold text-blue-400">${newLeads}</div>
-          <div class="text-xs text-white/55 mt-1">New</div>
+          <div class="text-2xl font-semibold text-blue-400">${newLeads}</div>
+          <div class="text-xs text-[var(--text-muted)] mt-1">New</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-contacted">
-          <div class="text-2xl font-bold text-yellow-400">${contactedLeads}</div>
-          <div class="text-xs text-white/55 mt-1">Contacted</div>
+          <div class="text-2xl font-semibold text-yellow-400">${contactedLeads}</div>
+          <div class="text-xs text-[var(--text-muted)] mt-1">Contacted</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-qualified">
-          <div class="text-2xl font-bold text-[#2BDE73]">${qualifiedLeads}</div>
-          <div class="text-xs text-white/55 mt-1">Qualified</div>
+          <div class="text-2xl font-semibold text-[#2BDE73]">${qualifiedLeads}</div>
+          <div class="text-xs text-[var(--text-muted)] mt-1">Qualified</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-converted">
-          <div class="text-2xl font-bold text-purple-400">${convertedLeads}</div>
-          <div class="text-xs text-white/55 mt-1">Converted</div>
+          <div class="text-2xl font-semibold text-purple-400">${convertedLeads}</div>
+          <div class="text-xs text-[var(--text-muted)] mt-1">Converted</div>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
         <div class="overflow-x-auto">
           <table class="w-full text-left" data-testid="table-leads">
             <thead>
-              <tr class="border-b border-white/5 text-white/55 text-xs uppercase tracking-wider">
+              <tr class="border-b border-white/5 text-[var(--text-muted)] text-xs uppercase tracking-wider">
                 <th class="py-3 px-4 font-medium">Contact</th>
                 <th class="py-3 px-4 font-medium">Company</th>
                 <th class="py-3 px-4 font-medium">Volume</th>
@@ -190,7 +190,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
               </tr>
             </thead>
             <tbody>
-              ${leadRows || '<tr><td colspan="7" class="py-12 text-center text-white/50">No leads yet. They will appear here when someone fills out a contact form.</td></tr>'}
+              ${leadRows || '<tr><td colspan="7" class="py-12 text-center text-[var(--text-muted)]">No leads yet. They will appear here when someone fills out a contact form.</td></tr>'}
             </tbody>
           </table>
         </div>
@@ -208,7 +208,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <div class="glass-card p-8 max-w-lg w-full" @click.stop data-testid="modal-message">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-white" x-text="'Message from ' + modalName"></h3>
-          <button @click="showMessageModal = false" class="text-white/55 hover:text-white transition-colors" data-testid="button-close-modal">
+          <button @click="showMessageModal = false" class="text-[var(--text-muted)] hover:text-white transition-colors" data-testid="button-close-modal">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>

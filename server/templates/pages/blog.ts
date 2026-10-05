@@ -27,22 +27,22 @@ export function renderBlogPage(posts: BlogPostData[]): string {
       <div class="p-6 sm:p-8">
         <div class="flex items-center gap-3 mb-4">
           <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}" data-testid="badge-category">${post.category}</span>
-          <span class="text-xs text-white/50">${formatDate(post.publishedAt)}</span>
-          <span class="text-xs text-white/50 flex items-center gap-1">
+          <span class="text-xs text-[var(--text-muted)]">${formatDate(post.publishedAt)}</span>
+          <span class="text-xs text-[var(--text-muted)] flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             ${readTime} min read
           </span>
         </div>
         <a href="/blog/${post.slug}" class="block" data-testid="link-blog-post-${post.slug}">
-          <h2 class="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-[var(--accent)] transition-colors leading-snug">${post.title}</h2>
+          <h2 class="text-xl sm:text-2xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors leading-snug">${post.title}</h2>
         </a>
-        <p class="text-white/55 leading-relaxed mb-5 line-clamp-3">${post.excerpt}</p>
+        <p class="text-[var(--text-muted)] leading-relaxed mb-5 line-clamp-3">${post.excerpt}</p>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
               <span class="text-xs font-semibold text-[var(--accent)]">${post.author.split(" ").map(n => n[0]).join("")}</span>
             </div>
-            <span class="text-sm text-white/50">${post.author}</span>
+            <span class="text-sm text-[var(--text-muted)]">${post.author}</span>
           </div>
           <a href="/blog/${post.slug}" class="text-sm text-[var(--accent)] font-medium hover:text-[var(--accent-dark)] transition-colors flex items-center gap-1" data-testid="link-read-more-${post.slug}">
             Read More
@@ -56,7 +56,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 
   const categoryFilters = categories.map(cat => `
     <button data-cat="${sanitizeText(cat)}" @click="activeCategory = activeCategory === $el.dataset.cat ? '' : $el.dataset.cat"
-            :class="activeCategory === $el.dataset.cat ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-white/50 hover:text-white hover:border-white/20'"
+            :class="activeCategory === $el.dataset.cat ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-[var(--text-muted)] hover:text-white hover:border-white/20'"
             class="text-sm px-4 py-2 rounded-full border transition-all"
             data-testid="filter-${cat.toLowerCase().replace(/\s+/g, '-')}">
       ${cat}
@@ -70,7 +70,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
         <div class="relative flex-1 max-w-md">
-          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input type="search" aria-label="Search articles" x-model="searchQuery" placeholder="Search articles..."
                  class="glass-input w-full pl-11 pr-4 py-3 text-sm" data-testid="input-blog-search" />
         </div>
@@ -78,7 +78,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 
       <div class="flex flex-wrap items-center gap-3 mb-12" data-testid="blog-filters">
         <button @click="activeCategory = ''"
-                :class="!activeCategory ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-white/50 hover:text-white hover:border-white/20'"
+                :class="!activeCategory ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-[var(--text-muted)] hover:text-white hover:border-white/20'"
                 class="text-sm px-4 py-2 rounded-full border transition-all"
                 data-testid="filter-all">
           All Posts
@@ -107,7 +107,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostData[]): string {
   const tagsList = post.tags ? post.tags.split(",").map(t => t.trim()).filter(Boolean) : [];
   const tagsHtml = tagsList.map(tag => `
-    <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/55">${tag}</span>
+    <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-[var(--text-muted)]">${tag}</span>
   `).join("");
 
   const readTime = estimateReadTime(post.content);
@@ -127,9 +127,9 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
             </div>
             ` : ""}
             <span class="text-xs font-medium px-2 py-0.5 rounded-full border ${getCategoryColor(rp.category)} mb-3 inline-block">${rp.category}</span>
-            <h3 class="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors leading-snug mb-2">${rp.title}</h3>
-            <p class="text-sm text-white/55 line-clamp-3">${rp.excerpt}</p>
-            <div class="flex items-center gap-2 mt-3 text-xs text-white/50">
+            <h3 class="text-lg font-semibold text-white group-hover:text-[var(--accent)] transition-colors leading-snug mb-2">${rp.title}</h3>
+            <p class="text-sm text-[var(--text-muted)] line-clamp-3">${rp.excerpt}</p>
+            <div class="flex items-center gap-2 mt-3 text-xs text-[var(--text-muted)]">
               <span>${formatDate(rp.publishedAt)}</span>
               <span>&middot;</span>
               <span>${estimateReadTime(rp.content)} min read</span>
@@ -144,21 +144,21 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
   <article class="pt-28 pb-16" data-testid="blog-post-${post.slug}">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8" style="animation: fadeInUp 0.6s ease forwards">
-        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-white/55 hover:text-[var(--accent)] transition-colors mb-6" data-testid="link-back-to-blog">
+        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-6" data-testid="link-back-to-blog">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog
         </a>
         <div class="flex flex-wrap items-center gap-3 mb-6">
           <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
-          <span class="text-sm text-white/50">${formatDate(post.publishedAt)}</span>
-          ${showUpdated ? `<span class="text-sm text-white/25">Updated ${formatDate(post.updatedAt)}</span>` : ""}
-          <span class="text-sm text-white/50 flex items-center gap-1">
+          <span class="text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</span>
+          ${showUpdated ? `<span class="text-sm text-[var(--text-muted)]">Updated ${formatDate(post.updatedAt)}</span>` : ""}
+          <span class="text-sm text-[var(--text-muted)] flex items-center gap-1">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             ${readTime} min read
           </span>
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight text-gradient leading-snug mb-6" data-testid="text-post-title">${post.title}</h1>
-        <p class="text-lg text-white/50 leading-relaxed mb-8">${post.excerpt}</p>
+        <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-8">${post.excerpt}</p>
 
         ${post.coverImage ? `
         <div class="rounded-2xl overflow-hidden mb-8 border border-white/5">
@@ -172,7 +172,7 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
           </div>
           <div>
             <div class="font-medium text-white" data-testid="text-post-author">${post.author}</div>
-            <div class="text-sm text-white/50">${formatDate(post.publishedAt)}</div>
+            <div class="text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</div>
           </div>
         </div>
       </div>
@@ -184,7 +184,7 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
       ${tagsList.length > 0 ? `
       <div class="mt-12 pt-8 border-t border-white/5">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm text-white/50 mr-2">Tags:</span>
+          <span class="text-sm text-[var(--text-muted)] mr-2">Tags:</span>
           ${tagsHtml}
         </div>
       </div>

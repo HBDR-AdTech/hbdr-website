@@ -9,14 +9,14 @@ export function renderOpenBiddingPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ob-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-ob-overview">
           <div class="glass-tag mb-6">Server-to-Server Bidding</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">What is Open Bidding?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What is Open Bidding?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Google Open Bidding (formerly Exchange Bidding Dynamic Allocation, or EBDA) is Google's server-side bidding solution that allows third-party exchanges and SSPs to compete in a unified auction alongside Google Ad Exchange demand — all within Google Ad Manager. Unlike client-side header bidding, Open Bidding happens server-to-server, eliminating page latency while maintaining competitive auction dynamics.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             HBDR configures and manages your Open Bidding setup to complement your existing header bidding stack, creating a multi-layered auction strategy that maximizes competition and revenue. Our hybrid approach ensures you capture demand from partners that perform better in server-side environments while maintaining the transparency benefits of client-side Prebid.
           </p>
         </div>
@@ -28,10 +28,10 @@ export function renderOpenBiddingPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ob-advantages-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Advantages</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Advantages</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why Open Bidding Matters</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Combine the best of server-side speed with the scale of Google's ecosystem.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Combine the best of server-side speed with the scale of Google's ecosystem.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -41,11 +41,11 @@ export function renderOpenBiddingPage(): string {
           { title: "Simplified Billing", desc: "Revenue from all Open Bidding partners is consolidated in your Google Ad Manager payment, reducing reconciliation complexity and providing a single, reliable payment stream.", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>' },
         ].map((f, i) => `
         <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="ob-advantage-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.desc}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -55,10 +55,10 @@ export function renderOpenBiddingPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ob-features-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">HBDR Advantage</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">HBDR Advantage</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Open Bidding Expertise</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">We maximize Open Bidding performance through strategic partner selection and ongoing optimization.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">We maximize Open Bidding performance through strategic partner selection and ongoing optimization.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -69,11 +69,11 @@ export function renderOpenBiddingPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>', title: "Ongoing Tuning", description: "Continuous optimization of yield partner configurations, timeout settings, and floor prices specific to the Open Bidding auction environment." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="ob-feature-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
