@@ -44,7 +44,19 @@ Access app "HBDR Website Admin" (id `ed8b2081-38dc-487d-a816-5be437b2606d`, team
 The app password, login page, in-memory sessions and CSRF tokens are removed. Every admin path (`/admin*`, `/api/blog*`, `/api/leads*`) requires a valid Cloudflare Access JWT, verified in the Worker against the team JWKS, issuer and the app AUD; missing configuration fails closed. The lead list moved from `GET /api/contact` to `GET /api/leads` so Access covers it. Access also covers both Workers' workers.dev hostnames. Branch previews deploy with `--env preview` to their own D1 with no email binding. The `EMAIL` binding is allowlisted to send from noreply@ to contact@/support@ only. Threat model: `docs/SECURITY.md`.
 Supersedes: the `ADMIN_PASSWORD` login (and its public default).
 
-## D-010 — 2026-10-04 — Matt — Site uses the Linear (linear.app) look and feel
+## D-010 — 2026-10-04 — Matt — CI applies D1 migrations before every deploy
+
+Both workflows run `wrangler d1 migrations apply --remote` (prod DB on main, preview DB on branches) before `deploy`. Root cause it closes: `0002_rate_limits.sql` shipped on 2026-03-06 but was never applied to prod, so from that deploy until 2026-10-02 every contact/support submission threw on the missing table and the handler reported success; no leads were saved or emailed for seven months. Migrations stay additive (`IF NOT EXISTS`), so re-applying is a no-op.
+
+## D-011 — 2026-10-04 — Matt — Lead capture never fails silently again
+
+"Never mess this up again." Leads stopped from 2026-03-06 to 2026-10-02 and nobody knew. Standing rules:
+1. A form failure returns a non-2xx status and the visitor sees the error; never a success message on failure (test: `server/routes/__tests__/api.test.ts`).
+2. Code that queries a table ships with the migration that creates it (test: `server/__tests__/schema.test.ts` fails otherwise), and CI applies migrations before deploy (D-010).
+3. Any change that touches the contact/support path or email is verified after deploy by one live submission that lands in contact@hbdr.com, and the PR says so.
+4. Workers observability is on, and the Cloudflare notification "Workers errors (hbdr.com forms and all Workers)" (Workers Observability Real-Time Issue, policy `bf3c322a59a443ddb02f8dde4bc1e4d4`) emails matt@hbdr.com and matt.ortolani@gmail.com when a Worker starts throwing a new error.
+
+## D-012 — 2026-10-04 — Matt — Site uses the Linear (linear.app) look and feel
 
 The whole marketing site follows Linear's visual language: near-black canvas (`#08090a`), barely lighter surfaces, hairline borders, Inter for body and headings (semibold, tight tracking), muted gray body text (`#8a8f98`), restrained fade-up motion that honours prefers-reduced-motion (the partner marquee keeps moving), compact 8px-radius buttons, and at most one soft glow in a hero. HBDR mint `#2BDE73` replaces Linear's indigo as the single accent. No glassmorphism blur, floating orbs, gradient text or serif display face. Copy and claims are unchanged (D-005). Tokens live in `src/styles/main.css`.
 Supersedes: the dark glassmorphism theme (Figtree + Instrument Serif, orbs, liquid gradients).

@@ -7,6 +7,10 @@ tsconfig = "tsconfig.worker.json"
 [assets]
 directory = "./public"
 
+# Workers Logs feed the "Real-Time Issue" alert that emails on new errors (D-011)
+[observability]
+enabled = true
+
 [vars]
 ENVIRONMENT = "production"
 # Cloudflare Access app "HBDR Website Admin" (D-008); the Worker verifies its JWT on admin routes
