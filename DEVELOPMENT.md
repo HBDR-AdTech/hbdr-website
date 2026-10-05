@@ -177,37 +177,38 @@ The entire UI lives in one file. Navigation tips:
 
 ### Working with the Design System
 
-Key CSS classes (defined in `renderHead()` `<style>` block, lines 49-530):
+Key CSS classes (defined in `src/styles/main.css`; Linear-style: near-black canvas, hairline borders, Inter, mint `#2BDE73` as the only accent):
 
 | Class | Usage |
 |-------|-------|
-| `glass-card` | Frosted glass container with blur, border, hover lift |
-| `glass-btn` | Primary green gradient pill button |
-| `glass-btn-outline` | Secondary transparent outline pill button |
-| `glass-input` | Form input with glass background and green focus ring |
-| `glass-select` | Dropdown select with glass styling |
-| `glass-tag` | Small pill label (green tint) |
-| `glass-nav` | Fixed top navigation bar with blur |
-| `text-gradient` | White-to-gray gradient text |
-| `text-gradient-accent` | Green gradient text |
-| `liquid-gradient` | Background with radial green gradients |
+| `glass-card` | Elevated surface (`#0f1011`), hairline border, border brightens on hover |
+| `glass-btn` | Primary button, solid mint fill, 8px radius |
+| `glass-btn-outline` | Secondary button, subtle fill with hairline border |
+| `glass-input` | Form input, hairline border, mint focus ring |
+| `glass-select` | Dropdown select matching `glass-input` |
+| `glass-tag` | Small hairline pill label with a mint dot |
+| `glass-nav` | Fixed translucent top bar with hairline bottom border |
+| `text-gradient` | Heading text, flat near-white (name kept to avoid template churn) |
+| `text-gradient-accent` | Heading text in mint |
+| `hero-glow` | Single soft radial glow, heroes only |
+| `icon-tile` | Monochrome 40px icon tile |
 | `animate-on-scroll` | Fade-in-up on scroll (via IntersectionObserver) |
 | `stagger-1` through `stagger-6` | Delay for staggered animations |
-| `section-divider` | Subtle horizontal line between sections |
+| `section-divider` | Full-bleed hairline between sections |
 
 ### Reusable Template Components
 
 | Function | Purpose |
 |----------|---------|
 | `renderLayout(options)` | Wraps content with full HTML document (head, nav, footer, scripts) |
-| `renderPageHero(tag, title, description)` | Standard page hero section with orbs and gradient |
+| `renderPageHero(tag, title, description)` | Standard left-aligned page hero with a soft top glow |
 | `renderStatsSection()` | Stats grid (1T+ ads, 50%+ revenue, etc.) |
 | `renderCTASection(heading, buttonText)` | Call-to-action section with centered heading and button |
 | `renderContactFormSection()` | Full contact form with Alpine.js state management |
 
 ### Fonts
 
-The site uses **Figtree** (sans-serif, body text) and **Instrument Serif** (serif, decorative headings) loaded from Google Fonts CDN. Prior documentation incorrectly stated Inter — that was changed.
+The site uses **Inter** (variable, weights 300..800) for everything, loaded from Google Fonts. Headings are semibold with tight negative letter-spacing; body text is `--text-muted` `#8a8f98` or `--text-secondary` `#d0d6e0`.
 
 ---
 

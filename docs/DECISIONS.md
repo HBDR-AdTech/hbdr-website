@@ -43,3 +43,8 @@ Access app "HBDR Website Admin" (id `ed8b2081-38dc-487d-a816-5be437b2606d`, team
 
 The app password, login page, in-memory sessions and CSRF tokens are removed. Every admin path (`/admin*`, `/api/blog*`, `/api/leads*`) requires a valid Cloudflare Access JWT, verified in the Worker against the team JWKS, issuer and the app AUD; missing configuration fails closed. The lead list moved from `GET /api/contact` to `GET /api/leads` so Access covers it. Access also covers both Workers' workers.dev hostnames. Branch previews deploy with `--env preview` to their own D1 with no email binding. The `EMAIL` binding is allowlisted to send from noreply@ to contact@/support@ only. Threat model: `docs/SECURITY.md`.
 Supersedes: the `ADMIN_PASSWORD` login (and its public default).
+
+## D-010 — 2026-10-04 — Matt — Site uses the Linear (linear.app) look and feel
+
+The whole marketing site follows Linear's visual language: near-black canvas (`#08090a`), barely lighter surfaces, hairline borders, Inter for body and headings (semibold, tight tracking), muted gray body text (`#8a8f98`), restrained fade-up motion that honours prefers-reduced-motion (the partner marquee keeps moving), compact 8px-radius buttons, and at most one soft glow in a hero. HBDR mint `#2BDE73` replaces Linear's indigo as the single accent. No glassmorphism blur, floating orbs, gradient text or serif display face. Copy and claims are unchanged (D-005). Tokens live in `src/styles/main.css`.
+Supersedes: the dark glassmorphism theme (Figtree + Instrument Serif, orbs, liquid gradients).
