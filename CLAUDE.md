@@ -99,6 +99,7 @@ migrations/                  # D1 database schema (0001_init.sql)
 6. **Tests use Vitest** -- Run `npm test`. Tests cover sanitizer, CSRF, rate limiter, email notifications, blog helpers, and all page routes (85 tests). `data-testid` attributes are on key elements for future E2E testing.
 7. **Unlayered CSS beats utilities** -- Tailwind v4 puts utilities in `@layer utilities`; any plain rule in `main.css` wins over them regardless of specificity. Put global element rules in `@layer base` (see the `body > *` rule).
 8. **Migrations deploy with the code** -- CI applies `migrations/` to the remote D1 before `wrangler deploy` (D-010). Never ship code that needs a table without its migration file.
+9. **Lead capture never fails silently (D-011)** -- form failures return non-2xx and show the error; every queried table has a migration (`server/__tests__/schema.test.ts`); after any deploy touching the form or email path, submit once live and confirm it lands in contact@hbdr.com.
 
 ## Design System
 

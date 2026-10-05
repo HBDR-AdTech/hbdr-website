@@ -47,3 +47,11 @@ Supersedes: the `ADMIN_PASSWORD` login (and its public default).
 ## D-010 — 2026-10-04 — Matt — CI applies D1 migrations before every deploy
 
 Both workflows run `wrangler d1 migrations apply --remote` (prod DB on main, preview DB on branches) before `deploy`. Root cause it closes: `0002_rate_limits.sql` shipped on 2026-03-06 but was never applied to prod, so from that deploy until 2026-10-02 every contact/support submission threw on the missing table and the handler reported success; no leads were saved or emailed for seven months. Migrations stay additive (`IF NOT EXISTS`), so re-applying is a no-op.
+
+## D-011 — 2026-10-04 — Matt — Lead capture never fails silently again
+
+"Never mess this up again." Leads stopped from 2026-03-06 to 2026-10-02 and nobody knew. Standing rules:
+1. A form failure returns a non-2xx status and the visitor sees the error; never a success message on failure (test: `server/routes/__tests__/api.test.ts`).
+2. Code that queries a table ships with the migration that creates it (test: `server/__tests__/schema.test.ts` fails otherwise), and CI applies migrations before deploy (D-010).
+3. Any change that touches the contact/support path or email is verified after deploy by one live submission that lands in contact@hbdr.com, and the PR says so.
+4. Workers observability is on, and the Cloudflare notification "Workers errors (hbdr.com forms and all Workers)" (Workers Observability Real-Time Issue, policy `bf3c322a59a443ddb02f8dde4bc1e4d4`) emails matt@hbdr.com and matt.ortolani@gmail.com when a Worker starts throwing a new error.
