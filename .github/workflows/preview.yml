@@ -36,4 +36,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env preview
+          command: |
+            d1 migrations apply hbdr-website-preview --env preview --remote
+            deploy --env preview

@@ -43,3 +43,7 @@ Access app "HBDR Website Admin" (id `ed8b2081-38dc-487d-a816-5be437b2606d`, team
 
 The app password, login page, in-memory sessions and CSRF tokens are removed. Every admin path (`/admin*`, `/api/blog*`, `/api/leads*`) requires a valid Cloudflare Access JWT, verified in the Worker against the team JWKS, issuer and the app AUD; missing configuration fails closed. The lead list moved from `GET /api/contact` to `GET /api/leads` so Access covers it. Access also covers both Workers' workers.dev hostnames. Branch previews deploy with `--env preview` to their own D1 with no email binding. The `EMAIL` binding is allowlisted to send from noreply@ to contact@/support@ only. Threat model: `docs/SECURITY.md`.
 Supersedes: the `ADMIN_PASSWORD` login (and its public default).
+
+## D-010 — 2026-10-04 — Matt — CI applies D1 migrations before every deploy
+
+Both workflows run `wrangler d1 migrations apply --remote` (prod DB on main, preview DB on branches) before `deploy`. Root cause it closes: `0002_rate_limits.sql` shipped on 2026-03-06 but was never applied to prod, so from that deploy until 2026-10-02 every contact/support submission threw on the missing table and the handler reported success; no leads were saved or emailed for seven months. Migrations stay additive (`IF NOT EXISTS`), so re-applying is a no-op.
