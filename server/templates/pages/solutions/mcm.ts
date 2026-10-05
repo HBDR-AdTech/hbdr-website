@@ -9,14 +9,14 @@ export function renderMcmPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mcm-overview">
           <div class="glass-tag mb-6">Google MCM</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">What is Google MCM?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What is Google MCM?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. As a certified MCM partner, HBDR provides publishers access to premium Google Ad Exchange demand, advanced yield optimization, and enterprise-level support — even if they don't meet Google's individual eligibility thresholds.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Through our MCM relationship, publishers benefit from HBDR's negotiated pricing tiers, priority support channels, and access to exclusive demand that would otherwise be unavailable. We handle all the technical complexity of account provisioning, policy compliance, and revenue reconciliation.
           </p>
         </div>
@@ -28,10 +28,10 @@ export function renderMcmPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-benefits-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Benefits</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Benefits</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why Publishers Choose MCM</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Unlock premium demand, simplified operations, and accelerated revenue growth through our MCM partnership.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Unlock premium demand, simplified operations, and accelerated revenue growth through our MCM partnership.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -44,11 +44,11 @@ export function renderMcmPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', title: "Transparent Reporting", description: "Real-time revenue reporting with full breakdowns by publisher, ad unit, geography, and demand source. No hidden fees or opaque revenue calculations." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="mcm-benefit-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -58,14 +58,14 @@ export function renderMcmPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-process-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mcm-process">
           <div class="glass-tag mb-6">Onboarding</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Seamless MCM Onboarding</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Seamless MCM Onboarding</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             Getting started with HBDR's MCM program is straightforward. We handle the Google approval process, configure your Ad Manager account, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Our MCM agreement is transparent with no lock-in periods. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.
           </p>
         </div>

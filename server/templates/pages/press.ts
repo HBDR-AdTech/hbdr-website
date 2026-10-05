@@ -7,9 +7,9 @@ export function renderPressPage(): string {
 
   <!-- Press Releases -->
   <section class="py-24 lg:py-32" data-testid="press-releases-section">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Latest News</div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Latest News</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Press Releases</h2>
       </div>
 
@@ -26,7 +26,7 @@ export function renderPressPage(): string {
             <span class="glass-tag text-xs">${pr.date}</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">${pr.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${pr.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${pr.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -40,8 +40,8 @@ export function renderPressPage(): string {
       <div class="grid lg:grid-cols-2 gap-8">
         <div class="glass-card p-8 animate-on-scroll" data-testid="card-media-contact">
           <div class="glass-tag mb-6">Media Contact</div>
-          <h3 class="text-2xl font-bold text-white mb-4">Get in Touch</h3>
-          <p class="text-white/55 leading-relaxed mb-6">
+          <h3 class="text-2xl font-semibold text-white mb-4">Get in Touch</h3>
+          <p class="text-[var(--text-muted)] leading-relaxed mb-6">
             For press inquiries, interview requests, or media partnerships, please reach out to our communications team.
           </p>
           <div class="space-y-4">
@@ -58,11 +58,11 @@ export function renderPressPage(): string {
 
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-brand-assets">
           <div class="glass-tag mb-6">Brand Assets</div>
-          <h3 class="text-2xl font-bold text-white mb-4">Media Kit</h3>
-          <p class="text-white/55 leading-relaxed mb-6">
+          <h3 class="text-2xl font-semibold text-white mb-4">Media Kit</h3>
+          <p class="text-[var(--text-muted)] leading-relaxed mb-6">
             Download our official logos, brand guidelines, and media assets for use in press coverage and publications. All assets are available in multiple formats and resolutions.
           </p>
-          <p class="text-white/55 leading-relaxed">
+          <p class="text-[var(--text-muted)] leading-relaxed">
             For custom brand asset requests or high-resolution images, please contact our media team at press@hbdr.com.
           </p>
         </div>

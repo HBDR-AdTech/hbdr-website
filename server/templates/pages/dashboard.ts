@@ -8,14 +8,14 @@ export function renderDashboardPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="dashboard-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-dashboard-overview">
           <div class="glass-tag mb-6">Analytics Suite</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Your Revenue Command Center</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Your Revenue Command Center</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             HBDR's proprietary analytics dashboard is a comprehensive data suite that gives publishers complete visibility into their ad performance. From real-time revenue tracking to granular breakdowns by geography, device, and demand source, every metric you need is at your fingertips.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed mb-8">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-8">
             The dashboard is fully web-based, updates in real time, and is accessible from anywhere. Whether you manage a single site or a portfolio of properties, our command center consolidates all your data into one powerful interface.
           </p>
           <a href="https://dashboard.hbdr.com" target="_blank" rel="noopener noreferrer" class="glass-btn inline-flex items-center gap-2" data-testid="link-dashboard-external">
@@ -31,10 +31,10 @@ export function renderDashboardPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="dashboard-dimensions-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Data Dimensions</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Data Dimensions</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Slice Your Data Any Way You Need</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Drill down into performance across every dimension that matters to your business.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Drill down into performance across every dimension that matters to your business.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -47,11 +47,11 @@ export function renderDashboardPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>', title: "By Demand Source", description: "See which SSPs and demand partners are driving the most value, compare bid rates, and optimize your partner mix." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="dashboard-dimension-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -61,37 +61,37 @@ export function renderDashboardPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="dashboard-revenue-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Revenue Views</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Revenue Views</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Complete Revenue Visibility</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Understand exactly where your revenue comes from with dedicated views for every monetization channel.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Understand exactly where your revenue comes from with dedicated views for every monetization channel.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-adx-revenue">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">AdX Revenue & Performance</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             Google Ad Exchange metrics including CPMs, fill rates, revenue, and impression-level data. Track your AdX performance in real time with full transparency into auction dynamics.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-adserver-revenue">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Ad Server Revenue & Performance</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             Overall ad server (GAM) metrics and delivery data. Monitor line item pacing, total impressions served, and overall ad server revenue across all demand channels.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-3" data-testid="card-ssp-revenue">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">SSP Performance</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             Individual SSP and demand partner performance comparison. Evaluate bid rates, win rates, CPMs, and revenue contribution from each partner to optimize your demand stack.
           </p>
         </div>
@@ -110,10 +110,10 @@ export function renderDashboardPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="dashboard-features-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Platform Features</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Platform Features</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Everything You Need in One Dashboard</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Built for publishers who demand speed, accuracy, and actionable insights.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Built for publishers who demand speed, accuracy, and actionable insights.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -128,11 +128,11 @@ export function renderDashboardPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>', title: "Access Controls", description: "User-level permissions so your team sees exactly what they need." },
         ].map((f, i) => `
         <div class="glass-card p-6 group animate-on-scroll stagger-${(i % 4) + 1}" data-testid="dashboard-feature-card-${i}">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-4">
             <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-sm">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-sm">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>

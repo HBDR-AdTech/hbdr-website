@@ -9,17 +9,17 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inventory-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-inventory-overview">
           <div class="glass-tag mb-6">Full-Stack Ad Operations</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">What Is HBDR Manage Inventory?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Inventory?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             HBDR Manage Inventory is a <strong class="text-white/70">full-service ad operations engagement</strong> built on top of Google's <strong class="text-white/70">Multiple Customer Management (MCM)</strong> program. Unlike our <a href="/solutions/manage-account" class="text-[var(--accent)] hover:underline">Manage Account</a> offering — where you run your own GAM and we simply provide AdX access — Manage Inventory means <strong class="text-white/70">HBDR takes over the complete management of your ad inventory</strong> inside your Google Ad Manager.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             When you connect to HBDR's parent MCM account under a Manage Inventory arrangement, you're granting our team the access needed to operate your ad stack on your behalf. We handle everything: ad unit creation and configuration, header bidding setup, demand partner management, floor pricing, yield optimization, reporting, policy compliance, and ongoing performance tuning. You focus on creating content and growing your audience; we focus on maximizing every dollar your traffic earns.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             This is the engagement model for publishers who want to completely hand off ad monetization to a dedicated team with the tools, technology, and expertise to get the best possible results.
           </p>
         </div>
@@ -31,37 +31,37 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-how-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">How It Works</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">How It Works</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">The MCM Manage Inventory Connection</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">You grant HBDR access to manage your GAM inventory, and our team takes it from there.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">You grant HBDR access to manage your GAM inventory, and our team takes it from there.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="glass-card p-8 animate-on-scroll stagger-1 text-center" data-testid="card-mi-step-1">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">1</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">1</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">MCM Inventory Link</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             HBDR sends an MCM invitation from our parent Google Ad Manager 360 account. You accept the invitation inside your GAM, granting HBDR the permissions to manage your ad inventory directly.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2 text-center" data-testid="card-mi-step-2">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">2</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">2</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">HBDR Takes Over</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             Our ad ops team audits your current setup, then builds and optimizes your entire ad stack from scratch — ad units, Prebid configuration, Google AdX, Open Bidding, demand partners, floor pricing, and more.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-3 text-center" data-testid="card-mi-step-3">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">3</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">3</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Continuous Optimization</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             HBDR's team continuously monitors and optimizes your yield using our proprietary tools and real-time data. You receive transparent reporting and a dedicated account manager for ongoing communication.
           </p>
         </div>
@@ -73,64 +73,64 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-services-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">What HBDR Manages</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">What HBDR Manages</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Complete Yield Management</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Every layer of your ad monetization stack, handled by our expert team using industry-leading tools.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Every layer of your ad monetization stack, handled by our expert team using industry-leading tools.</p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-8">
         <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-gam-management">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">GAM Setup & Configuration</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
             HBDR builds your Google Ad Manager configuration from the ground up. We create optimized ad units, set up line item structures, configure key-value targeting, and implement the ad tags on your site. If you already have a GAM setup, we audit and restructure it for maximum performance.
           </p>
-          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
+          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Ad unit creation and placement strategy</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Line item architecture and priority management</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Key-value targeting and audience segmentation</li>
           </ul>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-demand-management">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Demand Partner Stack</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
             We select, integrate, and manage a curated stack of demand partners tailored to your traffic profile. This includes Prebid.js header bidding, Google AdX through our MCM parent account, Open Bidding partners, and direct SSP relationships — all continuously optimized for your specific audience and content verticals.
           </p>
-          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
+          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Prebid.js configuration and bidder management</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Google AdX access through HBDR parent MCM</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> 50+ SSP and exchange integrations</li>
           </ul>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-yield-optimization">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Yield Optimization</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
             HBDR's yield management team uses our proprietary optimization tools to squeeze maximum revenue from every impression. We run continuous A/B tests on floor prices, bidder configurations, ad layouts, refresh strategies, and timeout settings — making data-driven decisions that compound into significant revenue growth over time.
           </p>
-          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
+          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Dynamic floor pricing powered by ML</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Automated A/B testing across ad configurations</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Ad refresh and lazy-load optimization</li>
           </ul>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-reporting-compliance">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">Reporting & Compliance</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem] mb-4">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
             Full transparency into your ad performance with custom dashboards, monthly strategy reviews, and proactive policy compliance monitoring. HBDR manages your ads.txt, sellers.json, privacy consent (CMP), and all Google policy requirements so you never have to worry about account flags or violations.
           </p>
-          <ul class="space-y-2 text-white/55 text-[0.9375rem]">
+          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Custom revenue dashboards and reports</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> ads.txt and sellers.json management</li>
             <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> CMP/consent and privacy compliance</li>
@@ -144,11 +144,11 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-ma-comparison-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mi-vs-ma">
           <div class="glass-tag mb-6">MA vs. MI</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Manage Account vs. Manage Inventory</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-8">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Manage Account vs. Manage Inventory</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-8">
             Both options connect your GAM to HBDR's parent MCM account, but the level of service is completely different. Here's how to decide which is right for you:
           </p>
           <div class="overflow-x-auto">
@@ -160,7 +160,7 @@ export function renderManageInventoryPage(): string {
                   <th class="py-4 pl-4 text-white/70 font-semibold">Manage Inventory (MI)</th>
                 </tr>
               </thead>
-              <tbody class="text-white/55">
+              <tbody class="text-[var(--text-muted)]">
                 <tr class="border-b border-white/5">
                   <td class="py-3 pr-4 text-white/60 font-medium">Who runs GAM?</td>
                   <td class="py-3 px-4">You (the publisher)</td>
@@ -208,10 +208,10 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-tools-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">HBDR Advantage</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">HBDR Advantage</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Tools & Team</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Proprietary technology and seasoned ad ops professionals working together to maximize your revenue.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Proprietary technology and seasoned ad ops professionals working together to maximize your revenue.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -224,11 +224,11 @@ export function renderManageInventoryPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', title: "Transparent Reporting", description: "No black boxes. You get full access to your revenue data, see exactly how every demand source performs, and receive clear explanations for every optimization decision HBDR makes on your behalf." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="inventory-feature-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -238,11 +238,11 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-who-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mi-who">
           <div class="glass-tag mb-6">Ideal For</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Who Should Choose Manage Inventory?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Should Choose Manage Inventory?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             HBDR Manage Inventory is the right choice for publishers who want to completely outsource their ad monetization. If you don't have an in-house ad ops team — or simply don't want to spend time managing demand partners, floor prices, and GAM configurations — this is the engagement model for you.
           </p>
           <div class="grid sm:grid-cols-2 gap-4 mt-8">
@@ -256,7 +256,7 @@ export function renderManageInventoryPage(): string {
             ].map(item => `
             <div class="flex items-start gap-3">
               <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
-              <span class="text-white/50 text-[0.9375rem]">${item}</span>
+              <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
             </div>`).join("")}
           </div>
         </div>

@@ -82,9 +82,9 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-commitment-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Built on Trust</h2>
-        <p class="text-lg text-white/55 max-w-3xl mx-auto leading-relaxed">HBDR operates in one of the most complex ecosystems in digital advertising. With billions of ad transactions happening daily, trust and compliance aren't optional — they're essential. HBDR is committed to maintaining the highest standards across every aspect of our operations, from how we manage publisher inventory to how we handle user data.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">HBDR operates in one of the most complex ecosystems in digital advertising. With billions of ad transactions happening daily, trust and compliance aren't optional — they're essential. HBDR is committed to maintaining the highest standards across every aspect of our operations, from how we manage publisher inventory to how we handle user data.</p>
       </div>
     </div>
   </section>
@@ -93,14 +93,14 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-supply-chain-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Supply Chain Transparency</h2>
       </div>
       <div class="grid sm:grid-cols-2 gap-6">
         ${supplyChainCards.map((c, i) => `
         <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="trust-supply-${i}">
           <h3 class="text-xl font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-white/55 leading-relaxed">${c.desc}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed">${c.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -110,14 +110,14 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-anti-fraud-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Anti-Fraud & Traffic Quality</h2>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${antiFraudCards.map((c, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-fraud-${i}">
           <h3 class="text-lg font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-white/55 text-sm leading-relaxed">${c.desc}</p>
+          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -127,14 +127,14 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-privacy-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Privacy & Data Protection</h2>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${privacyCards.map((c, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-privacy-${i}">
           <h3 class="text-lg font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-white/55 text-sm leading-relaxed">${c.desc}</p>
+          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -144,7 +144,7 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-certifications-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Industry Partnerships & Certifications</h2>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -154,7 +154,7 @@ export function renderTrustCompliancePage(): string {
             <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2">${c.title}</h3>
-          <p class="text-white/55 text-sm leading-relaxed">${c.desc}</p>
+          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -164,15 +164,15 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-capabilities-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">What HBDR Does</h2>
-        <p class="text-lg text-white/55 max-w-3xl mx-auto leading-relaxed">HBDR is a full-service ad technology and ad operations company serving publishers and advertisers across every channel, format, and device.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">HBDR is a full-service ad technology and ad operations company serving publishers and advertisers across every channel, format, and device.</p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${capabilities.map((c, i) => `
         <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-capability-${i}">
           <h3 class="text-lg font-semibold text-white mb-2">${c.title}</h3>
-          <p class="text-white/55 text-sm leading-relaxed">${c.desc}</p>
+          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -182,7 +182,7 @@ export function renderTrustCompliancePage(): string {
 
   <section class="py-24 lg:py-32" data-testid="trust-who-we-serve-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16 animate-on-scroll">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Serving Every Type of Publisher & Advertiser</h2>
       </div>
       <div class="grid md:grid-cols-2 gap-8">
@@ -190,7 +190,7 @@ export function renderTrustCompliancePage(): string {
           <h3 class="text-xl font-semibold text-white mb-6">Publishers We Serve</h3>
           <ul class="space-y-3">
             ${publishersWeServe.map(item => `
-            <li class="flex items-start gap-3 text-white/55 leading-relaxed">
+            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
               <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               ${item}
             </li>`).join("")}
@@ -200,7 +200,7 @@ export function renderTrustCompliancePage(): string {
           <h3 class="text-xl font-semibold text-white mb-6">Advertisers We Serve</h3>
           <ul class="space-y-3">
             ${advertisersWeServe.map(item => `
-            <li class="flex items-start gap-3 text-white/55 leading-relaxed">
+            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
               <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
               ${item}
             </li>`).join("")}

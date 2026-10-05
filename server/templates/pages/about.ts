@@ -10,14 +10,14 @@ export function renderAboutPage(): string {
   <!-- Mission -->
   <section class="py-24 lg:py-32" data-testid="about-mission-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mission">
           <div class="glass-tag mb-6">Our Mission</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Maximizing Publisher Revenue</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Maximizing Publisher Revenue</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             At HBDR, our mission is to empower digital publishers with enterprise-grade ad monetization technology. We believe every publisher deserves access to the most advanced header bidding solutions, transparent analytics, and dedicated support to unlock their full revenue potential.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             We combine cutting-edge technology with deep industry expertise to deliver solutions that consistently outperform traditional ad networks, helping our partners achieve an average revenue increase of over 50%.
           </p>
         </div>
@@ -30,10 +30,10 @@ export function renderAboutPage(): string {
   <!-- Story / Timeline -->
   <section class="py-24 lg:py-32" data-testid="about-story-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Our Journey</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Our Journey</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Story</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Key milestones that shaped who we are today.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Key milestones that shaped who we are today.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8 relative">
@@ -46,7 +46,7 @@ export function renderAboutPage(): string {
         <div class="glass-card p-8 text-center relative animate-on-scroll stagger-${i + 1}" data-testid="timeline-card-${i}">
           <div class="step-number mx-auto mb-6">${item.step}</div>
           <h3 class="text-xl font-semibold text-white mb-4">${item.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${item.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${item.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -57,10 +57,10 @@ export function renderAboutPage(): string {
   <!-- Values -->
   <section class="py-24 lg:py-32" data-testid="about-values-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">What We Stand For</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">What We Stand For</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Values</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">The principles that guide everything we do.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">The principles that guide everything we do.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -71,11 +71,11 @@ export function renderAboutPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>', title: "Performance", description: "Relentless focus on delivering measurable results and maximizing revenue for every partner." },
         ].map((v, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${i + 1}" data-testid="value-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${v.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${v.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${v.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${v.description}</p>
         </div>`).join("")}
       </div>
     </div>

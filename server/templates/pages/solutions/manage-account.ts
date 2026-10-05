@@ -9,17 +9,17 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="account-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-account-overview">
           <div class="glass-tag mb-6">Google MA &middot; MCM Connection</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">What Is HBDR Manage Account?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Account?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             HBDR Manage Account (MA) is a <strong class="text-white/70">Multiple Customer Management (MCM)</strong> relationship inside <strong class="text-white/70">Google Ad Manager 360</strong>. When you connect to HBDR's parent MCM account, your Google Ad Manager network is linked to our parent network as a child publisher. This connection grants your site access to <strong class="text-white/70">Google Ad Exchange (AdX)</strong> premium programmatic demand through HBDR — demand that is otherwise unavailable to publishers who don't meet Google's direct AdX eligibility requirements.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             The key advantage of a Google MA arrangement is that <strong class="text-white/70">you continue to operate inside your own GAM</strong>. You keep your existing ad units, line items, reporting, and trafficking workflows exactly as they are. HBDR's parent MCM simply extends AdX eligibility to your account so high-value exchange demand can compete in your unified auction alongside your other demand partners.
           </p>
-          <p class="text-lg text-white/50 leading-relaxed">
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
             Whether you call it a Google MA, an HBDR MA, or an MCM Manage Account connection — the result is the same: more competition for every impression, higher CPMs, and significantly more revenue, all without giving up control of your ad operations.
           </p>
         </div>
@@ -31,37 +31,37 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-structure-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">How It Works</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">How It Works</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">The MCM Parent-Child Structure</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">A transparent relationship where HBDR provides the AdX connection and you stay in the driver's seat.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">A transparent relationship where HBDR provides the AdX connection and you stay in the driver's seat.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
         <div class="glass-card p-8 animate-on-scroll stagger-1 text-center" data-testid="card-mcm-step-1">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">1</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">1</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">MCM Invitation</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             HBDR sends an MCM invitation from our Google Ad Manager 360 parent account to your GAM network. You accept the invitation directly inside your own GAM — a simple, one-click approval.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-2 text-center" data-testid="card-mcm-step-2">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">2</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">2</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">AdX Demand Flows In</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             Once the MCM link is active, Google Ad Exchange demand from HBDR's parent account is made available to compete in your ad auctions. AdX line items appear inside your GAM, competing alongside your existing header bidding, direct deals, and other programmatic partners.
           </p>
         </div>
         <div class="glass-card p-8 animate-on-scroll stagger-3 text-center" data-testid="card-mcm-step-3">
-          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/5 flex items-center justify-center mb-6 mx-auto">
-            <span class="text-2xl font-bold text-white/90">3</span>
+          <div class="icon-tile flex items-center justify-center mb-6 mx-auto">
+            <span class="text-2xl font-semibold text-white/90">3</span>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3">You Stay in Control</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">
             You continue to manage your own GAM — your ad units, line item priorities, targeting, reporting, and yield strategy remain entirely under your control. HBDR provides the AdX connection; you run the show.
           </p>
         </div>
@@ -73,10 +73,10 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ma-benefits-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Benefits</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Benefits</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why Publishers Choose HBDR MA</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Access premium Google AdX demand without changing how you run your ads.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Access premium Google AdX demand without changing how you run your ads.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -89,11 +89,11 @@ export function renderManageAccountPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>', title: "Dedicated Support", description: "Every HBDR MA publisher gets a dedicated account manager who monitors AdX performance, handles policy compliance, manages ads.txt and sellers.json updates, and provides monthly performance reviews." },
         ].map((f, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="account-service-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${f.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -103,11 +103,11 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ma-who-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto animate-on-scroll">
+      <div class="max-w-4xl animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-ma-who">
           <div class="glass-tag mb-6">Ideal For</div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-6 text-gradient">Who Is Google MA Right For?</h2>
-          <p class="text-lg text-white/50 leading-relaxed mb-6">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Is Google MA Right For?</h2>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
             HBDR Manage Account is built for publishers who already have an ad ops team (or handle their own ad operations) and simply need access to premium AdX demand. If you're comfortable managing your own Google Ad Manager but don't qualify for a direct Google Ad Exchange relationship — or if your current AdX partner isn't delivering the results you expect — HBDR MA is the solution.
           </p>
           <div class="grid sm:grid-cols-2 gap-4 mt-8">
@@ -121,7 +121,7 @@ export function renderManageAccountPage(): string {
             ].map(item => `
             <div class="flex items-start gap-3">
               <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
-              <span class="text-white/50 text-[0.9375rem]">${item}</span>
+              <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
             </div>`).join("")}
           </div>
         </div>
@@ -133,8 +133,8 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ma-faq-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">FAQ</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">FAQ</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Common Questions About Google MA</h2>
       </div>
 
@@ -148,7 +148,7 @@ export function renderManageAccountPage(): string {
         ].map((faq, i) => `
         <div class="glass-card p-6 animate-on-scroll" data-testid="ma-faq-${i}">
           <h3 class="text-lg font-semibold text-white mb-3">${faq.q}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${faq.a}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${faq.a}</p>
         </div>`).join("")}
       </div>
     </div>

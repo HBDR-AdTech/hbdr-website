@@ -9,10 +9,10 @@ export function renderCareersPage(): string {
   <!-- Why HBDR -->
   <section class="py-24 lg:py-32" data-testid="careers-why-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Why Join Us</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Why Join Us</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why HBDR</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Join a team that's redefining digital advertising technology.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Join a team that's redefining digital advertising technology.</p>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-8">
@@ -22,11 +22,11 @@ export function renderCareersPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>', title: "Growth & Learning", description: "Continuous learning opportunities, mentorship from industry veterans, and a clear career growth path in one of tech's fastest-growing sectors." },
         ].map((item, i) => `
         <div class="glass-card p-8 group animate-on-scroll stagger-${i + 1}" data-testid="careers-why-card-${i}">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-5">
             <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>
           </div>
           <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${item.title}</h3>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${item.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${item.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -37,10 +37,10 @@ export function renderCareersPage(): string {
   <!-- Benefits -->
   <section class="py-24 lg:py-32" data-testid="careers-benefits-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Perks & Benefits</div>
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Perks & Benefits</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Benefits</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">We take care of our team so they can focus on doing their best work.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">We take care of our team so they can focus on doing their best work.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -53,11 +53,11 @@ export function renderCareersPage(): string {
           { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', title: "Team Retreats", description: "Annual company retreats and quarterly team offsites around the world." },
         ].map((b, i) => `
         <div class="glass-card p-7 group animate-on-scroll stagger-${i + 1}" data-testid="benefit-card-${i}">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <div class="icon-tile flex items-center justify-center mb-4">
             <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${b.icon}</svg>
           </div>
           <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-[var(--accent)] transition-colors">${b.title}</h3>
-          <p class="text-white/55 leading-relaxed text-sm">${b.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-sm">${b.description}</p>
         </div>`).join("")}
       </div>
     </div>
@@ -67,11 +67,11 @@ export function renderCareersPage(): string {
 
   <!-- Open Positions -->
   <section class="py-24 lg:py-32" data-testid="careers-positions-section">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-20 animate-on-scroll">
-        <div class="glass-tag mb-6 mx-auto w-fit">Open Roles</div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
+      <div class="mb-14 lg:mb-16 animate-on-scroll">
+        <div class="glass-tag mb-6">Open Roles</div>
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Open Positions</h2>
-        <p class="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">Find your next opportunity at HBDR.</p>
+        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Find your next opportunity at HBDR.</p>
       </div>
 
       <div class="space-y-4">
@@ -87,12 +87,12 @@ export function renderCareersPage(): string {
               <h3 class="text-xl font-semibold text-white">${pos.title}</h3>
               <div class="flex items-center gap-3 mt-2">
                 <span class="glass-tag text-xs">${pos.dept}</span>
-                <span class="text-sm text-white/55">${pos.location}</span>
+                <span class="text-sm text-[var(--text-muted)]">${pos.location}</span>
               </div>
             </div>
             <a href="/contact" class="glass-btn text-sm px-6 py-2.5 text-center flex-shrink-0" data-testid="button-apply-${i}">Apply Now</a>
           </div>
-          <p class="text-white/55 leading-relaxed text-[0.9375rem]">${pos.description}</p>
+          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${pos.description}</p>
         </div>`).join("")}
       </div>
     </div>
