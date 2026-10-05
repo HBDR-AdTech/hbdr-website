@@ -36,4 +36,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
+          # migrations before deploy so new code never runs against a schema prod doesn't have
+          command: |
+            d1 migrations apply hbdr-website-database --remote
+            deploy
