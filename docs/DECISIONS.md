@@ -60,3 +60,7 @@ Both workflows run `wrangler d1 migrations apply --remote` (prod DB on main, pre
 
 The whole marketing site follows Linear's visual language: near-black canvas (`#08090a`), barely lighter surfaces, hairline borders, Inter for body and headings (semibold, tight tracking), muted gray body text (`#8a8f98`), restrained fade-up motion that honours prefers-reduced-motion (the partner marquee keeps moving), compact 8px-radius buttons, and at most one soft glow in a hero. HBDR mint `#2BDE73` replaces Linear's indigo as the single accent. No glassmorphism blur, floating orbs, gradient text or serif display face. Copy and claims are unchanged (D-005). Tokens live in `src/styles/main.css`.
 Supersedes: the dark glassmorphism theme (Figtree + Instrument Serif, orbs, liquid gradients).
+
+## D-013 — 2026-10-06 — Matt — Leads are kept forever
+
+`contact_leads` is append-only: the app inserts leads and updates `status`, and nothing in code or migrations may delete, drop or truncate the table (`server/__tests__/schema.test.ts` fails otherwise). This includes the 16 Feb–Mar 2026 leads that never reached the inbox and the test submissions. Recovery layers: D1 Time Travel (30-day point-in-time restore, `wrangler d1 time-travel restore`), and offline exports at `~/.config/hbdr/backups/contact_leads-<UTC>.sql` (mode 600, PII, never committed); first export 2026-10-06 with 24 rows.
