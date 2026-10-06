@@ -28,4 +28,13 @@ describe("D1 schema", () => {
     expect(used.size).toBeGreaterThan(0);
     expect([...used].filter((t) => !created.has(t))).toEqual([]);
   });
+
+  // Leads are append-only (D-013): nothing in code or migrations may remove them
+  it("never deletes, drops or truncates contact_leads", () => {
+    const files = [...sources(join(root, "server")), join(root, "worker.ts"),
+      ...readdirSync(join(root, "migrations")).map((f) => join(root, "migrations", f))];
+    const offenders = files.filter((f) =>
+      /\b(DELETE\s+FROM|DROP\s+TABLE(\s+IF\s+EXISTS)?|TRUNCATE(\s+TABLE)?)\s+contact_leads\b/i.test(readFileSync(f, "utf8")));
+    expect(offenders).toEqual([]);
+  });
 });
