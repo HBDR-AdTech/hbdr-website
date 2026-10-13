@@ -64,3 +64,8 @@ Supersedes: the dark glassmorphism theme (Figtree + Instrument Serif, orbs, liqu
 ## D-013 — 2026-10-06 — Matt — Leads are kept forever
 
 `contact_leads` is append-only: the app inserts leads and updates `status`, and nothing in code or migrations may delete, drop or truncate the table (`server/__tests__/schema.test.ts` fails otherwise). This includes the 16 Feb–Mar 2026 leads that never reached the inbox and the test submissions. Recovery layers: D1 Time Travel (30-day point-in-time restore, `wrangler d1 time-travel restore`), and offline exports at `~/.config/hbdr/backups/contact_leads-<UTC>.sql` (mode 600, PII, never committed); first export 2026-10-06 with 24 rows.
+
+## D-014 — 2026-10-13 — Matt — Contact form asks qualifying questions
+
+The contact form (home and /contact) asks, besides name, work email, company and monthly impressions: phone (optional), role (optional), inventory type (Website / Mobile app / CTV / OTT checkboxes, at least one), domain, bundle ID or app URL, app store URLs (optional, shown when Mobile app or CTV is ticked), ads.txt URL (optional), current monetization, top traffic region, timeline and how they heard about HBDR (last three optional). Choice lists live once in `LEAD_OPTIONS` (`shared/schema.ts`); the API accepts only those values and stores each answer in its own `contact_leads` column (`migrations/0003_lead_details.sql`). The browser enforces the required ones; the API keeps every qualifying field optional so a visitor on a cached pre-change page still gets through (D-011). The lead email and the admin leads table show every answer given.
+Rollback: revert the commit; the added columns are nullable and harmless to the old code.
