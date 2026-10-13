@@ -1,5 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost } from "./services/storage";
+import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails } from "./services/storage";
+import { LEAD_DETAIL_COLUMNS } from "./services/storage";
 
 export class D1Storage implements IStorage {
   constructor(private db: D1Database) {}
@@ -24,17 +25,20 @@ export class D1Storage implements IStorage {
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
+    const details = Object.fromEntries(LEAD_DETAIL_COLUMNS.map(([key]) => [key, lead[key] ?? null])) as unknown as LeadDetails;
+    const detailColumns = LEAD_DETAIL_COLUMNS.map(([, column]) => column);
     await this.db.prepare(
-      "INSERT INTO contact_leads (id, name, email, company, impressions, message, ip, source, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      `INSERT INTO contact_leads (id, name, email, company, impressions, message, ip, source, status, created_at, ${detailColumns.join(", ")}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ${detailColumns.map(() => "?").join(", ")})`
     ).bind(
       id, lead.name, lead.email, lead.company, lead.impressions,
-      lead.message || null, lead.ip || null, lead.source || "contact", "new", now
+      lead.message || null, lead.ip || null, lead.source || "contact", "new", now,
+      ...LEAD_DETAIL_COLUMNS.map(([key]) => details[key]),
     ).run();
     return {
       id, name: lead.name, email: lead.email, company: lead.company,
       impressions: lead.impressions, message: lead.message || null,
       ip: lead.ip || null, source: lead.source || "contact", status: "new",
-      createdAt: new Date(now),
+      createdAt: new Date(now), ...details,
     };
   }
 
@@ -213,6 +217,7 @@ export class D1Storage implements IStorage {
       impressions: row.impressions, message: row.message,
       ip: row.ip, source: row.source, status: row.status,
       createdAt: row.created_at ? new Date(row.created_at) : null,
+      ...(Object.fromEntries(LEAD_DETAIL_COLUMNS.map(([key, column]) => [key, row[column] ?? null])) as unknown as LeadDetails),
     };
   }
 

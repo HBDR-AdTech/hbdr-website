@@ -25,6 +25,14 @@ describe("sendContactNotification", () => {
     expect(msg.html).toContain("10M - 50M");
   });
 
+  it("lists the qualifying answers a contact lead gave", async () => {
+    const m = mailer();
+    await sendContactNotification(m, { ...lead, phone: "+1 305 555 0100", inventoryTypes: "Website, CTV / OTT", property: "pub.com", currentSetup: "Google Ad Manager", referral: null });
+    const html = m.send.mock.calls[0][0].html;
+    for (const text of ["+1 305 555 0100", "Website, CTV / OTT", "pub.com", "Google Ad Manager"]) expect(html).toContain(text);
+    expect(html).not.toContain("Heard about us");
+  });
+
   it("routes support requests to support@ and parses subject/priority", async () => {
     const m = mailer();
     await sendContactNotification(m, { ...lead, source: "support", company: "Login broken [Priority: High]" });

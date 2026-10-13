@@ -100,6 +100,10 @@ export function registerApiRoutes(
         email: validatedData.data.email.toLowerCase().trim(),
         company: sanitizeText(validatedData.data.company),
         message: validatedData.data.message ? sanitizeText(validatedData.data.message) : null,
+        inventoryTypes: validatedData.data.inventoryTypes?.length ? validatedData.data.inventoryTypes.join(", ") : null,
+        property: validatedData.data.property ? sanitizeText(validatedData.data.property) : null,
+        appStoreUrls: validatedData.data.appStoreUrls ? sanitizeText(validatedData.data.appStoreUrls) : null,
+        adsTxtUrl: validatedData.data.adsTxtUrl ? sanitizeText(validatedData.data.adsTxtUrl) : null,
       };
 
       const storage = getStorage(c);
@@ -107,15 +111,7 @@ export function registerApiRoutes(
 
       // waitUntil keeps the Worker alive for the send after the response returns; a bare promise gets cancelled
       if (config.email) {
-        c.executionCtx.waitUntil(sendContactNotification(config.email, {
-          name: sanitizedData.name,
-          email: sanitizedData.email,
-          company: sanitizedData.company,
-          impressions: sanitizedData.impressions,
-          message: sanitizedData.message,
-          source,
-          ip,
-        }));
+        c.executionCtx.waitUntil(sendContactNotification(config.email, lead));
       }
 
       return c.html(`

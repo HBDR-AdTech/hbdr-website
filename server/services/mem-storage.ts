@@ -1,5 +1,6 @@
 // In-memory storage for local development (no database required)
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost } from "./storage";
+import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails } from "./storage";
+import { LEAD_DETAIL_COLUMNS } from "./storage";
 
 export class MemStorage implements IStorage {
   private users = new Map<string, User>();
@@ -35,6 +36,7 @@ export class MemStorage implements IStorage {
       source: lead.source || "contact",
       status: "new",
       createdAt: new Date(),
+      ...(Object.fromEntries(LEAD_DETAIL_COLUMNS.map(([key]) => [key, lead[key] ?? null])) as unknown as LeadDetails),
     };
     this.contactLeads.set(id, newLead);
     return newLead;

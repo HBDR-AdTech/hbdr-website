@@ -2,16 +2,23 @@
 
 import { sanitizeText } from "../middleware/sanitize";
 import { EMAIL_FROM, CONTACT_NOTIFY_EMAIL, SUPPORT_NOTIFY_EMAIL } from "../config";
+import type { LeadDetails } from "./storage";
 
-interface ContactNotificationData {
+interface ContactNotificationData extends Partial<LeadDetails> {
   name: string;
   email: string;
   company: string;
   impressions: string;
   message: string | null;
-  source: string;
+  source: string | null;
   ip: string | null;
 }
+
+const detailLabels: [keyof LeadDetails, string][] = [
+  ["phone", "Phone"], ["role", "Role"], ["inventoryTypes", "Inventory"], ["property", "Domain / bundle ID"],
+  ["appStoreUrls", "App store URLs"], ["adsTxtUrl", "ads.txt URL"], ["currentSetup", "Current setup"],
+  ["topGeo", "Top geo"], ["timeline", "Timeline"], ["referral", "Heard about us"],
+];
 
 const impressionLabels: Record<string, string> = {
   "under-10m": "Under 10M",
@@ -46,6 +53,10 @@ function buildDetailRows(data: ContactNotificationData): string {
     rows += row("Company", sanitizeText(data.company));
     const impressionDisplay = impressionLabels[data.impressions] || sanitizeText(data.impressions);
     rows += row("Impressions", impressionDisplay);
+    for (const [key, label] of detailLabels) {
+      const value = data[key];
+      if (value) rows += row(label, sanitizeText(value).replace(/\n/g, "<br>"));
+    }
   }
 
   if (safeIp) {
