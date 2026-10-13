@@ -9,16 +9,20 @@ export function renderHeaderBiddingPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="hb-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-hb-overview">
-          <div class="glass-tag mb-6">Unified Auctions</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">How Header Bidding Works</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            Header bidding revolutionizes programmatic advertising by allowing multiple demand sources to bid on your inventory simultaneously, rather than sequentially through a traditional waterfall. HBDR's implementation leverages Prebid.js — the industry-standard open-source framework — combined with our proprietary server-side bidding infrastructure to ensure every impression is sold at the highest possible price.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Our unified auction engine processes bids from 50+ demand partners in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution see an average CPM uplift of 40-60% compared to traditional waterfall setups.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-hb-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Unified Auctions</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">How Header Bidding Works</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              Header bidding revolutionizes programmatic advertising by allowing multiple demand sources to bid on your inventory simultaneously, rather than sequentially through a traditional waterfall. HBDR's implementation leverages Prebid.js — the industry-standard open-source framework — combined with our proprietary server-side bidding infrastructure to ensure every impression is sold at the highest possible price.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Our unified auction engine processes bids from 50+ demand partners in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution see an average CPM uplift of 40-60% compared to traditional waterfall setups.
+            </p>
+          </div>
         </div>
       </div>
     </div>

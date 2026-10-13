@@ -9,16 +9,20 @@ export function renderInAppAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inapp-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-inapp-overview">
-          <div class="glass-tag mb-6">Mobile Monetization</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Revenue Without Friction</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution offers lightweight, SDK-less integration via server-side APIs, eliminating the bloat and complexity of traditional SDK stacks while connecting your app to the full breadth of programmatic demand.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Our platform supports all major in-app ad formats — including rewarded video, interstitials, banners, and native ads — with intelligent mediation that maximizes eCPM across every user session. Advanced frequency capping and placement optimization ensure ads enhance rather than interrupt the user experience.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-inapp-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Mobile Monetization</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Revenue Without Friction</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution offers lightweight, SDK-less integration via server-side APIs, eliminating the bloat and complexity of traditional SDK stacks while connecting your app to the full breadth of programmatic demand.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Our platform supports all major in-app ad formats — including rewarded video, interstitials, banners, and native ads — with intelligent mediation that maximizes eCPM across every user session. Advanced frequency capping and placement optimization ensure ads enhance rather than interrupt the user experience.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -56,16 +60,20 @@ export function renderInAppAdsPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inapp-integration-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-inapp-integration">
-          <div class="glass-tag mb-6">Integration</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">SDK-Less Architecture</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            Unlike traditional mediation platforms that require heavy SDK integrations, HBDR's server-side approach connects your app to our auction engine via lightweight API calls. This means smaller app binary sizes, fewer crashes, faster app review cycles, and the ability to update demand configurations without app store submissions.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork/Privacy Sandbox compatibility for post-IDFA attribution.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-inapp-integration">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Integration</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">SDK-Less Architecture</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              Unlike traditional mediation platforms that require heavy SDK integrations, HBDR's server-side approach connects your app to our auction engine via lightweight API calls. This means smaller app binary sizes, fewer crashes, faster app review cycles, and the ability to update demand configurations without app store submissions.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork/Privacy Sandbox compatibility for post-IDFA attribution.
+            </p>
+          </div>
         </div>
       </div>
     </div>

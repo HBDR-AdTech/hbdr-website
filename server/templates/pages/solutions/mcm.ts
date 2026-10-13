@@ -9,16 +9,20 @@ export function renderMcmPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-mcm-overview">
-          <div class="glass-tag mb-6">Google MCM</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What is Google MCM?</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. As a certified MCM partner, HBDR provides publishers access to premium Google Ad Exchange demand, advanced yield optimization, and enterprise-level support — even if they don't meet Google's individual eligibility thresholds.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Through our MCM relationship, publishers benefit from HBDR's negotiated pricing tiers, priority support channels, and access to exclusive demand that would otherwise be unavailable. We handle all the technical complexity of account provisioning, policy compliance, and revenue reconciliation.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-mcm-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Google MCM</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What is Google MCM?</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. As a certified MCM partner, HBDR provides publishers access to premium Google Ad Exchange demand, advanced yield optimization, and enterprise-level support — even if they don't meet Google's individual eligibility thresholds.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Through our MCM relationship, publishers benefit from HBDR's negotiated pricing tiers, priority support channels, and access to exclusive demand that would otherwise be unavailable. We handle all the technical complexity of account provisioning, policy compliance, and revenue reconciliation.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -58,16 +62,20 @@ export function renderMcmPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mcm-process-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-mcm-process">
-          <div class="glass-tag mb-6">Onboarding</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Seamless MCM Onboarding</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            Getting started with HBDR's MCM program is straightforward. We handle the Google approval process, configure your Ad Manager account, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Our MCM agreement is transparent with no lock-in periods. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-mcm-process">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Onboarding</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Seamless MCM Onboarding</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              Getting started with HBDR's MCM program is straightforward. We handle the Google approval process, configure your Ad Manager account, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Our MCM agreement is transparent with no lock-in periods. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.
+            </p>
+          </div>
         </div>
       </div>
     </div>

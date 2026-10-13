@@ -9,19 +9,23 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="inventory-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-inventory-overview">
-          <div class="glass-tag mb-6">Full-Stack Ad Operations</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Inventory?</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            HBDR Manage Inventory is a <strong class="text-white/70">full-service ad operations engagement</strong> built on top of Google's <strong class="text-white/70">Multiple Customer Management (MCM)</strong> program. Unlike our <a href="/solutions/manage-account" class="text-[var(--accent)] hover:underline">Manage Account</a> offering — where you run your own GAM and we simply provide AdX access — Manage Inventory means <strong class="text-white/70">HBDR takes over the complete management of your ad inventory</strong> inside your Google Ad Manager.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            When you connect to HBDR's parent MCM account under a Manage Inventory arrangement, you're granting our team the access needed to operate your ad stack on your behalf. We handle everything: ad unit creation and configuration, header bidding setup, demand partner management, floor pricing, yield optimization, reporting, policy compliance, and ongoing performance tuning. You focus on creating content and growing your audience; we focus on maximizing every dollar your traffic earns.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            This is the engagement model for publishers who want to completely hand off ad monetization to a dedicated team with the tools, technology, and expertise to get the best possible results.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-inventory-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Full-Stack Ad Operations</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Inventory?</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              HBDR Manage Inventory is a <strong class="text-white/70">full-service ad operations engagement</strong> built on top of Google's <strong class="text-white/70">Multiple Customer Management (MCM)</strong> program. Unlike our <a href="/solutions/manage-account" class="text-[var(--accent)] hover:underline">Manage Account</a> offering — where you run your own GAM and we simply provide AdX access — Manage Inventory means <strong class="text-white/70">HBDR takes over the complete management of your ad inventory</strong> inside your Google Ad Manager.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              When you connect to HBDR's parent MCM account under a Manage Inventory arrangement, you're granting our team the access needed to operate your ad stack on your behalf. We handle everything: ad unit creation and configuration, header bidding setup, demand partner management, floor pricing, yield optimization, reporting, policy compliance, and ongoing performance tuning. You focus on creating content and growing your audience; we focus on maximizing every dollar your traffic earns.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              This is the engagement model for publishers who want to completely hand off ad monetization to a dedicated team with the tools, technology, and expertise to get the best possible results.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -144,7 +148,7 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-ma-comparison-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
+      <div class="animate-on-scroll">
         <div class="glass-card p-8 sm:p-12" data-testid="card-mi-vs-ma">
           <div class="glass-tag mb-6">MA vs. MI</div>
           <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Manage Account vs. Manage Inventory</h2>
@@ -238,26 +242,30 @@ export function renderManageInventoryPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="mi-who-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-mi-who">
-          <div class="glass-tag mb-6">Ideal For</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Should Choose Manage Inventory?</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            HBDR Manage Inventory is the right choice for publishers who want to completely outsource their ad monetization. If you don't have an in-house ad ops team — or simply don't want to spend time managing demand partners, floor prices, and GAM configurations — this is the engagement model for you.
-          </p>
-          <div class="grid sm:grid-cols-2 gap-4 mt-8">
-            ${[
-              "Publishers without an in-house ad ops team",
-              "Content creators who want to focus on content, not ads",
-              "Sites looking for fully outsourced monetization",
-              "Publishers frustrated with underperforming ad partners",
-              "Growing sites that need expert yield management from day one",
-              "Multi-site operators who need a single partner for all properties",
-            ].map(item => `
-            <div class="flex items-start gap-3">
-              <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
-              <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
-            </div>`).join("")}
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-mi-who">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Ideal For</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Should Choose Manage Inventory?</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              HBDR Manage Inventory is the right choice for publishers who want to completely outsource their ad monetization. If you don't have an in-house ad ops team — or simply don't want to spend time managing demand partners, floor prices, and GAM configurations — this is the engagement model for you.
+            </p>
+            <div class="grid sm:grid-cols-2 gap-4 mt-8">
+              ${[
+                "Publishers without an in-house ad ops team",
+                "Content creators who want to focus on content, not ads",
+                "Sites looking for fully outsourced monetization",
+                "Publishers frustrated with underperforming ad partners",
+                "Growing sites that need expert yield management from day one",
+                "Multi-site operators who need a single partner for all properties",
+              ].map(item => `
+              <div class="flex items-start gap-3">
+                <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
+                <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
+              </div>`).join("")}
+            </div>
           </div>
         </div>
       </div>

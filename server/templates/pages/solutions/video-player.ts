@@ -9,16 +9,20 @@ export function renderVideoPlayerPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="video-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-video-overview">
-          <div class="glass-tag mb-6">Custom-Built Player</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Built for Revenue, Designed for Users</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            HBDR's video player is fully custom-built from the ground up — not a white-labeled third-party solution. Every line of code is optimized for both desktop and mobile, supporting instream and outstream video formats for all OLV (Online Video) purposes.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            The player generates massive RPMs and yield for publishers by delivering high-quality video ads on websites and in apps. With intelligent ad scheduling, viewability optimization, and multi-source header bidding built in, our player turns every video impression into maximum revenue.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-video-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Custom-Built Player</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Built for Revenue, Designed for Users</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              HBDR's video player is fully custom-built from the ground up — not a white-labeled third-party solution. Every line of code is optimized for both desktop and mobile, supporting instream and outstream video formats for all OLV (Online Video) purposes.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              The player generates massive RPMs and yield for publishers by delivering high-quality video ads on websites and in apps. With intelligent ad scheduling, viewability optimization, and multi-source header bidding built in, our player turns every video impression into maximum revenue.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -99,28 +103,32 @@ export function renderVideoPlayerPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="video-revenue-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-video-revenue">
-          <div class="glass-tag mb-6">Revenue Engine</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Maximizing Video RPMs</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            Every aspect of the HBDR video player is engineered for the highest possible RPMs. From intelligent ad pod scheduling that sequences ads for maximum yield, to viewability optimization that keeps the player in view, our technology ensures no revenue is left on the table.
-          </p>
-          <div class="grid sm:grid-cols-2 gap-4 mt-8">
-            ${[
-              "Intelligent ad pod scheduling",
-              "Viewability optimization",
-              "Multi-demand-source video header bidding",
-              "Lazy loading for performance",
-              "Adaptive bitrate for quality across connections",
-              "VAST/VPAID/VMAP compliance",
-            ].map(f => `
-            <div class="flex items-start gap-3">
-              <span class="text-[var(--accent)] mt-0.5">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              </span>
-              <span class="text-[var(--text-muted)] text-[0.9375rem]">${f}</span>
-            </div>`).join("")}
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-video-revenue">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Revenue Engine</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Maximizing Video RPMs</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              Every aspect of the HBDR video player is engineered for the highest possible RPMs. From intelligent ad pod scheduling that sequences ads for maximum yield, to viewability optimization that keeps the player in view, our technology ensures no revenue is left on the table.
+            </p>
+            <div class="grid sm:grid-cols-2 gap-4 mt-8">
+              ${[
+                "Intelligent ad pod scheduling",
+                "Viewability optimization",
+                "Multi-demand-source video header bidding",
+                "Lazy loading for performance",
+                "Adaptive bitrate for quality across connections",
+                "VAST/VPAID/VMAP compliance",
+              ].map(f => `
+              <div class="flex items-start gap-3">
+                <span class="text-[var(--accent)] mt-0.5">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </span>
+                <span class="text-[var(--text-muted)] text-[0.9375rem]">${f}</span>
+              </div>`).join("")}
+            </div>
           </div>
         </div>
       </div>

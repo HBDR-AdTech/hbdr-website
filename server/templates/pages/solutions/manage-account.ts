@@ -9,19 +9,23 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="account-overview-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-account-overview">
-          <div class="glass-tag mb-6">Google MA &middot; MCM Connection</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Account?</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            HBDR Manage Account (MA) is a <strong class="text-white/70">Multiple Customer Management (MCM)</strong> relationship inside <strong class="text-white/70">Google Ad Manager 360</strong>. When you connect to HBDR's parent MCM account, your Google Ad Manager network is linked to our parent network as a child publisher. This connection grants your site access to <strong class="text-white/70">Google Ad Exchange (AdX)</strong> premium programmatic demand through HBDR — demand that is otherwise unavailable to publishers who don't meet Google's direct AdX eligibility requirements.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            The key advantage of a Google MA arrangement is that <strong class="text-white/70">you continue to operate inside your own GAM</strong>. You keep your existing ad units, line items, reporting, and trafficking workflows exactly as they are. HBDR's parent MCM simply extends AdX eligibility to your account so high-value exchange demand can compete in your unified auction alongside your other demand partners.
-          </p>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-            Whether you call it a Google MA, an HBDR MA, or an MCM Manage Account connection — the result is the same: more competition for every impression, higher CPMs, and significantly more revenue, all without giving up control of your ad operations.
-          </p>
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-account-overview">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Google MA &middot; MCM Connection</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">What Is HBDR Manage Account?</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              HBDR Manage Account (MA) is a <strong class="text-white/70">Multiple Customer Management (MCM)</strong> relationship inside <strong class="text-white/70">Google Ad Manager 360</strong>. When you connect to HBDR's parent MCM account, your Google Ad Manager network is linked to our parent network as a child publisher. This connection grants your site access to <strong class="text-white/70">Google Ad Exchange (AdX)</strong> premium programmatic demand through HBDR — demand that is otherwise unavailable to publishers who don't meet Google's direct AdX eligibility requirements.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              The key advantage of a Google MA arrangement is that <strong class="text-white/70">you continue to operate inside your own GAM</strong>. You keep your existing ad units, line items, reporting, and trafficking workflows exactly as they are. HBDR's parent MCM simply extends AdX eligibility to your account so high-value exchange demand can compete in your unified auction alongside your other demand partners.
+            </p>
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+              Whether you call it a Google MA, an HBDR MA, or an MCM Manage Account connection — the result is the same: more competition for every impression, higher CPMs, and significantly more revenue, all without giving up control of your ad operations.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -103,26 +107,30 @@ export function renderManageAccountPage(): string {
 
   <section class="py-24 lg:py-32" data-testid="ma-who-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12" data-testid="card-ma-who">
-          <div class="glass-tag mb-6">Ideal For</div>
-          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Is Google MA Right For?</h2>
-          <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-            HBDR Manage Account is built for publishers who already have an ad ops team (or handle their own ad operations) and simply need access to premium AdX demand. If you're comfortable managing your own Google Ad Manager but don't qualify for a direct Google Ad Exchange relationship — or if your current AdX partner isn't delivering the results you expect — HBDR MA is the solution.
-          </p>
-          <div class="grid sm:grid-cols-2 gap-4 mt-8">
-            ${[
-              "Publishers with their own GAM who need AdX access",
-              "Sites with 1M+ monthly pageviews seeking higher CPMs",
-              "Ad ops teams who want to keep control of their stack",
-              "Publishers switching from underperforming MCM partners",
-              "Multi-site networks looking for a single AdX connection",
-              "Content creators ready to monetize with premium demand",
-            ].map(item => `
-            <div class="flex items-start gap-3">
-              <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
-              <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
-            </div>`).join("")}
+      <div class="animate-on-scroll">
+        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-ma-who">
+          <div class="lg:col-span-5">
+            <div class="glass-tag mb-6">Ideal For</div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Who Is Google MA Right For?</h2>
+          </div>
+          <div class="lg:col-span-7">
+            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
+              HBDR Manage Account is built for publishers who already have an ad ops team (or handle their own ad operations) and simply need access to premium AdX demand. If you're comfortable managing your own Google Ad Manager but don't qualify for a direct Google Ad Exchange relationship — or if your current AdX partner isn't delivering the results you expect — HBDR MA is the solution.
+            </p>
+            <div class="grid sm:grid-cols-2 gap-4 mt-8">
+              ${[
+                "Publishers with their own GAM who need AdX access",
+                "Sites with 1M+ monthly pageviews seeking higher CPMs",
+                "Ad ops teams who want to keep control of their stack",
+                "Publishers switching from underperforming MCM partners",
+                "Multi-site networks looking for a single AdX connection",
+                "Content creators ready to monetize with premium demand",
+              ].map(item => `
+              <div class="flex items-start gap-3">
+                <span class="text-[var(--accent)] mt-1 flex-shrink-0">&#10003;</span>
+                <span class="text-[var(--text-muted)] text-[0.9375rem]">${item}</span>
+              </div>`).join("")}
+            </div>
           </div>
         </div>
       </div>
