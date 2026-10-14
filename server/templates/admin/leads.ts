@@ -81,7 +81,8 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <td class="py-4 px-4">
         ${lead.message ? `
         <button
-          @click="$dispatch('show-message', { name: '${lead.name.replace(/'/g, "\\'")}', message: '${(lead.message || '').replace(/'/g, "\\'").replace(/\n/g, "\\n")}' })"
+          data-name="${lead.name}" data-message="${lead.message}"
+          @click="$dispatch('show-message', { name: $el.dataset.name, message: $el.dataset.message })"
           class="text-[#2BDE73] hover:text-[#1AAF5C] text-sm transition-colors"
           data-testid="button-view-message-${lead.id}"
         >
