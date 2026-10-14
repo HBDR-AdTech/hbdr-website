@@ -87,7 +87,7 @@ export function registerPageRoutes(app: Hono<any>, getStorage: (c: any) => IStor
   app.get("/privacy-policy", (c) => c.html(renderPrivacyPolicyPage()));
   app.get("/terms", (c) => c.html(renderTermsPage()));
   app.get("/gdpr-cookie-policy", (c) => c.html(renderGdprCookiePolicyPage()));
-  app.get("/support", (c) => c.html(renderFaqSupportPage()));
+  app.get("/support", async (c) => c.html(renderFaqSupportPage((await formConfig(c)).turnstileSiteKey)));
 
   // Blog (needs storage)
   app.get("/blog", async (c) => {

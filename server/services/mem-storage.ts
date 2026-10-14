@@ -1,30 +1,14 @@
 // In-memory storage for local development (no database required)
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./storage";
+import type { IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./storage";
 import { LEAD_DETAIL_COLUMNS } from "./storage";
 
 export class MemStorage implements IStorage {
-  private users = new Map<string, User>();
   private contactLeads = new Map<string, ContactLead>();
   private blogPosts = new Map<string, BlogPost>();
   private fieldOverrides = new Map<string, string>();
   private formSettings = new Map<string, string>();
   private formChanges: FormConfigChange[] = [];
   private seeded = false;
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(u => u.username === username);
-  }
-
-  async createUser(user: { username: string; password: string }): Promise<User> {
-    const id = crypto.randomUUID();
-    const newUser = { id, ...user };
-    this.users.set(id, newUser);
-    return newUser;
-  }
 
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
     const id = crypto.randomUUID();

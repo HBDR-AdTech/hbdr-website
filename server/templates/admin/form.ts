@@ -1,4 +1,4 @@
-// Admin "Form settings" page (D-016). Static HTML: everything shown comes from GET /api/form-config at runtime
+// Admin "Form settings" page (D-016). Static HTML: everything shown comes from GET /admin/api/form-config at runtime
 // and is rendered with x-text / :value, so operator text never reaches the markup or an Alpine expression.
 import { renderLayout } from "../layout";
 
@@ -14,7 +14,7 @@ const script = `
       newField: { label: '', type: 'text', options: '', required: false },
       async load() {
         try {
-          const res = await fetch('/api/form-config');
+          const res = await fetch('/admin/api/form-config');
           if (!res.ok) { this.error = 'Could not load the form settings (' + res.status + ').'; return; }
           const data = await res.json();
           this.fields = data.fields; this.changes = data.changes; this.settings = data.settings; this.secretSet = data.turnstileSecretSet;
@@ -40,7 +40,7 @@ const script = `
           await this.load();
         }
       },
-      save(key, change) { return this.post('/api/form-config/fields/' + encodeURIComponent(key), change); },
+      save(key, change) { return this.post('/admin/api/form-config/fields/' + encodeURIComponent(key), change); },
       edit(f) {
         this.editing = f.key;
         this.draft = { label: f.label, placeholder: f.placeholder, newOption: '',
@@ -61,10 +61,10 @@ const script = `
         if (this.newField.type === 'select' || this.newField.type === 'checkboxes') {
           body.options = this.newField.options.split('\\n').map(s => s.trim()).filter(Boolean);
         }
-        if (await this.post('/api/form-config/fields', body)) this.newField = { label: '', type: 'text', options: '', required: false };
+        if (await this.post('/admin/api/form-config/fields', body)) this.newField = { label: '', type: 'text', options: '', required: false };
       },
       saveSettings() {
-        return this.post('/api/form-config/settings', { turnstileEnabled: this.settings.turnstileEnabled, turnstileSiteKey: this.settings.turnstileSiteKey });
+        return this.post('/admin/api/form-config/settings', { turnstileEnabled: this.settings.turnstileEnabled, turnstileSiteKey: this.settings.turnstileSiteKey });
       },
       when(at) { return new Date(at).toLocaleString(); },
     };

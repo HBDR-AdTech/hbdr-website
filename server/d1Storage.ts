@@ -1,26 +1,9 @@
 /// <reference types="@cloudflare/workers-types" />
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./services/storage";
+import type { IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./services/storage";
 import { LEAD_DETAIL_COLUMNS } from "./services/storage";
 
 export class D1Storage implements IStorage {
   constructor(private db: D1Database) {}
-
-  async getUser(id: string): Promise<User | undefined> {
-    const row = await this.db.prepare("SELECT * FROM users WHERE id = ?").bind(id).first();
-    return row ? this.mapUser(row) : undefined;
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const row = await this.db.prepare("SELECT * FROM users WHERE username = ?").bind(username).first();
-    return row ? this.mapUser(row) : undefined;
-  }
-
-  async createUser(user: { username: string; password: string }): Promise<User> {
-    const id = crypto.randomUUID();
-    await this.db.prepare("INSERT INTO users (id, username, password) VALUES (?, ?, ?)")
-      .bind(id, user.username, user.password).run();
-    return { id, username: user.username, password: user.password };
-  }
 
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
     const id = crypto.randomUUID();
@@ -250,10 +233,6 @@ export class D1Storage implements IStorage {
     }
 
     console.log(`Seeded blog posts to D1.`);
-  }
-
-  private mapUser(row: any): User {
-    return { id: row.id, username: row.username, password: row.password };
   }
 
   private mapLead(row: any): ContactLead {

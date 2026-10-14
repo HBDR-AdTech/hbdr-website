@@ -28,7 +28,7 @@ export function registerAdminRoutes(
     return c.html(renderAdminLeadsPage(leads, form.fields));
   });
 
-  // Form settings; the page loads its data from /api/form-config
+  // Form settings; the page loads its data from /admin/api/form-config
   app.get("/admin/form", (c) => c.html(renderFormSettingsPage()));
 
   // CSV export

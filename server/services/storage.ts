@@ -1,12 +1,6 @@
 // IStorage interface — the contract that both D1Storage and MemStorage implement
 // Import types directly to avoid Drizzle dependency in production path
 
-export interface User {
-  id: string;
-  username: string;
-  password: string;
-}
-
 // Qualifying answers from the contact form; null when not asked (support form), hidden or left blank
 export interface LeadDetails {
   phone: string | null;
@@ -90,9 +84,6 @@ export interface InsertBlogPost {
 }
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: { username: string; password: string }): Promise<User>;
   createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead>;
   getContactLeads(): Promise<ContactLead[]>;
   getContactLeadById(id: string): Promise<ContactLead | undefined>;

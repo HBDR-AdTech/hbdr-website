@@ -121,13 +121,13 @@ describe("Turnstile on", () => {
     expect((await storage.getContactLeads())[0].botCheck).toBeNull();
   });
 
-  it("leaves support requests to the honeypot and rate limit: the support form has no widget", async () => {
+  // A bot must not skip the check by claiming to be the support form
+  it("checks support requests too", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
     const { submit, storage } = await setup(true);
-    expect((await submit({ ...base, impressions: "support-request", message: "help", _source: "support" })).status).toBe(200);
-    expect(fetch).not.toHaveBeenCalled();
-    expect((await storage.getContactLeads())[0].botCheck).toBeNull();
+    expect((await submit({ ...base, impressions: "support-request", message: "help", _source: "support" })).status).toBe(403);
+    expect(await storage.getContactLeads()).toEqual([]);
   });
 });
 

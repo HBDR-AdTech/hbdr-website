@@ -33,8 +33,8 @@ const token = (claims: Record<string, unknown> = {}, key: JsonWebKey = privateJw
 function app(config: Partial<AccessConfig> = {}) {
   const a = new Hono();
   protectAdmin(a, accessGuard(() => ({ teamDomain: TEAM, aud: AUD, keys: [publicJwk], ...config })));
-  for (const p of ["/admin/leads", "/admin/form", "/api/leads", "/api/blog/1", "/api/form-config/settings", "/api/form-config/fields/phone", "/blog"]) a.all(p, (c) => c.text("ok"));
-  a.get("/api/form-config", (c) => c.text(c.get("accessEmail" as never)));
+  for (const p of ["/admin/leads", "/admin/form", "/api/leads", "/api/blog/1", "/admin/api/form-config/settings", "/admin/api/form-config/fields/phone", "/blog"]) a.all(p, (c) => c.text("ok"));
+  a.get("/admin/api/form-config", (c) => c.text(c.get("accessEmail" as never)));
   return a;
 }
 
@@ -67,13 +67,13 @@ describe("Cloudflare Access guard on admin routes", () => {
 
   // The form settings page and its API change what every visitor sees (D-016)
   it("covers the form settings page and every form config endpoint", async () => {
-    for (const p of ["/admin/form", "/api/form-config"]) expect(await call(app(), p)).toBe(403);
-    for (const p of ["/api/form-config/settings", "/api/form-config/fields/phone"]) expect(await call(app(), p, undefined, "POST")).toBe(403);
-    expect(await call(app(), "/api/form-config/settings", await token(), "POST")).toBe(200);
+    for (const p of ["/admin/form", "/admin/api/form-config"]) expect(await call(app(), p)).toBe(403);
+    for (const p of ["/admin/api/form-config/settings", "/admin/api/form-config/fields/phone"]) expect(await call(app(), p, undefined, "POST")).toBe(403);
+    expect(await call(app(), "/admin/api/form-config/settings", await token(), "POST")).toBe(200);
   });
 
   it("passes the verified Access email on for audit rows", async () => {
-    const res = await app().request("/api/form-config", { headers: { "Cf-Access-Jwt-Assertion": await token() } });
+    const res = await app().request("/admin/api/form-config", { headers: { "Cf-Access-Jwt-Assertion": await token() } });
     expect(await res.text()).toBe("matt@hbdr.com");
   });
 

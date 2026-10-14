@@ -64,7 +64,8 @@ export function registerApiRoutes(
       const body = await c.req.json();
 
       // Honeypot check
-      if (body._hp_website && body._hp_website.trim() !== "") {
+      // any non-empty value, string or not, is a bot (a non-string used to throw and return 500)
+      if (body._hp_website != null && String(body._hp_website).trim() !== "") {
         console.log(`Bot detected via honeypot from IP: ${ip}`);
         return c.html(`
           <div id="contact-form-result" class="glass-card p-8 text-center">
@@ -118,9 +119,9 @@ export function registerApiRoutes(
       }
 
       // Turnstile (D-016): after the rate limit and honeypot so bots can't spend siteverify calls, before the insert
-      // so a failed check stores nothing. The support form has no widget, so only contact posts are checked.
+      // so a failed check stores nothing. Both forms carry the widget, so both sources are checked.
       let botCheck: string | null = null;
-      if (form.turnstileSiteKey && source === "contact") {
+      if (form.turnstileSiteKey) {
         if (!token || token.length > 2048) return c.json({ message: VERIFY_FAILED }, 403);
         if (!config.turnstileSecret) console.error("Turnstile is on but TURNSTILE_SECRET is not set; lead kept as unverified");
         const result = config.turnstileSecret ? await verifyTurnstile(config.turnstileSecret, token, ip) : "unverified";
@@ -173,9 +174,9 @@ export function registerApiRoutes(
     }
   });
 
-  // Form config admin (D-016). Cloudflare Access covers /api/form-config* (ADMIN_PATHS); a mutation must also
+  // Form config admin (D-016). Cloudflare Access covers /admin/api/form-config* (ADMIN_PATHS); a mutation must also
   // carry a same-origin Origin header. Reads here skip the 60s cache so the admin sees what is stored.
-  app.use("/api/form-config/*", async (c, next) => {
+  app.use("/admin/api/form-config/*", async (c, next) => {
     if (c.req.method !== "GET" && !requireSameOrigin(c.req.raw.headers)) return c.json({ message: "Forbidden" }, 403);
     await next();
   });
@@ -183,7 +184,7 @@ export function registerApiRoutes(
   // the verified Access email; the dev server runs without Access
   const actor = (c: any): string => c.get("accessEmail") ?? "local-dev";
 
-  app.get("/api/form-config", async (c) => {
+  app.get("/admin/api/form-config", async (c) => {
     const storage = getStorage(c);
     const [{ fields, settings }, changes] = await Promise.all([readFormConfig(storage), storage.getFormConfigChanges(50)]);
     return c.json({
@@ -194,7 +195,7 @@ export function registerApiRoutes(
     });
   });
 
-  app.post("/api/form-config/fields/:key", async (c) => {
+  app.post("/admin/api/form-config/fields/:key", async (c) => {
     const parsed = fieldUpdateSchema.safeParse(await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
     const storage = getStorage(c);
@@ -209,7 +210,7 @@ export function registerApiRoutes(
     return c.json({ ok: true });
   });
 
-  app.post("/api/form-config/fields", async (c) => {
+  app.post("/admin/api/form-config/fields", async (c) => {
     const parsed = customFieldSchema.safeParse(await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
     const storage = getStorage(c);
@@ -221,7 +222,7 @@ export function registerApiRoutes(
     return c.json({ key: result.key }, 201);
   });
 
-  app.post("/api/form-config/settings", async (c) => {
+  app.post("/admin/api/form-config/settings", async (c) => {
     const parsed = settingsSchema.safeParse(await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
     const storage = getStorage(c);
