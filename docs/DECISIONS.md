@@ -67,5 +67,13 @@ Supersedes: the dark glassmorphism theme (Figtree + Instrument Serif, orbs, liqu
 
 ## D-014 — 2026-10-13 — Matt — Contact form asks qualifying questions
 
-The contact form (home and /contact) asks, besides name, work email, company and monthly impressions: phone (optional), role (optional), inventory type (Website / Mobile app / CTV / OTT checkboxes, at least one), domain, bundle ID or app URL, app store URLs (optional, shown when Mobile app or CTV is ticked), ads.txt URL (optional), current monetization, top traffic region, timeline and how they heard about HBDR (last three optional). Choice lists live once in `LEAD_OPTIONS` (`shared/schema.ts`); the API accepts only those values and stores each answer in its own `contact_leads` column (`migrations/0003_lead_details.sql`). The browser enforces the required ones; the API keeps every qualifying field optional so a visitor on a cached pre-change page still gets through (D-011). The lead email and the admin leads table show every answer given.
+The contact form (home and /contact) asks, besides name, work email, company and monthly impressions: phone (optional), role (optional), inventory type (Website / Mobile app / CTV / OTT checkboxes, at least one), domain, bundle ID or app URL, app store URLs (optional, shown when Mobile app or CTV is ticked), ads.txt or app-ads.txt URL (required from 2026-10-14), current monetization, top traffic region, timeline and how they heard about HBDR (last three optional). Choice lists live once in `LEAD_OPTIONS` (`shared/schema.ts`); the API accepts only those values and stores each answer in its own `contact_leads` column (`migrations/0003_lead_details.sql`). The browser enforces the required ones; the API keeps every qualifying field optional so a visitor on a cached pre-change page still gets through (D-011). The lead email and the admin leads table show every answer given.
 Rollback: revert the commit; the added columns are nullable and harmless to the old code.
+
+## D-015 — 2026-10-14 — Matt — The lead form and admin are held to a production security baseline
+
+"Make sure we use all best practices and full security measures." Standing rules for the contact/support form, its API and the admin panel:
+1. Every visitor-supplied value is either an allowlisted choice (`LEAD_OPTIONS`, impressions, `_source`) or length-capped free text, HTML-escaped once at the API boundary; nothing visitor-controlled reaches admin HTML, an Alpine expression or the email unescaped (tests in `server/routes/__tests__/api.test.ts`, `server/templates/admin/__tests__/leads.test.ts`).
+2. `POST /api/contact` refuses bodies over 64 KB before parsing.
+3. Admin and every lead-reading path stay behind Cloudflare Access with the JWT verified in the Worker (D-008, D-009).
+4. Open gaps are tracked in `docs/SECURITY.md` with an owner: bot challenge (Turnstile), edge rate limit on the form, a preview-only CI token, SRI on CDN scripts, DNSSEC and CAA.
