@@ -58,7 +58,7 @@ Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpin
 - Edge rate limit: closed 2026-10-14. Zone rule `977d0b83626f4cf29bb6d9d1a99fa086` (`http_ratelimit` phase) blocks an IP for 10 s after more than 5 `POST /api/contact` in 10 s (free-plan limits), in front of the Worker's own D1 limit.
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
 - Supply chain: CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: Alpine CSP build plus nonces.
-- DNS: DNSSEC off (registrar is Cloudflare, so turning it on publishes the DS automatically: `~/.config/hbdr/dnssec-on.sh`). No CAA, on purpose: DNS-only hosts (dashboard on Vercel, crm on ludicrous.cloud, auth on PropelAuth, monitor on AWS) issue their own certs and a CAA record could block their renewals. DMARC `p=none`. Owner: Matt.
+- DNS: DNSSEC turned on 2026-10-14 (status `pending`; Cloudflare signs the zone and, as registrar, publishes the DS). Done when `dig DS hbdr.com @a.gtld-servers.net` returns a record and the zone shows `active`. No CAA, on purpose: DNS-only hosts (dashboard on Vercel, crm on ludicrous.cloud, auth on PropelAuth, monitor on AWS) issue their own certs and a CAA record could block their renewals. DMARC `p=none`. Owner: Matt.
 - Privacy: submitter IP kept forever with the lead (D-013, D-018); read only behind Access.
 - Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.
 
