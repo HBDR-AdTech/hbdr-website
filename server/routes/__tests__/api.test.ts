@@ -67,6 +67,14 @@ describe("POST /api/contact qualifying fields", () => {
     expect((await post({ ...base, currentSetup: "<script>" }, "198.51.100.3")).status).toBe(400);
     expect((await post({ ...base, inventoryTypes: ["Billboard"] }, "198.51.100.4")).status).toBe(400);
     expect((await post({ ...base, phone: "call me maybe" }, "198.51.100.5")).status).toBe(400);
+    expect((await post({ ...base, impressions: "<img src=x>" }, "198.51.100.6")).status).toBe(400);
+    expect((await post({ ...base, name: "x".repeat(101) }, "198.51.100.7")).status).toBe(400);
+  });
+
+  it("refuses bodies over 64 KB before parsing", async () => {
+    const { storage, post } = setup();
+    expect((await post({ ...base, message: "x".repeat(70 * 1024) }, "198.51.100.8")).status).toBe(413);
+    expect(await storage.getContactLeads()).toEqual([]);
   });
 });
 
@@ -82,7 +90,7 @@ describe("POST /api/contact to email", () => {
       headers: { "Content-Type": "application/json", Origin: "http://localhost", Host: "localhost", "CF-Connecting-IP": "198.51.100.9" },
       body: JSON.stringify({
         name: "Jane O'Brien", email: "jane@publisher.com", company: "<b>Pub</b>",
-        impressions: "<img src=x onerror=alert(1)>", message: "<script>alert(1)</script>", _source: "contact",
+        impressions: "10m-50m", message: "<script>alert(1)</script>", _source: "<img src=x onerror=alert(1)>",
       }),
     }, {}, { waitUntil: (p: Promise<unknown>) => pending.push(p), passThroughOnException: () => {} } as any);
     await Promise.all(pending);
@@ -94,6 +102,6 @@ describe("POST /api/contact to email", () => {
     expect(msg.html).not.toContain("&amp;#x27;");
     expect(msg.subject).toBe("New Lead: Jane O'Brien - <b>Pub</b>");
     const [lead] = await storage.getContactLeads();
-    expect(lead.impressions).toBe("&lt;img src=x onerror=alert(1)&gt;");
+    expect(lead.source).toBe("contact");
   });
 });

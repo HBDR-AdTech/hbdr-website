@@ -187,8 +187,8 @@ export function renderContactFormSection(): string {
                   <input id="input-property" type="text" x-model="formData.property" placeholder="example.com or com.example.app" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-property" />
                 </div>
                 <div>
-                  <label for="input-ads-txt" class="${LABEL}">ads.txt URL ${OPTIONAL}</label>
-                  <input id="input-ads-txt" type="text" x-model="formData.adsTxtUrl" placeholder="example.com/ads.txt" maxlength="300" class="glass-input w-full px-4 py-3" data-testid="input-ads-txt" />
+                  <label for="input-ads-txt" class="${LABEL}">ads.txt or app-ads.txt URL</label>
+                  <input id="input-ads-txt" type="text" x-model="formData.adsTxtUrl" placeholder="example.com/ads.txt" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-ads-txt" />
                 </div>
               </div>
 

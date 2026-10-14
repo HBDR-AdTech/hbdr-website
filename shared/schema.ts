@@ -11,6 +11,9 @@ export const LEAD_OPTIONS = {
   referral: ["Google search", "LinkedIn", "Referral / word of mouth", "Industry event", "Other"],
 } as const;
 
+// Monthly-impressions select values; the support form sends "support-request" (CLAUDE.md gotcha 3)
+const IMPRESSION_VALUES = ["under-10m", "10m-50m", "50m-100m", "100m-500m", "500m-1b", "over-1b", "support-request"] as const;
+
 // An unselected <select> posts "", which means "not answered"
 const blankToNull = (v: unknown) => (typeof v === "string" && v.trim() === "" ? null : v);
 const optionalText = (max: number) => z.preprocess(blankToNull, z.string().trim().max(max).nullable().optional());
@@ -19,11 +22,11 @@ const optionalChoice = <T extends readonly [string, ...string[]]>(values: T) => 
 // Contact lead validation. Qualifying fields are optional here (the form marks the key ones required):
 // a visitor on a cached pre-change page must still get through, never lose the lead (D-011).
 export const insertContactLeadSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  company: z.string().min(2, "Company name is required"),
-  impressions: z.string().min(1, "Please select your monthly impressions"),
-  message: z.string().nullable().optional(),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100),
+  email: z.string().max(254).email("Please enter a valid email address"),
+  company: z.string().min(2, "Company name is required").max(300),
+  impressions: z.enum(IMPRESSION_VALUES, "Please select your monthly impressions"),
+  message: z.string().max(10000).nullable().optional(),
   phone: z.preprocess(blankToNull, z.string().trim().max(40).regex(/^[0-9+().\-\s]+$/, "Please enter a valid phone number").nullable().optional()),
   inventoryTypes: z.array(z.enum(LEAD_OPTIONS.inventoryTypes)).max(LEAD_OPTIONS.inventoryTypes.length).optional(),
   property: optionalText(300),
