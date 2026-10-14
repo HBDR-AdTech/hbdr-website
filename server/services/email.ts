@@ -44,7 +44,7 @@ function buildDetailRows(data: ContactNotificationData, fields: FormField[]): st
   const safeIp = data.ip ? sanitizeText(data.ip) : null;
 
   const row = (label: string, value: string, isEmail = false) =>
-    `<tr><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; font-weight: 600; color: #333; width: 140px;">${label}</td><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #555;">${isEmail ? `<a href="mailto:${value}" style="color: #2BDE73;">${value}</a>` : value}</td></tr>`;
+    `<tr><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; font-weight: 600; color: #333; width: 140px;">${label}</td><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #555;">${isEmail ? `<a href="mailto:${value}" style="color: #00FAA8;">${value}</a>` : value}</td></tr>`;
 
   let rows = row("Name", safeName) + row("Email", safeEmail, true);
 
@@ -87,8 +87,8 @@ export async function sendContactNotification(
 
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #0a0a0c 0%, #1a1a2e 100%); border-radius: 12px; padding: 30px; margin-bottom: 20px;">
-          <h1 style="color: #2BDE73; margin: 0 0 5px 0; font-size: 24px;">${isSupport ? "New Support Request" : "New Lead from HBDR.com"}</h1>
+        <div style="background: #15181f; border-radius: 12px; padding: 30px; margin-bottom: 20px;">
+          <h1 style="color: #00FAA8; margin: 0 0 5px 0; font-size: 24px;">${isSupport ? "New Support Request" : "New Lead from HBDR.com"}</h1>
           <p style="color: rgba(255,255,255,0.5); margin: 0; font-size: 14px;">${sourceLabel}</p>
         </div>
         <div style="background: #f8f9fa; border-radius: 12px; padding: 24px; margin-bottom: 20px;">

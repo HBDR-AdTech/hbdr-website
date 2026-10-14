@@ -43,7 +43,7 @@ function renderSliderInput(model: string, label: string, min: string, max: strin
       class="w-full h-1.5 rounded-full appearance-none cursor-pointer bg-white/10
       [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
       [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--accent)]
-      [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(43,222,115,0.4)]
+      [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(0,250,168,0.4)]
       [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full
       [&::-moz-range-thumb]:bg-[var(--accent)] [&::-moz-range-thumb]:border-0" />
   </div>`;
@@ -78,7 +78,7 @@ function renderOutputMetric(label: string, value: string, highlight: boolean = f
 
 function renderHbdrUplift(currentExpr: string, projectedExpr: string, fmtFn: string): string {
   return `
-  <div class="glass-card p-6 rounded-2xl border border-[var(--accent)]/20 mt-6" style="border-color: rgba(43,222,115,0.2); background: rgba(43,222,115,0.03);">
+  <div class="glass-card p-6 rounded-2xl border border-[var(--accent)]/20 mt-6" style="border-color: rgba(0,250,168,0.2); background: rgba(0,250,168,0.03);">
     <div class="flex items-center gap-2 mb-5">
       <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
       <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">HBDR Uplift Projection</span>

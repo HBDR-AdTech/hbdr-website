@@ -43,7 +43,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
         ${lead.inventoryTypes ? `<div class="text-xs text-[var(--text-muted)]">${lead.inventoryTypes}${lead.currentSetup ? ` &middot; ${lead.currentSetup}` : ""}</div>` : ""}
         ${lead.adsTxtUrl || lead.appStoreUrls || lead.topGeo || lead.timeline || lead.referral || custom.length ? `
         <details class="mt-1 text-xs text-[var(--text-muted)]">
-          <summary class="cursor-pointer text-[#2BDE73]">More</summary>
+          <summary class="cursor-pointer text-[var(--accent)]">More</summary>
           ${lead.adsTxtUrl ? `<div>ads.txt: ${lead.adsTxtUrl}</div>` : ""}
           ${lead.appStoreUrls ? `<div class="whitespace-pre-line">Stores: ${lead.appStoreUrls}</div>` : ""}
           ${lead.topGeo ? `<div>Geo: ${lead.topGeo}</div>` : ""}
@@ -89,7 +89,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
         <button
           data-name="${lead.name}" data-message="${lead.message}"
           @click="$dispatch('show-message', { name: $el.dataset.name, message: $el.dataset.message })"
-          class="text-[#2BDE73] hover:text-[#1AAF5C] text-sm transition-colors"
+          class="text-[var(--accent)] hover:text-[var(--accent-hover)] text-sm transition-colors"
           data-testid="button-view-message-${lead.id}"
         >
           View
@@ -108,7 +108,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
     modalMessage: ''
   }" @show-message.window="showMessageModal = true; modalName = $event.detail.name; modalMessage = $event.detail.message">
 
-    <nav class="border-b border-white/5 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-[var(--surface)]/80 backdrop-blur-xl sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-6">
@@ -117,7 +117,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
             <span class="text-white/60 font-medium">Admin Panel</span>
           </div>
           <div class="flex items-center gap-4">
-            <a href="/admin/leads" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-leads">Leads</a>
+            <a href="/admin/leads" class="text-sm text-[var(--accent)] font-medium" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
             <a href="/admin/form" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-form">Form</a>
             <span class="text-white/10">|</span>
@@ -156,7 +156,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
           <div class="text-xs text-[var(--text-muted)] mt-1">Contacted</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-qualified">
-          <div class="text-2xl font-semibold text-[#2BDE73]">${qualifiedLeads}</div>
+          <div class="text-2xl font-semibold text-[var(--accent)]">${qualifiedLeads}</div>
           <div class="text-xs text-[var(--text-muted)] mt-1">Qualified</div>
         </div>
         <div class="glass-card p-4 text-center" data-testid="stat-converted">

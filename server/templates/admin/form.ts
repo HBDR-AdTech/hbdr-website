@@ -76,7 +76,7 @@ export function renderFormSettingsPage(): string {
   ${script}
   <div class="min-h-screen" x-data="formAdmin()" x-init="load()">
 
-    <nav class="border-b border-white/5 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-[var(--surface)]/80 backdrop-blur-xl sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center gap-6">
@@ -87,7 +87,7 @@ export function renderFormSettingsPage(): string {
           <div class="flex items-center gap-4">
             <a href="/admin/leads" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
-            <a href="/admin/form" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-form">Form</a>
+            <a href="/admin/form" class="text-sm text-[var(--accent)] font-medium" data-testid="link-admin-form">Form</a>
             <span class="text-white/10">|</span>
             <a href="/cdn-cgi/access/logout" class="text-sm text-[var(--text-muted)] hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>

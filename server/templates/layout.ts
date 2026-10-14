@@ -19,6 +19,7 @@ function renderHead(options: LayoutOptions): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#15181f" />
   <title>${options.title}</title>
   ${options.adminPage ? '<meta name="robots" content="noindex, nofollow" />' : ''}
   <meta name="description" content="${options.description}" />
