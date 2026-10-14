@@ -1,0 +1,687 @@
+<title>HBDR Inventory Blueprint</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Geist+Mono:wght@400..600&family=Inter:wght@400..700&display=swap">
+<style>
+/* Layout: the publisher's page drawn as an IAB spec sheet; one 12-col grid, blueprint ground only behind the hero sheet */
+:root {
+  color-scheme: dark;
+  --ground: #15181f;      /* logo slate */
+  --panel: #1b1f27;
+  --raised: #222630;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --mint: #00faa8;        /* logo mint */
+  --mint-soft: rgba(0, 250, 168, 0.12);
+  --ink-on-mint: #15181f;
+  --text: #f5f7fa;
+  --text-2: #d0d6e0;
+  --muted: #959ca8;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; }
+html { background: var(--ground); scrollbar-color: #343a46 var(--ground); }
+body { margin: 0; background: var(--ground); color: var(--text-2); font: 400 1rem/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+::selection { background: rgba(0, 250, 168, 0.28); color: #fff; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; border-radius: 4px; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-family: var(--display); color: var(--text); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.5rem, 4.6vw, 4.25rem); font-weight: 640; font-stretch: 115%; line-height: 1.02; letter-spacing: -0.035em; }
+h2 { font-size: clamp(1.9rem, 3.2vw, 2.85rem); font-weight: 620; font-stretch: 112%; line-height: 1.06; letter-spacing: -0.03em; }
+h3 { font-size: 1.15rem; font-weight: 600; font-stretch: 105%; letter-spacing: -0.01em; line-height: 1.3; }
+p { margin: 0; }
+.mono { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.mint { color: var(--mint); }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+section { padding-block: clamp(4.5rem, 9vw, 8rem); border-top: 1px solid var(--line); }
+.section-head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.section-head h2 { grid-column: span 7; }
+.section-head p { grid-column: 8 / span 5; color: var(--muted); max-width: 46ch; }
+
+/* Nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: rgba(21, 24, 31, 0.92); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 2rem; height: 64px; }
+.nav img { height: 26px; width: auto; display: block; }
+.nav ul { display: flex; gap: 1.6rem; list-style: none; margin: 0; padding: 0; font-size: 0.875rem; color: var(--text-2); }
+.nav ul a:hover { color: var(--text); }
+.nav .actions { margin-left: auto; display: flex; gap: 0.6rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border-radius: 8px; font: 550 0.875rem/1.2 var(--body); border: 1px solid transparent; cursor: pointer; transition: background-color 0.15s var(--ease), border-color 0.15s var(--ease), transform 0.15s var(--ease); }
+.btn:active { transform: translateY(1px); }
+.btn-mint { background: var(--mint); color: var(--ink-on-mint); }
+.btn-mint:hover { background: #5cffc4; }
+.btn-line { border-color: var(--line-strong); color: var(--text); background: rgba(255, 255, 255, 0.02); }
+.btn-line:hover { border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.06); }
+.btn-lg { padding: 0.8rem 1.25rem; font-size: 0.95rem; }
+
+/* Hero */
+.hero { border-top: 0; padding-block: clamp(3rem, 6vw, 5.5rem) clamp(4rem, 7vw, 6rem); }
+.hero-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; align-items: center; }
+.hero-copy { grid-column: span 5; display: flex; flex-direction: column; gap: 1.6rem; }
+.hero-copy .lede { font-size: 1.125rem; color: var(--muted); max-width: 40ch; }
+.hero-copy .ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.facts { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0 2rem; margin-top: 0.75rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.facts b { display: block; font: 600 1.6rem/1.1 var(--display); font-stretch: 110%; color: var(--text); letter-spacing: -0.02em; }
+.facts span { font-size: 0.8125rem; color: var(--muted); }
+.sheet { grid-column: 6 / span 7; position: relative; border: 1px solid var(--line-strong); border-radius: 12px; overflow: hidden;
+  background-color: #171a22;
+  background-image: linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+                    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 8px 8px, 8px 8px; }
+.sheet-bar { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--line); background: rgba(21, 24, 31, 0.7); }
+.sheet svg.blueprint { display: block; width: 100%; height: auto; }
+.bp-line { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1.2; fill: none; }
+.bp-tick { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1.2; }
+.bp-label { font: 500 15px var(--mono); fill: var(--text-2); letter-spacing: 0.02em; }
+.bp-copy { fill: rgba(255, 255, 255, 0.07); }
+.slot-frame { fill: rgba(21, 24, 31, 0.55); stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; stroke-dasharray: 7 6; }
+.slot-frame.is-live { stroke: var(--text); stroke-dasharray: none; }
+.slot-fill { fill: var(--mint); opacity: 0; }
+.slot-name { font: 500 14px var(--mono); fill: var(--muted); }
+.slot-price { font: 600 20px var(--mono); fill: var(--ink-on-mint); opacity: 0; }
+.plate { position: relative; }
+/* Ladder sits over the page-copy blocks (x 40-640, y 190-570 of the 1180×760 drawing), never over a slot */
+.ladder { position: absolute; left: 3.4%; top: 25%; width: 50.8%; background: rgba(27, 31, 39, 0.96); border: 1px solid var(--line-strong); border-radius: 10px; padding: 0.9rem 1rem; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.55); }
+.ladder header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.6rem; }
+.ladder header strong { color: var(--text); font-size: 0.8125rem; font-weight: 600; }
+.timer { height: 2px; background: rgba(255, 255, 255, 0.08); border-radius: 1px; overflow: hidden; margin-bottom: 0.75rem; }
+.timer i { display: block; height: 100%; background: var(--muted); transform-origin: left; transform: scaleX(1); }
+.bids { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.bids li { display: grid; grid-template-columns: 4.2rem 1fr 3.4rem; gap: 0.6rem; align-items: center; font-size: 0.75rem; transition: opacity 0.3s var(--ease); }
+.bids li > span:first-child { color: var(--muted); }
+.track { height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+.track i { display: block; height: 100%; background: rgba(255, 255, 255, 0.32); transform-origin: left; border-radius: inherit; }
+.bids li .cpm { text-align: right; color: var(--text-2); }
+.bids li.win .track i { background: var(--mint); }
+.bids li.win .cpm, .bids li.win > span:first-child { color: var(--mint); }
+.bids.closed li:not(.win) { opacity: 0.45; }
+.tally { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.7rem 1rem; border-top: 1px solid var(--line); background: rgba(21, 24, 31, 0.7); }
+
+/* Partners */
+.partners { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.partners li { list-style: none; position: relative; padding: 1.05rem 1.1rem 1.05rem 1.6rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--text-2); font-size: 0.9375rem; }
+.partners li::before { content: ""; position: absolute; left: 0.85rem; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 1px; background: rgba(255, 255, 255, 0.18); transition: background-color 0.4s var(--ease); }
+.partners li.lit::before { background: var(--mint); }
+.partners-wrap { padding: 0; margin: 0; }
+
+/* Formats */
+.formats { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; align-items: start; }
+.stage { grid-column: span 7; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.stage svg { display: block; width: 100%; height: auto; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.75rem; border-bottom: 1px solid var(--line); }
+.tab { font: 550 0.8125rem/1 var(--body); color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 7px; padding: 0.55rem 0.8rem; cursor: pointer; }
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { color: var(--text); background: var(--raised); border-color: var(--line-strong); }
+.format-copy { grid-column: 9 / span 4; display: flex; flex-direction: column; gap: 1rem; padding-top: 0.5rem; }
+.format-copy .spec { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.format-copy ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
+.format-copy li { display: flex; gap: 0.6rem; align-items: center; color: var(--text-2); font-size: 0.9375rem; }
+.format-copy li::before { content: ""; width: 10px; height: 1px; background: var(--mint); flex: none; }
+
+/* Auction timeline */
+.timeline-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; align-items: start; }
+.timeline { grid-column: span 8; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 1.25rem 1.25rem 0.75rem; overflow-x: auto; }
+.timeline svg { display: block; width: 100%; min-width: 560px; height: auto; }
+.tl-axis { stroke: rgba(255, 255, 255, 0.14); }
+.tl-label { font: 500 13px var(--mono); fill: var(--muted); }
+.tl-row { font: 500 14px var(--body); fill: var(--text-2); }
+.tl-req { stroke: rgba(255, 255, 255, 0.4); stroke-width: 2; }
+.tl-wait { stroke: rgba(255, 255, 255, 0.16); stroke-width: 2; stroke-dasharray: 3 5; }
+.tl-dot { fill: var(--text-2); }
+.tl-win { stroke: var(--mint); }
+.tl-win-dot { fill: var(--mint); }
+.tl-timeout { stroke: rgba(255, 255, 255, 0.5); stroke-width: 1; stroke-dasharray: 4 4; }
+.points { grid-column: 9 / span 4; display: grid; gap: 1.6rem; }
+.points div { display: grid; gap: 0.35rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.points p { color: var(--muted); font-size: 0.9375rem; }
+
+/* Comparison */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; min-width: 620px; font-size: 0.9375rem; }
+th, td { padding: 0.95rem 1.25rem; border-bottom: 1px solid var(--line); text-align: center; }
+th:first-child, td:first-child { text-align: left; color: var(--text-2); }
+thead th { font: 500 0.8125rem var(--body); color: var(--muted); background: rgba(255, 255, 255, 0.015); }
+thead th.us { color: var(--ink-on-mint); background: var(--mint); font-weight: 650; }
+tbody td.us { background: var(--mint-soft); }
+tbody tr:last-child td { border-bottom: 0; }
+td .check { width: 18px; height: 18px; color: var(--mint); vertical-align: middle; }
+td .check path { stroke-dasharray: 22; stroke-dashoffset: 0; }
+td.no { color: #7d838f; }
+td.part { color: var(--text-2); font-size: 0.8125rem; }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; }
+.step { display: grid; gap: 0.8rem; padding-top: 1.6rem; border-top: 1px solid var(--line-strong); position: relative; }
+.step::before { content: ""; position: absolute; top: -4px; left: 0; width: 7px; height: 7px; background: var(--mint); border-radius: 1px; }
+.step .mono { color: var(--mint); }
+.step p { color: var(--muted); font-size: 0.9375rem; max-width: 34ch; }
+.step ul { margin: 0.4rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; font-size: 0.875rem; color: var(--text-2); }
+.step-progress { position: absolute; top: 0; left: 0; height: 1px; width: 100%; background: var(--mint); transform-origin: left; }
+
+/* Spec sheet of company facts */
+.spec-sheet { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; }
+.spec-sheet .intro { grid-column: span 5; display: grid; gap: 1rem; align-content: start; }
+.spec-sheet dl { grid-column: 7 / span 6; margin: 0; display: grid; }
+.spec-sheet dl div { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+.spec-sheet dl div:first-child { border-top: 1px solid var(--line); }
+.spec-sheet dt { color: var(--muted); font-size: 0.9375rem; }
+.spec-sheet dd { margin: 0; font: 600 1.75rem/1 var(--display); font-stretch: 112%; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.spec-sheet dd small { font: 400 0.8125rem var(--body); color: var(--muted); letter-spacing: 0; margin-left: 0.4rem; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem; }
+.contact .intro { grid-column: span 5; display: grid; gap: 1.4rem; align-content: start; }
+.contact address { font-style: normal; display: grid; gap: 0.9rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.contact address div { display: grid; gap: 0.1rem; }
+.form { grid-column: 7 / span 6; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--panel); padding: clamp(1.25rem, 3vw, 2rem); display: grid; gap: 1.1rem; }
+.form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field { display: grid; gap: 0.4rem; }
+.field label, .field legend { font-size: 0.8125rem; font-weight: 550; color: var(--text-2); padding: 0; }
+.field input, .field select { width: 100%; font: 400 0.9375rem var(--body); color: var(--text); background: var(--ground); border: 1px solid var(--line-strong); border-radius: 8px; padding: 0.7rem 0.85rem; caret-color: var(--mint); }
+.field input::placeholder { color: #848b97; }
+.field input:focus, .field select:focus { outline: none; border-color: var(--mint); box-shadow: 0 0 0 3px rgba(0, 250, 168, 0.18); }
+fieldset.field { border: 0; margin: 0; padding: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chips label { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.5rem 0.75rem; border: 1px solid var(--line-strong); border-radius: 7px; font-weight: 450; cursor: pointer; }
+.chips input { accent-color: var(--mint); width: auto; margin: 0; }
+.form .note { font-size: 0.8125rem; color: var(--muted); }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding-block: 3rem calc(3rem + env(safe-area-inset-bottom, 0px)); }
+footer .wrap { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 2rem; font-size: 0.875rem; }
+footer h4 { margin: 0 0 0.8rem; font: 600 0.8125rem var(--body); color: var(--text); }
+footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; color: var(--muted); }
+footer .legal { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8125rem; }
+
+.preview-flag { position: fixed; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 60; background: var(--raised); color: var(--text-2); border: 1px solid var(--line-strong); border-radius: 8px; padding: 0.5rem 0.75rem; font: 500 0.75rem var(--mono); }
+
+@media (max-width: 960px) {
+  .nav ul { display: none; }
+  .hero-copy, .sheet, .stage, .format-copy, .timeline, .points, .spec-sheet .intro, .spec-sheet dl, .contact .intro, .form { grid-column: 1 / -1; }
+  .section-head h2, .section-head p { grid-column: 1 / -1; }
+  .steps { grid-template-columns: 1fr; gap: 2rem; }
+  footer .wrap { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .nav .actions .btn-line { display: none; }
+  .ladder { position: static; width: auto; margin: 0 0.75rem 0.75rem; }
+  .form .row { grid-template-columns: 1fr; }
+  .partners { grid-template-columns: 1fr 1fr; }
+  .partners li { font-size: 0.875rem; padding-right: 0.6rem; }
+  .facts { grid-template-columns: repeat(3, 1fr); gap: 0 1rem; }
+  .facts b { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
+</style>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a href="#top" aria-label="HBDR home"><img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" width="83" height="26"></a>
+    <ul>
+      <li><a href="#formats">Solutions</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#partners">Partners</a></li>
+      <li><a href="#compare">Why HBDR</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="actions">
+      <a class="btn btn-line" href="#contact">Schedule a call</a>
+      <a class="btn btn-mint" href="#contact">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>Every ad slot, sold to the highest bidder.</h1>
+        <p class="lede">HBDR runs header bidding for websites, apps and CTV. Your inventory goes to every demand partner at once, and the best price wins, which helps publishers increase revenue by up to 50%.</p>
+        <div class="ctas">
+          <a class="btn btn-mint btn-lg" href="#contact">Get started free
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-line btn-lg" href="#how">See how an impression is sold</a>
+        </div>
+        <div class="facts">
+          <div><b>1B+</b><span>impressions a month</span></div>
+          <div><b>500+</b><span>publishers</span></div>
+          <div><b>22</b><span>demand partners</span></div>
+        </div>
+      </div>
+
+      <figure class="sheet" style="margin:0" aria-label="Example: a publisher page whose ad slots are sold one auction at a time">
+        <div class="sheet-bar mono"><span class="muted">yourdomain.com/article</span><span class="muted">Inventory spec · example auction</span></div>
+        <div class="plate">
+        <svg class="blueprint" viewBox="0 0 1180 760" role="img" aria-label="Page layout with a 728×90 leaderboard, two 300×250 rectangles, a native slot and a 320×50 mobile banner">
+          <!-- page copy blocks -->
+          <rect class="bp-copy" x="40" y="190" width="520" height="26" rx="3"/>
+          <rect class="bp-copy" x="40" y="228" width="420" height="26" rx="3"/>
+          <rect class="bp-copy" x="40" y="280" width="600" height="190" rx="4"/>
+          <rect class="bp-copy" x="40" y="490" width="600" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="512" width="570" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="534" width="590" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="556" width="380" height="10" rx="2"/>
+
+          <!-- slots: frame, mint fill, name, price -->
+          <g class="slot" data-name="728×90 leaderboard" data-place="top of page">
+            <rect class="slot-frame" x="136" y="60" width="728" height="90" rx="3"/>
+            <rect class="slot-fill" x="136" y="60" width="728" height="90" rx="3"/>
+            <text class="slot-name" x="500" y="110" text-anchor="middle">728×90 · leaderboard</text>
+            <text class="slot-price" x="500" y="112" text-anchor="middle"></text>
+          </g>
+          <g class="slot" data-name="300×250 right rail" data-place="above the fold">
+            <rect class="slot-frame" x="680" y="190" width="300" height="250" rx="3"/>
+            <rect class="slot-fill" x="680" y="190" width="300" height="250" rx="3" style="opacity:1"/>
+            <text class="slot-name" x="830" y="320" text-anchor="middle" style="opacity:0">300×250</text>
+            <text class="slot-price" x="830" y="322" text-anchor="middle" style="opacity:1">SOLD $4.86</text>
+          </g>
+          <g class="slot" data-name="300×250 lower rail" data-place="below the fold">
+            <rect class="slot-frame" x="680" y="470" width="300" height="250" rx="3"/>
+            <rect class="slot-fill" x="680" y="470" width="300" height="250" rx="3"/>
+            <text class="slot-name" x="830" y="600" text-anchor="middle">300×250</text>
+            <text class="slot-price" x="830" y="602" text-anchor="middle"></text>
+          </g>
+          <g class="slot" data-name="Native in-article" data-place="in content">
+            <rect class="slot-frame" x="40" y="590" width="600" height="130" rx="3"/>
+            <rect class="slot-fill" x="40" y="590" width="600" height="130" rx="3"/>
+            <text class="slot-name" x="340" y="660" text-anchor="middle">native · fluid</text>
+            <text class="slot-price" x="340" y="662" text-anchor="middle"></text>
+          </g>
+
+          <!-- phone with 320×50 anchor -->
+          <rect x="1018" y="300" width="146" height="300" rx="18" fill="#1b1f27" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <rect class="bp-copy" x="1032" y="330" width="118" height="70" rx="3"/>
+          <rect class="bp-copy" x="1032" y="410" width="110" height="8" rx="2"/>
+          <rect class="bp-copy" x="1032" y="426" width="96" height="8" rx="2"/>
+          <rect class="bp-copy" x="1032" y="442" width="104" height="8" rx="2"/>
+          <g class="slot" data-name="320×50 mobile anchor" data-place="sticky, mobile">
+            <rect class="slot-frame" x="1027" y="556" width="128" height="20" rx="2"/>
+            <rect class="slot-fill" x="1027" y="556" width="128" height="20" rx="2"/>
+            <text class="slot-name" x="1091" y="571" text-anchor="middle" style="font-size:11px">320×50</text>
+            <text class="slot-price" x="1091" y="571" text-anchor="middle" style="font-size:12px"></text>
+          </g>
+
+          <!-- dimension callouts -->
+          <g class="dims">
+            <path class="bp-line" d="M136 38 H864"/><path class="bp-tick" d="M136 30 V46 M864 30 V46"/>
+            <text class="bp-label" x="500" y="28" text-anchor="middle">728</text>
+            <path class="bp-line" d="M876 60 V150"/><path class="bp-tick" d="M868 60 H884 M868 150 H884"/>
+            <text class="bp-label" x="892" y="110">90</text>
+            <path class="bp-line" d="M680 172 H980"/><path class="bp-tick" d="M680 164 V180 M980 164 V180"/>
+            <text class="bp-label" x="830" y="163" text-anchor="middle">300</text>
+            <path class="bp-line" d="M996 190 V440"/><path class="bp-tick" d="M988 190 H1004 M988 440 H1004"/>
+            <text class="bp-label" x="1010" y="320" transform="rotate(90 1010 320)" text-anchor="middle">250</text>
+            <path class="bp-line" d="M1027 600 H1155"/><path class="bp-tick" d="M1027 593 V607 M1155 593 V607"/>
+            <text class="bp-label" x="1091" y="626" text-anchor="middle" style="font-size:12px">320 × 50</text>
+          </g>
+        </svg>
+
+        <div class="ladder" aria-live="off">
+          <header><strong data-slot-name>300×250 right rail</strong><span class="mono muted" data-slot-place>above the fold</span></header>
+          <div class="timer" aria-hidden="true"><i></i></div>
+          <ul class="bids closed">
+            <li><span>Bidder 1</span><span class="track"><i style="transform:scaleX(.40)"></i></span><span class="cpm mono">$2.41</span></li>
+            <li class="win"><span>Bidder 2</span><span class="track"><i style="transform:scaleX(.81)"></i></span><span class="cpm mono">$4.86</span></li>
+            <li><span>Bidder 3</span><span class="track"><i style="transform:scaleX(.56)"></i></span><span class="cpm mono">$3.37</span></li>
+            <li><span>Bidder 4</span><span class="track"><i style="transform:scaleX(.32)"></i></span><span class="cpm mono">$1.92</span></li>
+            <li><span>Bidder 5</span><span class="track"><i style="transform:scaleX(.51)"></i></span><span class="cpm mono">$3.05</span></li>
+          </ul>
+        </div>
+        </div>
+        <div class="tally mono"><span><span data-filled>1</span> of 5 slots sold · page eCPM <span class="mint" data-ecpm>$4.86</span></span><span class="muted">Simulated bids, example data</span></div>
+      </figure>
+    </div>
+  </section>
+
+  <section id="partners">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>22 demand partners bid on every impression.</h2>
+        <p>Each one sees your inventory in the same auction, so no single network sets your price. All of them are integrated and live.</p>
+      </div>
+      <ul class="partners partners-wrap">
+        <li>Magnite</li><li>PubMatic</li><li>Index Exchange</li><li>OpenX</li><li>Xandr</li><li>Google AdX</li>
+        <li>Amazon Publisher Services</li><li>TripleLift</li><li>Sharethrough</li><li>Equativ</li><li>Sovrn</li>
+        <li>Criteo</li><li>Taboola</li><li>InMobi</li><li>AppLovin</li><li>Verve</li><li>Digital Turbine</li>
+        <li>Liftoff</li><li>BidMachine</li><li>BidSwitch</li><li>MGID</li><li>Dianomi</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="formats">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>One stack for every screen your audience uses.</h2>
+        <p>Display, video, connected TV and in-app inventory run through the same auction, the same reporting and the same account team.</p>
+      </div>
+      <div class="formats">
+        <div class="stage">
+          <div class="tabs" role="tablist" aria-label="Ad formats">
+            <button class="tab" role="tab" id="tab-display" aria-selected="true" data-format="display">Display</button>
+            <button class="tab" role="tab" id="tab-video" aria-selected="false" data-format="video">Video</button>
+            <button class="tab" role="tab" id="tab-ctv" aria-selected="false" data-format="ctv">CTV &amp; OTT</button>
+            <button class="tab" role="tab" id="tab-app" aria-selected="false" data-format="app">In-app</button>
+          </div>
+          <svg viewBox="0 0 760 460" role="img" aria-label="The selected ad format drawn at its real proportions">
+            <rect class="f-frame" x="230" y="70" width="300" height="250" rx="4" fill="rgba(0,250,168,0.10)" stroke="#00faa8" stroke-width="1.5"/>
+            <path class="f-play" d="M372 175 L372 215 L404 195 Z" fill="#00faa8" opacity="0"/>
+            <path class="f-dim-w bp-line" d="M230 350 H530"/>
+            <path class="f-dim-w-t bp-tick" d="M230 342 V358 M530 342 V358"/>
+            <path class="f-dim-h bp-line" d="M560 70 V320"/>
+            <path class="f-dim-h-t bp-tick" d="M552 70 H568 M552 320 H568"/>
+            <text class="f-w bp-label" x="380" y="380" text-anchor="middle">300</text>
+            <text class="f-h bp-label" x="578" y="200">250</text>
+            <text class="f-name bp-label" x="380" y="430" text-anchor="middle" style="fill:#959ca8">medium rectangle · IAB</text>
+          </svg>
+        </div>
+        <div class="format-copy" role="tabpanel" aria-labelledby="tab-display">
+          <h3 data-f="title">Display advertising</h3>
+          <p class="muted" data-f="body">Website display monetization with smart layouts that maximize revenue while preserving user experience.</p>
+          <ul data-f="list"><li>Smart layouts</li><li>Viewability optimization</li><li>Brand safety</li></ul>
+          <div class="spec mono"><span class="muted">Sizes</span><span data-f="sizes">300×250 · 728×90 · 160×600 · 320×50</span><span class="muted">Sold by</span><span data-f="via">Prebid header bidding</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How one impression is sold.</h2>
+        <p>Header bidding asks every partner at once while the page loads. Bids that miss the timeout are dropped, so a slow bidder never holds the page.</p>
+      </div>
+      <div class="timeline-grid">
+        <div class="timeline">
+          <svg viewBox="0 0 860 400" role="img" aria-label="Example timeline: bid requests go out at 40 milliseconds, bids return between 190 and 760 milliseconds, one bidder times out, the highest bid wins and the ad renders">
+            <g class="tl-axis-g">
+              <path class="tl-axis" d="M140 360 H820"/>
+              <g class="tl-label">
+                <text x="140" y="388" text-anchor="middle">0 ms</text><text x="310" y="388" text-anchor="middle">250</text>
+                <text x="480" y="388" text-anchor="middle">500</text><text x="650" y="388" text-anchor="middle">750</text>
+                <text x="820" y="388" text-anchor="middle">1000</text>
+              </g>
+              <path class="tl-timeout" d="M820 30 V360"/>
+              <text class="tl-label" x="812" y="24" text-anchor="end">timeout</text>
+            </g>
+            <g class="tl-rows"></g>
+          </svg>
+        </div>
+        <div class="points">
+          <div><h3>Everyone bids at once</h3><p>The page sends one request to every partner in parallel instead of offering the slot to networks one after another.</p></div>
+          <div><h3>The highest price wins</h3><p>Bids go to your ad server together, so the best offer for that impression is the one that serves.</p></div>
+          <div><h3>Timeouts protect page speed</h3><p>A partner that answers too late is skipped for that impression. Readers never wait on a slow bidder.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What you get that a typical network doesn't.</h2>
+        <p>Compared with the two usual alternatives: a single ad network, or building and running header bidding in-house.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Feature</th><th scope="col" class="us">HBDR</th><th scope="col">Typical ad network</th><th scope="col">DIY in-house setup</th></tr></thead>
+          <tbody data-compare></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Live in three steps.</h2>
+        <p>Our team does the integration work. You review the proposal and approve the rollout.</p>
+      </div>
+      <div class="steps">
+        <span class="step-progress" aria-hidden="true"></span>
+        <div class="step"><span class="mono">Step 1</span><h3>Discovery call</h3><p>We analyze your current ad setup, find the revenue you are leaving behind and agree on goals.</p><ul><li>Current ad stack review</li><li>Opportunities ranked</li><li>Revenue goals</li></ul></div>
+        <div class="step"><span class="mono">Step 2</span><h3>Customized proposal</h3><p>A tailored plan with revenue forecasts, ad placement strategy and an implementation roadmap.</p><ul><li>Revenue projections</li><li>Placement strategy</li><li>Timeline</li></ul></div>
+        <div class="step"><span class="mono">Step 3</span><h3>Technical implementation</h3><p>We configure accounts, implement the code and monitor performance after launch.</p><ul><li>Code implementation</li><li>Platform configuration</li><li>Performance monitoring</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap spec-sheet">
+      <div class="intro">
+        <h2>The company behind the auction.</h2>
+        <p class="muted">Founded in 2015 and based in Miami. A team with more than 25 years of combined experience in programmatic advertising.</p>
+      </div>
+      <dl>
+        <div><dt>Ads served through HBDR</dt><dd>1T+</dd></div>
+        <div><dt>Impressions per month</dt><dd>1B+</dd></div>
+        <div><dt>Publishers</dt><dd>500+</dd></div>
+        <div><dt>Revenue increase</dt><dd>50%<small>up to</small></dd></div>
+        <div><dt>Founded</dt><dd>2015</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="intro">
+        <h2>Let's look at your revenue.</h2>
+        <p class="muted">Tell us about your inventory. Our team replies within 24 hours with what we would change and what it should earn.</p>
+        <address>
+          <div><span class="mono muted">Email</span><span>contact@hbdr.com</span></div>
+          <div><span class="mono muted">Phone</span><span>(786) 675-6080</span></div>
+          <div><span class="mono muted">Office</span><span>1200 Brickell Ave Ste 1950, Miami, FL 33131</span></div>
+        </address>
+      </div>
+      <form class="form" aria-label="Contact form preview">
+        <div class="row">
+          <div class="field"><label for="f-name">Full name</label><input id="f-name" placeholder="John Smith" autocomplete="off"></div>
+          <div class="field"><label for="f-email">Work email</label><input id="f-email" type="email" placeholder="john@company.com" autocomplete="off"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="f-company">Company</label><input id="f-company" placeholder="Your company" autocomplete="off"></div>
+          <div class="field"><label for="f-imp">Monthly impressions</label><select id="f-imp"><option>Select range</option><option>Under 1M</option><option>1M to 10M</option><option>10M to 100M</option><option>100M+</option></select></div>
+        </div>
+        <fieldset class="field"><legend>Inventory type</legend>
+          <div class="chips">
+            <label for="f-web"><input id="f-web" type="checkbox" checked> Website</label>
+            <label for="f-app"><input id="f-app" type="checkbox"> Mobile app</label>
+            <label for="f-ctv"><input id="f-ctv" type="checkbox"> CTV</label>
+            <label for="f-ott"><input id="f-ott" type="checkbox"> OTT</label>
+          </div>
+        </fieldset>
+        <div class="row">
+          <div class="field"><label for="f-domain">Domain or bundle ID</label><input id="f-domain" placeholder="yourdomain.com" autocomplete="off"></div>
+          <div class="field"><label for="f-adstxt">ads.txt URL</label><input id="f-adstxt" placeholder="yourdomain.com/ads.txt" autocomplete="off"></div>
+        </div>
+        <button class="btn btn-mint btn-lg" type="submit" style="justify-content:center">Send to the HBDR team</button>
+        <p class="note">Design preview: this form sends nothing. The live form keeps every field set on /admin/form.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:1rem;align-content:start"><img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" width="96" height="30" style="height:30px;width:auto"><p class="muted" style="max-width:32ch;font-size:.875rem">Header bidding and managed monetization for websites, apps and CTV.</p></div>
+    <div><h4>Solutions</h4><ul><li>Header bidding</li><li>Display ads</li><li>Video player</li><li>CTV &amp; OTT</li><li>In-app ads</li></ul></div>
+    <div><h4>Company</h4><ul><li>About</li><li>How it works</li><li>Trust &amp; compliance</li><li>Blog</li><li>Careers</li></ul></div>
+    <div><h4>Contact</h4><ul><li>contact@hbdr.com</li><li>(786) 675-6080</li><li>Miami, FL</li></ul></div>
+    <div class="legal"><span>© 2026 HBDR. All rights reserved.</span><span>Privacy · Terms · Cookies</span></div>
+  </div>
+</footer>
+
+<div class="preview-flag">Design preview · not live</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  document.querySelector('.form').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  // Comparison rows (D-005 wording from the live site)
+  var rows = [
+    ['Header bidding implementation', 1, 1, 0], ['Managed Prebid Server', 1, 0, 0], ['In-app SDK (desktop and mobile)', 1, 'p', 0],
+    ['Real-time analytics dashboard', 1, 1, 1], ['Dynamic floor pricing', 1, 0, 0], ['Custom video player', 1, 'p', 0],
+    ['CTV and OTT support', 1, 0, 0], ['24/7 technical support', 1, 1, 'p'], ['Dedicated account manager', 1, 0, 0], ['Revenue guarantee', 1, 0, 0]
+  ];
+  var check = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Included"><path d="M5 13l4 4L19 7"/></svg>';
+  function cell(v, us) {
+    if (v === 1) return '<td' + (us ? ' class="us"' : '') + '>' + check + '</td>';
+    if (v === 'p') return '<td class="part">Partial</td>';
+    return '<td class="no" aria-label="Not included">—</td>';
+  }
+  document.querySelector('[data-compare]').innerHTML = rows.map(function (r) {
+    return '<tr><td>' + r[0] + '</td>' + cell(r[1], true) + cell(r[2]) + cell(r[3]) + '</tr>';
+  }).join('');
+
+  // Timeline rows: request at 40 ms, responses at fixed example times; one bidder misses the timeout
+  var X0 = 140, PX = 0.68; // 680 px per 1000 ms
+  function x(ms) { return X0 + ms * PX; }
+  var lanes = [['Bidder 1', 310, 2.41], ['Bidder 2', 520, 4.86, true], ['Bidder 3', 190, 3.37], ['Bidder 4', 760, 1.92], ['Bidder 5', 1150, null], ['Bidder 6', 430, 3.05]];
+  var g = document.querySelector('.tl-rows'), svgNS = 'http://www.w3.org/2000/svg', html = '';
+  lanes.forEach(function (l, i) {
+    var y = 50 + i * 46, end = l[2] === null ? 1000 : l[1];
+    html += '<text class="tl-row" x="0" y="' + (y + 5) + '">' + l[0] + '</text>';
+    html += '<path class="tl-wait" d="M' + x(40) + ' ' + y + ' H' + x(end) + '"/>';
+    html += '<path class="tl-req' + (l[3] ? ' tl-win' : '') + '" data-lane d="M' + x(40) + ' ' + y + ' H' + x(end) + '"/>';
+    html += l[2] === null
+      ? '<text class="tl-label" x="' + (x(1000) - 8) + '" y="' + (y - 8) + '" text-anchor="end">no bid in time</text>'
+      : '<circle class="' + (l[3] ? 'tl-win-dot' : 'tl-dot') + '" cx="' + x(l[1]) + '" cy="' + y + '" r="5"/><text class="tl-label" x="' + (x(l[1]) + 10) + '" y="' + (y + 4) + '"' + (l[3] ? ' style="fill:#00faa8"' : '') + '>$' + l[2].toFixed(2) + (l[3] ? ' wins' : '') + '</text>';
+  });
+  g.innerHTML = html;
+
+  // Format stage data (copy from the live solution pages)
+  var formats = {
+    display: { w: 300, h: 250, s: 1, play: 0, name: 'medium rectangle · IAB', title: 'Display advertising',
+      body: 'Website display monetization with smart layouts that maximize revenue while preserving user experience.',
+      list: ['Smart layouts', 'Viewability optimization', 'Brand safety'], sizes: '300×250 · 728×90 · 160×600 · 320×50', via: 'Prebid header bidding' },
+    video: { w: 640, h: 360, s: 0.66, play: 1, name: 'instream player · VAST', title: 'Video ad solutions',
+      body: 'Instream, outstream and interactive video formats in HBDR’s own player, built for engagement and viewability.',
+      list: ['VAST / VPAID', 'High viewability', 'Engagement metrics'], sizes: '640×360 · 16:9 instream and outstream', via: 'Custom video player' },
+    ctv: { w: 1920, h: 1080, s: 0.24, play: 1, name: 'connected TV · 16:9', title: 'CTV and OTT monetization',
+      body: 'Connected-TV advertising that captures the growing streaming audience with premium video inventory.',
+      list: ['SSAI support', 'Premium buyers', 'Cross-platform'], sizes: '1920×1080 · 15s and 30s spots', via: 'Server-side ad insertion' },
+    app: { w: 320, h: 480, s: 0.58, play: 0, name: 'interstitial · in-app', title: 'In-app monetization',
+      body: 'Banner, native, video and app-open ads for mobile apps, with Google AdX integration.',
+      list: ['Native formats', 'Rewarded video', 'Open bidding'], sizes: '320×50 · 320×480 · 300×250 · rewarded', via: 'In-app SDK and open bidding' }
+  };
+  function geom(f) { var w = f.w * f.s, h = f.h * f.s; return { x: 380 - w / 2, y: 195 - h / 2, w: w, h: h }; }
+  function applyCopy(f) {
+    document.querySelector('[data-f="title"]').textContent = f.title;
+    document.querySelector('[data-f="body"]').textContent = f.body;
+    document.querySelector('[data-f="list"]').innerHTML = f.list.map(function (t) { return '<li>' + t + '</li>'; }).join('');
+    document.querySelector('[data-f="sizes"]').textContent = f.sizes;
+    document.querySelector('[data-f="via"]').textContent = f.via;
+    document.querySelector('.f-w').textContent = f.w;
+    document.querySelector('.f-h').textContent = f.h;
+    document.querySelector('.f-name').textContent = f.name;
+  }
+  function placeFormat(f, animate) {
+    var g2 = geom(f), d = animate ? 0.7 : 0, e = 'expo.out';
+    gsap.to('.f-frame', { attr: { x: g2.x, y: g2.y, width: g2.w, height: g2.h }, duration: d, ease: e });
+    gsap.to('.f-dim-w', { attr: { d: 'M' + g2.x + ' ' + (g2.y + g2.h + 30) + ' H' + (g2.x + g2.w) }, duration: d, ease: e });
+    gsap.to('.f-dim-w-t', { attr: { d: 'M' + g2.x + ' ' + (g2.y + g2.h + 22) + ' V' + (g2.y + g2.h + 38) + ' M' + (g2.x + g2.w) + ' ' + (g2.y + g2.h + 22) + ' V' + (g2.y + g2.h + 38) }, duration: d, ease: e });
+    gsap.to('.f-dim-h', { attr: { d: 'M' + (g2.x + g2.w + 30) + ' ' + g2.y + ' V' + (g2.y + g2.h) }, duration: d, ease: e });
+    gsap.to('.f-dim-h-t', { attr: { d: 'M' + (g2.x + g2.w + 22) + ' ' + g2.y + ' H' + (g2.x + g2.w + 38) + ' M' + (g2.x + g2.w + 22) + ' ' + (g2.y + g2.h) + ' H' + (g2.x + g2.w + 38) }, duration: d, ease: e });
+    gsap.to('.f-w', { attr: { x: g2.x + g2.w / 2, y: g2.y + g2.h + 60 }, duration: d, ease: e });
+    gsap.to('.f-h', { attr: { x: g2.x + g2.w + 48, y: g2.y + g2.h / 2 + 5 }, duration: d, ease: e });
+    gsap.to('.f-play', { opacity: f.play, duration: d * 0.6 });
+    gsap.to('.f-name', { attr: { y: Math.min(452, g2.y + g2.h + 92) }, duration: d, ease: e });
+  }
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+      document.querySelector('.format-copy').setAttribute('aria-labelledby', tab.id);
+      var f = formats[tab.dataset.format];
+      applyCopy(f);
+      if (window.gsap) placeFormat(f, !reduce);
+    });
+  });
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (window.gsap) placeFormat(formats.display, false);
+
+  if (!window.gsap || reduce) return; // the static page above is complete on its own
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero: dimension lines draw once, then slots are sold one auction at a time
+  document.querySelectorAll('.dims .bp-line').forEach(function (p) {
+    var len = p.getTotalLength(); gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.1, ease: 'expo.out', delay: 0.15 });
+  });
+  var slots = [].slice.call(document.querySelectorAll('.slot'));
+  var order = [1, 0, 3, 2, 4];
+  var ladderName = document.querySelector('[data-slot-name]'), ladderPlace = document.querySelector('[data-slot-place]');
+  var bids = document.querySelector('.bids'), items = [].slice.call(bids.children);
+  var filledEl = document.querySelector('[data-filled]'), ecpmEl = document.querySelector('[data-ecpm]');
+  var cycle;
+  function money(v) { return '$' + v.toFixed(2); }
+  function buildCycle() {
+    var tl = gsap.timeline({ onComplete: function () { cycle = buildCycle(); } }), won = [];
+    tl.set('.slot-fill, .slot-price', { opacity: 0 }).call(function () { filledEl.textContent = '0'; ecpmEl.textContent = '—'; });
+    order.forEach(function (si, n) {
+      var slot = slots[si], frame = slot.querySelector('.slot-frame'), fill = slot.querySelector('.slot-fill'), price = slot.querySelector('.slot-price'), label = slot.querySelector('.slot-name');
+      var vals = items.map(function () { return Math.round((0.6 + Math.random() * 5.2) * 100) / 100; });
+      var best = vals.indexOf(Math.max.apply(null, vals)), start = tl.duration();
+      tl.call(function () {
+        ladderName.textContent = slot.dataset.name; ladderPlace.textContent = slot.dataset.place;
+        bids.classList.remove('closed'); items.forEach(function (li) { li.classList.remove('win'); li.querySelector('.cpm').textContent = '—'; });
+        frame.classList.add('is-live');
+      }, null, start);
+      tl.fromTo('.timer i', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'none' }, start);
+      items.forEach(function (li, i) {
+        var at = start + 0.1 + Math.random() * 0.85;
+        tl.set(li.querySelector('.track i'), { scaleX: 0 }, start);
+        tl.to(li.querySelector('.track i'), { scaleX: vals[i] / 6, duration: 0.45, ease: 'expo.out' }, at);
+        tl.call(function () { li.querySelector('.cpm').textContent = money(vals[i]); }, null, at);
+      });
+      tl.call(function () {
+        items[best].classList.add('win'); bids.classList.add('closed'); frame.classList.remove('is-live');
+        price.textContent = 'SOLD ' + money(vals[best]); won.push(vals[best]);
+        filledEl.textContent = String(won.length);
+        ecpmEl.textContent = money(won.reduce(function (a, b) { return a + b; }, 0) / won.length);
+      }, null, start + 1.3);
+      tl.to(fill, { opacity: 1, duration: 0.5, ease: 'expo.out' }, start + 1.3);
+      tl.to(label, { opacity: 0, duration: 0.2 }, start + 1.3);
+      tl.to(price, { opacity: 1, duration: 0.4 }, start + 1.4);
+      tl.to({}, { duration: 0.9 }, start + 1.4);
+    });
+    tl.to({}, { duration: 1.8 });
+    tl.to('.slot-fill, .slot-price', { opacity: 0, duration: 0.5 });
+    tl.to('.slot-name', { opacity: 1, duration: 0.4 }, '<');
+    return tl;
+  }
+  cycle = buildCycle();
+  ScrollTrigger.create({ trigger: '.sheet', start: 'top bottom', end: 'bottom top', onToggle: function (self) { if (cycle) self.isActive ? cycle.resume() : cycle.pause(); } });
+
+  // Partners: bids arriving, cells light in a random order once
+  ScrollTrigger.create({ trigger: '.partners', start: 'top 80%', once: true, onEnter: function () {
+    gsap.utils.shuffle([].slice.call(document.querySelectorAll('.partners li'))).forEach(function (li, i) { gsap.delayedCall(0.05 + i * 0.07, function () { li.classList.add('lit'); }); });
+  } });
+
+  // Timeline: request lines travel out to each response time, dots land with them
+  var tlAnim = gsap.timeline({ paused: true });
+  document.querySelectorAll('[data-lane]').forEach(function (p, i) {
+    var len = p.getTotalLength();
+    gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+    tlAnim.to(p, { strokeDashoffset: 0, duration: len / 520, ease: 'power2.out' }, 0.1 + i * 0.04);
+  });
+  tlAnim.from('.tl-rows circle', { scale: 0, transformOrigin: 'center', duration: 0.35, ease: 'back.out(2)', stagger: 0.08 }, 0.6);
+  ScrollTrigger.create({ trigger: '.timeline', start: 'top 75%', once: true, onEnter: function () { tlAnim.play(); } });
+
+  // Comparison: checks in the HBDR column draw top to bottom
+  var checks = document.querySelectorAll('td.us .check path');
+  gsap.set(checks, { strokeDashoffset: 22 });
+  ScrollTrigger.create({ trigger: '.table-wrap', start: 'top 75%', once: true, onEnter: function () {
+    gsap.to(checks, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', stagger: 0.06 });
+  } });
+
+  // Steps: the hairline fills left to right as the section comes into view (no pinning)
+  gsap.fromTo('.step-progress', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.steps', start: 'top 85%', end: 'top 35%', scrub: 0.6 } });
+})();
+</script>
