@@ -1,6 +1,7 @@
 // Blog admin templates — blog manager and post editor
 import { renderLayout } from "../layout";
 import { BlogPostData, formatDate, getCategoryColor } from "../components/blog-helpers";
+import { sanitizeText } from "../../middleware/sanitize";
 
 export function renderBlogAdminPage(posts: BlogPostData[]): string {
   const postRows = posts.map(post => `
@@ -76,6 +77,8 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
   const isEdit = !!post;
   const formAction = isEdit ? `/api/blog/${post!.id}` : "/api/blog";
   const formMethod = isEdit ? "PUT" : "POST";
+  // The x-data attribute is single-quoted HTML: a raw ' would end it, and the browser decodes entities before Alpine reads it
+  const js = (value: string) => sanitizeText(JSON.stringify(value));
 
   const content = `
   <section class="pt-28 pb-16" data-testid="blog-editor">
@@ -91,15 +94,15 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
       <div class="glass-card p-6 sm:p-8"
            x-data='{
              formData: {
-               title: ${JSON.stringify(post?.title || "")},
-               slug: ${JSON.stringify(post?.slug || "")},
-               excerpt: ${JSON.stringify(post?.excerpt || "")},
-               content: ${JSON.stringify(post?.content || "")},
-               author: ${JSON.stringify(post?.author || "")},
-               category: ${JSON.stringify(post?.category || "")},
-               tags: ${JSON.stringify(post?.tags || "")},
-               coverImage: ${JSON.stringify(post?.coverImage || "")},
-               published: ${JSON.stringify(post?.published || "true")}
+               title: ${js(post?.title || "")},
+               slug: ${js(post?.slug || "")},
+               excerpt: ${js(post?.excerpt || "")},
+               content: ${js(post?.content || "")},
+               author: ${js(post?.author || "")},
+               category: ${js(post?.category || "")},
+               tags: ${js(post?.tags || "")},
+               coverImage: ${js(post?.coverImage || "")},
+               published: ${js(post?.published || "true")}
              },
              saving: false,
              error: "",
