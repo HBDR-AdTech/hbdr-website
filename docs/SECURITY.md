@@ -18,7 +18,7 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Zone: HTTPS forced, TLS 1.2 minimum, TLS 1.3 on, www 301 to apex (D-002).
 
 ### Contact and support form (`POST /api/contact`)
-- Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed per-IP rate limit (`rate_limits`), text sanitized before storage.
+- Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed rate limit (`rate_limits`: 5 per 15 minutes, one atomic upsert, keyed on `cf-connecting-ip` only, IPv6 by /64), text sanitized before storage.
 - Notification email (D-001, D-004): the `EMAIL` binding may send **only from** `noreply@hbdr.com` and **only to** contact@ / support@hbdr.com (`wrangler.toml`), so a compromised Worker cannot mail anyone else. Submitter text is HTML-escaped in the email body; reply-to is the submitter.
 - Failures return 500 and the form shows them (never a fake success).
 - Answers other than name, email, company and impressions are checked against the operator's form config (D-016): choices must be on the field's option list (retired options included), text is length-capped and escaped once, custom answers under unknown keys are dropped, and hidden fields are ignored.
@@ -42,7 +42,9 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 ## Supply chain and repo
 - Repo is public. `main` is protected: PR required, `preview` check (typecheck, tests, CSS build) must pass, no force-push or deletion.
 - GitHub secret scanning with push protection and Dependabot security updates are on. A history scan on 2026-10-02 found no committed credentials.
-- CI installs with `npm ci` from the lockfile; third-party actions are pinned by SHA.
+- CI installs with `npm ci` from the lockfile; every action is pinned to a commit SHA and the workflow token defaults to `contents: read` (test: `server/__tests__/workflows.test.ts`).
+- Alpine and @alpinejs/intersect load from jsdelivr with sha384 SRI (test: `server/routes/__tests__/pages.test.ts`). Google Fonts CSS has none: it differs per User-Agent.
+- `npm audit --omit=dev` is clean. Four highs remain in dev-only tooling (@tailwindcss/cli -> @parcel/watcher -> micromatch -> braces, GHSA-vfj7-8cjw-p6xm); npm's only fix downgrades the CLI.
 - Worker secrets: `TURNSTILE_SECRET` (optional; needed only to turn Turnstile on, D-016). Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
 - Operator credentials: the Cloudflare API token lives in `~/.config/hbdr/cloudflare.env` (mode 600). It is broad (DNS, Workers, D1, Access); a scoped deploy-only token for CI is the upgrade.
 
@@ -51,9 +53,10 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Known gap: DMARC is `p=none` on hbdr.com. Move to `p=quarantine` after reviewing aggregate reports for Google Workspace, Zendesk and SendGrid alignment.
 
 ## Open gaps (audit 2026-10-14, D-015)
-- Bot challenge: Turnstile is built and off (D-016). To turn it on, Matt: (1) creates a Turnstile widget for hbdr.com and both workers.dev hostnames; (2) runs `wrangler secret put TURNSTILE_SECRET`; (3) enters the site key on `/admin/form` and turns it on. The support form carries the same widget and both sources are checked. The D1 rate limit is still per IP, not atomic, and keyed on the full IPv6 address; a Cloudflare rate limiting rule on `POST /api/contact` is still open. Owner: Matt.
+Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpine CDN scripts, SHA-pinned actions with a read-only default token, blog editor and blog list escaping, `npm audit fix`, Turnstile on both forms behind a toggle (D-016), honeypot crash, dead `users` code.
+- Bot challenge: Turnstile is built and off (D-016). To turn it on, Matt: (1) creates a Turnstile widget for hbdr.com and both workers.dev hostnames; (2) runs `wrangler secret put TURNSTILE_SECRET`; (3) enters the site key on `/admin/form` and turns it on. A Cloudflare rate limiting rule on `POST /api/contact` is still open. Owner: Matt.
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
-- Supply chain: Alpine CDN scripts have no SRI; first-party actions are tag-pinned, not SHA-pinned; CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: SRI now, SHA pins now, Alpine CSP build later.
+- Supply chain: CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: Alpine CSP build plus nonces.
 - DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
 - Privacy: submitter IP kept forever (D-013). Needs a retention decision.
 - Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.

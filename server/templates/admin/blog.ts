@@ -1,16 +1,17 @@
 // Blog admin templates — blog manager and post editor
 import { renderLayout } from "../layout";
 import { BlogPostData, formatDate, getCategoryColor } from "../components/blog-helpers";
+import { sanitizeText } from "../../middleware/sanitize";
 
 export function renderBlogAdminPage(posts: BlogPostData[]): string {
   const postRows = posts.map(post => `
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="admin-row-${post.id}">
       <td class="py-4 px-4">
-        <div class="font-medium text-white text-sm">${post.title}</div>
+        <div class="font-medium text-white text-sm">${sanitizeText(post.title)}</div>
         <div class="text-xs text-[var(--text-muted)] mt-1">/blog/${post.slug}</div>
       </td>
       <td class="py-4 px-4 hidden sm:table-cell">
-        <span class="text-xs font-medium px-2.5 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
+        <span class="text-xs font-medium px-2.5 py-1 rounded-full border ${getCategoryColor(post.category)}">${sanitizeText(post.category)}</span>
       </td>
       <td class="py-4 px-4 hidden md:table-cell text-sm text-[var(--text-muted)]">${post.author}</td>
       <td class="py-4 px-4 hidden md:table-cell text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</td>
@@ -76,6 +77,8 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
   const isEdit = !!post;
   const formAction = isEdit ? `/api/blog/${post!.id}` : "/api/blog";
   const formMethod = isEdit ? "PUT" : "POST";
+  // The x-data attribute is single-quoted HTML: a raw ' would end it, and the browser decodes entities before Alpine reads it
+  const js = (value: string) => sanitizeText(JSON.stringify(value));
 
   const content = `
   <section class="pt-28 pb-16" data-testid="blog-editor">
@@ -91,15 +94,15 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
       <div class="glass-card p-6 sm:p-8"
            x-data='{
              formData: {
-               title: ${JSON.stringify(post?.title || "")},
-               slug: ${JSON.stringify(post?.slug || "")},
-               excerpt: ${JSON.stringify(post?.excerpt || "")},
-               content: ${JSON.stringify(post?.content || "")},
-               author: ${JSON.stringify(post?.author || "")},
-               category: ${JSON.stringify(post?.category || "")},
-               tags: ${JSON.stringify(post?.tags || "")},
-               coverImage: ${JSON.stringify(post?.coverImage || "")},
-               published: ${JSON.stringify(post?.published || "true")}
+               title: ${js(post?.title || "")},
+               slug: ${js(post?.slug || "")},
+               excerpt: ${js(post?.excerpt || "")},
+               content: ${js(post?.content || "")},
+               author: ${js(post?.author || "")},
+               category: ${js(post?.category || "")},
+               tags: ${js(post?.tags || "")},
+               coverImage: ${js(post?.coverImage || "")},
+               published: ${js(post?.published || "true")}
              },
              saving: false,
              error: "",
