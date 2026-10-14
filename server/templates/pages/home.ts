@@ -364,7 +364,7 @@ export function renderPage(form: FormConfig): string {
                 <td class="p-4 lg:p-5 text-sm font-medium text-white/80">${row[0]}</td>
                 ${[row[1], row[2], row[3]]
                   .map((val) => {
-                    if (val === true) return '<td class="p-4 lg:p-5 text-center"><span class="check-icon check-animate"><svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></span></td>';
+                    if (val === true) return '<td class="p-4 lg:p-5 text-center"><span class="check-icon check-animate"><svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></span></td>';
                     if (val === false) return '<td class="p-4 lg:p-5 text-center"><span class="x-icon"><svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></span></td>';
                     return '<td class="p-4 lg:p-5 text-center"><span class="partial-icon"><svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg></span></td>';
                   })

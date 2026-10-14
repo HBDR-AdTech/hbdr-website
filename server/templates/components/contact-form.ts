@@ -132,8 +132,8 @@ export function renderContactFormSection(form: FormConfig): string {
             <div class="text-sm text-[var(--text-muted)] mb-3">Response time</div>
             <div class="flex items-center gap-2">
               <span class="relative flex h-3 w-3">
-                <span class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" style="animation: pulse-ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
+                <span class="absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" style="animation: pulse-ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-[var(--accent)]"></span>
               </span>
               <span class="font-medium text-white">Usually within 24 hours</span>
             </div>
@@ -178,8 +178,8 @@ export function renderContactFormSection(form: FormConfig): string {
                }">
 
             <div x-show="submitted" x-cloak class="glass-card p-8 text-center" x-transition>
-              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 mb-4">
-                <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--accent)]/15 mb-4">
+                <svg class="w-8 h-8 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
               </div>
