@@ -71,7 +71,7 @@ export function renderPage(form: FormConfig): string {
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                   <div class="metric-card">
                     <div class="text-[var(--text-muted)] text-xs mb-1.5">Today's Revenue</div>
-                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="12847" data-prefix="$">$12,847</span></div>
+                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="12847" data-prefix="$" data-revenue>$12,847</span></div>
                     <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+23%</div>
                   </div>
                   <div class="metric-card">
@@ -90,9 +90,10 @@ export function renderPage(form: FormConfig): string {
                     <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+31%</div>
                   </div>
               </div>
-              <div class="rounded-lg border border-white/[0.06] p-4">
+              <div class="grid lg:grid-cols-[1fr_340px] gap-3">
+              <div class="rounded-lg border border-white/[0.06] p-4 flex flex-col">
                 <div class="text-[0.8125rem] text-white font-medium mb-4">Revenue</div>
-                <div class="bar-chart" x-data x-init="$nextTick(() => { $el.querySelectorAll('div').forEach((b, i) => { b.style.height = b.dataset.h }) })">
+                <div class="bar-chart bar-chart-fill" x-data x-init="$nextTick(() => { $el.querySelectorAll('div').forEach((b, i) => { b.style.height = b.dataset.h }) })">
                     <div data-h="40%" style="height: 0%"></div>
                     <div data-h="65%" style="height: 0%"></div>
                     <div data-h="45%" style="height: 0%"></div>
@@ -107,12 +108,87 @@ export function renderPage(form: FormConfig): string {
                     <div data-h="88%" style="height: 0%"></div>
                 </div>
               </div>
+              <!-- One example auction, replayed while in view: bids land inside the timeout, the highest wins -->
+              <div class="auction is-closed rounded-lg border border-white/[0.06] p-4" data-auction aria-label="Example header bidding auction">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="text-[0.8125rem] text-white font-medium">Header auction</div>
+                  <div class="text-xs text-[var(--text-muted)]">300&times;250 &middot; above the fold</div>
+                </div>
+                <div class="auction-timer mb-4" aria-hidden="true"><span data-auction-timer></span></div>
+                <ul class="space-y-2.5">
+                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 1</span><span class="auction-track"><span class="auction-fill" style="--w: 0.402"></span></span><span class="auction-cpm tabular-nums">$2.41</span></li>
+                  <li class="auction-row is-winner"><span class="text-xs text-[var(--text-muted)]">Bidder 2</span><span class="auction-track"><span class="auction-fill" style="--w: 0.810"></span></span><span class="auction-cpm tabular-nums">$4.86</span></li>
+                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 3</span><span class="auction-track"><span class="auction-fill" style="--w: 0.562"></span></span><span class="auction-cpm tabular-nums">$3.37</span></li>
+                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 4</span><span class="auction-track"><span class="auction-fill" style="--w: 0.320"></span></span><span class="auction-cpm tabular-nums">$1.92</span></li>
+                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 5</span><span class="auction-track"><span class="auction-fill" style="--w: 0.508"></span></span><span class="auction-cpm tabular-nums">$3.05</span></li>
+                </ul>
+                <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                  <span class="text-[var(--text-muted)]">Winning bid to ad server</span>
+                  <span class="text-[var(--accent)] font-medium tabular-nums" data-auction-win>$4.86 CPM</span>
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--surface)] to-transparent"></div>
       </div>
     </div>
+    <script>
+    (function () {
+      var root = document.querySelector('[data-auction]');
+      if (!root || !root.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var rows = [].slice.call(root.querySelectorAll('.auction-row'));
+      var timer = root.querySelector('[data-auction-timer]');
+      var win = root.querySelector('[data-auction-win]');
+      var revenueEl = document.querySelector('[data-revenue]');
+      var revenue = 12847, cycles = 0, running = false, pending = [];
+      var EASE = 'cubic-bezier(0.16, 1, 0.3, 1)', WINDOW = 1400, MAX_CPM = 6;
+      function later(fn, ms) { pending.push(setTimeout(fn, ms)); }
+      function money(v) { return '$' + v.toFixed(2); }
+      function open() {
+        root.classList.remove('is-closed');
+        win.textContent = 'Collecting bids';
+        var bids = rows.map(function () { return Math.round((0.6 + Math.random() * 5.2) * 100) / 100; });
+        rows.forEach(function (row, i) {
+          var fill = row.querySelector('.auction-fill'), cpm = row.querySelector('.auction-cpm');
+          var at = 120 + Math.random() * (WINDOW - 400);
+          row.classList.remove('is-winner');
+          cpm.textContent = '—';
+          fill.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(' + bids[i] / MAX_CPM + ')' }],
+            { duration: 420, delay: at, easing: EASE, fill: 'both' });
+          later(function () { cpm.textContent = money(bids[i]); }, at);
+        });
+        timer.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: WINDOW, easing: 'linear', fill: 'forwards' });
+        later(function () { close(bids); }, WINDOW + 200);
+      }
+      function close(bids) {
+        var best = bids.indexOf(Math.max.apply(null, bids));
+        rows[best].classList.add('is-winner');
+        root.classList.add('is-closed');
+        win.textContent = money(bids[best]) + ' CPM';
+        win.animate([{ opacity: 0.3, transform: 'translateY(3px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE });
+        // The first close can overlap the revenue count-up, so the ticker joins from the second auction
+        if (revenueEl && ++cycles > 1) {
+          revenue += Math.round(bids[best] * 4);
+          revenueEl.textContent = '$' + revenue.toLocaleString('en-US');
+        }
+        later(open, 2600);
+      }
+      function setRunning(on) {
+        if (on === running) return;
+        running = on;
+        pending.forEach(clearTimeout); pending = [];
+        if (on) open();
+      }
+      var visible = false;
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        setRunning(visible && !document.hidden);
+      }, { threshold: 0.4 }).observe(root);
+      document.addEventListener('visibilitychange', function () { setRunning(visible && !document.hidden); });
+    })();
+    </script>
   </section>
 
 

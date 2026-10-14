@@ -380,6 +380,34 @@
 
 .glass-btn:active, .glass-btn-outline:active { transform: translateY(0.5px); }
 
+/* ── Hero auction: the one authored motion on the page (D-019) ── */
+.auction-row {
+  display: grid;
+  grid-template-columns: 4.25rem 1fr 3.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.3s var(--ease-out);
+}
+.auction-track { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.auction-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.3);
+  transform-origin: left;
+  transform: scaleX(var(--w, 0));
+  transition: background-color 0.25s var(--ease-out);
+}
+.auction-cpm { font-size: 0.75rem; text-align: right; color: var(--text-secondary); transition: color 0.25s var(--ease-out); }
+.auction-row.is-winner .auction-fill { background: var(--accent); }
+.auction-row.is-winner .auction-cpm { color: var(--accent); }
+.auction.is-closed .auction-row:not(.is-winner) { opacity: 0.45; }
+.auction:not(.is-closed) [data-auction-win] { color: var(--text-muted); }
+/* Revenue chart stretches to match the auction card beside it */
+.bar-chart.bar-chart-fill { height: auto; flex: 1; min-height: 96px; }
+.auction-timer { height: 2px; border-radius: 1px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.auction-timer span { display: block; height: 100%; background: var(--text-muted); transform-origin: left; }
+
 /* ── Comparison Row ── */
 .comparison-row {
   opacity: 0;
