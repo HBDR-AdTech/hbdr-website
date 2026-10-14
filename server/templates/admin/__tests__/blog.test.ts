@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { renderBlogEditorPage } from "../blog";
+import { renderBlogEditorPage, renderBlogAdminPage } from "../blog";
 
 // What the browser hands Alpine: a single-quoted attribute ends at the first ', then character references are decoded
 function xData(html: string): string {
@@ -22,5 +22,16 @@ describe("blog editor", () => {
     expect(data.formData).toMatchObject({
       title: post.title, excerpt: post.excerpt, content: post.content, author: post.author, published: "true",
     });
+  });
+});
+
+describe("blog admin list", () => {
+  it("prints post titles and categories as text, not markup", () => {
+    const post = { id: "1", title: "<img src=x onerror=alert(1)>", slug: "x", excerpt: "e", content: "c", coverImage: null,
+      author: "a", category: "<b>News</b>", tags: null, published: "true", publishedAt: new Date(), updatedAt: new Date() };
+    const html = renderBlogAdminPage([post as any]);
+    expect(html).not.toContain("<img src=x");
+    expect(html).not.toContain("<b>News</b>");
+    expect(html).toContain("&lt;img src=x onerror=alert(1)&gt;");
   });
 });

@@ -7,11 +7,11 @@ export function renderBlogAdminPage(posts: BlogPostData[]): string {
   const postRows = posts.map(post => `
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="admin-row-${post.id}">
       <td class="py-4 px-4">
-        <div class="font-medium text-white text-sm">${post.title}</div>
+        <div class="font-medium text-white text-sm">${sanitizeText(post.title)}</div>
         <div class="text-xs text-[var(--text-muted)] mt-1">/blog/${post.slug}</div>
       </td>
       <td class="py-4 px-4 hidden sm:table-cell">
-        <span class="text-xs font-medium px-2.5 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
+        <span class="text-xs font-medium px-2.5 py-1 rounded-full border ${getCategoryColor(post.category)}">${sanitizeText(post.category)}</span>
       </td>
       <td class="py-4 px-4 hidden md:table-cell text-sm text-[var(--text-muted)]">${post.author}</td>
       <td class="py-4 px-4 hidden md:table-cell text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</td>
