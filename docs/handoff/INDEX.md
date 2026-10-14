@@ -14,3 +14,4 @@
 |---|------|---------------|--------------|-----|
 | 001 | 2026-03-06 | Phase A: deps, Tailwind build step, Vitest (filed retroactively from untracked docs/HANDOFF.md) | — | [HANDOFF-001.md](HANDOFF-001.md) |
 | 002 | 2026-10-14 | Solutions layout, qualifying lead form (D-014), security hardening (D-015), admin form settings + Turnstile toggle (D-016); PRs #18–#20; 160 tests; migrations through 0005 | `fb9b8b0d` | [HANDOFF-002.md](HANDOFF-002.md) |
+| 003 | 2026-10-14 | Logo palette (D-017), IPs kept (D-018), auction hero (D-019); PRs #21, #22; Turnstile widget + secret; WAF/DNSSEC scripts for operator | — (PRs open) | [HANDOFF-003.md](HANDOFF-003.md) |
