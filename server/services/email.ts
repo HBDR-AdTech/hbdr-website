@@ -1,9 +1,11 @@
 // Lead/support notifications via the Cloudflare Email Sending binding (see wrangler.toml [[send_email]])
 
-import { sanitizeText } from "../middleware/sanitize";
+import { sanitizeText, unescapeText } from "../middleware/sanitize";
 import { EMAIL_FROM, CONTACT_NOTIFY_EMAIL, SUPPORT_NOTIFY_EMAIL } from "../config";
 import type { LeadDetails } from "./storage";
 
+// The stored lead: every text field except email and ip is already HTML-escaped at the API boundary
+// (routes/api.ts), so it goes into the HTML as is; escaping again shows &amp;#x27; for an apostrophe
 interface ContactNotificationData extends Partial<LeadDetails> {
   name: string;
   email: string;
@@ -36,7 +38,7 @@ function parseSupportCompany(company: string): { subject: string; priority: stri
 }
 
 function buildDetailRows(data: ContactNotificationData): string {
-  const safeName = sanitizeText(data.name);
+  const safeName = data.name;
   const safeEmail = sanitizeText(data.email);
   const safeIp = data.ip ? sanitizeText(data.ip) : null;
 
@@ -47,15 +49,15 @@ function buildDetailRows(data: ContactNotificationData): string {
 
   if (data.source === "support") {
     const { subject, priority } = parseSupportCompany(data.company);
-    rows += row("Subject", sanitizeText(subject));
-    rows += row("Priority", sanitizeText(priority));
+    rows += row("Subject", subject);
+    rows += row("Priority", priority);
   } else {
-    rows += row("Company", sanitizeText(data.company));
-    const impressionDisplay = impressionLabels[data.impressions] || sanitizeText(data.impressions);
+    rows += row("Company", data.company);
+    const impressionDisplay = impressionLabels[data.impressions] || data.impressions;
     rows += row("Impressions", impressionDisplay);
     for (const [key, label] of detailLabels) {
       const value = data[key];
-      if (value) rows += row(label, sanitizeText(value).replace(/\n/g, "<br>"));
+      if (value) rows += row(label, value.replace(/\n/g, "<br>"));
     }
   }
 
@@ -73,7 +75,7 @@ export async function sendContactNotification(
   try {
     const isSupport = data.source === "support";
     const sourceLabel = isSupport ? "Support Request" : "Contact Form";
-    const safeMessage = data.message ? sanitizeText(data.message) : null;
+    const safeMessage = data.message;
 
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -90,13 +92,15 @@ export async function sendContactNotification(
         <div style="text-align: center; margin-top: 20px; padding: 15px;"><p style="color: #999; font-size: 12px; margin: 0;">This notification was sent from HBDR.com</p></div>
       </div>`;
 
-    const safeSubjectName = data.name.replace(/[<>"'&\n\r]/g, "");
+    // the subject is a plain-text header: show the real characters, drop line breaks
+    const plain = (text: string) => unescapeText(text).replace(/[\r\n]/g, "");
+    const safeSubjectName = plain(data.name);
     let emailSubject: string;
     if (isSupport) {
       const { subject } = parseSupportCompany(data.company);
-      emailSubject = `Support Request: ${subject} — ${safeSubjectName}`;
+      emailSubject = `Support Request: ${plain(subject)} — ${safeSubjectName}`;
     } else {
-      const safeSubjectCompany = data.company.replace(/[<>"'&\n\r]/g, "");
+      const safeSubjectCompany = plain(data.company);
       emailSubject = `New Lead: ${safeSubjectName} - ${safeSubjectCompany}`;
     }
 

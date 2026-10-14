@@ -91,3 +91,8 @@ export function sanitizeText(text: string): string {
     return entities[char] || char;
   });
 }
+
+// Inverse of sanitizeText, for plain-text sinks (email subject) that must show the visitor's own characters
+export function unescapeText(text: string): string {
+  return text.replace(/&lt;|&gt;|&quot;|&#x27;|&amp;/g, (entity) => ({ "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#x27;": "'", "&amp;": "&" })[entity]!);
+}

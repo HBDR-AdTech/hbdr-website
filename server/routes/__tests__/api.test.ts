@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Hono } from "hono";
 import { registerApiRoutes } from "../api";
 import { MemStorage } from "../../services/mem-storage";
@@ -67,5 +67,33 @@ describe("POST /api/contact qualifying fields", () => {
     expect((await post({ ...base, currentSetup: "<script>" }, "198.51.100.3")).status).toBe(400);
     expect((await post({ ...base, inventoryTypes: ["Billboard"] }, "198.51.100.4")).status).toBe(400);
     expect((await post({ ...base, phone: "call me maybe" }, "198.51.100.5")).status).toBe(400);
+  });
+});
+
+describe("POST /api/contact to email", () => {
+  it("escapes visitor HTML exactly once from form to inbox", async () => {
+    const app = new Hono();
+    const storage = new MemStorage();
+    const send = vi.fn().mockResolvedValue({ messageId: "m1" });
+    registerApiRoutes(app, () => storage, () => ({ db: null, email: { send } as unknown as SendEmail }));
+    const pending: Promise<unknown>[] = [];
+    const res = await app.request("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: "http://localhost", Host: "localhost", "CF-Connecting-IP": "198.51.100.9" },
+      body: JSON.stringify({
+        name: "Jane O'Brien", email: "jane@publisher.com", company: "<b>Pub</b>",
+        impressions: "<img src=x onerror=alert(1)>", message: "<script>alert(1)</script>", _source: "contact",
+      }),
+    }, {}, { waitUntil: (p: Promise<unknown>) => pending.push(p), passThroughOnException: () => {} } as any);
+    await Promise.all(pending);
+
+    expect(res.status).toBe(200);
+    const msg = send.mock.calls[0][0];
+    for (const raw of ["<script>", "<img", "<b>"]) expect(msg.html).not.toContain(raw);
+    expect(msg.html).toContain("Jane O&#x27;Brien");
+    expect(msg.html).not.toContain("&amp;#x27;");
+    expect(msg.subject).toBe("New Lead: Jane O'Brien - <b>Pub</b>");
+    const [lead] = await storage.getContactLeads();
+    expect(lead.impressions).toBe("&lt;img src=x onerror=alert(1)&gt;");
   });
 });

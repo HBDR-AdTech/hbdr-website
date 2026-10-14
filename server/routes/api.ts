@@ -99,6 +99,7 @@ export function registerApiRoutes(
         name: sanitizeText(validatedData.data.name),
         email: validatedData.data.email.toLowerCase().trim(),
         company: sanitizeText(validatedData.data.company),
+        impressions: sanitizeText(validatedData.data.impressions),
         message: validatedData.data.message ? sanitizeText(validatedData.data.message) : null,
         inventoryTypes: validatedData.data.inventoryTypes?.length ? validatedData.data.inventoryTypes.join(", ") : null,
         property: validatedData.data.property ? sanitizeText(validatedData.data.property) : null,

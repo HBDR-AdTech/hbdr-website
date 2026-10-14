@@ -42,10 +42,14 @@ describe("sendContactNotification", () => {
     expect(msg.html).toContain("High");
   });
 
-  it("escapes submitter HTML in the email body", async () => {
+  // The API stores text HTML-escaped once; escaping again showed "Pub&#x27;s" in the inbox
+  it("shows stored text once-escaped in the body and plain in the subject", async () => {
     const m = mailer();
-    await sendContactNotification(m, { ...lead, message: "<script>alert(1)</script>" });
-    expect(m.send.mock.calls[0][0].html).not.toContain("<script>");
+    await sendContactNotification(m, { ...lead, name: "Jane O&#x27;Brien", company: "Pub&#x27;s &amp; Co" });
+    const msg = m.send.mock.calls[0][0];
+    expect(msg.html).toContain("Jane O&#x27;Brien");
+    expect(msg.html).not.toContain("&amp;#x27;");
+    expect(msg.subject).toBe("New Lead: Jane O'Brien - Pub's & Co");
   });
 
   it("returns false instead of throwing when the binding rejects", async () => {
