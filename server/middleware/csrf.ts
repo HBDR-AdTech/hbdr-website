@@ -32,3 +32,9 @@ export function validateOrigin(headers: Headers): boolean {
   // CSRF tokens provide defense in depth for form POSTs
   return true;
 }
+
+// Stricter check for admin config mutations: browsers always send Origin on a fetch POST, so a request
+// without one is not from the admin page and is refused
+export function requireSameOrigin(headers: Headers): boolean {
+  return headers.has("origin") && validateOrigin(headers);
+}

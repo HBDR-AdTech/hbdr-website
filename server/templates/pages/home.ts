@@ -1,7 +1,8 @@
 import { renderLayout } from "../layout";
 import { renderContactFormSection } from "../components/contact-form";
+import type { FormConfig } from "../../services/form-config";
 
-export function renderPage(): string {
+export function renderPage(form: FormConfig): string {
   const homepageContent = `
 
   <!-- ========== HERO ========== -->
@@ -571,7 +572,7 @@ export function renderPage(): string {
 
   <div class="section-divider max-w-5xl mx-auto"></div>
 
-  ${renderContactFormSection()}`;
+  ${renderContactFormSection(form)}`;
 
   return renderLayout({
     title: "HBDR - Header Bidding & Ad Monetization Solutions",

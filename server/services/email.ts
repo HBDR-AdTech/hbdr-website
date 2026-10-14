@@ -3,6 +3,7 @@
 import { sanitizeText, unescapeText } from "../middleware/sanitize";
 import { EMAIL_FROM, CONTACT_NOTIFY_EMAIL, SUPPORT_NOTIFY_EMAIL } from "../config";
 import type { LeadDetails } from "./storage";
+import { customAnswers, type FormField } from "./form-config";
 
 // The stored lead: every text field except email and ip is already HTML-escaped at the API boundary
 // (routes/api.ts), so it goes into the HTML as is; escaping again shows &amp;#x27; for an apostrophe
@@ -37,7 +38,7 @@ function parseSupportCompany(company: string): { subject: string; priority: stri
   return { subject: company, priority: "Medium" };
 }
 
-function buildDetailRows(data: ContactNotificationData): string {
+function buildDetailRows(data: ContactNotificationData, fields: FormField[]): string {
   const safeName = data.name;
   const safeEmail = sanitizeText(data.email);
   const safeIp = data.ip ? sanitizeText(data.ip) : null;
@@ -59,7 +60,13 @@ function buildDetailRows(data: ContactNotificationData): string {
       const value = data[key];
       if (value) rows += row(label, value.replace(/\n/g, "<br>"));
     }
+    // labels are operator text, escaped here; the answers were escaped at the API boundary
+    for (const [label, value] of customAnswers(data.customFields ?? null, fields)) {
+      rows += row(sanitizeText(label), value.replace(/\n/g, "<br>"));
+    }
   }
+
+  if (data.botCheck) rows += row("Bot check", data.botCheck);
 
   if (safeIp) {
     rows += `<tr><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; font-weight: 600; color: #333;">IP Address</td><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #999; font-size: 13px;">${safeIp}</td></tr>`;
@@ -70,7 +77,8 @@ function buildDetailRows(data: ContactNotificationData): string {
 
 export async function sendContactNotification(
   mailer: SendEmail,
-  data: ContactNotificationData
+  data: ContactNotificationData,
+  fields: FormField[] = []
 ): Promise<boolean> {
   try {
     const isSupport = data.source === "support";
@@ -85,7 +93,7 @@ export async function sendContactNotification(
         </div>
         <div style="background: #f8f9fa; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
           <table style="width: 100%; border-collapse: collapse;">
-            ${buildDetailRows(data)}
+            ${buildDetailRows(data, fields)}
           </table>
         </div>
         ${safeMessage ? `<div style="background: #f8f9fa; border-radius: 12px; padding: 24px;"><h3 style="margin: 0 0 10px 0; color: #333; font-size: 16px;">${isSupport ? "Description" : "Message"}</h3><p style="margin: 0; color: #555; line-height: 1.6; white-space: pre-wrap;">${safeMessage}</p></div>` : ""}

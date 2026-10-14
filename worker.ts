@@ -18,6 +18,7 @@ type Env = {
   ACCESS_AUD: string;
   ENVIRONMENT: string;
   EMAIL: SendEmail;
+  TURNSTILE_SECRET?: string; // Worker secret (wrangler secret put TURNSTILE_SECRET); unset until Turnstile is set up
 };
 
 const app = new Hono<{ Bindings: Env }>();
@@ -36,6 +37,7 @@ registerPageRoutes(app, getStorage);
 registerApiRoutes(app, getStorage, (c) => ({
   email: c.env.EMAIL,
   db: c.env.DB,
+  turnstileSecret: c.env.TURNSTILE_SECRET,
 }));
 registerAdminRoutes(app, getStorage);
 registerSeoRoutes(app, getStorage);

@@ -33,6 +33,16 @@ describe("sendContactNotification", () => {
     expect(html).not.toContain("Heard about us");
   });
 
+  it("lists custom answers under their escaped labels and the bot check result", async () => {
+    const m = mailer();
+    const fields = [{ key: "custom_budget", type: "text" as const, label: "Budget <USD>", placeholder: "", required: false, visible: true, order: 150, locked: false, maxLength: 300, custom: true }];
+    await sendContactNotification(m, { ...lead, customFields: JSON.stringify({ custom_budget: "10k &amp; up", custom_gone: "kept" }), botCheck: "unverified" }, fields);
+    const html = m.send.mock.calls[0][0].html;
+    expect(html).toMatch(/Budget &lt;USD&gt;<\/td><td[^>]*>10k &amp; up</);
+    expect(html).toMatch(/custom_gone<\/td><td[^>]*>kept</);
+    expect(html).toMatch(/Bot check<\/td><td[^>]*>unverified</);
+  });
+
   it("routes support requests to support@ and parses subject/priority", async () => {
     const m = mailer();
     await sendContactNotification(m, { ...lead, source: "support", company: "Login broken [Priority: High]" });

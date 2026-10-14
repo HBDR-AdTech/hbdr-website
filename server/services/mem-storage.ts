@@ -1,11 +1,14 @@
 // In-memory storage for local development (no database required)
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails } from "./storage";
+import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./storage";
 import { LEAD_DETAIL_COLUMNS } from "./storage";
 
 export class MemStorage implements IStorage {
   private users = new Map<string, User>();
   private contactLeads = new Map<string, ContactLead>();
   private blogPosts = new Map<string, BlogPost>();
+  private fieldOverrides = new Map<string, string>();
+  private formSettings = new Map<string, string>();
+  private formChanges: FormConfigChange[] = [];
   private seeded = false;
 
   async getUser(id: string): Promise<User | undefined> {
@@ -107,6 +110,31 @@ export class MemStorage implements IStorage {
 
   async deleteBlogPost(id: string): Promise<boolean> {
     return this.blogPosts.delete(id);
+  }
+
+  async getFieldOverrides(): Promise<Record<string, string>> {
+    return Object.fromEntries(this.fieldOverrides);
+  }
+
+  async getFormSettings(): Promise<Record<string, string>> {
+    return Object.fromEntries(this.formSettings);
+  }
+
+  async saveFieldOverride(key: string, config: string, before: string | null, actor: string): Promise<void> {
+    this.fieldOverrides.set(key, config);
+    this.formChanges.push({ id: crypto.randomUUID(), at: new Date().toISOString(), actor, target: `field:${key}`, before, after: config });
+  }
+
+  async saveFormSettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    for (const { key, value, before } of changes) {
+      this.formSettings.set(key, value);
+      this.formChanges.push({ id: crypto.randomUUID(), at, actor, target: `setting:${key}`, before, after: value });
+    }
+  }
+
+  async getFormConfigChanges(limit: number): Promise<FormConfigChange[]> {
+    return this.formChanges.slice(-limit).reverse();
   }
 
   async seedBlogPosts(): Promise<void> {

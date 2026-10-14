@@ -3,6 +3,7 @@
 
 import type { Hono } from "hono";
 import type { IStorage } from "../services/storage";
+import { getFormConfig, DEFAULT_FORM_CONFIG } from "../services/form-config";
 
 // Page template imports
 import { renderPage } from "../templates/pages/home";
@@ -47,13 +48,20 @@ import { renderPublisherToolsPage } from "../templates/tools/index";
 import { render404Page } from "../templates/pages/error";
 
 export function registerPageRoutes(app: Hono<any>, getStorage: (c: any) => IStorage) {
+  // The contact form follows the operator's config (D-016). If D1 can't be read the page still renders,
+  // with the code's default form; the submission path reads the config again and never falls back.
+  const formConfig = (c: any) => getFormConfig(getStorage(c)).catch((error) => {
+    console.error("Form config read failed; rendering the default form:", error);
+    return DEFAULT_FORM_CONFIG;
+  });
+
   // Static pages
-  app.get("/", (c) => c.html(renderPage()));
+  app.get("/", async (c) => c.html(renderPage(await formConfig(c))));
   app.get("/about", (c) => c.html(renderAboutPage()));
   app.get("/how-it-works", (c) => c.html(renderHowItWorksPage()));
   app.get("/careers", (c) => c.html(renderCareersPage()));
   app.get("/press", (c) => c.html(renderPressPage()));
-  app.get("/contact", (c) => c.html(renderContactPage()));
+  app.get("/contact", async (c) => c.html(renderContactPage(await formConfig(c))));
 
   // Solutions
   app.get("/solutions/header-bidding", (c) => c.html(renderHeaderBiddingPage()));

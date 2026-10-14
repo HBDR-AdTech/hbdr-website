@@ -10,6 +10,10 @@ export const EMAIL_FROM = { name: "HBDR Website", email: "noreply@hbdr.com" };
 export const CONTACT_NOTIFY_EMAIL = "contact@hbdr.com";
 export const SUPPORT_NOTIFY_EMAIL = "support@hbdr.com";
 
+// Hostnames a Turnstile token may come from (siteverify reports where the widget was solved):
+// production plus both Workers' workers.dev hostnames
+export const TURNSTILE_HOSTNAMES = ["hbdr.com", "hbdr-website.matt-ortolani.workers.dev", "hbdr-website-preview.matt-ortolani.workers.dev"];
+
 // All page routes for sitemap generation and nav building
 export const PAGE_ROUTES = [
   "/", "/about", "/how-it-works", "/careers", "/press", "/contact",

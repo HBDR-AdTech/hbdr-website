@@ -1,23 +1,79 @@
-import { LEAD_OPTIONS } from "@shared/schema";
+import type { FormConfig, FormField } from "../../services/form-config";
+import { sanitizeText as esc } from "../../middleware/sanitize";
 
 const LABEL = "block text-sm font-medium text-white/60 mb-2";
 const OPTIONAL = '<span class="text-[var(--text-muted)] font-normal">(optional)</span>';
+const INPUT = "glass-input w-full px-4 py-3";
 
-function options(values: readonly string[], placeholder: string): string {
-  return `<option value="">${placeholder}</option>` + values.map((v) => `<option value="${v}">${v}</option>`).join("");
-}
+// The ids (and data-testids) the built-in fields have always had
+const BUILTIN_IDS: Record<string, string> = {
+  name: "input-name", email: "input-email", company: "input-company", phone: "input-phone", role: "select-role",
+  impressions: "select-impressions", property: "input-property", adsTxtUrl: "input-ads-txt", appStoreUrls: "textarea-app-stores",
+  currentSetup: "select-current-setup", topGeo: "select-top-geo", timeline: "select-timeline", referral: "select-referral",
+  message: "textarea-message",
+};
 
-function selectField(id: string, model: string, label: string, values: readonly string[], required: boolean): string {
+// Labels, placeholders and options are operator text: escaped here. Only field keys ([A-Za-z0-9_]) reach Alpine expressions.
+// One two-column grid: short fields pair up, checkbox groups and text areas span both columns.
+// conditional: App Store URLs, shown only while Mobile app or CTV / OTT is ticked
+function renderField(field: FormField, conditional: boolean): string {
+  const prefix = field.type === "select" ? "select" : field.type === "textarea" ? "textarea" : "input";
+  const id = BUILTIN_IDS[field.key] ?? `${prefix}-${field.key}`;
+  const model = `formData.${field.custom ? "custom." : ""}${field.key}`;
+  const label = `${esc(field.label)}${field.required ? "" : ` ${OPTIONAL}`}`;
+  // a hidden required control would block the browser's submit, so the conditional field is required only while shown
+  const required = !field.required ? "" : conditional ? ':required="appStores()"' : "required";
+  const placeholder = esc(field.placeholder);
+
+  if (field.type === "checkboxes") {
+    const testid = field.key === "inventoryTypes" ? "checkbox-inventory" : `checkbox-${field.key}`;
+    return `
+                <fieldset class="sm:col-span-2"${field.required ? ` data-required-group data-label="${esc(field.label)}"` : ""}>
+                  <legend class="${LABEL}">${esc(field.label)} <span class="text-[var(--text-muted)] font-normal">(select all that apply${field.required ? "" : ", optional"})</span></legend>
+                  <div class="flex flex-wrap gap-3">
+                    ${field.options!.map((o, i) => !o.active ? "" : `
+                    <label class="glass-input flex items-center gap-2 px-4 py-2.5 cursor-pointer has-[:checked]:border-[var(--accent)]">
+                      <input type="checkbox" value="${esc(o.value)}" x-model="${model}" class="checkbox checkbox-sm checkbox-success" data-testid="${testid}-${i}" />
+                      <span class="text-sm text-white">${esc(o.label ?? o.value)}</span>
+                    </label>`).join("")}
+                  </div>
+                </fieldset>`;
+  }
+  if (field.type === "select") {
+    return `
+                <div>
+                  <label for="${id}" class="${LABEL}">${label}</label>
+                  <select id="${id}" x-model="${model}" class="glass-select w-full" ${required} data-testid="${id}">
+                    <option value="">${placeholder}</option>${field.options!.filter((o) => o.active).map((o) => `<option value="${esc(o.value)}">${esc(o.label ?? o.value)}</option>`).join("")}
+                  </select>
+                </div>`;
+  }
+  if (field.type === "textarea") {
+    return `
+                <div class="sm:col-span-2"${conditional ? ' x-show="appStores()" x-cloak x-transition' : ""}>
+                  <label for="${id}" class="${LABEL}">${label}</label>
+                  <textarea id="${id}" x-model="${model}" placeholder="${placeholder}" rows="${field.key === "message" ? 4 : 3}" maxlength="${field.maxLength}" class="${INPUT} resize-none" ${required} data-testid="${id}"></textarea>
+                </div>`;
+  }
   return `
                 <div>
-                  <label for="${id}" class="${LABEL}">${label}${required ? "" : ` ${OPTIONAL}`}</label>
-                  <select id="${id}" x-model="formData.${model}" class="glass-select w-full" ${required ? "required" : ""} data-testid="${id}">
-                    ${options(values, "Select one")}
-                  </select>
+                  <label for="${id}" class="${LABEL}">${label}</label>
+                  <input id="${id}" type="${field.type}" x-model="${model}" placeholder="${placeholder}" maxlength="${field.maxLength}"${field.type === "tel" ? ' autocomplete="tel"' : ""} class="${INPUT}" ${required} data-testid="${id}" />
                 </div>`;
 }
 
-export function renderContactFormSection(): string {
+export function renderContactFormSection(form: FormConfig): string {
+  const visible = form.fields.filter((f) => f.visible);
+  const conditional = (f: FormField) => f.key === "appStoreUrls" && visible.some((v) => v.key === "inventoryTypes");
+  const initial = (f: FormField) => `${f.key}: ${f.type === "checkboxes" ? "[]" : "''"}`;
+  // hidden fields are left out entirely: the API ignores them, and an absent field is never "required but blank"
+  const formData = [
+    ...visible.filter((f) => !f.custom).map(initial),
+    `custom: { ${visible.filter((f) => f.custom).map(initial).join(", ")} }`,
+    "_hp_website: ''", "_source: 'contact'",
+  ].join(", ");
+  const siteKey = form.turnstileSiteKey;
+
   return `
   <section id="contact" class="py-24 lg:py-32" data-testid="contact-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,24 +143,32 @@ export function renderContactFormSection(): string {
         <div class="lg:col-span-3 animate-on-scroll stagger-2">
           <div id="contact-form-container"
                x-data="{
-                 formData: { name: '', email: '', company: '', phone: '', role: '', impressions: '', inventoryTypes: [], property: '', appStoreUrls: '', adsTxtUrl: '', currentSetup: '', topGeo: '', timeline: '', referral: '', message: '', _hp_website: '', _source: 'contact' },
+                 formData: { ${formData} },
                  submitting: false,
                  submitted: false,
                  error: false,
+                 appStores() { return (this.formData.inventoryTypes || []).some(t => t === 'Mobile app' || t === 'CTV / OTT'); },
                  async submitForm() {
                    this.error = false;
-                   if (!this.formData.inventoryTypes.length) { this.error = 'Select at least one inventory type.'; return; }
+                   for (const group of this.$root.querySelectorAll('[data-required-group]')) {
+                     if (!group.querySelector('input:checked')) { this.error = 'Select at least one option for ' + group.dataset.label + '.'; return; }
+                   }
+                   const body = { ...this.formData };${visible.some(conditional) ? `
+                   if (!this.appStores()) delete body.appStoreUrls;` : ""}${siteKey ? `
+                   body.turnstileToken = (this.$root.querySelector('[name=cf-turnstile-response]') || {}).value || '';` : ""}
                    this.submitting = true;
                    try {
                      const res = await fetch('/api/contact', {
                        method: 'POST',
                        headers: { 'Content-Type': 'application/json' },
-                       body: JSON.stringify(this.formData)
+                       body: JSON.stringify(body)
                      });
                      if (res.ok) {
                        this.submitted = true;
                      } else {
-                       this.error = {400:'Please check your details and try again.',422:'Please use a permanent email address. Disposable addresses are not accepted.',429:'Too many submissions. Please wait a few minutes and try again.'}[res.status] || 'Something went wrong. Please try again or email us at contact@hbdr.com';
+                       const detail = res.status === 400 ? (await res.json().catch(() => ({}))).message : '';
+                       this.error = detail || {400:'Please check your details and try again.',403:window.turnstile ? 'Verification failed, please retry.' : 'The verification check did not load. Please reload the page and try again, or email us at contact@hbdr.com',422:'Please use a permanent email address. Disposable addresses are not accepted.',429:'Too many submissions. Please wait a few minutes and try again.'}[res.status] || 'Something went wrong. Please try again or email us at contact@hbdr.com';
+                       if (window.turnstile) window.turnstile.reset();
                      }
                    } catch (e) {
                      this.error = 'Network error. Please try again or email us at contact@hbdr.com';
@@ -133,84 +197,11 @@ export function renderContactFormSection(): string {
               </div>
 
               <div class="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label for="input-name" class="block text-sm font-medium text-white/60 mb-2">Full Name</label>
-                  <input id="input-name" type="text" x-model="formData.name" placeholder="John Smith" class="glass-input w-full px-4 py-3" required data-testid="input-name" />
-                </div>
-                <div>
-                  <label for="input-email" class="${LABEL}">Work Email</label>
-                  <input id="input-email" type="email" x-model="formData.email" placeholder="john@company.com" class="glass-input w-full px-4 py-3" required data-testid="input-email" />
-                </div>
+                ${visible.map((f) => renderField(f, conditional(f))).join("")}
               </div>
-
-              <div class="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label for="input-company" class="${LABEL}">Company Name</label>
-                  <input id="input-company" type="text" x-model="formData.company" placeholder="Your Company" class="glass-input w-full px-4 py-3" required data-testid="input-company" />
-                </div>
-                <div>
-                  <label for="input-phone" class="${LABEL}">Phone ${OPTIONAL}</label>
-                  <input id="input-phone" type="tel" x-model="formData.phone" placeholder="+1 (555) 123-4567" autocomplete="tel" maxlength="40" class="glass-input w-full px-4 py-3" data-testid="input-phone" />
-                </div>
-              </div>
-
-              <div class="grid sm:grid-cols-2 gap-6">
-                ${selectField("select-role", "role", "Your Role", LEAD_OPTIONS.role, false)}
-                <div>
-                  <label for="select-impressions" class="${LABEL}">Monthly Impressions</label>
-                  <select id="select-impressions" x-model="formData.impressions" class="glass-select w-full" required data-testid="select-impressions">
-                    <option value="" disabled selected>Select volume</option>
-                    <option value="under-10m">Under 10M</option>
-                    <option value="10m-50m">10M - 50M</option>
-                    <option value="50m-100m">50M - 100M</option>
-                    <option value="100m-500m">100M - 500M</option>
-                    <option value="500m-1b">500M - 1B</option>
-                    <option value="over-1b">Over 1B</option>
-                  </select>
-                </div>
-              </div>
-
-              <fieldset>
-                <legend class="${LABEL}">Inventory Type <span class="text-[var(--text-muted)] font-normal">(select all that apply)</span></legend>
-                <div class="flex flex-wrap gap-3">
-                  ${LEAD_OPTIONS.inventoryTypes.map((t, i) => `
-                  <label class="glass-input flex items-center gap-2 px-4 py-2.5 cursor-pointer has-[:checked]:border-[var(--accent)]">
-                    <input type="checkbox" value="${t}" x-model="formData.inventoryTypes" class="checkbox checkbox-sm checkbox-success" data-testid="checkbox-inventory-${i}" />
-                    <span class="text-sm text-white">${t}</span>
-                  </label>`).join("")}
-                </div>
-              </fieldset>
-
-              <div class="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label for="input-property" class="${LABEL}">Domain, Bundle ID or App URL</label>
-                  <input id="input-property" type="text" x-model="formData.property" placeholder="example.com or com.example.app" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-property" />
-                </div>
-                <div>
-                  <label for="input-ads-txt" class="${LABEL}">ads.txt or app-ads.txt URL</label>
-                  <input id="input-ads-txt" type="text" x-model="formData.adsTxtUrl" placeholder="example.com/ads.txt" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-ads-txt" />
-                </div>
-              </div>
-
-              <div x-show="formData.inventoryTypes.includes('Mobile app') || formData.inventoryTypes.includes('CTV / OTT')" x-cloak x-transition>
-                <label for="textarea-app-stores" class="${LABEL}">App Store URLs ${OPTIONAL}</label>
-                <textarea id="textarea-app-stores" x-model="formData.appStoreUrls" placeholder="One per line: Apple App Store, Google Play, Roku, Amazon Fire TV, Samsung, LG..." rows="3" maxlength="2000" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-app-stores"></textarea>
-              </div>
-
-              <div class="grid sm:grid-cols-2 gap-6">
-                ${selectField("select-current-setup", "currentSetup", "Current Monetization", LEAD_OPTIONS.currentSetup, true)}
-                ${selectField("select-top-geo", "topGeo", "Top Traffic Region", LEAD_OPTIONS.topGeo, false)}
-              </div>
-
-              <div class="grid sm:grid-cols-2 gap-6">
-                ${selectField("select-timeline", "timeline", "Timeline", LEAD_OPTIONS.timeline, false)}
-                ${selectField("select-referral", "referral", "How Did You Hear About Us?", LEAD_OPTIONS.referral, false)}
-              </div>
-
-              <div>
-                <label for="textarea-message" class="${LABEL}">Message ${OPTIONAL}</label>
-                <textarea id="textarea-message" x-model="formData.message" placeholder="Tell us about your current ad setup and goals..." rows="4" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-message"></textarea>
-              </div>
+${siteKey ? `
+              <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+              <div class="cf-turnstile" data-sitekey="${esc(siteKey)}" data-action="contact" data-theme="dark" data-testid="turnstile-widget"></div>` : ""}
 
               <button type="submit" :disabled="submitting" class="glass-btn w-full py-4 text-base font-medium flex items-center justify-center gap-2 disabled:opacity-50" data-testid="button-submit-contact">
                 <template x-if="!submitting">

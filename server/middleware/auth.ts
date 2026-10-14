@@ -4,7 +4,7 @@ import type { Hono, MiddlewareHandler } from "hono";
 import { verifyWithJwks } from "hono/jwt";
 import type { HonoJsonWebKey } from "hono/utils/jwt/jws";
 
-export const ADMIN_PATHS = ["/admin", "/admin/*", "/api/blog", "/api/blog/*", "/api/leads", "/api/leads/*"];
+export const ADMIN_PATHS = ["/admin", "/admin/*", "/api/blog", "/api/blog/*", "/api/leads", "/api/leads/*", "/api/form-config", "/api/form-config/*"];
 
 export interface AccessConfig {
   teamDomain?: string; // e.g. securehbdr.cloudflareaccess.com
@@ -18,8 +18,9 @@ export function accessGuard(getConfig: (c: any) => AccessConfig): MiddlewareHand
     const token = c.req.header("Cf-Access-Jwt-Assertion");
     // Missing config fails closed: no Access configuration means no admin access
     if (!teamDomain || !aud || !token) return c.text("Forbidden", 403);
+    let payload;
     try {
-      await verifyWithJwks(token, {
+      payload = await verifyWithJwks(token, {
         ...(keys ? { keys } : { jwks_uri: `https://${teamDomain}/cdn-cgi/access/certs` }),
         allowedAlgorithms: ["RS256"],
         verification: { iss: `https://${teamDomain}`, aud },
@@ -27,6 +28,8 @@ export function accessGuard(getConfig: (c: any) => AccessConfig): MiddlewareHand
     } catch {
       return c.text("Forbidden", 403);
     }
+    // the verified identity, recorded as the actor on admin audit rows
+    c.set("accessEmail", typeof payload.email === "string" ? payload.email : "unknown");
     await next();
   };
 }
