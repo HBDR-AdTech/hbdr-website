@@ -107,13 +107,13 @@ migrations/                  # D1 database schema (0001 init, 0002 rate limits, 
 
 ## Design System
 
-- **Look**: Linear (linear.app) feel (D-012): near-black canvas, hairline borders, no blur/orbs/gradient text, restrained fade-up motion, left-aligned section headings on one 7xl grid
-- **Accent**: Mint green `#2BDE73` is the only accent, used sparingly (primary button, dots, checks, one highlighted word)
-- **Surfaces**: canvas `#08090a`, elevated `#0f1011`, raised `#141516`; hairlines `rgba(255,255,255,0.08)` / `0.14`
-- **Text**: primary `#f7f8f8`, secondary `#d0d6e0`, muted `#8a8f98` (use `text-[var(--text-muted)]` for body copy; >= 4.5:1 on every surface)
+- **Look**: Linear (linear.app) feel (D-012) in the logo's colors (D-017): slate canvas, hairline borders, no blur/orbs/gradient text, restrained fade-up motion, left-aligned section headings on one 7xl grid
+- **Accent**: Logo mint `#00FAA8` is the only accent, used sparingly (primary button, dots, checks, one highlighted word)
+- **Surfaces**: canvas `#15181f` (logo ground), elevated `#1b1f27`, raised `#222630`; hairlines `rgba(255,255,255,0.08)` / `0.14`
+- **Text**: primary `#f5f7fa`, secondary `#d0d6e0`, muted `#959ca8` (use `text-[var(--text-muted)]` for body copy; >= 4.5:1 on every surface)
 - **Buttons**: `glass-btn` (solid mint, primary) and `glass-btn-outline` (subtle bordered), 8px radius, compact
 - **Typography**: Inter; `.font-display` headings weight 540, -0.03em; `text-gradient` = flat white, `text-gradient-accent` = mint (names kept to avoid churn)
-- **CSS custom properties**: `--accent`, `--accent-glow`, `--accent-dark`, `--surface`, `--surface-elevated`, `--surface-raised`, `--hairline`, `--hairline-strong`, `--text-primary`, `--text-secondary`, `--text-muted`
+- **CSS custom properties**: `--accent`, `--accent-hover`, `--accent-glow`, `--accent-dark`, `--placeholder`, `--surface`, `--surface-elevated`, `--surface-raised`, `--hairline`, `--hairline-strong`, `--text-primary`, `--text-secondary`, `--text-muted`
 - **Component classes**: `glass-card`, `glass-btn`, `glass-btn-outline`, `glass-input`, `glass-select`, `glass-tag`, `glass-nav`, `icon-tile`, `hero-glow`, `section-divider`
 
 ## Environment Setup

@@ -58,7 +58,7 @@ Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpin
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
 - Supply chain: CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: Alpine CSP build plus nonces.
 - DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
-- Privacy: submitter IP kept forever (D-013). Needs a retention decision.
+- Privacy: submitter IP kept forever with the lead (D-013, D-018); read only behind Access.
 - Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.
 
 
