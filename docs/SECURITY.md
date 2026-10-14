@@ -21,13 +21,15 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed per-IP rate limit (`rate_limits`), text sanitized before storage.
 - Notification email (D-001, D-004): the `EMAIL` binding may send **only from** `noreply@hbdr.com` and **only to** contact@ / support@hbdr.com (`wrangler.toml`), so a compromised Worker cannot mail anyone else. Submitter text is HTML-escaped in the email body; reply-to is the submitter.
 - Failures return 500 and the form shows them (never a fake success).
-- Known gap: no CAPTCHA. Upgrade path: Cloudflare Turnstile if spam appears in the leads table.
+- Answers other than name, email, company and impressions are checked against the operator's form config (D-016): choices must be on the field's option list (retired options included), text is length-capped and escaped once, custom answers under unknown keys are dropped, and hidden fields are ignored.
+- Bot check (D-016): Cloudflare Turnstile behind a toggle on `/admin/form`, off by default. When it is on, contact submissions need a token verified server-side (siteverify, action `contact`, hostname allowlist `TURNSTILE_HOSTNAMES`) after the rate limit and honeypot and before the insert; failures return 403 and store nothing. A siteverify outage saves the lead as `bot_check = 'unverified'` (D-011). The secret is the Worker secret `TURNSTILE_SECRET`: never in D1, never logged, never sent to the browser (the admin page shows only "set" or "missing"). CSP allows `https://challenges.cloudflare.com` in `script-src` and `frame-src`.
 
-### Admin (`/admin/*`, `/api/blog*`, `/api/leads*`)
+### Admin (`/admin/*`, `/api/blog*`, `/api/leads*`, `/api/form-config*`)
 - Authentication is Cloudflare Access only (D-008, D-009): app "HBDR Website Admin", one-time PIN, 24h session, allowlisted emails. There is no app password.
 - Defense in depth: the Worker verifies the `Cf-Access-Jwt-Assertion` JWT on every admin path (`server/middleware/auth.ts`): RS256 signature against the team JWKS, issuer, audience (`ACCESS_AUD`), expiry. Missing config fails closed (403). Tested in `server/middleware/__tests__/auth.test.ts`.
 - Access also covers every workers.dev hostname of both Workers (and their version-preview wildcards), so there is no path to admin that skips Access.
-- Admin mutations are JSON API calls checked by `validateOrigin`; the Access cookie is SameSite=Lax.
+- Admin mutations are JSON API calls checked by `validateOrigin`; the Access cookie is SameSite=Lax. Form config mutations (`/api/form-config/*`) also refuse a request with no `Origin` header (`requireSameOrigin`).
+- Form config changes (D-016) are zod-validated, refuse to hide or unrequire the locked fields, and write an append-only `form_config_changes` row with the Access email as actor (`server/__tests__/schema.test.ts` fails on any delete, update or drop of that table). Operator text (labels, placeholders, options) is escaped wherever it is rendered and never reaches an Alpine expression.
 - Lead CSV export neutralizes spreadsheet formulas (`csvCell`).
 - Logout: `/cdn-cgi/access/logout`.
 
@@ -41,7 +43,7 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Repo is public. `main` is protected: PR required, `preview` check (typecheck, tests, CSS build) must pass, no force-push or deletion.
 - GitHub secret scanning with push protection and Dependabot security updates are on. A history scan on 2026-10-02 found no committed credentials.
 - CI installs with `npm ci` from the lockfile; third-party actions are pinned by SHA.
-- Worker secrets: none. Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
+- Worker secrets: `TURNSTILE_SECRET` (optional; needed only to turn Turnstile on, D-016). Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
 - Operator credentials: the Cloudflare API token lives in `~/.config/hbdr/cloudflare.env` (mode 600). It is broad (DNS, Workers, D1, Access); a scoped deploy-only token for CI is the upgrade.
 
 ## Email domain
@@ -49,7 +51,7 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Known gap: DMARC is `p=none` on hbdr.com. Move to `p=quarantine` after reviewing aggregate reports for Google Workspace, Zendesk and SendGrid alignment.
 
 ## Open gaps (audit 2026-10-14, D-015)
-- Bot challenge: no Turnstile on the form; the D1 rate limit is per IP, not atomic, and keyed on the full IPv6 address. Fix: Turnstile verified server-side before the insert, plus a Cloudflare rate limiting rule on `POST /api/contact`. Owner: Matt creates the Turnstile widget; code follows.
+- Bot challenge: Turnstile is built and off (D-016). To turn it on, Matt: (1) adds `hbdr.com/api/form-config` to the Access app "HBDR Website Admin" (without it, `/admin/form` gets 403 from the Worker); (2) creates a Turnstile widget for hbdr.com and both workers.dev hostnames; (3) runs `wrangler secret put TURNSTILE_SECRET`; (4) enters the site key on `/admin/form` and turns it on. The support form has no widget, so a bot can post `_source: support` to skip the check (fix: widget on `/support`). The D1 rate limit is still per IP, not atomic, and keyed on the full IPv6 address; a Cloudflare rate limiting rule on `POST /api/contact` is still open. Owner: Matt.
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
 - Supply chain: Alpine CDN scripts have no SRI; first-party actions are tag-pinned, not SHA-pinned; CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: SRI now, SHA pins now, Alpine CSP build later.
 - DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
@@ -58,5 +60,5 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 
 
 - Suspected admin compromise: remove the email from the Access policy, revoke sessions in Zero Trust (Access → Users), rotate the Cloudflare API token.
-- Spam wave on the form: tighten `rate_limits` window, add Turnstile.
+- Spam wave on the form: turn Turnstile on at `/admin/form` (needs `TURNSTILE_SECRET` and a site key, D-016); tighten the `rate_limits` window.
 - Rollback any Worker change: `npx wrangler rollback` or revert the merge commit.
