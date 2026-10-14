@@ -99,3 +99,9 @@ Rollback: revert the commit; only CSS tokens and color literals change.
 
 "Keep the submitter IDs in the database. Make sure they're safe." `contact_leads.ip` stays, kept forever with the lead (D-013); there is no retention job. Checked 2026-10-14: the IP is read only behind Cloudflare Access (admin leads table and `/admin/leads/export`, whose cells are formula-escaped by `csvCell`), never sent in the lead email; `rate_limits` rows are deleted after their 15-minute window; offline exports are mode 600 outside the repo.
 Closes: the "decide IP retention" item in `docs/SECURITY.md`.
+
+## D-019 — 2026-10-14 — Matt — The hero's motion is a live header-bidding auction
+
+Matt chose the auction hero over a sitewide GSAP pass. The home hero dashboard carries one authored motion: an example header auction for a 300×250 slot. A timeout bar runs for 1.4 s, five bidders' bids land at random points inside it, the highest bid turns logo mint, the others dim, and "Today's Revenue" ticks up from the second auction on. It replays while the panel is in view and stops when it scrolls off-screen or the tab is hidden. It uses the browser's Web Animations API with no GSAP or other library, so no new script download and no SRI entry. Bidders are labelled "Bidder 1–5" and bids are random example values (D-005: no partner names, no implied performance data). The server renders a finished auction (one winner, $4.86 CPM), and that is what visitors see without JavaScript or with `prefers-reduced-motion` (test: `server/routes/__tests__/pages.test.ts`).
+Supersedes: HANDOFF-002's "strong GSAP motion" direction. D-012's restrained fade-up stays for every other section.
+Rollback: revert the commit; the hero goes back to the revenue chart alone.
