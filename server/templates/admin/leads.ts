@@ -1,17 +1,7 @@
 import { renderLayout } from "../layout";
+import type { ContactLead } from "../../services/storage";
 
-interface LeadData {
-  id: string;
-  name: string;
-  email: string;
-  company: string;
-  impressions: string;
-  message: string | null;
-  ip: string | null;
-  source: string | null;
-  status: string | null;
-  createdAt: Date | null;
-}
+type LeadData = ContactLead;
 
 export function renderAdminLeadsPage(leads: LeadData[]): string {
   const totalLeads = leads.length;
@@ -40,8 +30,23 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <td class="py-4 px-4">
         <div class="font-medium text-white">${lead.name}</div>
         <div class="text-sm text-[var(--text-muted)]">${lead.email}</div>
+        ${lead.phone ? `<div class="text-sm text-[var(--text-muted)]">${lead.phone}</div>` : ""}
+        ${lead.role ? `<div class="text-xs text-[var(--text-muted)]">${lead.role}</div>` : ""}
       </td>
-      <td class="py-4 px-4 text-white/60">${lead.company}</td>
+      <td class="py-4 px-4 text-white/60">
+        <div>${lead.company}</div>
+        ${lead.property ? `<div class="text-sm text-white">${lead.property}</div>` : ""}
+        ${lead.inventoryTypes ? `<div class="text-xs text-[var(--text-muted)]">${lead.inventoryTypes}${lead.currentSetup ? ` &middot; ${lead.currentSetup}` : ""}</div>` : ""}
+        ${lead.adsTxtUrl || lead.appStoreUrls || lead.topGeo || lead.timeline || lead.referral ? `
+        <details class="mt-1 text-xs text-[var(--text-muted)]">
+          <summary class="cursor-pointer text-[#2BDE73]">More</summary>
+          ${lead.adsTxtUrl ? `<div>ads.txt: ${lead.adsTxtUrl}</div>` : ""}
+          ${lead.appStoreUrls ? `<div class="whitespace-pre-line">Stores: ${lead.appStoreUrls}</div>` : ""}
+          ${lead.topGeo ? `<div>Geo: ${lead.topGeo}</div>` : ""}
+          ${lead.timeline ? `<div>Timeline: ${lead.timeline}</div>` : ""}
+          ${lead.referral ? `<div>Heard via: ${lead.referral}</div>` : ""}
+        </details>` : ""}
+      </td>
       <td class="py-4 px-4 text-white/60 text-sm">${impressions}</td>
       <td class="py-4 px-4">
         <span class="text-xs px-2 py-1 rounded-full ${source === 'support' ? 'bg-purple-500/15 text-purple-400' : 'bg-blue-500/15 text-blue-400'}">${source}</span>
@@ -76,7 +81,8 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
       <td class="py-4 px-4">
         ${lead.message ? `
         <button
-          @click="$dispatch('show-message', { name: '${lead.name.replace(/'/g, "\\'")}', message: '${(lead.message || '').replace(/'/g, "\\'").replace(/\n/g, "\\n")}' })"
+          data-name="${lead.name}" data-message="${lead.message}"
+          @click="$dispatch('show-message', { name: $el.dataset.name, message: $el.dataset.message })"
           class="text-[#2BDE73] hover:text-[#1AAF5C] text-sm transition-colors"
           data-testid="button-view-message-${lead.id}"
         >

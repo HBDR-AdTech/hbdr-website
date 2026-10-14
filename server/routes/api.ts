@@ -2,6 +2,7 @@
 // Handles contact form, blog CRUD, lead management
 
 import type { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import type { IStorage } from "../services/storage";
 import { insertContactLeadSchema, insertBlogPostSchema } from "@shared/schema";
 import { fromError } from "zod-validation-error";
@@ -31,8 +32,8 @@ export function registerApiRoutes(
     await next();
   });
 
-  // Contact form submission
-  app.post("/api/contact", async (c) => {
+  // Contact form submission; a full submission is a few KB, the cap stops multi-MB rows and emails
+  app.post("/api/contact", bodyLimit({ maxSize: 64 * 1024, onError: (c) => c.json({ message: "Submission too large" }, 413) }), async (c) => {
     try {
       const ip = getClientIp(c.req.raw.headers);
 
@@ -70,7 +71,8 @@ export function registerApiRoutes(
         `);
       }
 
-      const source = body._source || "contact";
+      // _source is visitor-controlled and printed in the admin table: only two values exist
+      const source = body._source === "support" ? "support" : "contact";
       delete body._hp_website;
       delete body._source;
 
@@ -100,6 +102,10 @@ export function registerApiRoutes(
         email: validatedData.data.email.toLowerCase().trim(),
         company: sanitizeText(validatedData.data.company),
         message: validatedData.data.message ? sanitizeText(validatedData.data.message) : null,
+        inventoryTypes: validatedData.data.inventoryTypes?.length ? validatedData.data.inventoryTypes.join(", ") : null,
+        property: validatedData.data.property ? sanitizeText(validatedData.data.property) : null,
+        appStoreUrls: validatedData.data.appStoreUrls ? sanitizeText(validatedData.data.appStoreUrls) : null,
+        adsTxtUrl: validatedData.data.adsTxtUrl ? sanitizeText(validatedData.data.adsTxtUrl) : null,
       };
 
       const storage = getStorage(c);
@@ -107,15 +113,7 @@ export function registerApiRoutes(
 
       // waitUntil keeps the Worker alive for the send after the response returns; a bare promise gets cancelled
       if (config.email) {
-        c.executionCtx.waitUntil(sendContactNotification(config.email, {
-          name: sanitizedData.name,
-          email: sanitizedData.email,
-          company: sanitizedData.company,
-          impressions: sanitizedData.impressions,
-          message: sanitizedData.message,
-          source,
-          ip,
-        }));
+        c.executionCtx.waitUntil(sendContactNotification(config.email, lead));
       }
 
       return c.html(`

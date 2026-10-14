@@ -1,3 +1,22 @@
+import { LEAD_OPTIONS } from "@shared/schema";
+
+const LABEL = "block text-sm font-medium text-white/60 mb-2";
+const OPTIONAL = '<span class="text-[var(--text-muted)] font-normal">(optional)</span>';
+
+function options(values: readonly string[], placeholder: string): string {
+  return `<option value="">${placeholder}</option>` + values.map((v) => `<option value="${v}">${v}</option>`).join("");
+}
+
+function selectField(id: string, model: string, label: string, values: readonly string[], required: boolean): string {
+  return `
+                <div>
+                  <label for="${id}" class="${LABEL}">${label}${required ? "" : ` ${OPTIONAL}`}</label>
+                  <select id="${id}" x-model="formData.${model}" class="glass-select w-full" ${required ? "required" : ""} data-testid="${id}">
+                    ${options(values, "Select one")}
+                  </select>
+                </div>`;
+}
+
 export function renderContactFormSection(): string {
   return `
   <section id="contact" class="py-24 lg:py-32" data-testid="contact-section">
@@ -13,7 +32,7 @@ export function renderContactFormSection(): string {
       </div>
 
       <div class="grid lg:grid-cols-5 gap-12">
-        <div class="lg:col-span-2 space-y-8 animate-on-scroll">
+        <div class="lg:col-span-2 space-y-8 animate-on-scroll lg:sticky lg:top-28 lg:self-start">
           <div>
             <h3 class="text-2xl font-semibold text-white mb-4">Let's Talk Revenue</h3>
             <p class="text-[var(--text-muted)] leading-relaxed">
@@ -68,13 +87,14 @@ export function renderContactFormSection(): string {
         <div class="lg:col-span-3 animate-on-scroll stagger-2">
           <div id="contact-form-container"
                x-data="{
-                 formData: { name: '', email: '', company: '', impressions: '', message: '', _hp_website: '', _source: 'contact' },
+                 formData: { name: '', email: '', company: '', phone: '', role: '', impressions: '', inventoryTypes: [], property: '', appStoreUrls: '', adsTxtUrl: '', currentSetup: '', topGeo: '', timeline: '', referral: '', message: '', _hp_website: '', _source: 'contact' },
                  submitting: false,
                  submitted: false,
                  error: false,
                  async submitForm() {
-                   this.submitting = true;
                    this.error = false;
+                   if (!this.formData.inventoryTypes.length) { this.error = 'Select at least one inventory type.'; return; }
+                   this.submitting = true;
                    try {
                      const res = await fetch('/api/contact', {
                        method: 'POST',
@@ -118,18 +138,26 @@ export function renderContactFormSection(): string {
                   <input id="input-name" type="text" x-model="formData.name" placeholder="John Smith" class="glass-input w-full px-4 py-3" required data-testid="input-name" />
                 </div>
                 <div>
-                  <label for="input-email" class="block text-sm font-medium text-white/60 mb-2">Email Address</label>
+                  <label for="input-email" class="${LABEL}">Work Email</label>
                   <input id="input-email" type="email" x-model="formData.email" placeholder="john@company.com" class="glass-input w-full px-4 py-3" required data-testid="input-email" />
                 </div>
               </div>
 
               <div class="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label for="input-company" class="block text-sm font-medium text-white/60 mb-2">Company Name</label>
+                  <label for="input-company" class="${LABEL}">Company Name</label>
                   <input id="input-company" type="text" x-model="formData.company" placeholder="Your Company" class="glass-input w-full px-4 py-3" required data-testid="input-company" />
                 </div>
                 <div>
-                  <label for="select-impressions" class="block text-sm font-medium text-white/60 mb-2">Monthly Impressions</label>
+                  <label for="input-phone" class="${LABEL}">Phone ${OPTIONAL}</label>
+                  <input id="input-phone" type="tel" x-model="formData.phone" placeholder="+1 (555) 123-4567" autocomplete="tel" maxlength="40" class="glass-input w-full px-4 py-3" data-testid="input-phone" />
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-6">
+                ${selectField("select-role", "role", "Your Role", LEAD_OPTIONS.role, false)}
+                <div>
+                  <label for="select-impressions" class="${LABEL}">Monthly Impressions</label>
                   <select id="select-impressions" x-model="formData.impressions" class="glass-select w-full" required data-testid="select-impressions">
                     <option value="" disabled selected>Select volume</option>
                     <option value="under-10m">Under 10M</option>
@@ -142,8 +170,45 @@ export function renderContactFormSection(): string {
                 </div>
               </div>
 
+              <fieldset>
+                <legend class="${LABEL}">Inventory Type <span class="text-[var(--text-muted)] font-normal">(select all that apply)</span></legend>
+                <div class="flex flex-wrap gap-3">
+                  ${LEAD_OPTIONS.inventoryTypes.map((t, i) => `
+                  <label class="glass-input flex items-center gap-2 px-4 py-2.5 cursor-pointer has-[:checked]:border-[var(--accent)]">
+                    <input type="checkbox" value="${t}" x-model="formData.inventoryTypes" class="checkbox checkbox-sm checkbox-success" data-testid="checkbox-inventory-${i}" />
+                    <span class="text-sm text-white">${t}</span>
+                  </label>`).join("")}
+                </div>
+              </fieldset>
+
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <label for="input-property" class="${LABEL}">Domain, Bundle ID or App URL</label>
+                  <input id="input-property" type="text" x-model="formData.property" placeholder="example.com or com.example.app" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-property" />
+                </div>
+                <div>
+                  <label for="input-ads-txt" class="${LABEL}">ads.txt or app-ads.txt URL</label>
+                  <input id="input-ads-txt" type="text" x-model="formData.adsTxtUrl" placeholder="example.com/ads.txt" maxlength="300" class="glass-input w-full px-4 py-3" required data-testid="input-ads-txt" />
+                </div>
+              </div>
+
+              <div x-show="formData.inventoryTypes.includes('Mobile app') || formData.inventoryTypes.includes('CTV / OTT')" x-cloak x-transition>
+                <label for="textarea-app-stores" class="${LABEL}">App Store URLs ${OPTIONAL}</label>
+                <textarea id="textarea-app-stores" x-model="formData.appStoreUrls" placeholder="One per line: Apple App Store, Google Play, Roku, Amazon Fire TV, Samsung, LG..." rows="3" maxlength="2000" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-app-stores"></textarea>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-6">
+                ${selectField("select-current-setup", "currentSetup", "Current Monetization", LEAD_OPTIONS.currentSetup, true)}
+                ${selectField("select-top-geo", "topGeo", "Top Traffic Region", LEAD_OPTIONS.topGeo, false)}
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-6">
+                ${selectField("select-timeline", "timeline", "Timeline", LEAD_OPTIONS.timeline, false)}
+                ${selectField("select-referral", "referral", "How Did You Hear About Us?", LEAD_OPTIONS.referral, false)}
+              </div>
+
               <div>
-                <label for="textarea-message" class="block text-sm font-medium text-white/60 mb-2">Message (Optional)</label>
+                <label for="textarea-message" class="${LABEL}">Message ${OPTIONAL}</label>
                 <textarea id="textarea-message" x-model="formData.message" placeholder="Tell us about your current ad setup and goals..." rows="4" class="glass-input w-full px-4 py-3 resize-none" data-testid="textarea-message"></textarea>
               </div>
 

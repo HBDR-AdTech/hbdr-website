@@ -7,7 +7,28 @@ export interface User {
   password: string;
 }
 
-export interface ContactLead {
+// Qualifying answers from the contact form; null when not asked (support form) or left blank
+export interface LeadDetails {
+  phone: string | null;
+  inventoryTypes: string | null;
+  property: string | null;
+  appStoreUrls: string | null;
+  adsTxtUrl: string | null;
+  currentSetup: string | null;
+  role: string | null;
+  timeline: string | null;
+  topGeo: string | null;
+  referral: string | null;
+}
+
+// LeadDetails key -> contact_leads column (migrations/0003_lead_details.sql)
+export const LEAD_DETAIL_COLUMNS: [keyof LeadDetails, string][] = [
+  ["phone", "phone"], ["inventoryTypes", "inventory_types"], ["property", "property"],
+  ["appStoreUrls", "app_store_urls"], ["adsTxtUrl", "ads_txt_url"], ["currentSetup", "current_setup"],
+  ["role", "role"], ["timeline", "timeline"], ["topGeo", "top_geo"], ["referral", "referral"],
+];
+
+export interface ContactLead extends LeadDetails {
   id: string;
   name: string;
   email: string;
@@ -35,7 +56,7 @@ export interface BlogPost {
   updatedAt: Date | null;
 }
 
-export interface InsertContactLead {
+export interface InsertContactLead extends Partial<LeadDetails> {
   name: string;
   email: string;
   company: string;

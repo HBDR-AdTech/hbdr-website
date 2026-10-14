@@ -48,7 +48,15 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - SPF/DKIM for Cloudflare Email Sending on `cf-bounce.hbdr.com`; Resend records removed (D-007).
 - Known gap: DMARC is `p=none` on hbdr.com. Move to `p=quarantine` after reviewing aggregate reports for Google Workspace, Zendesk and SendGrid alignment.
 
-## If something goes wrong
+## Open gaps (audit 2026-10-14, D-015)
+- Bot challenge: no Turnstile on the form; the D1 rate limit is per IP, not atomic, and keyed on the full IPv6 address. Fix: Turnstile verified server-side before the insert, plus a Cloudflare rate limiting rule on `POST /api/contact`. Owner: Matt creates the Turnstile widget; code follows.
+- CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
+- Supply chain: Alpine CDN scripts have no SRI; first-party actions are tag-pinned, not SHA-pinned; CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: SRI now, SHA pins now, Alpine CSP build later.
+- DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
+- Privacy: submitter IP kept forever (D-013). Needs a retention decision.
+- Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.
+
+
 - Suspected admin compromise: remove the email from the Access policy, revoke sessions in Zero Trust (Access → Users), rotate the Cloudflare API token.
 - Spam wave on the form: tighten `rate_limits` window, add Turnstile.
 - Rollback any Worker change: `npx wrangler rollback` or revert the merge commit.

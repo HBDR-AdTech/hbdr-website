@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { LEAD_DETAIL_COLUMNS } from "../services/storage";
 
 // Code that queries a table no migration creates fails every request in production (D-010, D-011)
 const root = join(__dirname, "..", "..");
@@ -27,6 +28,18 @@ describe("D1 schema", () => {
     );
     expect(used.size).toBeGreaterThan(0);
     expect([...used].filter((t) => !created.has(t))).toEqual([]);
+  });
+
+  // A column the insert writes but no migration adds makes every lead insert throw (D-011)
+  it("every contact_leads column the insert writes is created by a migration", () => {
+    const sql = readdirSync(join(root, "migrations")).map((f) => readFileSync(join(root, "migrations", f), "utf8")).join("\n");
+    const createBody = sql.match(/CREATE TABLE IF NOT EXISTS contact_leads \(([\s\S]*?)\n\);/)![1];
+    const columns = new Set([
+      ...[...createBody.matchAll(/^\s*(\w+) /gm)].map((m) => m[1]),
+      ...[...sql.matchAll(/ALTER TABLE contact_leads ADD COLUMN (\w+)/g)].map((m) => m[1]),
+    ]);
+    const base = ["id", "name", "email", "company", "impressions", "message", "ip", "source", "status", "created_at"];
+    expect([...base, ...LEAD_DETAIL_COLUMNS.map(([, c]) => c)].filter((c) => !columns.has(c))).toEqual([]);
   });
 
   // Leads are append-only (D-013): nothing in code or migrations may remove them
