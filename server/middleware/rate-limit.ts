@@ -20,10 +20,21 @@ export async function checkRateLimit(
   ip: string,
   db?: { prepare: (sql: string) => any; batch?: (stmts: any[]) => Promise<any[]> } | null
 ): Promise<RateLimitResult> {
+  const key = bucketKey(ip);
   if (db) {
-    return checkRateLimitD1(ip, db);
+    return checkRateLimitD1(key, db);
   }
-  return checkRateLimitMemory(ip);
+  return checkRateLimitMemory(key);
+}
+
+// One IPv6 subscriber usually holds a whole /64, so per-address buckets let a bot rotate past the limit
+export function bucketKey(ip: string): string {
+  if (!ip.includes(":") || ip.includes(".")) return ip;
+  const [head, tail = ""] = ip.toLowerCase().split("::");
+  const h = head ? head.split(":") : [];
+  const t = tail ? tail.split(":") : [];
+  const hextets = [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill("0"), ...t];
+  return hextets.slice(0, 4).map((x) => parseInt(x, 16).toString(16)).join(":") + "::/64";
 }
 
 function checkRateLimitMemory(ip: string): RateLimitResult {
@@ -51,45 +62,36 @@ async function checkRateLimitD1(
   const now = Date.now();
   const windowStart = now - WINDOW_MS;
 
-  // Clean expired + fetch current in one batch
+  // One statement reads and bumps the counter, so concurrent requests cannot both see the old count
   const cleanStmt = db.prepare("DELETE FROM rate_limits WHERE window_start < ?").bind(windowStart);
-  const fetchStmt = db.prepare("SELECT count, window_start FROM rate_limits WHERE ip = ?").bind(ip);
+  const upsertStmt = db.prepare(
+    `INSERT INTO rate_limits (ip, count, window_start) VALUES (?, 1, ?)
+     ON CONFLICT(ip) DO UPDATE SET
+       count = CASE WHEN window_start < ? THEN 1 ELSE count + 1 END,
+       window_start = CASE WHEN window_start < ? THEN ? ELSE window_start END
+     RETURNING count, window_start`
+  ).bind(ip, now, windowStart, windowStart, now);
 
   let row: any;
   if (db.batch) {
-    const [, fetchResult] = await db.batch([cleanStmt, fetchStmt]);
-    row = (fetchResult as any).results?.[0];
+    const [, upsertResult] = await db.batch([cleanStmt, upsertStmt]);
+    row = (upsertResult as any).results?.[0];
   } else {
     await cleanStmt.run();
-    row = await fetchStmt.first();
+    row = await upsertStmt.first();
   }
 
-  if (!row || row.window_start < windowStart) {
-    // New window — upsert with count=1
-    await db.prepare(
-      "INSERT INTO rate_limits (ip, count, window_start) VALUES (?, 1, ?) ON CONFLICT(ip) DO UPDATE SET count = 1, window_start = ?"
-    ).bind(ip, now, now).run();
-    return { allowed: true };
-  }
-
-  if (row.count >= MAX_REQUESTS) {
+  if (row.count > MAX_REQUESTS) {
     const resetAt = row.window_start + WINDOW_MS;
     const retryAfter = Math.ceil((resetAt - now) / 1000);
     return { allowed: false, retryAfter };
   }
-
-  // Increment
-  await db.prepare(
-    "UPDATE rate_limits SET count = count + 1 WHERE ip = ?"
-  ).bind(ip).run();
   return { allowed: true };
 }
 
+// Cloudflare sets cf-connecting-ip on every Worker request; X-Forwarded-For and X-Real-IP are whatever the
+// client sent, so trusting them would let a bot pick its own bucket. Without the header (local dev only)
+// every request shares one bucket instead of failing.
 export function getClientIp(headers: Headers): string {
-  return (
-    headers.get("cf-connecting-ip") ||
-    headers.get("x-real-ip") ||
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "unknown"
-  );
+  return headers.get("cf-connecting-ip") || "no-ip";
 }

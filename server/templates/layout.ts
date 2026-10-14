@@ -11,6 +11,8 @@ export interface LayoutOptions {
   adminPage?: boolean;
 }
 
+// Third-party scripts carry SRI hashes of their pinned version. Google Fonts CSS cannot: Google generates it
+// per browser User-Agent, so no single hash matches.
 function renderHead(options: LayoutOptions): string {
   return `<!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -36,8 +38,8 @@ function renderHead(options: LayoutOptions): string {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
   <noscript><style>.animate-on-scroll,.animate-scale-in,.comparison-row{opacity:1!important;transform:none!important}.check-animate svg path{stroke-dashoffset:0!important}</style></noscript>
-  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js" integrity="sha384-eA6+k1peuuIgxPHwWoQHx6OoDZ7hFJ+SKfMOhop5+zMV4SWR5OWBMatbIdoqA4lZ" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>
   <script type="application/ld+json">${JSON.stringify([
     {
       "@context": "https://schema.org",

@@ -18,7 +18,7 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Zone: HTTPS forced, TLS 1.2 minimum, TLS 1.3 on, www 301 to apex (D-002).
 
 ### Contact and support form (`POST /api/contact`)
-- Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed per-IP rate limit (`rate_limits`), text sanitized before storage.
+- Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed rate limit (`rate_limits`: 5 per 15 minutes, one atomic upsert, keyed on `cf-connecting-ip` only, IPv6 by /64), text sanitized before storage.
 - Notification email (D-001, D-004): the `EMAIL` binding may send **only from** `noreply@hbdr.com` and **only to** contact@ / support@hbdr.com (`wrangler.toml`), so a compromised Worker cannot mail anyone else. Submitter text is HTML-escaped in the email body; reply-to is the submitter.
 - Failures return 500 and the form shows them (never a fake success).
 - Known gap: no CAPTCHA. Upgrade path: Cloudflare Turnstile if spam appears in the leads table.
@@ -40,7 +40,9 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 ## Supply chain and repo
 - Repo is public. `main` is protected: PR required, `preview` check (typecheck, tests, CSS build) must pass, no force-push or deletion.
 - GitHub secret scanning with push protection and Dependabot security updates are on. A history scan on 2026-10-02 found no committed credentials.
-- CI installs with `npm ci` from the lockfile; third-party actions are pinned by SHA.
+- CI installs with `npm ci` from the lockfile; every action is pinned to a commit SHA and the workflow token defaults to `contents: read` (test: `server/__tests__/workflows.test.ts`).
+- Alpine and @alpinejs/intersect load from jsdelivr with sha384 SRI (test: `server/routes/__tests__/pages.test.ts`). Google Fonts CSS has none: it differs per User-Agent.
+- `npm audit --omit=dev` is clean. Four highs remain in dev-only tooling (@tailwindcss/cli -> @parcel/watcher -> micromatch -> braces, GHSA-vfj7-8cjw-p6xm); npm's only fix downgrades the CLI.
 - Worker secrets: none. Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
 - Operator credentials: the Cloudflare API token lives in `~/.config/hbdr/cloudflare.env` (mode 600). It is broad (DNS, Workers, D1, Access); a scoped deploy-only token for CI is the upgrade.
 
@@ -49,9 +51,12 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Known gap: DMARC is `p=none` on hbdr.com. Move to `p=quarantine` after reviewing aggregate reports for Google Workspace, Zendesk and SendGrid alignment.
 
 ## Open gaps (audit 2026-10-14, D-015)
-- Bot challenge: no Turnstile on the form; the D1 rate limit is per IP, not atomic, and keyed on the full IPv6 address. Fix: Turnstile verified server-side before the insert, plus a Cloudflare rate limiting rule on `POST /api/contact`. Owner: Matt creates the Turnstile widget; code follows.
+Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpine CDN scripts, SHA-pinned actions with a read-only default token, blog editor values escaped for their `x-data` attribute, `npm audit fix`.
+- Bot challenge: no Turnstile on the form. Fix: Turnstile verified server-side before the insert, plus a Cloudflare rate limiting rule on `POST /api/contact`. Owner: Matt creates the Turnstile widget; code follows.
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
-- Supply chain: Alpine CDN scripts have no SRI; first-party actions are tag-pinned, not SHA-pinned; CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: SRI now, SHA pins now, Alpine CSP build later.
+- Supply chain: CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: Alpine CSP build plus nonces.
+- Honeypot: a non-string `_hp_website` makes `POST /api/contact` throw (500). Fix: type-check it in `server/routes/api.ts`.
+- Dead code: the `users` table, `createUser` and `getUser*` have no callers (the app login went in D-009). Fix: delete them from `storage.ts`, `mem-storage.ts` and `d1Storage.ts`.
 - DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
 - Privacy: submitter IP kept forever (D-013). Needs a retention decision.
 - Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.

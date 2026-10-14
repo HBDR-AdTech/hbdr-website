@@ -87,3 +87,15 @@ describe("page content structure", () => {
     expect(html).toContain('data-testid="footer"');
   });
 });
+
+// A compromised CDN must not be able to run code on hbdr.com
+describe("third-party scripts", () => {
+  it("every external script carries an SRI hash", async () => {
+    for (const route of [...staticRoutes, "/blog"]) {
+      const html = await (await app.request(route)).text();
+      const tags = [...html.matchAll(/<script\b[^>]*\bsrc="(?:https?:)?\/\/[^"]*"[^>]*>/g)].map((m) => m[0]);
+      expect(tags.length, route).toBeGreaterThan(0);
+      for (const tag of tags) expect(tag, route).toMatch(/ integrity="sha384-[A-Za-z0-9+/]{64}" crossorigin="anonymous"/);
+    }
+  });
+});
