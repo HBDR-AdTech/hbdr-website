@@ -1,26 +1,9 @@
 /// <reference types="@cloudflare/workers-types" />
-import type { IStorage, User, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails } from "./services/storage";
+import type { IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./services/storage";
 import { LEAD_DETAIL_COLUMNS } from "./services/storage";
 
 export class D1Storage implements IStorage {
   constructor(private db: D1Database) {}
-
-  async getUser(id: string): Promise<User | undefined> {
-    const row = await this.db.prepare("SELECT * FROM users WHERE id = ?").bind(id).first();
-    return row ? this.mapUser(row) : undefined;
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const row = await this.db.prepare("SELECT * FROM users WHERE username = ?").bind(username).first();
-    return row ? this.mapUser(row) : undefined;
-  }
-
-  async createUser(user: { username: string; password: string }): Promise<User> {
-    const id = crypto.randomUUID();
-    await this.db.prepare("INSERT INTO users (id, username, password) VALUES (?, ?, ?)")
-      .bind(id, user.username, user.password).run();
-    return { id, username: user.username, password: user.password };
-  }
 
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
     const id = crypto.randomUUID();
@@ -125,6 +108,51 @@ export class D1Storage implements IStorage {
     return result.meta.changes > 0;
   }
 
+  // Both tables are bounded by the app (15 built-in + at most 20 custom fields, 2 settings): a full read is under 40 rows
+  async getFieldOverrides(): Promise<Record<string, string>> {
+    const { results } = await this.db.prepare("SELECT key, config FROM form_field_overrides").all<{ key: string; config: string }>();
+    return Object.fromEntries(results.map((r) => [r.key, r.config]));
+  }
+
+  async getFormSettings(): Promise<Record<string, string>> {
+    const { results } = await this.db.prepare("SELECT key, value FROM form_settings").all<{ key: string; value: string }>();
+    return Object.fromEntries(results.map((r) => [r.key, r.value]));
+  }
+
+  // batch() is one transaction: a change and its audit row land together or not at all
+  async saveFieldOverride(key: string, config: string, before: string | null, actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    await this.db.batch([
+      this.db.prepare(
+        "INSERT INTO form_field_overrides (key, config, updated_at, updated_by) VALUES (?, ?, ?, ?) ON CONFLICT(key) DO UPDATE SET config = excluded.config, updated_at = excluded.updated_at, updated_by = excluded.updated_by"
+      ).bind(key, config, at, actor),
+      this.auditRow(at, actor, `field:${key}`, before, config),
+    ]);
+  }
+
+  async saveFormSettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void> {
+    if (!changes.length) return;
+    const at = new Date().toISOString();
+    await this.db.batch(changes.flatMap(({ key, value, before }) => [
+      this.db.prepare(
+        "INSERT INTO form_settings (key, value, updated_at, updated_by) VALUES (?, ?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at, updated_by = excluded.updated_by"
+      ).bind(key, value, at, actor),
+      this.auditRow(at, actor, `setting:${key}`, before, value),
+    ]));
+  }
+
+  async getFormConfigChanges(limit: number): Promise<FormConfigChange[]> {
+    const { results } = await this.db.prepare(
+      "SELECT id, at, actor, target, before, after FROM form_config_changes ORDER BY at DESC LIMIT ?"
+    ).bind(limit).all<FormConfigChange>();
+    return results;
+  }
+
+  private auditRow(at: string, actor: string, target: string, before: string | null, after: string) {
+    return this.db.prepare("INSERT INTO form_config_changes (id, at, actor, target, before, after) VALUES (?, ?, ?, ?, ?, ?)")
+      .bind(crypto.randomUUID(), at, actor, target, before, after);
+  }
+
   async seedBlogPosts(): Promise<void> {
     const { results } = await this.db.prepare("SELECT COUNT(*) as count FROM blog_posts").all();
     const count = (results[0] as any).count;
@@ -205,10 +233,6 @@ export class D1Storage implements IStorage {
     }
 
     console.log(`Seeded blog posts to D1.`);
-  }
-
-  private mapUser(row: any): User {
-    return { id: row.id, username: row.username, password: row.password };
   }
 
   private mapLead(row: any): ContactLead {

@@ -50,4 +50,13 @@ describe("D1 schema", () => {
       /\b(DELETE\s+FROM|DROP\s+TABLE(\s+IF\s+EXISTS)?|TRUNCATE(\s+TABLE)?)\s+contact_leads\b/i.test(readFileSync(f, "utf8")));
     expect(offenders).toEqual([]);
   });
+
+  // The form config audit log is append-only (D-016): rows are inserted, never changed or removed
+  it("never deletes, updates, drops or truncates form_config_changes", () => {
+    const files = [...sources(join(root, "server")), join(root, "worker.ts"),
+      ...readdirSync(join(root, "migrations")).map((f) => join(root, "migrations", f))];
+    const offenders = files.filter((f) =>
+      /\b(DELETE\s+FROM|UPDATE|DROP\s+TABLE(\s+IF\s+EXISTS)?|TRUNCATE(\s+TABLE)?)\s+form_config_changes\b/i.test(readFileSync(f, "utf8")));
+    expect(offenders).toEqual([]);
+  });
 });

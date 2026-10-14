@@ -1,9 +1,12 @@
 import { renderLayout } from "../layout";
 import type { ContactLead } from "../../services/storage";
+import { customAnswers, type FormField } from "../../services/form-config";
+import { sanitizeText } from "../../middleware/sanitize";
 
 type LeadData = ContactLead;
 
-export function renderAdminLeadsPage(leads: LeadData[]): string {
+// fields: the current form config, for custom answer labels
+export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []): string {
   const totalLeads = leads.length;
   const newLeads = leads.filter(l => l.status === "new" || !l.status).length;
   const contactedLeads = leads.filter(l => l.status === "contacted").length;
@@ -24,6 +27,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
     const status = lead.status || "new";
     const impressions = impressionLabels[lead.impressions] || lead.impressions;
     const source = lead.source || "contact";
+    const custom = customAnswers(lead.customFields, fields);
 
     return `
     <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors" data-testid="lead-row-${lead.id}">
@@ -37,7 +41,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
         <div>${lead.company}</div>
         ${lead.property ? `<div class="text-sm text-white">${lead.property}</div>` : ""}
         ${lead.inventoryTypes ? `<div class="text-xs text-[var(--text-muted)]">${lead.inventoryTypes}${lead.currentSetup ? ` &middot; ${lead.currentSetup}` : ""}</div>` : ""}
-        ${lead.adsTxtUrl || lead.appStoreUrls || lead.topGeo || lead.timeline || lead.referral ? `
+        ${lead.adsTxtUrl || lead.appStoreUrls || lead.topGeo || lead.timeline || lead.referral || custom.length ? `
         <details class="mt-1 text-xs text-[var(--text-muted)]">
           <summary class="cursor-pointer text-[#2BDE73]">More</summary>
           ${lead.adsTxtUrl ? `<div>ads.txt: ${lead.adsTxtUrl}</div>` : ""}
@@ -45,11 +49,13 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           ${lead.topGeo ? `<div>Geo: ${lead.topGeo}</div>` : ""}
           ${lead.timeline ? `<div>Timeline: ${lead.timeline}</div>` : ""}
           ${lead.referral ? `<div>Heard via: ${lead.referral}</div>` : ""}
+          ${custom.map(([label, value]) => `<div class="whitespace-pre-line">${sanitizeText(label)}: ${value}</div>`).join("")}
         </details>` : ""}
       </td>
       <td class="py-4 px-4 text-white/60 text-sm">${impressions}</td>
       <td class="py-4 px-4">
         <span class="text-xs px-2 py-1 rounded-full ${source === 'support' ? 'bg-purple-500/15 text-purple-400' : 'bg-blue-500/15 text-blue-400'}">${source}</span>
+        ${lead.botCheck ? `<div class="text-xs mt-2 ${lead.botCheck === "unverified" ? "text-amber-400" : "text-[var(--text-muted)]"}" data-testid="bot-check-${lead.id}">Bot check: ${lead.botCheck}</div>` : ""}
       </td>
       <td class="py-4 px-4">
         <div x-data="{ status: '${status}', updating: false }" class="relative">
@@ -113,6 +119,7 @@ export function renderAdminLeadsPage(leads: LeadData[]): string {
           <div class="flex items-center gap-4">
             <a href="/admin/leads" class="text-sm text-[#2BDE73] font-medium" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
+            <a href="/admin/form" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-form">Form</a>
             <span class="text-white/10">|</span>
             <a href="/cdn-cgi/access/logout" class="text-sm text-[var(--text-muted)] hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>

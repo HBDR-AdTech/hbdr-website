@@ -88,6 +88,14 @@ describe("page content structure", () => {
   });
 });
 
+describe("support page Turnstile", () => {
+  it("renders the widget only when a site key is set", async () => {
+    const { renderFaqSupportPage } = await import("../../templates/pages/support");
+    expect(renderFaqSupportPage()).not.toContain("data-testid=\"turnstile-widget\"");
+    expect(renderFaqSupportPage("0x4AAA\"<x>")).toContain('data-sitekey="0x4AAA&quot;&lt;x&gt;"');
+  });
+});
+
 // A compromised CDN must not be able to run code on hbdr.com
 describe("third-party scripts", () => {
   it("every external script carries an SRI hash", async () => {

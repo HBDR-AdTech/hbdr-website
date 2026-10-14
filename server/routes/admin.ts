@@ -1,10 +1,12 @@
-// Admin routes — leads panel, blog admin, CSV export. Auth: protectAdmin() in the entry point (Cloudflare Access)
+// Admin routes — leads panel, blog admin, form settings, CSV export. Auth: protectAdmin() in the entry point (Cloudflare Access)
 // Single source of truth for both entry points
 
 import type { Hono } from "hono";
 import type { IStorage } from "../services/storage";
 import { renderAdminLeadsPage } from "../templates/admin/leads";
 import { renderBlogAdminPage, renderBlogEditorPage } from "../templates/admin/blog";
+import { renderFormSettingsPage } from "../templates/admin/form";
+import { getFormConfig } from "../services/form-config";
 import { render404Page } from "../templates/pages/error";
 
 // Quote every cell; a leading = + - @ would run as a formula when the export is opened in Excel/Sheets
@@ -22,9 +24,12 @@ export function registerAdminRoutes(
   // Leads panel
   app.get("/admin/leads", async (c) => {
     const storage = getStorage(c);
-    const leads = await storage.getContactLeads();
-    return c.html(renderAdminLeadsPage(leads));
+    const [leads, form] = await Promise.all([storage.getContactLeads(), getFormConfig(storage)]);
+    return c.html(renderAdminLeadsPage(leads, form.fields));
   });
+
+  // Form settings; the page loads its data from /admin/api/form-config
+  app.get("/admin/form", (c) => c.html(renderFormSettingsPage()));
 
   // CSV export
   app.get("/admin/leads/export", async (c) => {

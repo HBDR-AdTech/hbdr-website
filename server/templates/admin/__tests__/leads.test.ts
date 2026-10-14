@@ -11,7 +11,7 @@ describe("admin leads page", () => {
       id: "1", name, email: "a@b.com", company: "C", impressions: "10m-50m", message: "hi&#x27;)",
       ip: null, source: "contact", status: "new", createdAt: new Date(),
       phone: null, inventoryTypes: null, property: null, appStoreUrls: null, adsTxtUrl: null,
-      currentSetup: null, role: null, timeline: null, topGeo: null, referral: null,
+      currentSetup: null, role: null, timeline: null, topGeo: null, referral: null, customFields: null, botCheck: null,
     } satisfies ContactLead;
     const html = renderAdminLeadsPage([lead]);
     const click = html.match(/@click="(\$dispatch\('show-message'[^"]*)"/)![1];

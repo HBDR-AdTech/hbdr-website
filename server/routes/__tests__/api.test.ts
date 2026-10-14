@@ -35,6 +35,12 @@ describe("POST /api/contact qualifying fields", () => {
   }
   const base = { name: "Jane", email: "jane@publisher.com", company: "Pub", impressions: "10m-50m" };
 
+  it("treats a non-string honeypot as a bot, not a crash", async () => {
+    const { storage, post } = setup();
+    expect((await post({ ...base, _hp_website: { x: 1 } }, "198.51.100.20")).status).toBe(200);
+    expect(await storage.getContactLeads()).toEqual([]);
+  });
+
   it("stores every qualifying answer, blank selects as null", async () => {
     const { storage, post } = setup();
     const res = await post({

@@ -1,5 +1,5 @@
 // All API routes — single source of truth
-// Handles contact form, blog CRUD, lead management
+// Handles contact form, form config admin, blog CRUD, lead management
 
 import type { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
@@ -9,13 +9,21 @@ import { fromError } from "zod-validation-error";
 import { sanitizeHtml, sanitizeText } from "../middleware/sanitize";
 import { checkRateLimit, getClientIp } from "../middleware/rate-limit";
 import { sendContactNotification } from "../services/email";
-import { validateOrigin } from "../middleware/csrf";
+import { validateOrigin, requireSameOrigin } from "../middleware/csrf";
 import { isDisposableEmail } from "../middleware/email-blocklist";
+import {
+  DEFAULT_FORM_FIELDS, SETTING_DEFAULTS, getFormConfig, readFormConfig, invalidateFormConfig, validateAnswers,
+  fieldUpdateSchema, customFieldSchema, settingsSchema, applyFieldUpdate, newCustomField,
+} from "../services/form-config";
+import { verifyTurnstile } from "../services/turnstile";
 
 interface ApiConfig {
   email?: SendEmail;
   db?: any;
+  turnstileSecret?: string; // Worker secret TURNSTILE_SECRET; never stored, logged or sent to the browser
 }
+
+const VERIFY_FAILED = "Verification failed, please retry";
 
 export function registerApiRoutes(
   app: Hono<any>,
@@ -56,7 +64,8 @@ export function registerApiRoutes(
       const body = await c.req.json();
 
       // Honeypot check
-      if (body._hp_website && body._hp_website.trim() !== "") {
+      // any non-empty value, string or not, is a bot (a non-string used to throw and return 500)
+      if (body._hp_website != null && String(body._hp_website).trim() !== "") {
         console.log(`Bot detected via honeypot from IP: ${ip}`);
         return c.html(`
           <div id="contact-form-result" class="glass-card p-8 text-center">
@@ -82,6 +91,19 @@ export function registerApiRoutes(
         return c.json({ message: validationError.toString(), errors: validatedData.error.flatten().fieldErrors }, 400);
       }
 
+      const storage = getStorage(c);
+      let form = await getFormConfig(storage);
+      const token = typeof body.turnstileToken === "string" ? body.turnstileToken.trim() : "";
+      // A page rendered after Turnstile was switched off sends no token, while this isolate may still hold the
+      // "on" config for up to 60 seconds: re-read it before refusing (2 extra reads, only on this path)
+      if (form.turnstileSiteKey && source === "contact" && !token) {
+        invalidateFormConfig();
+        form = await getFormConfig(storage);
+      }
+      // The support form is not operator-configured: its posts are checked against the code defaults
+      const answers = validateAnswers(body, source === "support" ? DEFAULT_FORM_FIELDS : form.fields);
+      if ("error" in answers) return c.json({ message: answers.error }, 400);
+
       if (isDisposableEmail(validatedData.data.email)) {
         return c.html(`
           <div id="contact-form-result" class="glass-card p-8 text-center">
@@ -96,24 +118,33 @@ export function registerApiRoutes(
         `, 422);
       }
 
-      const sanitizedData = {
-        ...validatedData.data,
+      // Turnstile (D-016): after the rate limit and honeypot so bots can't spend siteverify calls, before the insert
+      // so a failed check stores nothing. Both forms carry the widget, so both sources are checked.
+      let botCheck: string | null = null;
+      if (form.turnstileSiteKey) {
+        if (!token || token.length > 2048) return c.json({ message: VERIFY_FAILED }, 403);
+        if (!config.turnstileSecret) console.error("Turnstile is on but TURNSTILE_SECRET is not set; lead kept as unverified");
+        const result = config.turnstileSecret ? await verifyTurnstile(config.turnstileSecret, token, ip) : "unverified";
+        if (result === "failed") return c.json({ message: VERIFY_FAILED }, 403);
+        botCheck = result;
+      }
+
+      // Free-text answers come back from validateAnswers already escaped; choices are allowlisted values
+      const lead = await storage.createContactLead({
         name: sanitizeText(validatedData.data.name),
         email: validatedData.data.email.toLowerCase().trim(),
         company: sanitizeText(validatedData.data.company),
-        message: validatedData.data.message ? sanitizeText(validatedData.data.message) : null,
-        inventoryTypes: validatedData.data.inventoryTypes?.length ? validatedData.data.inventoryTypes.join(", ") : null,
-        property: validatedData.data.property ? sanitizeText(validatedData.data.property) : null,
-        appStoreUrls: validatedData.data.appStoreUrls ? sanitizeText(validatedData.data.appStoreUrls) : null,
-        adsTxtUrl: validatedData.data.adsTxtUrl ? sanitizeText(validatedData.data.adsTxtUrl) : null,
-      };
-
-      const storage = getStorage(c);
-      const lead = await storage.createContactLead({ ...sanitizedData, ip, source });
+        impressions: validatedData.data.impressions,
+        ...answers.values,
+        customFields: Object.keys(answers.custom).length ? JSON.stringify(answers.custom) : null,
+        botCheck,
+        ip,
+        source,
+      });
 
       // waitUntil keeps the Worker alive for the send after the response returns; a bare promise gets cancelled
       if (config.email) {
-        c.executionCtx.waitUntil(sendContactNotification(config.email, lead));
+        c.executionCtx.waitUntil(sendContactNotification(config.email, lead, form.fields));
       }
 
       return c.html(`
@@ -141,6 +172,76 @@ export function registerApiRoutes(
         </div>
       `, 500);
     }
+  });
+
+  // Form config admin (D-016). Cloudflare Access covers /admin/api/form-config* (ADMIN_PATHS); a mutation must also
+  // carry a same-origin Origin header. Reads here skip the 60s cache so the admin sees what is stored.
+  app.use("/admin/api/form-config/*", async (c, next) => {
+    if (c.req.method !== "GET" && !requireSameOrigin(c.req.raw.headers)) return c.json({ message: "Forbidden" }, 403);
+    await next();
+  });
+
+  // the verified Access email; the dev server runs without Access
+  const actor = (c: any): string => c.get("accessEmail") ?? "local-dev";
+
+  app.get("/admin/api/form-config", async (c) => {
+    const storage = getStorage(c);
+    const [{ fields, settings }, changes] = await Promise.all([readFormConfig(storage), storage.getFormConfigChanges(50)]);
+    return c.json({
+      fields,
+      settings: { turnstileEnabled: settings.turnstile_enabled === "true", turnstileSiteKey: settings.turnstile_site_key },
+      turnstileSecretSet: Boolean(getConfig(c).turnstileSecret),
+      changes,
+    });
+  });
+
+  app.post("/admin/api/form-config/fields/:key", async (c) => {
+    const parsed = fieldUpdateSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
+    const storage = getStorage(c);
+    const key = c.req.param("key");
+    const { overrides, fields } = await readFormConfig(storage);
+    const field = fields.find((f) => f.key === key);
+    if (!field) return c.json({ message: "Unknown field" }, 404);
+    const result = applyFieldUpdate(field, overrides[key] ? JSON.parse(overrides[key]) : {}, parsed.data);
+    if ("error" in result) return c.json({ message: result.error }, 400);
+    await storage.saveFieldOverride(key, JSON.stringify(result.config), overrides[key] ?? null, actor(c));
+    invalidateFormConfig();
+    return c.json({ ok: true });
+  });
+
+  app.post("/admin/api/form-config/fields", async (c) => {
+    const parsed = customFieldSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
+    const storage = getStorage(c);
+    const { fields } = await readFormConfig(storage);
+    const result = newCustomField(fields, parsed.data);
+    if ("error" in result) return c.json({ message: result.error }, 400);
+    await storage.saveFieldOverride(result.key, JSON.stringify(result.config), null, actor(c));
+    invalidateFormConfig();
+    return c.json({ key: result.key }, 201);
+  });
+
+  app.post("/admin/api/form-config/settings", async (c) => {
+    const parsed = settingsSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return c.json({ message: fromError(parsed.error).toString() }, 400);
+    const storage = getStorage(c);
+    const stored = await storage.getFormSettings();
+    const current = { ...SETTING_DEFAULTS, ...stored };
+    const next: Record<string, string> = {
+      turnstile_enabled: parsed.data.turnstileEnabled === undefined ? current.turnstile_enabled : String(parsed.data.turnstileEnabled),
+      turnstile_site_key: parsed.data.turnstileSiteKey ?? current.turnstile_site_key,
+    };
+    // A widget without a working secret would refuse or mislabel every lead
+    if (next.turnstile_enabled === "true" && (!getConfig(c).turnstileSecret || !next.turnstile_site_key)) {
+      return c.json({ message: "Turnstile needs the TURNSTILE_SECRET Worker secret and a site key before it can be on." }, 409);
+    }
+    const changes = Object.entries(next)
+      .filter(([key, value]) => current[key] !== value)
+      .map(([key, value]) => ({ key, value, before: stored[key] ?? null }));
+    await storage.saveFormSettings(changes, actor(c));
+    invalidateFormConfig();
+    return c.json({ ok: true });
   });
 
   // Blog CRUD API

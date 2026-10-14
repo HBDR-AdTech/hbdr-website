@@ -18,8 +18,9 @@ export function accessGuard(getConfig: (c: any) => AccessConfig): MiddlewareHand
     const token = c.req.header("Cf-Access-Jwt-Assertion");
     // Missing config fails closed: no Access configuration means no admin access
     if (!teamDomain || !aud || !token) return c.text("Forbidden", 403);
+    let payload;
     try {
-      await verifyWithJwks(token, {
+      payload = await verifyWithJwks(token, {
         ...(keys ? { keys } : { jwks_uri: `https://${teamDomain}/cdn-cgi/access/certs` }),
         allowedAlgorithms: ["RS256"],
         verification: { iss: `https://${teamDomain}`, aud },
@@ -27,6 +28,8 @@ export function accessGuard(getConfig: (c: any) => AccessConfig): MiddlewareHand
     } catch {
       return c.text("Forbidden", 403);
     }
+    // the verified identity, recorded as the actor on admin audit rows
+    c.set("accessEmail", typeof payload.email === "string" ? payload.email : "unknown");
     await next();
   };
 }

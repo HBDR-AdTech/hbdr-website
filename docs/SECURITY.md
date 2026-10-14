@@ -21,13 +21,15 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Origin/Referer must match Host (`validateOrigin`), Zod schema validation, disposable-email blocklist, honeypot field, D1-backed rate limit (`rate_limits`: 5 per 15 minutes, one atomic upsert, keyed on `cf-connecting-ip` only, IPv6 by /64), text sanitized before storage.
 - Notification email (D-001, D-004): the `EMAIL` binding may send **only from** `noreply@hbdr.com` and **only to** contact@ / support@hbdr.com (`wrangler.toml`), so a compromised Worker cannot mail anyone else. Submitter text is HTML-escaped in the email body; reply-to is the submitter.
 - Failures return 500 and the form shows them (never a fake success).
-- Known gap: no CAPTCHA. Upgrade path: Cloudflare Turnstile if spam appears in the leads table.
+- Answers other than name, email, company and impressions are checked against the operator's form config (D-016): choices must be on the field's option list (retired options included), text is length-capped and escaped once, custom answers under unknown keys are dropped, and hidden fields are ignored.
+- Bot check (D-016): Cloudflare Turnstile behind a toggle on `/admin/form`, off by default. When it is on, contact submissions need a token verified server-side (siteverify, action `contact`, hostname allowlist `TURNSTILE_HOSTNAMES`) after the rate limit and honeypot and before the insert; failures return 403 and store nothing. A siteverify outage saves the lead as `bot_check = 'unverified'` (D-011). The secret is the Worker secret `TURNSTILE_SECRET`: never in D1, never logged, never sent to the browser (the admin page shows only "set" or "missing"). CSP allows `https://challenges.cloudflare.com` in `script-src` and `frame-src`.
 
-### Admin (`/admin/*`, `/api/blog*`, `/api/leads*`)
+### Admin (`/admin/*`, `/api/blog*`, `/api/leads*`, `/admin/api/form-config*`)
 - Authentication is Cloudflare Access only (D-008, D-009): app "HBDR Website Admin", one-time PIN, 24h session, allowlisted emails. There is no app password.
 - Defense in depth: the Worker verifies the `Cf-Access-Jwt-Assertion` JWT on every admin path (`server/middleware/auth.ts`): RS256 signature against the team JWKS, issuer, audience (`ACCESS_AUD`), expiry. Missing config fails closed (403). Tested in `server/middleware/__tests__/auth.test.ts`.
 - Access also covers every workers.dev hostname of both Workers (and their version-preview wildcards), so there is no path to admin that skips Access.
-- Admin mutations are JSON API calls checked by `validateOrigin`; the Access cookie is SameSite=Lax.
+- Admin mutations are JSON API calls checked by `validateOrigin`; the Access cookie is SameSite=Lax. Form config mutations (`/admin/api/form-config/*`) also refuse a request with no `Origin` header (`requireSameOrigin`).
+- Form config changes (D-016) are zod-validated, refuse to hide or unrequire the locked fields, and write an append-only `form_config_changes` row with the Access email as actor (`server/__tests__/schema.test.ts` fails on any delete, update or drop of that table). Operator text (labels, placeholders, options) is escaped wherever it is rendered and never reaches an Alpine expression.
 - Lead CSV export neutralizes spreadsheet formulas (`csvCell`).
 - Logout: `/cdn-cgi/access/logout`.
 
@@ -43,7 +45,7 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - CI installs with `npm ci` from the lockfile; every action is pinned to a commit SHA and the workflow token defaults to `contents: read` (test: `server/__tests__/workflows.test.ts`).
 - Alpine and @alpinejs/intersect load from jsdelivr with sha384 SRI (test: `server/routes/__tests__/pages.test.ts`). Google Fonts CSS has none: it differs per User-Agent.
 - `npm audit --omit=dev` is clean. Four highs remain in dev-only tooling (@tailwindcss/cli -> @parcel/watcher -> micromatch -> braces, GHSA-vfj7-8cjw-p6xm); npm's only fix downgrades the CLI.
-- Worker secrets: none. Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
+- Worker secrets: `TURNSTILE_SECRET` (optional; needed only to turn Turnstile on, D-016). Config that isn't secret (Access team domain and AUD) lives in `wrangler.toml` vars.
 - Operator credentials: the Cloudflare API token lives in `~/.config/hbdr/cloudflare.env` (mode 600). It is broad (DNS, Workers, D1, Access); a scoped deploy-only token for CI is the upgrade.
 
 ## Email domain
@@ -51,17 +53,15 @@ One page per surface: what it exposes, who can reach it, what stops abuse, how w
 - Known gap: DMARC is `p=none` on hbdr.com. Move to `p=quarantine` after reviewing aggregate reports for Google Workspace, Zendesk and SendGrid alignment.
 
 ## Open gaps (audit 2026-10-14, D-015)
-Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpine CDN scripts, SHA-pinned actions with a read-only default token, blog editor values escaped for their `x-data` attribute, `npm audit fix`.
-- Bot challenge: no Turnstile on the form. Fix: Turnstile verified server-side before the insert, plus a Cloudflare rate limiting rule on `POST /api/contact`. Owner: Matt creates the Turnstile widget; code follows.
+Closed 2026-10-14: atomic /64 rate limit on `cf-connecting-ip`, SRI on the Alpine CDN scripts, SHA-pinned actions with a read-only default token, blog editor and blog list escaping, `npm audit fix`, Turnstile on both forms behind a toggle (D-016), honeypot crash, dead `users` code.
+- Bot challenge: Turnstile is built and off (D-016). To turn it on, Matt: (1) creates a Turnstile widget for hbdr.com and both workers.dev hostnames; (2) runs `wrangler secret put TURNSTILE_SECRET`; (3) enters the site key on `/admin/form` and turns it on. A Cloudflare rate limiting rule on `POST /api/contact` is still open. Owner: Matt.
 - CI token: previews run with the production token, and a branch controls `wrangler.toml`, so "own D1" is config, not a boundary. Fix: GitHub Environments, a preview-only token, required reviewers on production. Owner: Matt.
 - Supply chain: CSP allows `unsafe-inline` and `unsafe-eval` (Alpine). Fix: Alpine CSP build plus nonces.
-- Honeypot: a non-string `_hp_website` makes `POST /api/contact` throw (500). Fix: type-check it in `server/routes/api.ts`.
-- Dead code: the `users` table, `createUser` and `getUser*` have no callers (the app login went in D-009). Fix: delete them from `storage.ts`, `mem-storage.ts` and `d1Storage.ts`.
 - DNS: no DNSSEC, no CAA records, DMARC `p=none`. Owner: Matt (dashboard).
 - Privacy: submitter IP kept forever (D-013). Needs a retention decision.
 - Unverified from the repo: WAF managed rules, Bot Fight Mode, min TLS 1.2, Access on preview-version hostnames.
 
 
 - Suspected admin compromise: remove the email from the Access policy, revoke sessions in Zero Trust (Access → Users), rotate the Cloudflare API token.
-- Spam wave on the form: tighten `rate_limits` window, add Turnstile.
+- Spam wave on the form: turn Turnstile on at `/admin/form` (needs `TURNSTILE_SECRET` and a site key, D-016); tighten the `rate_limits` window.
 - Rollback any Worker change: `npx wrangler rollback` or revert the merge commit.

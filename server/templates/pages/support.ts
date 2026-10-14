@@ -1,8 +1,10 @@
+import { sanitizeText } from "../../middleware/sanitize";
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
 
-export function renderFaqSupportPage(): string {
+// Turnstile site key when the operator has it on (D-016); the support form posts to the same checked endpoint
+export function renderFaqSupportPage(turnstileSiteKey: string | null = null): string {
   const faqs = [
     { category: "General", items: [
       { q: "What is HBDR and what services do you provide?", a: "HBDR is a global leader in ad monetization and header bidding solutions. We help publishers maximize their advertising revenue through advanced header bidding implementation, Google Ad Exchange (AdX) access, programmatic optimization, display ads, CTV/OTT advertising, in-app ads, and comprehensive yield management services." },
@@ -131,13 +133,15 @@ export function renderFaqSupportPage(): string {
                      impressions: 'support-request',
                      message: this.formData.message,
                      _hp_website: this.formData._hp_website,
-                     _source: 'support'
+                     _source: 'support',
+                     turnstileToken: (this.$root.querySelector('[name=cf-turnstile-response]') || {}).value || ''
                    })
                  });
                  if (res.ok) {
                    this.submitted = true;
                  } else {
-                   this.error = {400:'Please check your details and try again.',422:'Please use a permanent email address. Disposable addresses are not accepted.',429:'Too many submissions. Please wait a few minutes and try again.'}[res.status] || 'Something went wrong. Please try again or email us at support@hbdr.com';
+                   if (window.turnstile) window.turnstile.reset();
+                   this.error = {400:'Please check your details and try again.',403:window.turnstile ? 'Verification failed, please retry.' : 'The verification check did not load. Please reload the page and try again, or email us at support@hbdr.com',422:'Please use a permanent email address. Disposable addresses are not accepted.',429:'Too many submissions. Please wait a few minutes and try again.'}[res.status] || 'Something went wrong. Please try again or email us at support@hbdr.com';
                  }
                } catch (e) {
                  this.error = 'Network error. Please try again or email us at support@hbdr.com';
@@ -187,6 +191,9 @@ export function renderFaqSupportPage(): string {
               <label for="textarea-support-description" class="block text-sm font-medium text-white/60 mb-2">Description</label>
               <textarea id="textarea-support-description" x-model="formData.message" required rows="5" class="glass-input w-full px-4 py-3.5" placeholder="Please describe your issue or question in detail..." data-testid="textarea-support-description"></textarea>
             </div>
+            ${turnstileSiteKey ? `
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+            <div class="cf-turnstile mb-6" data-sitekey="${sanitizeText(turnstileSiteKey)}" data-action="contact" data-theme="dark" data-testid="turnstile-widget"></div>` : ""}
             <button type="submit" class="glass-btn w-full text-center py-4" :disabled="submitting" data-testid="button-submit-support">
               <span x-show="!submitting">Submit Support Request</span>
               <span x-show="submitting" x-cloak class="inline-flex items-center gap-2">
