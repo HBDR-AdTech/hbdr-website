@@ -69,6 +69,15 @@ describe("blog routes", () => {
 });
 
 describe("page content structure", () => {
+  // Without JS or with reduced motion the server-rendered auction is all a visitor sees, so it must be a finished one
+  it("homepage renders a closed auction with exactly one winner", async () => {
+    const html = await (await app.request("/")).text();
+    expect(html).toContain('class="auction is-closed');
+    expect(html.match(/auction-row is-winner/g)).toHaveLength(1);
+    expect(html).toContain("$4.86 CPM");
+    expect(html).toContain("matchMedia('(prefers-reduced-motion: reduce)')");
+  });
+
   it("homepage includes styles.css link", async () => {
     const res = await app.request("/");
     const html = await res.text();
