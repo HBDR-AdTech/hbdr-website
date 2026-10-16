@@ -300,8 +300,25 @@ function renderFooter(): string {
   </footer>`;
 }
 
+// A diagram or table wider than the screen scrolls inside its frame; say so above it, only when it actually overflows
+const SCROLL_HINT = `<script>
+  (function () {
+    function mark() {
+      document.querySelectorAll('.bp-frame-body, .bp-table-wrap').forEach(function (el) {
+        var hint = el.previousElementSibling && el.previousElementSibling.classList.contains('bp-scroll-hint') ? el.previousElementSibling : null;
+        var over = el.scrollWidth > el.clientWidth + 4;
+        if (over && !hint) { hint = document.createElement('p'); hint.className = 'bp-scroll-hint mono'; hint.textContent = 'Scroll sideways for the full ' + (el.querySelector('table') ? 'table' : 'diagram') + ' →'; el.parentNode.insertBefore(hint, el); }
+        if (hint) hint.hidden = !over;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', mark);
+    window.addEventListener('resize', mark);
+  })();
+  </script>`;
+
 function renderScripts(options: LayoutOptions): string {
   return `
+  ${options.adminPage ? "" : SCROLL_HINT}
   ${options.cfAnalyticsToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${options.cfAnalyticsToken}"}'></script>` : ""}
 
 `;

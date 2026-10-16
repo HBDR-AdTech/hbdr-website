@@ -33,7 +33,7 @@ export function renderBlogAdminPage(posts: BlogPostData[]): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between mb-10">
         <div>
-          <h1 class="text-3xl font-semibold text-white mb-2">Blog Manager</h1>
+          <h1 class="font-sans text-3xl font-semibold text-white mb-2">Blog Manager</h1>
           <p class="text-[var(--text-muted)]">Create, edit, and manage your blog content.</p>
         </div>
         <a href="/admin/blog/new" class="glass-btn text-sm px-6" data-testid="button-new-post">New Post</a>
@@ -88,7 +88,7 @@ export function renderBlogEditorPage(post?: BlogPostData): string {
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog Manager
         </a>
-        <h1 class="text-3xl font-semibold text-white">${isEdit ? "Edit Post" : "New Post"}</h1>
+        <h1 class="font-sans text-3xl font-semibold text-white">${isEdit ? "Edit Post" : "New Post"}</h1>
       </div>
 
       <div class="glass-card p-6 sm:p-8"

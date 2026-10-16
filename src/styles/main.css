@@ -449,3 +449,17 @@
   .bp-rows .bp-row-index { grid-column: 1 / -1; }
   .bp-rows h3, .bp-rows .bp-row-body { grid-column: 1 / -1; }
 }
+
+/* Narrow screens: a diagram or table wider than its frame scrolls inside it; the edge fades show there is more to the side */
+@media (max-width: 960px) {
+  .bp-frame-body, .bp-table-wrap {
+    background:
+      linear-gradient(90deg, var(--surface-elevated) 30%, transparent) left / 2.5rem 100% no-repeat local,
+      linear-gradient(270deg, var(--surface-elevated) 30%, transparent) right / 2.5rem 100% no-repeat local,
+      linear-gradient(90deg, rgba(0, 0, 0, 0.45), transparent) left / 1.25rem 100% no-repeat scroll,
+      linear-gradient(270deg, rgba(0, 0, 0, 0.6), transparent) right / 1.5rem 100% no-repeat scroll;
+  }
+}
+
+.bp-scroll-hint { color: var(--text-muted); padding: 0.6rem 1rem 0; }
+.bp-table-wrap + .bp-scroll-hint, .bp-scroll-hint + .bp-table-wrap { margin-top: 0.4rem; }

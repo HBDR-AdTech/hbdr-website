@@ -399,20 +399,19 @@ export function renderPage(form: FormConfig): string {
     } });
 
     // Timeline: request lines travel out to each response time, dots land with them
-    var tlAnim = gsap.timeline({ paused: true });
-    document.querySelectorAll('[data-lane]').forEach(function (p, i) {
-      var len = p.getTotalLength();
-      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-      tlAnim.to(p, { strokeDashoffset: 0, duration: len / 520, ease: 'power2.out' }, 0.1 + i * 0.04);
-    });
-    tlAnim.from('.tl-rows circle', { scale: 0, transformOrigin: 'center', duration: 0.35, ease: 'back.out(2)', stagger: 0.08 }, 0.6);
-    ScrollTrigger.create({ trigger: '.timeline-frame', start: 'top 75%', once: true, onEnter: function () { tlAnim.play(); } });
+    // Lines stay drawn until the replay starts, so a page that is never scrolled still shows the whole timeline
+    ScrollTrigger.create({ trigger: '.timeline-frame', start: 'top 75%', once: true, onEnter: function () {
+      var tlAnim = gsap.timeline();
+      document.querySelectorAll('[data-lane]').forEach(function (p, i) {
+        var len = p.getTotalLength();
+        tlAnim.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: len / 520, ease: 'power2.out' }, 0.1 + i * 0.04);
+      });
+      tlAnim.from('.tl-rows circle', { scale: 0, transformOrigin: 'center', duration: 0.35, ease: 'back.out(2)', stagger: 0.08 }, 0.6);
+    } });
 
     // Comparison: checks in the HBDR column draw top to bottom
-    var checks = document.querySelectorAll('td.us .check path');
-    gsap.set(checks, { strokeDashoffset: 22 });
     ScrollTrigger.create({ trigger: '.compare-table', start: 'top 75%', once: true, onEnter: function () {
-      gsap.to(checks, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', stagger: 0.06 });
+      gsap.fromTo('td.us .check path', { strokeDashoffset: 22 }, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', stagger: 0.06 });
     } });
 
     // Steps: the hairline fills left to right as the section scrolls in (no pinning)
