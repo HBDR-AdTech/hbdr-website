@@ -1,111 +1,124 @@
 import { renderLayout } from "../../layout";
-import { renderPageHero } from "../../components/hero";
+import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection, renderSpecList } from "../../components/blueprint";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 
+// Example auction (labelled as such): the same three bids, sold one network at a time and then all at once
+const NETWORKS: [string, number][] = [["A", 1.8], ["B", 2.1], ["C", 3.4]];
+const ROW_Y = [60, 170, 280];
+const ARROW = '<marker id="hb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path class="sm-arrowhead" d="M1 1 L9 5 L1 9"/></marker>';
+
+function renderAuctionDiagram(): string {
+  const node = (x: number, y: number, w: number, label: string, cls = "") =>
+    `<rect class="sm-node${cls}" x="${x}" y="${y}" width="${w}" height="52" rx="4"/><text class="sm-name${cls}" x="${x + w / 2}" y="${y + 31}" text-anchor="middle">${label}</text>`;
+  const waterfall = `
+            <text class="sm-k" x="0" y="20">Waterfall · one network at a time</text>
+            ${node(0, 170, 130, "Ad request")}
+            ${NETWORKS.map(([n], i) => node(250, ROW_Y[i], 170, `Network ${n}`, i === 2 ? " is-off" : "")).join("")}
+            <path class="sm-wire" d="M130 196 H190 V86 H244" marker-end="url(#hb-arrow)"/>
+            <path class="sm-wire" d="M335 112 V164" marker-end="url(#hb-arrow)"/>
+            <path class="sm-wire is-off" d="M335 222 V280"/>
+            <text class="sm-v" x="200" y="140">1</text><text class="sm-v" x="347" y="145">2</text>
+            <text class="sm-v" x="436" y="91">passes</text>
+            <text class="sm-v" x="436" y="201">fills at $2.10</text>
+            <text class="sm-v is-off" x="436" y="301">$3.40 · never asked</text>
+            <text class="sm-v" x="0" y="392">Sold at $2.10: the first network that accepts</text>`;
+  const parallel = `
+            <text class="sm-k is-win" x="600" y="20">Header bidding · every partner at once</text>
+            ${node(600, 170, 130, "Ad request")}
+            ${NETWORKS.map(([n], i) => node(830, ROW_Y[i], 150, `Bidder ${n}`, i === 2 ? " is-win" : "")).join("")}
+            ${ROW_Y.map((y, i) => `<path class="sm-wire${i === 2 ? " is-win" : ""}" d="M730 196 H780 V${y + 26} H824" marker-end="url(#hb-arrow)"/>`).reverse().join("")}
+            <text class="sm-v" x="742" y="186">1</text>
+            ${NETWORKS.map(([, cpm], i) => `<text class="sm-v${i === 2 ? " is-win" : ""}" x="996" y="${ROW_Y[i] + 31}">$${cpm.toFixed(2)}${i === 2 ? " wins" : ""}</text>`).join("")}
+            <text class="sm-v is-win" x="600" y="392">Sold at $3.40: the highest bid</text>`;
+  return `<svg viewBox="0 0 1120 410" role="img" aria-label="Example: in a waterfall the ad request goes to Network A, which passes, then Network B, which fills at $2.10, so Network C's $3.40 is never asked for. With header bidding the request goes to all three bidders at once and Bidder C's $3.40 wins.">
+            <defs>${ARROW}</defs>
+            ${waterfall}
+            <path class="sm-rule" d="M560 0 V410"/>
+            ${parallel}
+          </svg>`;
+}
+
+const FEATURES = [
+  { title: "Dynamic Floor Pricing", body: "AI-driven floor prices that adapt in real time to market conditions, bid density, and historical performance to maximize CPMs." },
+  { title: "Auto-Refresh Optimization", body: "Intelligent ad refresh cycles that maximize viewable impressions without sacrificing user experience or violating demand partner policies." },
+  { title: "Granular Analytics", body: "Bid-level reporting across every demand partner, ad unit, device, and geography with real-time dashboards and automated alerting." },
+  { title: "A/B Testing Engine", body: "Run controlled experiments on bidder configurations, timeout settings, and floor prices with statistical significance tracking." },
+  { title: "Brand Safety Controls", body: "Comprehensive blocklists, category filters, and ads.txt/sellers.json management to ensure only quality demand reaches your inventory." },
+  { title: "Global Demand Network", body: "Access 50+ premium SSPs and exchanges including Google AdX, Amazon TAM, Index Exchange, OpenX, and PubMatic from a single integration." },
+];
+
 export function renderHeaderBiddingPage(): string {
   const content = `
-  ${renderPageHero("Solutions", "Header Bidding", "Maximize every impression with unified auctions powered by Prebid.js and server-side bidding. Our header bidding stack drives fierce competition among demand partners to unlock your true revenue potential.")}
+  ${renderBlueprintHero({
+    eyebrow: "Solutions",
+    title: "Header Bidding",
+    lede: "Maximize every impression with unified auctions powered by Prebid.js and server-side bidding. Our header bidding stack drives fierce competition among demand partners to unlock your true revenue potential.",
+    actions: [
+      { label: "Start Your Free Audit", href: "/contact", primary: true, testid: "button-hero-cta" },
+      { label: "Waterfall vs. header bidding", href: "#how" },
+    ],
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="hb-overview-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-hb-overview">
-          <div class="lg:col-span-5">
-            <div class="glass-tag mb-6">Unified Auctions</div>
-            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">How Header Bidding Works</h2>
-          </div>
-          <div class="lg:col-span-7">
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-              Header bidding revolutionizes programmatic advertising by allowing multiple demand sources to bid on your inventory simultaneously, rather than sequentially through a traditional waterfall. HBDR's implementation leverages Prebid.js — the industry-standard open-source framework — combined with our proprietary server-side bidding infrastructure to ensure every impression is sold at the highest possible price.
-            </p>
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-              Our unified auction engine processes bids from 50+ demand partners in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution see an average CPM uplift of 40-60% compared to traditional waterfall setups.
-            </p>
-          </div>
+  <section class="bp-section" id="how" data-testid="hb-overview-section">
+    <div class="bp-wrap">
+      <div class="bp-grid12 sm-overview" data-testid="card-hb-overview">
+        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Unified Auctions")}<h2>How header bidding works.</h2></div>
+        <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
+          <p>Header bidding revolutionizes programmatic advertising by allowing multiple demand sources to bid on your inventory simultaneously, rather than sequentially through a traditional waterfall. HBDR's implementation leverages Prebid.js — the industry-standard open-source framework — combined with our proprietary server-side bidding infrastructure to ensure every impression is sold at the highest possible price.</p>
+          <p>Our unified auction engine processes bids from 50+ demand partners in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution see an average CPM uplift of 40-60% compared to traditional waterfall setups.</p>
         </div>
       </div>
+      <div class="sm-figure sm-diagram">${renderDiagramFrame({
+        label: "Example: the same three bids sold through a waterfall and through header bidding",
+        bar: ["Sequential vs. parallel", "One impression · three demand sources"],
+        body: renderAuctionDiagram(),
+        caption: "Example data: bids are illustrative.",
+        blueprint: true,
+        testid: "hb-auction-diagram",
+      })}</div>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
+  ${renderSection({
+    testid: "hb-approach-section",
+    eyebrow: "Our Approach",
+    title: "Client-side and server-side bidding.",
+    lede: "We deploy a hybrid architecture that combines the transparency of client-side auctions with the speed and scale of server-to-server connections.",
+    body: renderFeatureRows([
+      { title: "Client-Side (Prebid.js)", body: "Our optimized Prebid.js wrapper runs directly in the browser, enabling full auction transparency. We configure bid adapters for each demand partner, implement smart timeout management, and utilize price granularity settings tailored to your inventory.",
+        list: ["Full bid-level reporting and transparency", "Cookie-based audience targeting support", "Real-time bid debugging and analytics"], testid: "card-client-side" },
+      { title: "Server-Side (Prebid Server)", body: "Our Prebid Server infrastructure handles high-volume server-to-server connections, dramatically reducing page latency. This enables more demand partners to participate without impacting user experience or Core Web Vitals scores.",
+        list: ["Sub-100ms auction completion times", "Unlimited demand partner connections", "Zero impact on page load performance"], testid: "card-server-side" },
+    ]),
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="hb-approach-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Our Approach</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Client-Side & Server-Side Bidding</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">We deploy a hybrid architecture that combines the transparency of client-side auctions with the speed and scale of server-to-server connections.</p>
-      </div>
+  ${renderSection({
+    testid: "hb-features-section",
+    eyebrow: "Key Features",
+    title: "Enterprise-grade header bidding.",
+    lede: "Every feature designed to maximize yield and simplify operations.",
+    body: `
+      <ul class="sm-points">${FEATURES.map((f, i) => `
+        <li data-testid="hb-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
+      </ul>`,
+  })}
 
-      <div class="grid lg:grid-cols-2 gap-8">
-        <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-client-side">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3">Client-Side (Prebid.js)</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
-            Our optimized Prebid.js wrapper runs directly in the browser, enabling full auction transparency. We configure bid adapters for each demand partner, implement smart timeout management, and utilize price granularity settings tailored to your inventory.
-          </p>
-          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Full bid-level reporting and transparency</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Cookie-based audience targeting support</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Real-time bid debugging and analytics</li>
-          </ul>
-        </div>
-        <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-server-side">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3">Server-Side (Prebid Server)</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
-            Our Prebid Server infrastructure handles high-volume server-to-server connections, dramatically reducing page latency. This enables more demand partners to participate without impacting user experience or Core Web Vitals scores.
-          </p>
-          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Sub-100ms auction completion times</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Unlimited demand partner connections</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Zero impact on page load performance</li>
-          </ul>
-        </div>
-      </div>
+  <section class="bp-section" data-testid="hb-spec-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-5 grid gap-4 content-start">${renderEyebrow("Specifications")}<h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">At a glance.</h2></div>
+      <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
+        { label: "Client-side wrapper", value: "Prebid.js" },
+        { label: "Server-side bidding", value: "Prebid Server" },
+        { label: "Demand partners", value: "50+" },
+        { label: "Auction completion", value: '<span class="mono">&lt; 100 ms</span>' },
+        { label: "CPM uplift vs. waterfall", value: "40–60%<small>average</small>" },
+        { label: "Brand safety", value: "ads.txt · sellers.json" },
+      ])}</div>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="hb-features-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Key Features</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Enterprise-Grade Header Bidding</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Every feature designed to maximize yield and simplify operations.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${[
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>', title: "Dynamic Floor Pricing", description: "AI-driven floor prices that adapt in real time to market conditions, bid density, and historical performance to maximize CPMs." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>', title: "Auto-Refresh Optimization", description: "Intelligent ad refresh cycles that maximize viewable impressions without sacrificing user experience or violating demand partner policies." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', title: "Granular Analytics", description: "Bid-level reporting across every demand partner, ad unit, device, and geography with real-time dashboards and automated alerting." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>', title: "A/B Testing Engine", description: "Run controlled experiments on bidder configurations, timeout settings, and floor prices with statistical significance tracking." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>', title: "Brand Safety Controls", description: "Comprehensive blocklists, category filters, and ads.txt/sellers.json management to ensure only quality demand reaches your inventory." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>', title: "Global Demand Network", description: "Access 50+ premium SSPs and exchanges including Google AdX, Amazon TAM, Index Exchange, OpenX, and PubMatic from a single integration." },
-        ].map((f, i) => `
-        <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="hb-feature-card-${i}">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderStatsSection()}
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Ready to supercharge your header bidding?", "Start Your Free Audit")}`;
 
@@ -116,4 +129,3 @@ export function renderHeaderBiddingPage(): string {
     bodyContent: content,
   });
 }
-

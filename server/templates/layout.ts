@@ -9,7 +9,13 @@ export interface LayoutOptions {
   jsonLd?: object | object[];
   cfAnalyticsToken?: string;
   adminPage?: boolean;
+  // Loads GSAP + ScrollTrigger (deferred); only pages with authored motion set it (D-020 rule 4)
+  gsap?: boolean;
 }
+
+const GSAP_SCRIPTS = `
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>`;
 
 // Third-party scripts carry SRI hashes of their pinned version. Google Fonts CSS cannot: Google generates it
 // per browser User-Agent, so no single hash matches.
@@ -36,11 +42,10 @@ function renderHead(options: LayoutOptions): string {
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Geist+Mono:wght@400..600&family=Inter:wght@300..800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
-  <noscript><style>.animate-on-scroll,.animate-scale-in,.comparison-row{opacity:1!important;transform:none!important}.check-animate svg path{stroke-dashoffset:0!important}</style></noscript>
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js" integrity="sha384-eA6+k1peuuIgxPHwWoQHx6OoDZ7hFJ+SKfMOhop5+zMV4SWR5OWBMatbIdoqA4lZ" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>${options.gsap ? GSAP_SCRIPTS : ""}
   <script type="application/ld+json">${JSON.stringify([
     {
       "@context": "https://schema.org",
@@ -213,7 +218,7 @@ function renderFooter(): string {
             <img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" class="h-7 w-auto" data-testid="img-footer-logo" />
           </div>
           <p class="text-[var(--text-muted)] leading-relaxed max-w-xs text-[0.8125rem] mb-6">
-            Global leader in ad monetization and header bidding solutions. Maximize your revenue with our enterprise-grade platform.
+            Header bidding and managed monetization for websites, apps and CTV.
           </p>
           <div class="flex gap-3">
             <a href="https://linkedin.com/company/hbdr" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-md border border-white/[0.08] flex items-center justify-center text-[var(--text-muted)] hover:text-white hover:border-white/20 transition-colors" aria-label="HBDR on LinkedIn" data-testid="button-social-linkedin">
@@ -229,7 +234,7 @@ function renderFooter(): string {
         </div>
 
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Solutions</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Solutions</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "Header Bidding", href: "/solutions/header-bidding" },
@@ -246,7 +251,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Company</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Company</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "About Us", href: "/about" },
@@ -260,7 +265,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Resources</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Resources</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "For Publishers", href: "/publishers" },
@@ -274,7 +279,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Legal</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Legal</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "Privacy Policy", href: "/privacy-policy" },
@@ -295,67 +300,26 @@ function renderFooter(): string {
   </footer>`;
 }
 
+// A diagram or table wider than the screen scrolls inside its frame; say so above it, only when it actually overflows
+const SCROLL_HINT = `<script>
+  (function () {
+    function mark() {
+      document.querySelectorAll('.bp-frame-body, .bp-table-wrap').forEach(function (el) {
+        var hint = el.previousElementSibling && el.previousElementSibling.classList.contains('bp-scroll-hint') ? el.previousElementSibling : null;
+        var over = el.scrollWidth > el.clientWidth + 4;
+        if (over && !hint) { hint = document.createElement('p'); hint.className = 'bp-scroll-hint mono'; hint.textContent = 'Scroll sideways for the full ' + (el.querySelector('table') ? 'table' : 'diagram') + ' →'; el.parentNode.insertBefore(hint, el); }
+        if (hint) hint.hidden = !over;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', mark);
+    window.addEventListener('resize', mark);
+  })();
+  </script>`;
+
 function renderScripts(options: LayoutOptions): string {
   return `
+  ${options.adminPage ? "" : SCROLL_HINT}
   ${options.cfAnalyticsToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${options.cfAnalyticsToken}"}'></script>` : ""}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Unified scroll observer for all animated elements
-      var observer = new IntersectionObserver(
-        function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              var counter = entry.target.querySelector('[data-count]');
-              if (counter && !counter.dataset.counted) animateCounter(counter);
-            }
-          });
-        },
-        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-      );
-
-      var targets = '.animate-on-scroll, .animate-scale-in, .comparison-row, .check-animate, .step-connector';
-      document.querySelectorAll(targets).forEach(function(el) {
-        observer.observe(el);
-      });
-
-      // Counter animation — eased count from 0 to target
-      function animateCounter(el) {
-        el.dataset.counted = 'true';
-        var target = el.dataset.count;
-        var suffix = el.dataset.suffix || '';
-        var prefix = el.dataset.prefix || '';
-        var num = parseFloat(target);
-        if (isNaN(num)) { el.textContent = target; return; }
-        var duration = 2000;
-        var start = performance.now();
-        var decimals = (target.split('.')[1] || '').length;
-        if (num < 10 && !decimals) return;
-        function update(now) {
-          var elapsed = now - start;
-          var progress = Math.min(elapsed / duration, 1);
-          var ease = 1 - Math.pow(1 - progress, 3);
-          var current = num * ease;
-          el.textContent = prefix + (decimals ? current.toFixed(decimals) : Math.round(current).toLocaleString()) + suffix;
-          if (progress < 1) requestAnimationFrame(update);
-        }
-        requestAnimationFrame(update);
-      }
-
-      // Standalone counter observer for elements not inside animate-on-scroll
-      var counterObserver = new IntersectionObserver(
-        function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting && !entry.target.dataset.counted) animateCounter(entry.target);
-          });
-        },
-        { threshold: 0.3 }
-      );
-      document.querySelectorAll('[data-count]').forEach(function(el) {
-        counterObserver.observe(el);
-      });
-    });
-  </script>
 
 `;
 }
@@ -363,7 +327,7 @@ function renderScripts(options: LayoutOptions): string {
 export function renderLayout(options: LayoutOptions): string {
   return `${renderHead(options)}
 
-<body class="${options.adminPage ? 'min-h-screen text-white ' : ''}antialiased">
+<body class="${options.adminPage ? 'is-admin min-h-screen text-white ' : ''}antialiased">
 
   ${options.adminPage ? '' : renderNav()}
 
