@@ -116,7 +116,7 @@ migrations/                  # D1 database schema (0001 init, 0002 rate limits, 
 - **Text**: primary `#f5f7fa`, secondary `#d0d6e0`, muted `#959ca8` (>= 4.5:1 on every surface)
 - **Typography**: Archivo for h1-h3 on public pages (admin keeps Inter via `body.is-admin`), Inter body, `.mono` (Geist Mono) only for sizes, prices, timings and codes
 - **Blocks** (`server/templates/components/blueprint.ts`): `renderBlueprintHero`, `renderSection`, `renderSectionHead`, `renderFeatureRows`, `renderSpecList`, `renderStatRow`, `renderDiagramFrame`, `renderSteps`, `renderCtaBand`, `renderActions`; CSS classes `bp-*` in `main.css`
-- **Motion** (D-019, D-020 rule 4, D-022): GSAP only, no pinning or scroll-jacking, text never hidden waiting for an animation, the server render is the finished state and is what reduced-motion visitors see
+- **Motion** (D-019, D-020 rule 4, D-022, D-023): GSAP only, no pinning or scroll-jacking, text never hidden waiting for an animation, the server render is the finished state. Under reduced motion only the hero auction plays, as fades (nothing slides or draws); every other section stays finished
 - **Admin** keeps its D-012/D-017 layout and the `glass-*` classes
 
 ## Environment Setup
