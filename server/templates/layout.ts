@@ -9,7 +9,13 @@ export interface LayoutOptions {
   jsonLd?: object | object[];
   cfAnalyticsToken?: string;
   adminPage?: boolean;
+  // Loads GSAP + ScrollTrigger (deferred); only pages with authored motion set it (D-020 rule 4)
+  gsap?: boolean;
 }
+
+const GSAP_SCRIPTS = `
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>`;
 
 // Third-party scripts carry SRI hashes of their pinned version. Google Fonts CSS cannot: Google generates it
 // per browser User-Agent, so no single hash matches.
@@ -36,11 +42,11 @@ function renderHead(options: LayoutOptions): string {
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Geist+Mono:wght@400..600&family=Inter:wght@300..800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
   <noscript><style>.animate-on-scroll,.animate-scale-in,.comparison-row{opacity:1!important;transform:none!important}.check-animate svg path{stroke-dashoffset:0!important}</style></noscript>
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js" integrity="sha384-eA6+k1peuuIgxPHwWoQHx6OoDZ7hFJ+SKfMOhop5+zMV4SWR5OWBMatbIdoqA4lZ" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>${options.gsap ? GSAP_SCRIPTS : ""}
   <script type="application/ld+json">${JSON.stringify([
     {
       "@context": "https://schema.org",
@@ -213,7 +219,7 @@ function renderFooter(): string {
             <img src="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" alt="HBDR" class="h-7 w-auto" data-testid="img-footer-logo" />
           </div>
           <p class="text-[var(--text-muted)] leading-relaxed max-w-xs text-[0.8125rem] mb-6">
-            Global leader in ad monetization and header bidding solutions. Maximize your revenue with our enterprise-grade platform.
+            Header bidding and managed monetization for websites, apps and CTV.
           </p>
           <div class="flex gap-3">
             <a href="https://linkedin.com/company/hbdr" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-md border border-white/[0.08] flex items-center justify-center text-[var(--text-muted)] hover:text-white hover:border-white/20 transition-colors" aria-label="HBDR on LinkedIn" data-testid="button-social-linkedin">
@@ -229,7 +235,7 @@ function renderFooter(): string {
         </div>
 
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Solutions</h4>
+          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Solutions</h4>
           <ul class="space-y-2.5">
             ${[
               { label: "Header Bidding", href: "/solutions/header-bidding" },
@@ -246,7 +252,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Company</h4>
+          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Company</h4>
           <ul class="space-y-2.5">
             ${[
               { label: "About Us", href: "/about" },
@@ -260,7 +266,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Resources</h4>
+          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Resources</h4>
           <ul class="space-y-2.5">
             ${[
               { label: "For Publishers", href: "/publishers" },
@@ -274,7 +280,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="font-medium text-white text-[0.8125rem] mb-4">Legal</h4>
+          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Legal</h4>
           <ul class="space-y-2.5">
             ${[
               { label: "Privacy Policy", href: "/privacy-policy" },
@@ -363,7 +369,7 @@ function renderScripts(options: LayoutOptions): string {
 export function renderLayout(options: LayoutOptions): string {
   return `${renderHead(options)}
 
-<body class="${options.adminPage ? 'min-h-screen text-white ' : ''}antialiased">
+<body class="${options.adminPage ? 'is-admin min-h-screen text-white ' : ''}antialiased">
 
   ${options.adminPage ? '' : renderNav()}
 

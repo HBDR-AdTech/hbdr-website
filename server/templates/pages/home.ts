@@ -1,654 +1,424 @@
 import { renderLayout } from "../layout";
 import { renderContactFormSection } from "../components/contact-form";
+import { renderActions, renderSectionHead, renderSpecList, renderSteps } from "../components/blueprint";
 import type { FormConfig } from "../../services/form-config";
 
+// D-005: the strip is titled "Integrated Demand Partners"; names only, no logos
+const PARTNERS = [
+  "Verve", "AppLovin", "Sovrn", "Xandr", "OpenX", "Index Exchange", "Magnite", "Google AdX", "TripleLift", "ShareThrough", "Equativ",
+  "BidSwitch", "InMobi", "Amazon Publisher Services", "Taboola", "Dianomi", "Criteo", "PubMatic", "MGID", "Digital Turbine", "Liftoff", "Bidmachine",
+  "Affinity Global", "Pubpower", "AdMile", "Mobilefuse", "Bigo Ads", "Nexxen", "Freewheel", "Beachfront", "Playbuzz", "Amagi", "MediaFuse",
+  "Mintegral", "Improve Digital", "Algorix", "Edge226", "SportX", "Unity Technology", "Perion", "Optima", "Seedtag", "Sun Media", "TaurusX",
+  "SilverMob", "CPMStar", "LoopMe", "TopOn", "Actirise", "Gadsme", "Nimbus Ads", "Pixalate", "Media.net", "AdYouLike", "33Across",
+  "Gannett", "Teads.tv", "ConnectAd", "Vistar Media", "GumGum", "Nativo Edge", "E-Planning", "AdMob", "AdColony", "Adform", "Kevel", "Underdog Media",
+];
+
+// Copy from the solution pages; w/h are the format's real size, s scales it into the 760×460 stage
+const FORMATS = {
+  display: { w: 300, h: 250, s: 1, play: 0, name: "medium rectangle · IAB", title: "Display advertising", href: "/solutions/display-ads",
+    body: "Website display monetization with smart layouts that maximize revenue while preserving user experience.",
+    list: ["Smart layouts", "Viewability optimization", "Brand safety"], sizes: "300×250 · 728×90 · 160×600 · 320×50", via: "Prebid header bidding" },
+  video: { w: 640, h: 360, s: 0.66, play: 1, name: "instream player · VAST", title: "Video ad solutions", href: "/solutions/video-player",
+    body: "Instream, outstream and interactive video formats in HBDR’s own player, built for engagement and viewability.",
+    list: ["VAST / VPAID", "High viewability", "Engagement metrics"], sizes: "640×360 · 16:9 instream and outstream", via: "Custom video player" },
+  ctv: { w: 1920, h: 1080, s: 0.24, play: 1, name: "connected TV · 16:9", title: "CTV and OTT monetization", href: "/solutions/ctv-ott",
+    body: "Connected-TV advertising that captures the growing streaming audience with premium video inventory.",
+    list: ["SSAI support", "Premium buyers", "Cross-platform"], sizes: "1920×1080 · 15s and 30s spots", via: "Server-side ad insertion" },
+  app: { w: 320, h: 480, s: 0.58, play: 0, name: "interstitial · in-app", title: "In-app monetization", href: "/solutions/in-app-ads",
+    body: "Banner, native, video and app-open ads for mobile apps, with Google AdX integration.",
+    list: ["Native formats", "Rewarded video", "Open bidding"], sizes: "320×50 · 320×480 · 300×250 · rewarded", via: "In-app SDK and open bidding" },
+};
+const TABS: [keyof typeof FORMATS, string][] = [["display", "Display"], ["video", "Video"], ["ctv", "CTV &amp; OTT"], ["app", "In-app"]];
+
+// Example timeline (labelled as such): request at 40 ms, responses at fixed times, one bidder misses the 1000 ms timeout
+const LANES: [string, number, number | null, boolean?][] = [
+  ["Bidder 1", 310, 2.41], ["Bidder 2", 520, 4.86, true], ["Bidder 3", 190, 3.37], ["Bidder 4", 760, 1.92], ["Bidder 5", 1150, null], ["Bidder 6", 430, 3.05],
+];
+const tx = (ms: number) => 140 + ms * 0.68;
+
+const COMPARE: [string, boolean | "partial", boolean | "partial", boolean | "partial"][] = [
+  ["Header Bidding Implementation", true, true, false],
+  ["Managed Prebid Server", true, false, false],
+  ["In-App SDK (Desktop & Mobile)", true, "partial", false],
+  ["Real-Time Analytics Dashboard", true, true, true],
+  ["Dynamic Floor Pricing", true, false, false],
+  ["Custom Video Player", true, "partial", false],
+  ["CTV & OTT Support", true, false, false],
+  ["24/7 Technical Support", true, true, "partial"],
+  ["Dedicated Account Manager", true, false, false],
+  ["Revenue Guarantee", true, false, false],
+];
+const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Included"><path d="M5 13l4 4L19 7" stroke-dasharray="22"/></svg>';
+function compareCell(v: boolean | "partial", us = false): string {
+  if (v === true) return `<td${us ? ' class="us"' : ""}>${CHECK}</td>`;
+  if (v === "partial") return '<td class="part">Partial</td>';
+  return '<td class="no"><span aria-label="Not included">—</span></td>';
+}
+
+function renderTimelineRows(): string {
+  return LANES.map(([name, at, cpm, win], i) => {
+    const y = 50 + i * 46, end = cpm === null ? 1000 : at;
+    const mark = cpm === null
+      ? `<text class="tl-label" x="${tx(1000) - 8}" y="${y - 8}" text-anchor="end">no bid in time</text>`
+      : `<circle class="${win ? "tl-win-dot" : "tl-dot"}" cx="${tx(at)}" cy="${y}" r="5"/><text class="tl-label${win ? " tl-win-label" : ""}" x="${tx(at) + 10}" y="${y + 4}">$${cpm.toFixed(2)}${win ? " wins" : ""}</text>`;
+    return `<text class="tl-row" x="0" y="${y + 5}">${name}</text><path class="tl-wait" d="M${tx(40)} ${y} H${tx(end)}"/><path class="tl-req${win ? " tl-win" : ""}" data-lane d="M${tx(40)} ${y} H${tx(end)}"/>${mark}`;
+  }).join("");
+}
+
 export function renderPage(form: FormConfig): string {
+  const d = FORMATS.display;
   const homepageContent = `
-
-  <!-- ========== HERO ========== -->
-  <section class="relative overflow-hidden hero-glow" data-testid="hero-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 lg:pt-44 lg:pb-24">
-      <div class="glass-tag mb-8" style="animation: fadeInUp 0.5s var(--ease-out) both">25+ Years of Combined Team Expertise</div>
-
-      <h1 class="text-[2.5rem] leading-[1.08] sm:text-6xl lg:text-[4.5rem] lg:leading-[1.02] font-display max-w-5xl mb-6" style="animation: fadeInUp 0.6s 0.05s var(--ease-out) both">
-        <span class="text-gradient">Maximize Your</span>
-        <span class="text-gradient-accent">Ad Revenue</span><br class="hidden sm:block" />
-        <span class="text-gradient">with Header Bidding</span>
-      </h1>
-
-      <p class="text-lg sm:text-xl text-[var(--text-muted)] leading-relaxed mb-10 max-w-xl" style="animation: fadeInUp 0.6s 0.1s var(--ease-out) both">
-        HBDR delivers enterprise-grade ad monetization solutions that help publishers increase revenue by up to 50%.
-      </p>
-
-      <div class="flex flex-wrap items-center gap-3" style="animation: fadeInUp 0.6s 0.15s var(--ease-out) both">
-        <a href="/contact" class="glass-btn text-[0.9375rem]" data-testid="button-hero-get-started">
-          Get Started Free
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-        </a>
-        <a href="/how-it-works" class="glass-btn-outline text-[0.9375rem]" data-testid="button-hero-learn">
-          Learn More
-        </a>
-      </div>
-
-      <div class="grid grid-cols-3 max-w-lg mt-14 divide-x divide-white/[0.08]" style="animation: fadeInUp 0.6s 0.2s var(--ease-out) both">
-        <div class="pr-6">
-          <div class="text-2xl sm:text-3xl font-semibold tracking-tight text-white tabular-nums" data-testid="text-stat-revenue"><span data-count="50" data-suffix="%+">50%+</span></div>
-          <div class="text-xs sm:text-sm text-[var(--text-muted)] mt-1">Revenue Increase</div>
-        </div>
-        <div class="px-6">
-          <div class="text-2xl sm:text-3xl font-semibold tracking-tight text-white tabular-nums" data-testid="text-stat-publishers"><span data-count="500" data-suffix="+">500+</span></div>
-          <div class="text-xs sm:text-sm text-[var(--text-muted)] mt-1">Publishers</div>
-        </div>
-        <div class="pl-6">
-          <div class="text-2xl sm:text-3xl font-semibold tracking-tight text-white tabular-nums" data-testid="text-stat-impressions"><span data-count="1" data-suffix="B+">1B+</span></div>
-          <div class="text-xs sm:text-sm text-[var(--text-muted)] mt-1">Monthly Impressions</div>
+  <main id="top">
+  <section class="bp-home-hero" data-testid="hero-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="hero-copy">
+        <h1>Every ad slot, sold to the highest bidder.</h1>
+        <p class="lede">HBDR runs header bidding for websites, apps and CTV. Your inventory goes to every demand partner at once and the best price wins, which helps publishers increase revenue by up to 50%.</p>
+        <div class="flex flex-wrap gap-3">${renderActions([
+          { label: "Get Started Free", href: "/contact", primary: true, testid: "button-hero-get-started" },
+          { label: "See how an impression is sold", href: "#how", testid: "button-hero-learn" },
+        ])}</div>
+        <div class="hero-facts">
+          <div data-testid="text-stat-revenue"><b>50%+</b><span>revenue increase</span></div>
+          <div data-testid="text-stat-publishers"><b>500+</b><span>publishers</span></div>
+          <div data-testid="text-stat-impressions"><b>1B+</b><span>impressions a month</span></div>
         </div>
       </div>
 
-      <!-- Product panel: Linear-style app window -->
-      <div class="relative mt-16 lg:mt-20" style="animation: fadeInUp 0.8s 0.25s var(--ease-out) both">
-        <div class="rounded-xl border border-white/[0.08] bg-[var(--surface-elevated)] shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden" data-testid="hero-dashboard">
-          <div class="flex items-center justify-between h-11 px-4 border-b border-white/[0.06]">
-            <div class="flex items-center gap-2 text-[0.8125rem]">
-              <span class="text-[var(--text-muted)]">HBDR</span>
-              <span class="text-white/20">/</span>
-              <span class="text-white font-medium">Revenue Dashboard</span>
-            </div>
-            <span class="flex items-center gap-2 text-xs">
-              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-              <span class="text-[var(--text-secondary)]">Live</span>
-            </span>
-          </div>
-          <div class="grid md:grid-cols-[200px_1fr]">
-            <div class="hidden md:block border-r border-white/[0.06] p-3 space-y-0.5 text-[0.8125rem]" aria-hidden="true">
-                <div class="flex items-center gap-2 px-2 py-1.5 rounded-md bg-white/[0.05] text-white"><span class="w-3.5 h-3.5 rounded-[4px] border border-[var(--accent)] bg-[var(--accent)]/20"></span>Overview</div>
-                <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-[var(--text-muted)]"><span class="w-3.5 h-3.5 rounded-[4px] border border-white/20"></span>Demand Partners</div>
-                <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-[var(--text-muted)]"><span class="w-3.5 h-3.5 rounded-[4px] border border-white/20"></span>Ad Units</div>
-                <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-[var(--text-muted)]"><span class="w-3.5 h-3.5 rounded-[4px] border border-white/20"></span>Floors</div>
-                <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-[var(--text-muted)]"><span class="w-3.5 h-3.5 rounded-[4px] border border-white/20"></span>Reports</div>
-            </div>
-            <div class="p-4 sm:p-6">
-              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-                  <div class="metric-card">
-                    <div class="text-[var(--text-muted)] text-xs mb-1.5">Today's Revenue</div>
-                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="12847" data-prefix="$" data-revenue>$12,847</span></div>
-                    <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+23%</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="text-[var(--text-muted)] text-xs mb-1.5">Fill Rate</div>
-                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="94.2" data-suffix="%">94.2%</span></div>
-                    <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+5.1%</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="text-[var(--text-muted)] text-xs mb-1.5">eCPM</div>
-                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="4.82" data-prefix="$">$4.82</span></div>
-                    <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+18%</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="text-[var(--text-muted)] text-xs mb-1.5">Impressions</div>
-                    <div class="text-lg font-semibold text-white tabular-nums"><span data-count="2.7" data-suffix="M">2.7M</span></div>
-                    <div class="text-[var(--accent)] text-xs mt-1 tabular-nums">+31%</div>
-                  </div>
-              </div>
-              <div class="grid lg:grid-cols-[1fr_340px] gap-3">
-              <div class="rounded-lg border border-white/[0.06] p-4 flex flex-col">
-                <div class="text-[0.8125rem] text-white font-medium mb-4">Revenue</div>
-                <div class="bar-chart bar-chart-fill" x-data x-init="$nextTick(() => { $el.querySelectorAll('div').forEach((b, i) => { b.style.height = b.dataset.h }) })">
-                    <div data-h="40%" style="height: 0%"></div>
-                    <div data-h="65%" style="height: 0%"></div>
-                    <div data-h="45%" style="height: 0%"></div>
-                    <div data-h="80%" style="height: 0%"></div>
-                    <div data-h="55%" style="height: 0%"></div>
-                    <div data-h="90%" style="height: 0%"></div>
-                    <div data-h="70%" style="height: 0%"></div>
-                    <div data-h="85%" style="height: 0%"></div>
-                    <div data-h="60%" style="height: 0%"></div>
-                    <div data-h="95%" style="height: 0%"></div>
-                    <div data-h="75%" style="height: 0%"></div>
-                    <div data-h="88%" style="height: 0%"></div>
-                </div>
-              </div>
-              <!-- One example auction, replayed while in view: bids land inside the timeout, the highest wins -->
-              <div class="auction is-closed rounded-lg border border-white/[0.06] p-4" data-auction aria-label="Example header bidding auction">
-                <div class="flex items-center justify-between mb-3">
-                  <div class="text-[0.8125rem] text-white font-medium">Header auction</div>
-                  <div class="text-xs text-[var(--text-muted)]">300&times;250 &middot; above the fold</div>
-                </div>
-                <div class="auction-timer mb-4" aria-hidden="true"><span data-auction-timer></span></div>
-                <ul class="space-y-2.5">
-                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 1</span><span class="auction-track"><span class="auction-fill" style="--w: 0.402"></span></span><span class="auction-cpm tabular-nums">$2.41</span></li>
-                  <li class="auction-row is-winner"><span class="text-xs text-[var(--text-muted)]">Bidder 2</span><span class="auction-track"><span class="auction-fill" style="--w: 0.810"></span></span><span class="auction-cpm tabular-nums">$4.86</span></li>
-                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 3</span><span class="auction-track"><span class="auction-fill" style="--w: 0.562"></span></span><span class="auction-cpm tabular-nums">$3.37</span></li>
-                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 4</span><span class="auction-track"><span class="auction-fill" style="--w: 0.320"></span></span><span class="auction-cpm tabular-nums">$1.92</span></li>
-                  <li class="auction-row"><span class="text-xs text-[var(--text-muted)]">Bidder 5</span><span class="auction-track"><span class="auction-fill" style="--w: 0.508"></span></span><span class="auction-cpm tabular-nums">$3.05</span></li>
-                </ul>
-                <div class="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                  <span class="text-[var(--text-muted)]">Winning bid to ad server</span>
-                  <span class="text-[var(--accent)] font-medium tabular-nums" data-auction-win>$4.86 CPM</span>
-                </div>
-              </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--surface)] to-transparent"></div>
-      </div>
-    </div>
-    <script>
-    (function () {
-      var root = document.querySelector('[data-auction]');
-      if (!root || !root.animate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var rows = [].slice.call(root.querySelectorAll('.auction-row'));
-      var timer = root.querySelector('[data-auction-timer]');
-      var win = root.querySelector('[data-auction-win]');
-      var revenueEl = document.querySelector('[data-revenue]');
-      var revenue = 12847, cycles = 0, running = false, pending = [];
-      var EASE = 'cubic-bezier(0.16, 1, 0.3, 1)', WINDOW = 1400, MAX_CPM = 6;
-      function later(fn, ms) { pending.push(setTimeout(fn, ms)); }
-      function money(v) { return '$' + v.toFixed(2); }
-      function open() {
-        root.classList.remove('is-closed');
-        win.textContent = 'Collecting bids';
-        var bids = rows.map(function () { return Math.round((0.6 + Math.random() * 5.2) * 100) / 100; });
-        rows.forEach(function (row, i) {
-          var fill = row.querySelector('.auction-fill'), cpm = row.querySelector('.auction-cpm');
-          var at = 120 + Math.random() * (WINDOW - 400);
-          row.classList.remove('is-winner');
-          cpm.textContent = '—';
-          fill.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(' + bids[i] / MAX_CPM + ')' }],
-            { duration: 420, delay: at, easing: EASE, fill: 'both' });
-          later(function () { cpm.textContent = money(bids[i]); }, at);
-        });
-        timer.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: WINDOW, easing: 'linear', fill: 'forwards' });
-        later(function () { close(bids); }, WINDOW + 200);
-      }
-      function close(bids) {
-        var best = bids.indexOf(Math.max.apply(null, bids));
-        rows[best].classList.add('is-winner');
-        root.classList.add('is-closed');
-        win.textContent = money(bids[best]) + ' CPM';
-        win.animate([{ opacity: 0.3, transform: 'translateY(3px)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: EASE });
-        // The first close can overlap the revenue count-up, so the ticker joins from the second auction
-        if (revenueEl && ++cycles > 1) {
-          revenue += Math.round(bids[best] * 4);
-          revenueEl.textContent = '$' + revenue.toLocaleString('en-US');
-        }
-        later(open, 2600);
-      }
-      function setRunning(on) {
-        if (on === running) return;
-        running = on;
-        pending.forEach(clearTimeout); pending = [];
-        if (on) open();
-      }
-      var visible = false;
-      new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
-        setRunning(visible && !document.hidden);
-      }, { threshold: 0.4 }).observe(root);
-      document.addEventListener('visibilitychange', function () { setRunning(visible && !document.hidden); });
-    })();
-    </script>
-  </section>
-
-
-  <!-- ========== LOGO CAROUSEL ========== -->
-  <section class="py-16 lg:py-20 overflow-hidden border-t border-white/[0.06]" data-testid="logo-carousel">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-      <p class="text-center text-[var(--text-muted)] text-sm animate-on-scroll">
-        Integrated Demand Partners
-      </p>
-    </div>
-    <div class="space-y-3">
-      ${(() => {
-        const row1 = [
-          { name: "Verve" },
-          { name: "AppLovin" },
-          { name: "Sovrn" },
-          { name: "Xandr" },
-          { name: "OpenX" },
-          { name: "Index Exchange" },
-          { name: "Magnite" },
-          { name: "Google AdX" },
-          { name: "TripleLift" },
-          { name: "ShareThrough" },
-          { name: "Equativ" },
-        ];
-        const row2 = [
-          { name: "BidSwitch" },
-          { name: "InMobi" },
-          { name: "Amazon Publisher Services" },
-          { name: "Taboola" },
-          { name: "Dianomi" },
-          { name: "Criteo" },
-          { name: "PubMatic" },
-          { name: "MGID" },
-          { name: "Digital Turbine" },
-          { name: "Liftoff" },
-          { name: "Bidmachine" },
-        ];
-        const row3 = [
-          { name: "Affinity Global" },
-          { name: "Pubpower" },
-          { name: "AdMile" },
-          { name: "Mobilefuse" },
-          { name: "Bigo Ads" },
-          { name: "Nexxen" },
-          { name: "Freewheel" },
-          { name: "Beachfront" },
-          { name: "Playbuzz" },
-          { name: "Amagi" },
-          { name: "MediaFuse" },
-        ];
-        const row4 = [
-          { name: "Mintegral" },
-          { name: "Improve Digital" },
-          { name: "Algorix" },
-          { name: "Edge226" },
-          { name: "SportX" },
-          { name: "Unity Technology" },
-          { name: "Perion" },
-          { name: "Optima" },
-          { name: "Seedtag" },
-          { name: "Sun Media" },
-          { name: "TaurusX" },
-        ];
-        const row5 = [
-          { name: "SilverMob" },
-          { name: "CPMStar" },
-          { name: "LoopMe" },
-          { name: "TopOn" },
-          { name: "Actirise" },
-          { name: "Gadsme" },
-          { name: "Nimbus Ads" },
-          { name: "Pixalate" },
-          { name: "Media.net" },
-          { name: "AdYouLike" },
-          { name: "33Across" },
-        ];
-        const row6 = [
-          { name: "Gannett" },
-          { name: "Teads.tv" },
-          { name: "ConnectAd" },
-          { name: "Vistar Media" },
-          { name: "GumGum" },
-          { name: "Nativo Edge" },
-          { name: "E-Planning" },
-          { name: "AdMob" },
-          { name: "AdColony" },
-          { name: "Adform" },
-          { name: "Kevel" },
-          { name: "Underdog Media" },
-        ];
-
-        const renderPartnerCard = (p: {name: string}) => `
-          <div class="flex-shrink-0 mx-1.5">
-            <div class="px-3.5 py-2 flex items-center gap-2.5 rounded-lg border border-white/[0.06] bg-white/[0.02]">
-              <div class="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-semibold bg-white/[0.06] text-[var(--text-secondary)]" aria-hidden="true">${p.name.substring(0, 2).toUpperCase()}</div>
-              <span class="text-sm font-medium text-[var(--text-muted)] whitespace-nowrap">${p.name}</span>
-            </div>
-          </div>`;
-
-        const renderRow = (partners: typeof row1, scrollClass: string) => `
-          <div class="relative overflow-hidden">
-            <div class="absolute left-0 top-0 bottom-0 w-24 sm:w-40 bg-gradient-to-r from-[var(--surface)] to-transparent z-10"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-24 sm:w-40 bg-gradient-to-l from-[var(--surface)] to-transparent z-10"></div>
-            <div class="flex ${scrollClass}" style="width: max-content;">
-              ${[...partners, ...partners].map(renderPartnerCard).join("")}
-            </div>
-          </div>`;
-
-        return renderRow(row1, "logo-scroll") +
-               renderRow(row2, "logo-scroll-reverse") +
-               renderRow(row3, "logo-scroll") +
-               renderRow(row4, "logo-scroll-reverse") +
-               renderRow(row5, "logo-scroll") +
-               renderRow(row6, "logo-scroll-reverse");
-      })()}
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-
-  <!-- ========== SOLUTIONS ========== -->
-  <section id="solutions" class="py-24 lg:py-32" data-testid="services-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Our Solutions</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display mb-6">
-          <span class="text-gradient">Complete Ad Monetization</span><br/>
-          <span class="text-gradient-accent font-display">Platform</span>
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          From header bidding to CTV, we provide end-to-end solutions to maximize your advertising revenue.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        ${[
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>',
-            title: "Header Bidding",
-            description: "Advanced header bidding that creates open auctions, allowing multiple advertisers to bid simultaneously on your inventory.",
-            features: ["Real-time bidding", "Premium demand", "Higher CPMs"],
-            href: "/solutions/header-bidding",
-          },
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>',
-            title: "Display Advertising",
-            description: "Website display ad monetization with smart layouts that maximize revenue while preserving user experience.",
-            features: ["Smart layouts", "Viewability optimization", "Brand safety"],
-            href: "/solutions/display-ads",
-          },
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
-            title: "In-App Monetization",
-            description: "Mobile app advertising solutions including banner, native, video, and app open ads with Google AdX integration.",
-            features: ["Native formats", "Rewarded video", "Open bidding"],
-            href: "/solutions/in-app-ads",
-          },
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>',
-            title: "CTV Monetization",
-            description: "Connected-TV advertising solutions to capture the growing streaming audience with premium video inventory.",
-            features: ["SSAI support", "Premium buyers", "Cross-platform"],
-            href: "/solutions/ctv-ott",
-          },
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>',
-            title: "Video Ad Solutions",
-            description: "Comprehensive video ad solutions including instream, outstream, and interactive formats for maximum engagement.",
-            features: ["VAST/VPAID", "High viewability", "Engagement metrics"],
-            href: "/solutions/video-player",
-          },
-          {
-            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>',
-            title: "Advanced Analytics",
-            description: "Detailed metrics on partner-level performance, auction data, and A/B testing capabilities for optimization.",
-            features: ["Real-time data", "Custom reports", "Revenue insights"],
-            href: "/dashboard",
-          },
-        ]
-          .map(
-            (s, i) => `
-        <a href="${s.href}" class="glass-card p-7 group animate-scale-in stagger-${i + 1} block" data-testid="card-service-${i}">
-          <div class="icon-tile mb-5">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">${s.icon}</svg>
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">${s.title}</h3>
-          <p class="text-[var(--text-muted)] mb-5 leading-relaxed text-[0.9375rem]">${s.description}</p>
-          <ul class="space-y-2 mb-5">
-            ${s.features.map((f) => `<li class="flex items-center gap-2.5 text-sm text-[var(--text-muted)]"><div class="w-1 h-1 rounded-full bg-white/40"></div>${f}</li>`).join("")}
+      <figure class="sheet bp-blueprint" aria-label="Example: a publisher page whose ad slots are sold one auction at a time" data-testid="hero-dashboard">
+        <div class="bp-frame-bar mono"><span>yourdomain.com/article</span><span>Inventory spec · example auction</span></div>
+        <div class="sheet-plate">
+        <svg class="block w-full h-auto" viewBox="0 0 1180 760" role="img" aria-label="Page layout with a 728×90 leaderboard, two 300×250 rectangles, a native slot and a 320×50 mobile banner">
+          <rect class="bp-copy" x="40" y="190" width="520" height="26" rx="3"/>
+          <rect class="bp-copy" x="40" y="228" width="420" height="26" rx="3"/>
+          <rect class="bp-copy" x="40" y="280" width="600" height="190" rx="4"/>
+          <rect class="bp-copy" x="40" y="490" width="600" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="512" width="570" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="534" width="590" height="10" rx="2"/>
+          <rect class="bp-copy" x="40" y="556" width="380" height="10" rx="2"/>
+          <g class="slot" data-name="728×90 leaderboard" data-place="top of page">
+            <rect class="slot-frame" x="136" y="60" width="728" height="90" rx="3"/>
+            <rect class="slot-fill" x="136" y="60" width="728" height="90" rx="3"/>
+            <text class="slot-name" x="500" y="110" text-anchor="middle">728×90 · leaderboard</text>
+            <text class="slot-price" x="500" y="112" text-anchor="middle"></text>
+          </g>
+          <g class="slot" data-name="300×250 right rail" data-place="above the fold">
+            <rect class="slot-frame" x="680" y="190" width="300" height="250" rx="3"/>
+            <rect class="slot-fill" x="680" y="190" width="300" height="250" rx="3" style="opacity:1"/>
+            <text class="slot-name" x="830" y="320" text-anchor="middle" style="opacity:0">300×250</text>
+            <text class="slot-price" x="830" y="322" text-anchor="middle" style="opacity:1">SOLD $4.86</text>
+          </g>
+          <g class="slot" data-name="300×250 lower rail" data-place="below the fold">
+            <rect class="slot-frame" x="680" y="470" width="300" height="250" rx="3"/>
+            <rect class="slot-fill" x="680" y="470" width="300" height="250" rx="3"/>
+            <text class="slot-name" x="830" y="600" text-anchor="middle">300×250</text>
+            <text class="slot-price" x="830" y="602" text-anchor="middle"></text>
+          </g>
+          <g class="slot" data-name="Native in-article" data-place="in content">
+            <rect class="slot-frame" x="40" y="590" width="600" height="130" rx="3"/>
+            <rect class="slot-fill" x="40" y="590" width="600" height="130" rx="3"/>
+            <text class="slot-name" x="340" y="660" text-anchor="middle">native · fluid</text>
+            <text class="slot-price" x="340" y="662" text-anchor="middle"></text>
+          </g>
+          <rect x="1018" y="300" width="146" height="300" rx="18" fill="var(--surface-elevated)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+          <rect class="bp-copy" x="1032" y="330" width="118" height="70" rx="3"/>
+          <rect class="bp-copy" x="1032" y="410" width="110" height="8" rx="2"/>
+          <rect class="bp-copy" x="1032" y="426" width="96" height="8" rx="2"/>
+          <rect class="bp-copy" x="1032" y="442" width="104" height="8" rx="2"/>
+          <g class="slot" data-name="320×50 mobile anchor" data-place="sticky, mobile">
+            <rect class="slot-frame" x="1027" y="556" width="128" height="20" rx="2"/>
+            <rect class="slot-fill" x="1027" y="556" width="128" height="20" rx="2"/>
+            <text class="slot-name" x="1091" y="571" text-anchor="middle" style="font-size:11px">320×50</text>
+            <text class="slot-price" x="1091" y="571" text-anchor="middle" style="font-size:12px"></text>
+          </g>
+          <g class="dims">
+            <path class="bp-line" d="M136 38 H864"/><path class="bp-tick" d="M136 30 V46 M864 30 V46"/>
+            <text class="bp-label" x="500" y="28" text-anchor="middle">728</text>
+            <path class="bp-line" d="M876 60 V150"/><path class="bp-tick" d="M868 60 H884 M868 150 H884"/>
+            <text class="bp-label" x="892" y="110">90</text>
+            <path class="bp-line" d="M680 172 H980"/><path class="bp-tick" d="M680 164 V180 M980 164 V180"/>
+            <text class="bp-label" x="830" y="163" text-anchor="middle">300</text>
+            <path class="bp-line" d="M996 190 V440"/><path class="bp-tick" d="M988 190 H1004 M988 440 H1004"/>
+            <text class="bp-label" x="1010" y="320" transform="rotate(90 1010 320)" text-anchor="middle">250</text>
+            <path class="bp-line" d="M1027 600 H1155"/><path class="bp-tick" d="M1027 593 V607 M1155 593 V607"/>
+            <text class="bp-label" x="1091" y="626" text-anchor="middle" style="font-size:12px">320 × 50</text>
+          </g>
+        </svg>
+        <div class="ladder">
+          <div class="ladder-head"><strong data-slot-name>300×250 right rail</strong><span class="mono text-[var(--text-muted)]" data-slot-place>above the fold</span></div>
+          <div class="auction-timer" aria-hidden="true"><span></span></div>
+          <ul class="auction is-closed grid gap-[0.45rem]" aria-label="Example header bidding auction">
+            <li class="auction-row"><span>Bidder 1</span><span class="auction-track"><span class="auction-fill" style="--w:.40"></span></span><span class="auction-cpm mono">$2.41</span></li>
+            <li class="auction-row is-winner"><span>Bidder 2</span><span class="auction-track"><span class="auction-fill" style="--w:.81"></span></span><span class="auction-cpm mono">$4.86</span></li>
+            <li class="auction-row"><span>Bidder 3</span><span class="auction-track"><span class="auction-fill" style="--w:.56"></span></span><span class="auction-cpm mono">$3.37</span></li>
+            <li class="auction-row"><span>Bidder 4</span><span class="auction-track"><span class="auction-fill" style="--w:.32"></span></span><span class="auction-cpm mono">$1.92</span></li>
+            <li class="auction-row"><span>Bidder 5</span><span class="auction-track"><span class="auction-fill" style="--w:.51"></span></span><span class="auction-cpm mono">$3.05</span></li>
           </ul>
-          <div class="flex items-center gap-1.5 text-[var(--text-secondary)] text-sm font-medium group-hover:text-white transition-colors">
-            Learn more
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </div>
-        </a>`
-          )
-          .join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-
-  <!-- ========== COMPARISON TABLE ========== -->
-  <section class="py-24 lg:py-32" data-testid="comparison-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-5xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Why HBDR</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
-          The HBDR Advantage
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          See how HBDR compares to the usual alternatives.
-        </p>
-      </div>
-
-      <div class="glass-card overflow-hidden animate-on-scroll" data-testid="comparison-table">
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-white/5">
-                <th class="text-left p-4 lg:p-5 text-sm font-semibold text-white/60">Features</th>
-                <th class="p-4 lg:p-5 text-center">
-                  <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--accent)]/20 text-[var(--accent)] text-sm font-semibold">HBDR</span>
-                </th>
-                <th class="p-4 lg:p-5 text-center text-sm text-[var(--text-muted)] font-medium">Typical Ad Network</th>
-                <th class="p-4 lg:p-5 text-center text-sm text-[var(--text-muted)] font-medium">DIY In-House Setup</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${[
-                ["Header Bidding Implementation", true, true, false],
-                ["Managed Prebid Server", true, false, false],
-                ["In-App SDK (Desktop & Mobile)", true, "partial", false],
-                ["Real-Time Analytics Dashboard", true, true, true],
-                ["Dynamic Floor Pricing", true, false, false],
-                ["Custom Video Player", true, "partial", false],
-                ["CTV & OTT Support", true, false, false],
-                ["24/7 Technical Support", true, true, "partial"],
-                ["Dedicated Account Manager", true, false, false],
-                ["Revenue Guarantee", true, false, false],
-              ]
-                .map(
-                  (row, i) => `
-              <tr class="border-t border-white/5 comparison-row ${i % 2 === 0 ? "" : "bg-white/[0.02]"}" style="transition-delay: ${i * 0.08}s" data-testid="comparison-row-${i}">
-                <td class="p-4 lg:p-5 text-sm font-medium text-white/80">${row[0]}</td>
-                ${[row[1], row[2], row[3]]
-                  .map((val) => {
-                    if (val === true) return '<td class="p-4 lg:p-5 text-center"><span class="check-icon check-animate"><svg class="w-4 h-4 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></span></td>';
-                    if (val === false) return '<td class="p-4 lg:p-5 text-center"><span class="x-icon"><svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></span></td>';
-                    return '<td class="p-4 lg:p-5 text-center"><span class="partial-icon"><svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg></span></td>';
-                  })
-                  .join("")}
-              </tr>`
-                )
-                .join("")}
-            </tbody>
-          </table>
         </div>
-      </div>
+        </div>
+        <div class="sheet-tally mono"><span><span data-filled>1</span> of 5 slots sold · page eCPM <span class="text-[var(--accent)]" data-ecpm>$4.86</span></span><span class="text-[var(--text-muted)]">Simulated bids, example data</span></div>
+      </figure>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-
-  <!-- ========== HOW IT WORKS ========== -->
-  <section id="how-it-works" class="py-24 lg:py-32" data-testid="how-it-works-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Simple Process</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
-          How It Works
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Getting started with HBDR is simple. Our streamlined process gets you monetizing faster.
-        </p>
-      </div>
-
-      <div class="grid lg:grid-cols-3 gap-4 relative">
-        ${[
-          {
-            step: "01",
-            title: "Discovery Call",
-            description: "We analyze your current ad setup, identify optimization opportunities, and discuss revenue goals in a comprehensive discovery call.",
-            details: ["Analyze current ad stack", "Identify opportunities", "Discuss revenue goals"],
-          },
-          {
-            step: "02",
-            title: "Customized Proposal",
-            description: "Based on our discovery, we create a tailored proposal with revenue forecasts, ad placement strategy, and implementation roadmap.",
-            details: ["Revenue projections", "Ad placement strategy", "Implementation timeline"],
-          },
-          {
-            step: "03",
-            title: "Technical Implementation",
-            description: "Our expert team handles the complete integration, configuring accounts, implementing code, and ensuring smooth performance.",
-            details: ["Code implementation", "Platform configuration", "Performance monitoring"],
-          },
-        ]
-          .map(
-            (step, i) => `
-        <div class="glass-card p-8 relative animate-scale-in stagger-${i + 1}" data-testid="step-card-${i}">
-          <div class="step-number mb-6">${step.step}</div>
-          <h3 class="text-lg font-semibold text-white mb-3">${step.title}</h3>
-          <p class="text-[var(--text-muted)] mb-6 leading-relaxed text-[0.9375rem]">${step.description}</p>
-          <ul class="space-y-3">
-            ${step.details
-              .map(
-                (d) => `
-            <li class="flex items-center gap-3 text-sm text-[var(--text-muted)]">
-              <svg class="w-4 h-4 text-[var(--accent)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              ${d}
-            </li>`
-              )
-              .join("")}
-          </ul>
-        </div>`
-          )
-          .join("")}
-      </div>
-
-      <div class="mt-12 animate-on-scroll">
-        <a href="/contact" class="glass-btn text-[0.9375rem]" data-testid="button-start-journey">
-          Start Your Journey
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-        </a>
-      </div>
+  <section class="bp-section" id="partners" data-testid="logo-carousel">
+    <div class="bp-wrap">${renderSectionHead({
+      eyebrow: "Integrated Demand Partners",
+      title: "Every partner bids in the same auction.",
+      lede: "Each one sees your inventory at the same moment, so no single network sets your price.",
+    })}
+      <ul class="partner-grid">${PARTNERS.map((p) => `<li>${p}</li>`).join("")}</ul>
     </div>
   </section>
 
-
-  <!-- ========== STATS ========== -->
-  <section id="about" class="py-24 lg:py-32" data-testid="stats-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Our Impact</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6">
-          <span class="text-gradient">Delivering Results</span> <span class="text-gradient-accent">at Scale</span>
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Numbers that speak for themselves.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden">
-        ${[
-          { count: "1", suffix: "T+", label: "Ads Served", sub: "And counting every second" },
-          { count: "50", suffix: "%+", label: "Revenue Increase", sub: "Average publisher improvement" },
-          { count: "1", suffix: "B+", label: "Monthly Impressions", sub: "Across all platforms" },
-          { count: "500", suffix: "+", label: "Publishers", sub: "Trust us worldwide" },
-        ]
-          .map(
-            (stat, i) => `
-        <div class="bg-[var(--surface)] p-6 sm:p-8 animate-scale-in stagger-${i + 1}" data-testid="stat-card-${i}">
-          <div class="text-3xl sm:text-5xl font-semibold tracking-tight text-white mb-3 tabular-nums">
-            <span data-count="${stat.count}" data-suffix="${stat.suffix}">${stat.count}${stat.suffix}</span>
+  <section class="bp-section" id="solutions" data-testid="services-section">
+    <div class="bp-wrap">${renderSectionHead({
+      eyebrow: "Formats",
+      title: "One stack for every screen your audience uses.",
+      lede: "Display, video, connected TV and in-app inventory run through the same auction, the same reporting and the same account team.",
+    })}
+      <div class="bp-grid12">
+        <div class="format-stage bp-frame">
+          <div class="format-tabs" role="tablist" aria-label="Ad formats">${TABS.map(([k, label], i) => `
+            <button type="button" class="format-tab" role="tab" id="tab-${k}" aria-selected="${i === 0}" aria-controls="format-panel" tabindex="${i === 0 ? 0 : -1}" data-format="${k}" data-testid="tab-format-${k}">${label}</button>`).join("")}
           </div>
-          <div class="text-sm font-medium text-white mb-1">${stat.label}</div>
-          <div class="text-sm text-[var(--text-muted)]">${stat.sub}</div>
-        </div>`
-          )
-          .join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-
-  <!-- ========== TESTIMONIALS ========== -->
-  <section class="py-24 lg:py-32" data-testid="testimonials-section"
-           x-data="{
-             current: 0,
-             testimonials: [
-               { quote: 'HBDR has been the behind-the-scenes engine powering billions of monthly impressions across our sites. I never have to worry about scaling or downtime \\u2014 it just works flawlessly.', author: 'Sarah Chen', title: 'VP of Revenue Operations', company: 'TechMedia Group', initials: 'SC' },
-               { quote: 'Working with HBDR has been a game-changer for us. We managed to boost our RPMs by 56%, and it has been a huge lifesaver for our ad operations team.', author: 'Michael Torres', title: 'Director of Ad Monetization', company: 'Digital Publishing Co', initials: 'MT' },
-               { quote: 'Considering HBDR? Know this: Their team is committed to delivering the best results for your organization, actively working to continually enhance performance.', author: 'Emily Richardson', title: 'Head of Publisher Solutions', company: 'Content Network Inc', initials: 'ER' },
-               { quote: 'Working with HBDR has been an eye-opener for our business. Not only has performance substantially improved, but our understanding of the marketplace has as well.', author: 'David Park', title: 'CEO', company: 'Mobile Media Labs', initials: 'DP' },
-               { quote: 'Working with HBDR has been the single most impactful decision I have ever made for my business. There is not a single company that would not benefit from working with them.', author: 'Jessica Martinez', title: 'Founder', company: 'Gaming Publishers United', initials: 'JM' }
-             ],
-             next() { this.current = (this.current + 1) % this.testimonials.length },
-             prev() { this.current = (this.current - 1 + this.testimonials.length) % this.testimonials.length },
-             autoplay: null,
-             startAutoplay() { this.autoplay = setInterval(() => this.next(), 6000) },
-             stopAutoplay() { if (this.autoplay) clearInterval(this.autoplay) }
-           }"
-           x-init="startAutoplay()"
-           @mouseenter="stopAutoplay()"
-           @mouseleave="startAutoplay()">
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-5xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Testimonials</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
-          What Publishers Say
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Don't just take our word for it.
-        </p>
-      </div>
-
-      <div class="relative">
-        <div class="glass-card p-8 sm:p-12" data-testid="testimonial-card">
-          <svg class="w-8 h-8 text-white/15 mb-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11H10v10H0z"/>
+          <svg viewBox="0 0 760 460" role="img" aria-label="The selected ad format drawn at its real proportions">
+            <rect class="f-frame" x="230" y="70" width="300" height="250" rx="4" fill="rgba(0,250,168,0.10)" stroke="var(--accent)" stroke-width="1.5"/>
+            <path class="f-play" d="M372 175 L372 215 L404 195 Z" fill="var(--accent)" opacity="0"/>
+            <path class="f-dim-w bp-line" d="M230 350 H530"/>
+            <path class="f-dim-w-t bp-tick" d="M230 342 V358 M530 342 V358"/>
+            <path class="f-dim-h bp-line" d="M560 70 V320"/>
+            <path class="f-dim-h-t bp-tick" d="M552 70 H568 M552 320 H568"/>
+            <text class="f-w bp-label" x="380" y="380" text-anchor="middle">300</text>
+            <text class="f-h bp-label" x="578" y="200">250</text>
+            <text class="f-name bp-label" x="380" y="430" text-anchor="middle" style="fill:var(--text-muted)">medium rectangle · IAB</text>
           </svg>
-
-          <div class="relative min-h-[320px] sm:min-h-[180px]">
-            <template x-for="(t, index) in testimonials" :key="index">
-              <div x-show="current === index"
-                   x-transition:enter="transition ease-out duration-500"
-                   x-transition:enter-start="opacity-0 translate-x-8"
-                   x-transition:enter-end="opacity-100 translate-x-0"
-                   x-transition:leave="transition ease-in duration-300"
-                   x-transition:leave-start="opacity-100 translate-x-0"
-                   x-transition:leave-end="opacity-0 -translate-x-8"
-                   class="absolute inset-0">
-                <blockquote class="text-xl sm:text-2xl text-white leading-snug tracking-tight mb-8" x-text="'&ldquo;' + t.quote + '&rdquo;'"></blockquote>
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-[var(--text-secondary)] font-medium text-sm" x-text="t.initials"></div>
-                  <div>
-                    <div class="font-semibold text-white" x-text="t.author"></div>
-                    <div class="text-sm text-[var(--text-muted)]" x-text="t.title"></div>
-                    <div class="text-sm text-[var(--text-muted)]" x-text="t.company"></div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
         </div>
-
-        <div class="flex items-center justify-center gap-4 mt-8">
-          <button @click="prev()" class="glass-card w-10 h-10 flex items-center justify-center !rounded-full cursor-pointer" data-testid="button-prev-testimonial" style="border-radius: 50%;">
-            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          </button>
-
-          <div class="flex gap-2">
-            <template x-for="(_, index) in testimonials" :key="index">
-              <button @click="current = index"
-                      :class="current === index ? 'w-8 bg-[var(--accent)]' : 'w-2 bg-white/20 hover:bg-white/40'"
-                      class="h-2 rounded-full transition-all duration-300 cursor-pointer"
-                      :data-testid="'testimonial-dot-' + index"></button>
-            </template>
-          </div>
-
-          <button @click="next()" class="glass-card w-10 h-10 flex items-center justify-center !rounded-full cursor-pointer" data-testid="button-next-testimonial" style="border-radius: 50%;">
-            <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </button>
+        <div class="format-copy" id="format-panel" role="tabpanel" aria-labelledby="tab-display" aria-live="polite">
+          <h3 data-f="title">${d.title}</h3>
+          <p class="text-[var(--text-muted)]" data-f="body">${d.body}</p>
+          <ul class="bp-list" data-f="list">${d.list.map((l) => `<li>${l}</li>`).join("")}</ul>
+          <div class="format-spec mono"><span class="text-[var(--text-muted)]">Sizes</span><span data-f="sizes">${d.sizes}</span><span class="text-[var(--text-muted)]">Sold by</span><span data-f="via">${d.via}</span></div>
+          <a href="${d.href}" class="text-sm text-[var(--text-secondary)] hover:text-white inline-flex items-center gap-1.5" data-f="href" data-testid="link-format-learn-more">Learn more <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
+  <section class="bp-section" id="how" data-testid="auction-timeline-section">
+    <div class="bp-wrap">${renderSectionHead({
+      eyebrow: "Header bidding",
+      title: "How one impression is sold.",
+      lede: "Header bidding asks every partner at once while the page loads. Bids that miss the timeout are dropped, so a slow bidder never holds the page.",
+    })}
+      <div class="bp-grid12">
+        <figure class="timeline-frame bp-frame" style="margin:0">
+          <div class="bp-frame-body">
+          <svg viewBox="0 0 860 400" role="img" aria-label="Example timeline: bid requests go out at 40 milliseconds, bids return between 190 and 760 milliseconds, one bidder times out, the highest bid wins and the ad renders">
+            <path class="tl-axis" d="M140 360 H820"/>
+            <g class="tl-label">
+              <text x="140" y="388" text-anchor="middle">0 ms</text><text x="310" y="388" text-anchor="middle">250</text>
+              <text x="480" y="388" text-anchor="middle">500</text><text x="650" y="388" text-anchor="middle">750</text>
+              <text x="820" y="388" text-anchor="middle">1000</text>
+            </g>
+            <path class="tl-timeout" d="M820 30 V360"/>
+            <text class="tl-label" x="812" y="24" text-anchor="end">timeout</text>
+            <g class="tl-rows">${renderTimelineRows()}</g>
+          </svg>
+          </div>
+          <figcaption class="mono">Example data: response times and bids are illustrative.</figcaption>
+        </figure>
+        <div class="timeline-points">
+          <div><h3>Everyone bids at once</h3><p>The page sends one request to every partner in parallel instead of offering the slot to networks one after another.</p></div>
+          <div><h3>The highest price wins</h3><p>Bids go to your ad server together, so the best offer for that impression is the one that serves.</p></div>
+          <div><h3>Timeouts protect page speed</h3><p>A partner that answers too late is skipped for that impression. Readers never wait on a slow bidder.</p></div>
+          <a href="/solutions/header-bidding" class="text-sm text-[var(--text-secondary)] hover:text-white inline-flex items-center gap-1.5">Header bidding in detail <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  ${renderContactFormSection(form)}`;
+  <section class="bp-section" id="compare" data-testid="comparison-section">
+    <div class="bp-wrap">${renderSectionHead({
+      eyebrow: "Why HBDR",
+      title: "What you get that a typical network doesn’t.",
+      lede: "Compared with the two usual alternatives: a single ad network, or building and running header bidding in-house.",
+    })}
+      <div class="bp-table-wrap" data-testid="comparison-table">
+        <table class="bp-table compare-table">
+          <thead><tr><th scope="col">Feature</th><th scope="col" class="us">HBDR</th><th scope="col">Typical Ad Network</th><th scope="col">DIY In-House Setup</th></tr></thead>
+          <tbody>${COMPARE.map((r, i) => `
+            <tr data-testid="comparison-row-${i}"><td>${r[0].replace("&", "&amp;")}</td>${compareCell(r[1], true)}${compareCell(r[2])}${compareCell(r[3])}</tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bp-section" id="how-it-works" data-testid="how-it-works-section">
+    <div class="bp-wrap">${renderSectionHead({
+      eyebrow: "Process",
+      title: "Live in three steps.",
+      lede: "Our team does the integration work. You review the proposal and approve the rollout.",
+    })}${renderSteps([
+      { title: "Discovery call", body: "We analyze your current ad setup, find the revenue you are leaving behind and agree on goals.", list: ["Current ad stack review", "Opportunities ranked", "Revenue goals"], testid: "step-card-0" },
+      { title: "Customized proposal", body: "A tailored plan with revenue forecasts, ad placement strategy and an implementation roadmap.", list: ["Revenue projections", "Placement strategy", "Timeline"], testid: "step-card-1" },
+      { title: "Technical implementation", body: "We configure accounts, implement the code and monitor performance after launch.", list: ["Code implementation", "Platform configuration", "Performance monitoring"], testid: "step-card-2" },
+    ])}
+      <div class="mt-12">${renderActions([{ label: "Start Your Journey", href: "/contact", primary: true, testid: "button-start-journey" }])}</div>
+    </div>
+  </section>
+
+  <section class="bp-section" id="about" data-testid="stats-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-5 grid gap-4 content-start">
+        <span class="bp-eyebrow">Company</span>
+        <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">The company behind the auction.</h2>
+        <p class="text-[var(--text-muted)]">Founded in 2015 and based in Miami. A team with more than 25 years of combined experience in programmatic advertising.</p>
+      </div>
+      <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
+        { label: "Ads served through HBDR", value: "1T+" },
+        { label: "Impressions per month", value: "1B+" },
+        { label: "Publishers", value: "500+" },
+        { label: "Revenue increase", value: "50%<small>up to</small>" },
+        { label: "Founded", value: "2015" },
+      ], true)}</div>
+    </div>
+  </section>
+
+  ${renderContactFormSection(form)}
+  </main>
+
+  <script>
+  // Formats work with or without GSAP; everything else is GSAP motion over a finished server-rendered page (D-019, D-020 rule 4)
+  document.addEventListener('DOMContentLoaded', function () {
+    var formats = ${JSON.stringify(FORMATS)};
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hasGsap = !!window.gsap && !reduce;
+    var q = function (s) { return document.querySelector(s); };
+    function geom(f) { var w = f.w * f.s, h = f.h * f.s; return { x: 380 - w / 2, y: 195 - h / 2, w: w, h: h }; }
+    function place(f, animate) {
+      var g = geom(f), b = g.y + g.h, r = g.x + g.w;
+      var attrs = [
+        ['.f-frame', { x: g.x, y: g.y, width: g.w, height: g.h }],
+        ['.f-dim-w', { d: 'M' + g.x + ' ' + (b + 30) + ' H' + r }],
+        ['.f-dim-w-t', { d: 'M' + g.x + ' ' + (b + 22) + ' V' + (b + 38) + ' M' + r + ' ' + (b + 22) + ' V' + (b + 38) }],
+        ['.f-dim-h', { d: 'M' + (r + 30) + ' ' + g.y + ' V' + b }],
+        ['.f-dim-h-t', { d: 'M' + (r + 22) + ' ' + g.y + ' H' + (r + 38) + ' M' + (r + 22) + ' ' + b + ' H' + (r + 38) }],
+        ['.f-w', { x: g.x + g.w / 2, y: b + 60 }],
+        ['.f-h', { x: r + 48, y: g.y + g.h / 2 + 5 }],
+        ['.f-name', { y: Math.min(452, b + 92) }],
+        ['.f-play', { opacity: f.play }]
+      ];
+      attrs.forEach(function (a) {
+        if (animate) { gsap.to(a[0], { attr: a[1], duration: 0.7, ease: 'expo.out' }); return; }
+        var el = q(a[0]); Object.keys(a[1]).forEach(function (k) { el.setAttribute(k, a[1][k]); });
+      });
+    }
+    function show(tab, focus) {
+      var tabs = [].slice.call(document.querySelectorAll('.format-tab'));
+      tabs.forEach(function (t) { var on = t === tab; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
+      if (focus) tab.focus();
+      var f = formats[tab.dataset.format];
+      q('#format-panel').setAttribute('aria-labelledby', tab.id);
+      q('[data-f="title"]').textContent = f.title;
+      q('[data-f="body"]').textContent = f.body;
+      q('[data-f="list"]').innerHTML = f.list.map(function (t) { return '<li>' + t + '</li>'; }).join('');
+      q('[data-f="sizes"]').textContent = f.sizes;
+      q('[data-f="via"]').textContent = f.via;
+      q('[data-f="href"]').setAttribute('href', f.href);
+      q('.f-w').textContent = f.w; q('.f-h').textContent = f.h; q('.f-name').textContent = f.name;
+      place(f, hasGsap);
+    }
+    document.querySelectorAll('.format-tab').forEach(function (tab, i, all) {
+      tab.addEventListener('click', function () { show(tab); });
+      tab.addEventListener('keydown', function (e) {
+        var n = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (n) { e.preventDefault(); show(all[(i + n + all.length) % all.length], true); }
+      });
+    });
+
+    if (!hasGsap) return; // the server-rendered page is complete on its own
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero: dimension lines draw once, then the slots are sold one auction at a time
+    document.querySelectorAll('.dims .bp-line').forEach(function (p) {
+      var len = p.getTotalLength();
+      gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.1, ease: 'expo.out', delay: 0.15 });
+    });
+    var slots = [].slice.call(document.querySelectorAll('.slot')), order = [1, 0, 3, 2, 4];
+    var ladderName = q('[data-slot-name]'), ladderPlace = q('[data-slot-place]');
+    var bids = q('.auction'), items = [].slice.call(bids.children);
+    var filledEl = q('[data-filled]'), ecpmEl = q('[data-ecpm]');
+    var cycle, inView = false;
+    function money(v) { return '$' + v.toFixed(2); }
+    function buildCycle() {
+      var tl = gsap.timeline({ paused: !inView || document.hidden, onComplete: function () { cycle = buildCycle(); } }), won = [];
+      tl.set('.slot-fill, .slot-price', { opacity: 0 }).set('.slot-name', { opacity: 1 }).call(function () { filledEl.textContent = '0'; ecpmEl.textContent = '—'; });
+      order.forEach(function (si) {
+        var slot = slots[si], frame = slot.querySelector('.slot-frame'), fill = slot.querySelector('.slot-fill'), price = slot.querySelector('.slot-price'), label = slot.querySelector('.slot-name');
+        var vals = items.map(function () { return Math.round((0.6 + Math.random() * 5.2) * 100) / 100; });
+        var best = vals.indexOf(Math.max.apply(null, vals)), start = tl.duration();
+        tl.call(function () {
+          ladderName.textContent = slot.dataset.name; ladderPlace.textContent = slot.dataset.place;
+          bids.classList.remove('is-closed');
+          items.forEach(function (li) { li.classList.remove('is-winner'); li.querySelector('.auction-cpm').textContent = '—'; });
+          frame.classList.add('is-live');
+        }, null, start);
+        tl.fromTo('.auction-timer span', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'none' }, start);
+        items.forEach(function (li, i) {
+          var at = start + 0.1 + Math.random() * 0.85, bar = li.querySelector('.auction-fill');
+          tl.set(bar, { scaleX: 0 }, start);
+          tl.to(bar, { scaleX: vals[i] / 6, duration: 0.45, ease: 'expo.out' }, at);
+          tl.call(function () { li.querySelector('.auction-cpm').textContent = money(vals[i]); }, null, at);
+        });
+        tl.call(function () {
+          items[best].classList.add('is-winner'); bids.classList.add('is-closed'); frame.classList.remove('is-live');
+          price.textContent = 'SOLD ' + money(vals[best]); won.push(vals[best]);
+          filledEl.textContent = String(won.length);
+          ecpmEl.textContent = money(won.reduce(function (a, b) { return a + b; }, 0) / won.length);
+        }, null, start + 1.3);
+        tl.to(fill, { opacity: 1, duration: 0.5, ease: 'expo.out' }, start + 1.3);
+        tl.to(label, { opacity: 0, duration: 0.2 }, start + 1.3);
+        tl.to(price, { opacity: 1, duration: 0.4 }, start + 1.4);
+        tl.to({}, { duration: 0.9 }, start + 1.4);
+      });
+      tl.to({}, { duration: 1.8 });
+      tl.to('.slot-fill, .slot-price', { opacity: 0, duration: 0.5 });
+      tl.to('.slot-name', { opacity: 1, duration: 0.4 }, '<');
+      return tl;
+    }
+    // Runs only while the sheet is on screen and the tab is visible
+    function sync() { if (!cycle) return; (inView && !document.hidden) ? cycle.resume() : cycle.pause(); }
+    ScrollTrigger.create({ trigger: '.sheet', start: 'top bottom', end: 'bottom top', onToggle: function (self) { inView = self.isActive; if (!cycle && inView) cycle = buildCycle(); sync(); } });
+    document.addEventListener('visibilitychange', sync);
+
+    // Partners: dots light in a random order once, like bids arriving; names are always visible
+    ScrollTrigger.create({ trigger: '.partner-grid', start: 'top 80%', once: true, onEnter: function () {
+      gsap.utils.shuffle([].slice.call(document.querySelectorAll('.partner-grid li'))).forEach(function (li, i) { gsap.delayedCall(0.05 + i * 0.03, function () { li.classList.add('lit'); }); });
+    } });
+
+    // Timeline: request lines travel out to each response time, dots land with them
+    var tlAnim = gsap.timeline({ paused: true });
+    document.querySelectorAll('[data-lane]').forEach(function (p, i) {
+      var len = p.getTotalLength();
+      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+      tlAnim.to(p, { strokeDashoffset: 0, duration: len / 520, ease: 'power2.out' }, 0.1 + i * 0.04);
+    });
+    tlAnim.from('.tl-rows circle', { scale: 0, transformOrigin: 'center', duration: 0.35, ease: 'back.out(2)', stagger: 0.08 }, 0.6);
+    ScrollTrigger.create({ trigger: '.timeline-frame', start: 'top 75%', once: true, onEnter: function () { tlAnim.play(); } });
+
+    // Comparison: checks in the HBDR column draw top to bottom
+    var checks = document.querySelectorAll('td.us .check path');
+    gsap.set(checks, { strokeDashoffset: 22 });
+    ScrollTrigger.create({ trigger: '.compare-table', start: 'top 75%', once: true, onEnter: function () {
+      gsap.to(checks, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', stagger: 0.06 });
+    } });
+
+    // Steps: the hairline fills left to right as the section scrolls in (no pinning)
+    gsap.fromTo('.bp-step-progress', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.bp-steps', start: 'top 85%', end: 'top 35%', scrub: 0.6 } });
+  });
+  </script>`;
 
   return renderLayout({
     title: "HBDR - Header Bidding & Ad Monetization Solutions",
@@ -657,5 +427,6 @@ export function renderPage(form: FormConfig): string {
     ogDescription: "Maximize your ad revenue with HBDR's enterprise-grade header bidding platform.",
     canonicalPath: "/",
     bodyContent: homepageContent,
+    gsap: true,
   });
 }

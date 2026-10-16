@@ -6,8 +6,8 @@ export const siteSecurityHeaders = secureHeaders({
   // are string templates without nonces. The host allowlist, frame-ancestors, form-action and object-src still hold.
   contentSecurityPolicy: {
     defaultSrc: ["'self'"],
-    // challenges.cloudflare.com: the Turnstile script and its iframe, loaded only while the operator has it on (D-016)
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://static.cloudflareinsights.com", "https://challenges.cloudflare.com"],
+    // cdnjs: GSAP + ScrollTrigger (SRI-pinned, D-020). challenges.cloudflare.com: the Turnstile script and its iframe, loaded only while the operator has it on (D-016)
+    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://static.cloudflareinsights.com", "https://challenges.cloudflare.com"],
     frameSrc: ["https://challenges.cloudflare.com"],
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
     fontSrc: ["'self'", "https://fonts.gstatic.com"],

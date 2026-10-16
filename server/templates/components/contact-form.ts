@@ -75,72 +75,20 @@ export function renderContactFormSection(form: FormConfig): string {
   const siteKey = form.turnstileSiteKey;
 
   return `
-  <section id="contact" class="py-24 lg:py-32" data-testid="contact-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Get Started</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">
-          Start Monetizing Today
-        </h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-          Ready to transform your ad revenue? Fill out the form and our team will reach out within 24 hours.
-        </p>
+  <section id="contact" class="bp-section" data-testid="contact-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="contact-intro">
+        <span class="bp-eyebrow">Get started</span>
+        <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Let's look at your revenue.</h2>
+        <p class="text-[var(--text-muted)]">Tell us about your inventory. Our team replies within 24 hours.</p>
+        <address>
+          <div><span class="mono text-[var(--text-muted)]">Email</span><a href="mailto:contact@hbdr.com" class="text-[var(--text-primary)] hover:text-[var(--accent)]">contact@hbdr.com</a></div>
+          <div><span class="mono text-[var(--text-muted)]">Phone</span><a href="tel:+17866756080" class="text-[var(--text-primary)] hover:text-[var(--accent)]">(786) 675-6080</a></div>
+          <div><span class="mono text-[var(--text-muted)]">Office</span><span class="text-[var(--text-primary)]">1200 Brickell Ave Ste 1950, Miami, FL 33131</span></div>
+        </address>
       </div>
 
-      <div class="grid lg:grid-cols-5 gap-12">
-        <div class="lg:col-span-2 space-y-8 animate-on-scroll lg:sticky lg:top-28 lg:self-start">
-          <div>
-            <h3 class="text-2xl font-semibold text-white mb-4">Let's Talk Revenue</h3>
-            <p class="text-[var(--text-muted)] leading-relaxed">
-              Whether you're optimizing existing ads or exploring new monetization opportunities, our experts are here to help.
-            </p>
-          </div>
-
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <div class="icon-tile flex-shrink-0">
-                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              </div>
-              <div>
-                <div class="font-semibold text-white">Email Us</div>
-                <div class="text-[var(--text-muted)]">contact@hbdr.com</div>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="icon-tile flex-shrink-0">
-                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-              </div>
-              <div>
-                <div class="font-semibold text-white">Call Us</div>
-                <a href="tel:+17866756080" class="text-white/60 hover:text-white transition-colors">(786) 675-6080</a>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="icon-tile flex-shrink-0">
-                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              </div>
-              <div>
-                <div class="font-semibold text-white">Visit Us</div>
-                <div class="text-[var(--text-muted)]">1200 Brickell Ave Ste 1950<br/>Miami, FL 33131</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-6 border-t border-white/5">
-            <div class="text-sm text-[var(--text-muted)] mb-3">Response time</div>
-            <div class="flex items-center gap-2">
-              <span class="relative flex h-3 w-3">
-                <span class="absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" style="animation: pulse-ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-[var(--accent)]"></span>
-              </span>
-              <span class="font-medium text-white">Usually within 24 hours</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-3 animate-on-scroll stagger-2">
+        <div class="contact-form-col">
           <div id="contact-form-container"
                x-data="{
                  formData: { ${formData} },
@@ -227,7 +175,6 @@ ${siteKey ? `
             </form>
           </div>
         </div>
-      </div>
     </div>
   </section>`;
 }

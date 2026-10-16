@@ -74,8 +74,21 @@ describe("page content structure", () => {
     const html = await (await app.request("/")).text();
     expect(html).toContain('class="auction is-closed');
     expect(html.match(/auction-row is-winner/g)).toHaveLength(1);
-    expect(html).toContain("$4.86 CPM");
+    expect(html).toContain("SOLD $4.86");
     expect(html).toContain("matchMedia('(prefers-reduced-motion: reduce)')");
+  });
+
+  // D-021: no testimonials until Matt supplies real ones
+  it("homepage carries no testimonials", async () => {
+    const html = await (await app.request("/")).text();
+    expect(html).not.toContain("testimonials-section");
+    expect(html).not.toContain("TechMedia Group");
+  });
+
+  // D-020 rule 4: GSAP only where a page has authored motion
+  it("GSAP loads on the home page only when asked for", async () => {
+    expect(await (await app.request("/")).text()).toContain("gsap/3.12.5/gsap.min.js");
+    expect(await (await app.request("/about")).text()).not.toContain("gsap.min.js");
   });
 
   it("homepage includes styles.css link", async () => {
