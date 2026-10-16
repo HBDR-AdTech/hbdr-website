@@ -1,6 +1,7 @@
 import { renderLayout } from "../../layout";
 import { renderPageHero } from "../../components/hero";
 import { renderCTASection } from "../../components/cta";
+import { renderEyebrow, renderSection, renderSteps } from "../../components/blueprint";
 
 export function renderAdvertisersPage(): string {
   const dealTypes = [
@@ -68,115 +69,70 @@ export function renderAdvertisersPage(): string {
     { num: "4", title: "Optimize & Report", desc: "Our team monitors performance, provides regular reports, and optimizes for your KPIs" },
   ];
 
+  // Each cell restates the deal copy below; nothing here goes beyond it
+  const dealCompare = [
+    ["How it is bought", "Invitation-only auction, ahead of the open exchange", "Fixed CPM, no auction competition", "Direct-sold campaign"],
+    ["Delivery", "Priority pricing on premium inventory", "Guaranteed impression volume, first look before PMP and open auction", "Managed by our ad ops team through the flight"],
+    ["Where you activate it", "Custom PMP deal ID in your DSP", "PG deal set up in Google Ad Manager, activated in your DSP", "Trafficked into the publisher's GAM, no DSP required"],
+  ];
+
   const content = `
   ${renderPageHero("For Advertisers", "Advertiser Solutions", "Access premium, brand-safe publisher inventory through Private Marketplace deals, Programmatic Guaranteed campaigns, and direct placements across HBDR's publisher network.")}
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="advertisers-intro-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Premium Access to Quality Inventory</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">HBDR manages monetization for thousands of premium publisher sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
-      </div>
+  <section class="bp-section" data-testid="advertisers-intro-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-6">${renderEyebrow("Inventory access")}<h2 class="mt-4 text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Premium Access to Quality Inventory</h2></div>
+      <p class="col-span-12 lg:col-start-8 lg:col-span-5 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">HBDR manages monetization for thousands of premium publisher sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="advertisers-deal-types-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Flexible Deal Structures</h2>
+  ${renderSection({
+    testid: "advertisers-deal-types-section",
+    eyebrow: "Deal types",
+    title: "Flexible Deal Structures",
+    lede: "Three ways to buy the same publisher inventory, from an invitation-only auction to a campaign trafficked straight into the ad server.",
+    body: `
+      <div class="bp-table-wrap" data-testid="advertisers-deal-table">
+        <table class="bp-table">
+          <thead><tr><th scope="col"><span class="sr-only">Attribute</span></th>${dealTypes.map((d) => `<th scope="col">${d.title}</th>`).join("")}</tr></thead>
+          <tbody>${dealCompare.map((r) => `
+            <tr><th scope="row" class="text-[var(--text-muted)] font-medium">${r[0]}</th>${r.slice(1).map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}
+          </tbody>
+        </table>
       </div>
-      <div class="space-y-8">
-        ${dealTypes.map((deal, i) => `
-        <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="advertiser-deal-${i}">
-          <h3 class="text-2xl font-semibold text-white mb-4">${deal.title}</h3>
-          <div class="mb-6">
-            <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">What it is</span>
-            <p class="text-[var(--text-muted)] leading-relaxed mt-2">${deal.what}</p>
+      <div class="mt-16 grid gap-0 border-t border-[var(--hairline)]">${dealTypes.map((deal, i) => `
+        <article class="bp-grid12 py-10 border-b border-[var(--hairline)]" data-testid="advertiser-deal-${i}">
+          <div class="col-span-12 lg:col-span-4"><span class="mono text-[var(--accent)]">${String(i + 1).padStart(2, "0")}</span><h3 class="mt-3 text-[1.35rem] leading-tight">${deal.title}</h3></div>
+          <div class="col-span-12 lg:col-start-6 lg:col-span-7 grid gap-6">
+            <p class="text-[var(--text-secondary)] leading-relaxed">${deal.what}</p>
+            <div><h4 class="bp-eyebrow mb-4">Benefits</h4><ul class="bp-list">${deal.benefits.map((b) => `<li>${b}</li>`).join("")}</ul></div>
+            <div><h4 class="bp-eyebrow mb-3">How it works</h4><p class="text-[var(--text-muted)] leading-relaxed">${deal.how}</p></div>
           </div>
-          <div class="mb-6">
-            <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">Benefits</span>
-            <ul class="mt-3 space-y-2">
-              ${deal.benefits.map(b => `
-              <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-                <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                ${b}
-              </li>`).join("")}
-            </ul>
-          </div>
-          <div>
-            <span class="text-sm font-semibold text-[var(--accent)] uppercase tracking-wider">How it works</span>
-            <p class="text-[var(--text-muted)] leading-relaxed mt-2">${deal.how}</p>
-          </div>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="advertisers-inventory-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Our Inventory at a Glance</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${inventoryStats.map((stat, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="advertiser-inventory-${i}">
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center flex-shrink-0">
-              <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <p class="text-white/60 leading-relaxed">${stat}</p>
-          </div>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="advertisers-brand-safety-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Brand Safety First</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">Every layer of our platform is built with brand safety and transparency at its core.</p>
-      </div>
-      <div class="glass-card p-8 animate-on-scroll" data-testid="advertisers-brand-safety-card">
-        <ul class="space-y-4">
-          ${brandSafetyFeatures.map(f => `
-          <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-            <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            ${f}
-          </li>`).join("")}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="advertisers-getting-started-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">How to Get Started</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        ${steps.map((s, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${i + 1}" data-testid="advertiser-step-${i}">
-          <div class="step-number mb-4">${s.num}</div>
-          <h3 class="text-lg font-semibold text-white mb-2">${s.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${s.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
+        </article>`).join("")}
+      </div>`,
+  })}
+  ${renderSection({
+    testid: "advertisers-inventory-section",
+    eyebrow: "Inventory",
+    title: "Our Inventory at a Glance",
+    body: `
+      <ul class="co-defs">${inventoryStats.map((stat, i) => `
+        <li data-testid="advertiser-inventory-${i}"><p>${stat}</p></li>`).join("")}
+      </ul>`,
+  })}
+  ${renderSection({
+    testid: "advertisers-brand-safety-section",
+    eyebrow: "Brand safety",
+    title: "Brand Safety First",
+    lede: "Every layer of our platform is built with brand safety and transparency at its core.",
+    body: `
+      <ul class="bp-list md:grid-cols-2 md:gap-x-8 md:gap-y-4" data-testid="advertisers-brand-safety-card">${brandSafetyFeatures.map((f) => `<li>${f}</li>`).join("")}</ul>`,
+  })}
+  ${renderSection({
+    testid: "advertisers-getting-started-section",
+    eyebrow: "Process",
+    title: "How to Get Started",
+    body: renderSteps(steps.map((s, i) => ({ title: s.title, body: s.desc, testid: `advertiser-step-${i}` }))),
+  })}
   ${renderCTASection("Ready to reach premium audiences?", "Contact Our Sales Team")}`;
 
   return renderLayout({

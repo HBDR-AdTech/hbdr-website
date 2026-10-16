@@ -2,6 +2,7 @@ import { renderLayout } from "../../layout";
 import { renderPageHero } from "../../components/hero";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
+import { renderFeatureRows, renderSection } from "../../components/blueprint";
 
 export function renderPublishersPage(): string {
   const valueProps = [
@@ -82,139 +83,76 @@ export function renderPublishersPage(): string {
     { q: "Do you work with sites outside the US?", a: "Yes. We work with publishers globally and have demand partners that cover traffic from virtually every country." },
   ];
 
+  const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Yes"><path d="M5 13l4 4L19 7"/></svg>';
+  const owner = (testid: string, items: string[], hbdr: boolean) => `
+            <tbody data-testid="${testid}">${items.map((item) => `
+              <tr><td>${item}</td>${hbdr ? `<td class="us">${CHECK}</td><td class="no"><span aria-label="No">—</span></td>` : `<td class="no"><span aria-label="No">—</span></td><td>${CHECK}</td>`}</tr>`).join("")}
+            </tbody>`;
+  const chevron = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+
   const content = `
   ${renderPageHero("For Publishers", "Publisher Solutions", "From day one to full optimization, HBDR makes ad monetization effortless. Here's everything you need to know about working with us.")}
-
-  <section class="py-24 lg:py-32" data-testid="publishers-why-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Why Publishers Choose HBDR</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${valueProps.map((v, i) => `
-        <div class="glass-card p-8 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="publisher-value-${i}">
-          <h3 class="text-xl font-semibold text-white mb-3">${v.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed">${v.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="publishers-onboarding-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Getting Started Is Simple</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Our onboarding process is designed to be fast and hassle-free. Most publishers are live within 5-7 business days.</p>
-      </div>
-      <div class="max-w-3xl mx-auto space-y-6">
-        ${onboardingSteps.map((step, i) => `
-        <div class="relative flex gap-6 animate-on-scroll stagger-${(i % 5) + 1}" data-testid="onboarding-step-${i}">
-          ${i < onboardingSteps.length - 1 ? `<div class="absolute left-7 top-[72px] bottom-0 w-px bg-gradient-to-b from-[var(--accent)]/30 to-transparent"></div>` : ""}
-          <div class="flex-shrink-0">
-            <div class="step-number">${step.num}</div>
-          </div>
-          <div class="glass-card p-6 flex-1">
-            <h3 class="text-xl font-semibold text-white mb-1">${step.title}</h3>
-            ${step.subtitle ? `<span class="text-[var(--accent)] text-sm font-medium">${step.subtitle}</span>` : ""}
-            <ul class="mt-3 space-y-2">
-              ${step.bullets.map(b => `<li class="flex items-start gap-2 text-[var(--text-muted)] text-sm leading-relaxed">
-                <svg class="w-4 h-4 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                ${b}
-              </li>`).join("")}
-            </ul>
-          </div>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="publishers-handle-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">We Do the Heavy Lifting</h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="publishers-hbdr-manages">
-          <h3 class="text-xl font-semibold text-white mb-6">What HBDR Manages</h3>
-          <ul class="space-y-3">
-            ${hbdrManages.map(item => `
-            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-              <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              ${item}
-            </li>`).join("")}
-          </ul>
-        </div>
-        <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="publishers-you-do">
-          <h3 class="text-xl font-semibold text-white mb-6">What You Do</h3>
-          <ul class="space-y-3">
-            ${youDo.map(item => `
-            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-              <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              ${item}
-            </li>`).join("")}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="publishers-requirements-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Who We Work With</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">HBDR works with publishers of all sizes, from independent blogs to enterprise media companies. Here's what we look for:</p>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${requirements.map((r, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 5) + 1}" data-testid="publisher-req-${i}">
-          <h3 class="text-lg font-semibold text-white mb-2">${r.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${r.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="publishers-faq-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Common Publisher Questions</h2>
-      </div>
-      <div class="space-y-3" x-data="{ openFaq: null }">
-        ${pubFaqs.map((faq, i) => {
-          const faqId = `pub-faq-${i}`;
-          return `
-        <div class="glass-card overflow-hidden animate-on-scroll stagger-${(i % 4) + 1}" data-testid="${faqId}">
-          <button
-            @click="openFaq = openFaq === '${faqId}' ? null : '${faqId}'"
-            class="w-full text-left p-6 flex items-center justify-between gap-4 cursor-pointer"
-            data-testid="button-${faqId}"
-          >
-            <span class="font-semibold text-white/90">${faq.q}</span>
-            <svg class="w-5 h-5 text-[var(--text-muted)] flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+  ${renderSection({
+    testid: "publishers-why-section",
+    eyebrow: "Why HBDR",
+    title: "Why Publishers Choose HBDR",
+    body: renderFeatureRows(valueProps.map((v, i) => ({ title: v.title, body: v.desc, testid: `publisher-value-${i}` }))),
+  })}
+  ${renderSection({
+    testid: "publishers-onboarding-section",
+    eyebrow: "Onboarding",
+    title: "Getting Started Is Simple",
+    lede: "Our onboarding process is designed to be fast and hassle-free. Most publishers are live within 5-7 business days.",
+    body: `
+      <ul class="bp-rows co-stack">${onboardingSteps.map((step, i) => `
+        <li data-testid="onboarding-step-${i}">
+          <span class="bp-row-index mono">${step.num.padStart(2, "0")}</span>
+          <h3>${step.title}${step.subtitle ? `<span class="co-when mono">${step.subtitle}</span>` : ""}</h3>
+          <div class="bp-row-body"><ul>${step.bullets.map((b) => `<li>${b}</li>`).join("")}</ul></div>
+        </li>`).join("")}
+      </ul>`,
+  })}
+  ${renderSection({
+    testid: "publishers-handle-section",
+    eyebrow: "Who does what",
+    title: "We Do the Heavy Lifting",
+    lede: youDo[youDo.length - 1] + ".",
+    body: `
+      <div class="bp-table-wrap">
+        <table class="bp-table compare-table co-owner">
+          <caption class="sr-only">Who handles each part of running your ads</caption>
+          <thead><tr><th scope="col">Task</th><th scope="col" class="us">HBDR</th><th scope="col">You</th></tr></thead>${owner("publishers-hbdr-manages", hbdrManages, true)}${owner("publishers-you-do", youDo.slice(0, -1), false)}
+        </table>
+      </div>`,
+  })}
+  ${renderSection({
+    testid: "publishers-requirements-section",
+    eyebrow: "Requirements",
+    title: "Who We Work With",
+    lede: "HBDR works with publishers of all sizes, from independent blogs to enterprise media companies. Here's what we look for:",
+    body: renderFeatureRows(requirements.map((r, i) => ({ title: r.title, body: r.desc, testid: `publisher-req-${i}` }))),
+  })}
+  ${renderSection({
+    testid: "publishers-faq-section",
+    eyebrow: "FAQ",
+    title: "Common Publisher Questions",
+    body: `
+      <div class="co-faq" x-data="{ openFaq: null }">${pubFaqs.map((faq, i) => {
+        const faqId = `pub-faq-${i}`;
+        return `
+        <div data-testid="${faqId}">
+          <button type="button" @click="openFaq = openFaq === '${faqId}' ? null : '${faqId}'" :aria-expanded="openFaq === '${faqId}'" aria-expanded="false" data-testid="button-${faqId}">
+            <span>${faq.q}</span>
+            <span :class="openFaq === '${faqId}' ? 'rotate-180' : ''" class="inline-flex transition-transform duration-300">${chevron}</span>
           </button>
-          <div x-show="openFaq === '${faqId}'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-            <div class="px-6 pb-6 text-[var(--text-muted)] leading-relaxed border-t border-white/5 pt-4">${faq.a}</div>
+          <div x-show="openFaq === '${faqId}'" x-cloak x-transition.opacity.duration.200ms>
+            <p class="co-answer">${faq.a}</p>
           </div>
         </div>`;
-        }).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
+      }).join("")}
+      </div>`,
+  })}
   ${renderStatsSection()}
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
   ${renderCTASection("Ready to grow your ad revenue?", "Get Started")}`;
 
   return renderLayout({

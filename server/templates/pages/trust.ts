@@ -1,6 +1,7 @@
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
+import { renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection } from "../components/blueprint";
 
 export function renderTrustCompliancePage(): string {
   const supplyChainCards = [
@@ -75,143 +76,101 @@ export function renderTrustCompliancePage(): string {
     "Regional and local businesses seeking targeted reach",
   ];
 
+  const defs = (items: { title: string; desc: string }[], prefix: string) => `
+      <ul class="co-defs">${items.map((c, i) => `
+        <li data-testid="${prefix}-${i}"><h3>${c.title}</h3><p>${c.desc}</p></li>`).join("")}
+      </ul>`;
+
+  // The four supply-chain items above, drawn where each one lives on the path from publisher to buyer
+  const node = (x: number, title: string, file: string, note: string, hi = false) => `
+          <rect class="${hi ? "co-node-hi" : "co-node"}" x="${x}" y="40" width="300" height="116" rx="4"/>
+          <text class="co-title" x="${x + 18}" y="78">${title}</text>
+          <text class="co-sub${hi ? " co-hi" : ""}" x="${x + 18}" y="106">${file}</text><text class="co-sub" x="${x + 18}" y="128">${note}</text>`;
+  const supplyPath = `
+        <svg class="co-wide" viewBox="0 0 1160 300" role="img" aria-label="Publisher sites and apps list HBDR as an authorized seller in ads.txt and app-ads.txt; HBDR documents every publisher relationship in sellers.json; every bid request carries a SupplyChain object naming each node from publisher to buyer">
+          <defs><marker id="tr-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="co-arrow" d="M0 0 L10 5 L0 10 Z"/></marker></defs>
+          ${node(20, "Publisher site or app", "ads.txt · app-ads.txt", "lists HBDR as authorized seller")}
+          ${node(430, "HBDR", "sellers.json", "documents every publisher", true)}
+          ${node(840, "DSPs and advertisers", "buyer", "sees who is selling")}
+          <path class="co-flow" d="M320 98 H428" marker-end="url(#tr-arrow)"/><path class="co-flow" d="M730 98 H838" marker-end="url(#tr-arrow)"/>
+          <text class="co-sub" x="375" y="88" text-anchor="middle">inventory</text><text class="co-sub" x="785" y="88" text-anchor="middle">bid request</text>
+          <path class="co-flow-hi" d="M170 222 H990"/><path class="bp-tick" d="M170 212 V232 M580 212 V232 M990 212 V232" style="stroke:var(--accent)"/>
+          <path class="co-flow-back" d="M170 156 V212 M580 156 V212 M990 156 V212"/>
+          <text class="bp-label" x="580" y="262" text-anchor="middle">SupplyChain object (schain): every node from publisher to buyer</text>
+        </svg>`;
+
   const content = `
   ${renderPageHero("Trust & Compliance", "Trust & Compliance", "At HBDR, trust isn't just a value — it's the foundation of everything we build. We maintain the highest standards of transparency, compliance, and security across all our operations.")}
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-commitment-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Built on Trust</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">HBDR operates in one of the most complex ecosystems in digital advertising. With billions of ad transactions happening daily, trust and compliance aren't optional — they're essential. HBDR is committed to maintaining the highest standards across every aspect of our operations, from how we manage publisher inventory to how we handle user data.</p>
-      </div>
+  <section class="bp-section" data-testid="trust-commitment-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-5">${renderEyebrow("Commitment")}<h2 class="mt-4 text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Built on Trust</h2></div>
+      <p class="col-span-12 lg:col-start-7 lg:col-span-6 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">HBDR operates in one of the most complex ecosystems in digital advertising. With billions of ad transactions happening daily, trust and compliance aren't optional — they're essential. HBDR is committed to maintaining the highest standards across every aspect of our operations, from how we manage publisher inventory to how we handle user data.</p>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-supply-chain-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Supply Chain Transparency</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 gap-6">
-        ${supplyChainCards.map((c, i) => `
-        <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="trust-supply-${i}">
-          <h3 class="text-xl font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed">${c.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-anti-fraud-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Anti-Fraud & Traffic Quality</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${antiFraudCards.map((c, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-fraud-${i}">
-          <h3 class="text-lg font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-privacy-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Privacy & Data Protection</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${privacyCards.map((c, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-privacy-${i}">
-          <h3 class="text-lg font-semibold text-white mb-3">${c.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-certifications-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Industry Partnerships & Certifications</h2>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${certifications.map((c, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-cert-${i}">
-          <div class="w-10 h-10 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center mb-4">
-            <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">${c.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-capabilities-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">What HBDR Does</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-3xl leading-relaxed">HBDR is a full-service ad technology and ad operations company serving publishers and advertisers across every channel, format, and device.</p>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${capabilities.map((c, i) => `
-        <div class="glass-card p-6 animate-on-scroll stagger-${(i % 6) + 1}" data-testid="trust-capability-${i}">
-          <h3 class="text-lg font-semibold text-white mb-2">${c.title}</h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed">${c.desc}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="trust-who-we-serve-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Serving Every Type of Publisher & Advertiser</h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="trust-publishers-served">
-          <h3 class="text-xl font-semibold text-white mb-6">Publishers We Serve</h3>
-          <ul class="space-y-3">
-            ${publishersWeServe.map(item => `
-            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-              <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              ${item}
-            </li>`).join("")}
-          </ul>
+  ${renderSection({
+    testid: "trust-supply-chain-section",
+    eyebrow: "Supply chain",
+    title: "Supply Chain Transparency",
+    lede: "Each file and signal below answers one buyer question: is this seller authorized, and who touched the impression on its way to me?",
+    body: `${renderDiagramFrame({
+      label: "Where ads.txt, sellers.json and the SupplyChain object sit on the supply path",
+      blueprint: true,
+      bar: ["supply path", "publisher → buyer"],
+      body: supplyPath,
+      testid: "trust-supply-diagram",
+    })}
+      <div class="mt-12">${renderFeatureRows(supplyChainCards.map((c, i) => ({ title: c.title, body: c.desc, testid: `trust-supply-${i}` })))}</div>`,
+  })}
+  ${renderSection({
+    testid: "trust-anti-fraud-section",
+    eyebrow: "Traffic quality",
+    title: "Anti-Fraud & Traffic Quality",
+    body: renderFeatureRows(antiFraudCards.map((c, i) => ({ title: c.title, body: c.desc, testid: `trust-fraud-${i}` }))),
+  })}
+  ${renderSection({
+    testid: "trust-privacy-section",
+    eyebrow: "Privacy",
+    title: "Privacy & Data Protection",
+    body: defs(privacyCards, "trust-privacy"),
+  })}
+  ${renderSection({
+    testid: "trust-certifications-section",
+    eyebrow: "Industry",
+    title: "Industry Partnerships & Certifications",
+    body: `
+      <div class="bp-table-wrap">
+        <table class="bp-table">
+          <thead><tr><th scope="col">Program</th><th scope="col">Scope</th></tr></thead>
+          <tbody>${certifications.map((c, i) => `
+            <tr data-testid="trust-cert-${i}"><td>${c.title}</td><td>${c.desc}</td></tr>`).join("")}
+          </tbody>
+        </table>
+      </div>`,
+  })}
+  ${renderSection({
+    testid: "trust-capabilities-section",
+    eyebrow: "Capabilities",
+    title: "What HBDR Does",
+    lede: "HBDR is a full-service ad technology and ad operations company serving publishers and advertisers across every channel, format, and device.",
+    body: defs(capabilities, "trust-capability"),
+  })}
+  ${renderSection({
+    testid: "trust-who-we-serve-section",
+    eyebrow: "Customers",
+    title: "Serving Every Type of Publisher & Advertiser",
+    body: `
+      <div class="bp-grid12 co-pair">
+        <div class="col-span-12 md:col-span-6" data-testid="trust-publishers-served">
+          <h3>Publishers We Serve</h3>
+          <ul class="bp-list">${publishersWeServe.map((item) => `<li>${item}</li>`).join("")}</ul>
         </div>
-        <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="trust-advertisers-served">
-          <h3 class="text-xl font-semibold text-white mb-6">Advertisers We Serve</h3>
-          <ul class="space-y-3">
-            ${advertisersWeServe.map(item => `
-            <li class="flex items-start gap-3 text-[var(--text-muted)] leading-relaxed">
-              <svg class="w-5 h-5 text-[var(--accent)] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              ${item}
-            </li>`).join("")}
-          </ul>
+        <div class="col-span-12 md:col-span-6" data-testid="trust-advertisers-served">
+          <h3>Advertisers We Serve</h3>
+          <ul class="bp-list">${advertisersWeServe.map((item) => `<li>${item}</li>`).join("")}</ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
+      </div>`,
+  })}
   ${renderCTASection("Ready to work with a trusted partner?", "Get In Touch")}`;
 
   return renderLayout({
