@@ -105,3 +105,17 @@ Closes: the "decide IP retention" item in `docs/SECURITY.md`.
 Matt chose the auction hero over a sitewide GSAP pass. The home hero dashboard carries one authored motion: an example header auction for a 300×250 slot. A timeout bar runs for 1.4 s, five bidders' bids land at random points inside it, the highest bid turns logo mint, the others dim, and "Today's Revenue" ticks up from the second auction on. It replays while the panel is in view and stops when it scrolls off-screen or the tab is hidden. It uses the browser's Web Animations API with no GSAP or other library, so no new script download and no SRI entry. Bidders are labelled "Bidder 1–5" and bids are random example values (D-005: no partner names, no implied performance data). The server renders a finished auction (one winner, $4.86 CPM), and that is what visitors see without JavaScript or with `prefers-reduced-motion` (test: `server/routes/__tests__/pages.test.ts`).
 Supersedes: HANDOFF-002's "strong GSAP motion" direction. D-012's restrained fade-up stays for every other section.
 Rollback: revert the commit; the hero goes back to the revenue chart alone.
+
+## D-020 — 2026-10-16 — Matt — The blueprint design runs on every page; informational pages flow without boxes
+
+"Make sure the design goes throughout every page. Get rid of the boxes around the content on the informational pages; make everything flow more smoothly. Level up those pages: enterprise grade, higher quality, high-tech, like a true ad-tech software-as-a-service business." Standing rules:
+1. Every public page uses the inventory-blueprint system from `docs/design/home-blueprint.html`: the D-017 palette, Archivo for display, Inter for body, Geist Mono only for measurements, sizes, prices and timings, hairline rules, one 12-column grid, a heading on the left and its supporting line on the right.
+2. Informational pages (solutions, publishers, advertisers, about, how it works, trust, partners, careers, press, support, dashboard, legal) present content as flowing sections separated by hairlines and space. A border, fill or radius marks only a real object: a table, a form, a diagram, a code sample or an interactive demo. No card grids of icon + heading + text.
+3. Each informational page explains its subject the way an ad-tech SaaS vendor would: a diagram, spec table or worked example where one teaches more than prose, built from D-005 facts and labelled example data.
+4. Motion follows D-019 and the guardrails Matt set on 2026-10-14: GSAP only, no scroll-jacking or pinned sections, text never hidden waiting for an animation, a different treatment per section or none, and a static finished state under reduced motion.
+Supersedes: D-012's card components (`glass-card` grids) on public pages. The admin pages keep their current layout.
+Rollback: revert the redesign merge; tokens and templates return to the D-017 state.
+
+## D-021 — 2026-10-16 — Matt — No testimonials until real ones exist
+
+The home page testimonials ("TechMedia Group", "Digital Publishing Co", "Content Network Inc", "Mobile Media Labs", "Gaming Publishers United") are removed in the redesign. Testimonials return only with real quotes, names and companies that Matt supplies. Extends D-005 (no invented clients or quotes).
