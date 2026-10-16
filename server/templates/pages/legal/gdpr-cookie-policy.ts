@@ -49,7 +49,7 @@ export function renderGdprCookiePolicyPage(): string {
         </ul>
 
         <h3>Data Protection Officer</h3>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-6">For all GDPR-related inquiries, data subject access requests, or complaints, please contact our Data Protection Officer at <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-gdpr-dpo-email">contact@hbdr.com</a>. We will respond to verified requests within 30 days.</p>
+        <p class="text-[var(--text-muted)] leading-relaxed mb-6">For all GDPR-related inquiries, data subject access requests, or complaints, please contact our Data Protection Officer at <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-gdpr-dpo-email">contact@hbdr.com</a>. We will respond to verified requests within 30 days.</p>
 
         <h3>International Data Transfers</h3>
         <p class="text-[var(--text-muted)] leading-relaxed">When we transfer personal data outside the EEA, we ensure appropriate safeguards are in place, including Standard Contractual Clauses (SCCs) approved by the European Commission, adequacy decisions, or other lawful transfer mechanisms. Our programmatic advertising partners and demand-side platforms operate globally; data shared during real-time bidding auctions may be processed in various jurisdictions. We contractually require all partners to maintain GDPR-compliant data protection standards.</p>
@@ -179,8 +179,8 @@ export function renderGdprCookiePolicyPage(): string {
         <div class="space-y-3 text-[var(--text-muted)]">
           <p><strong class="text-white/80">HBDR Data Protection Officer</strong></p>
           <p>1200 Brickell Ave Ste 1950, Miami, FL 33131</p>
-          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-gdpr-contact-email">contact@hbdr.com</a></p>
-          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline" data-testid="link-gdpr-contact-phone">(786) 675-6080</a></p>
+          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-gdpr-contact-email">contact@hbdr.com</a></p>
+          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-gdpr-contact-phone">(786) 675-6080</a></p>
         </div>
       </section>
       </div>

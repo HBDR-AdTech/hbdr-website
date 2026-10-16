@@ -234,7 +234,7 @@ function renderFooter(): string {
         </div>
 
         <div>
-          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Solutions</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Solutions</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "Header Bidding", href: "/solutions/header-bidding" },
@@ -251,7 +251,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Company</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Company</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "About Us", href: "/about" },
@@ -265,7 +265,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Resources</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Resources</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "For Publishers", href: "/publishers" },
@@ -279,7 +279,7 @@ function renderFooter(): string {
           </ul>
         </div>
         <div>
-          <h4 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] mb-4">Legal</h4>
+          <h2 class="mono uppercase tracking-[0.06em] text-[var(--text-muted)] font-medium mb-4">Legal</h2>
           <ul class="space-y-2.5">
             ${[
               { label: "Privacy Policy", href: "/privacy-policy" },

@@ -170,7 +170,7 @@ ${siteKey ? `
               </button>
 
               <p class="text-center text-sm text-[var(--text-muted)]">
-                By submitting, you agree to our <a href="/privacy-policy" class="text-[var(--accent)] hover:underline">Privacy Policy</a>
+                By submitting, you agree to our <a href="/privacy-policy" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a>
               </p>
             </form>
           </div>

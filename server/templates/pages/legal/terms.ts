@@ -30,7 +30,7 @@ export function renderTermsPage(): string {
 
       <section class="legal-sec" id="acceptance-of-terms" data-testid="terms-section-acceptance">
         <h2><span class="mono">01</span>Acceptance of Terms</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">By creating an account, accessing our platform, or using any of our ad monetization services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="/privacy-policy" class="text-[var(--accent)] hover:underline">Privacy Policy</a>. If you are using our services on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.</p>
+        <p class="text-[var(--text-muted)] leading-relaxed mb-4">By creating an account, accessing our platform, or using any of our ad monetization services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="/privacy-policy" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a>. If you are using our services on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.</p>
         <p class="text-[var(--text-muted)] leading-relaxed">You must be at least 18 years of age and legally capable of entering into binding agreements to use our services.</p>
       </section>
 
@@ -116,8 +116,8 @@ export function renderTermsPage(): string {
         <div class="space-y-3 text-[var(--text-muted)]">
           <p><strong class="text-white/80">HBDR</strong></p>
           <p>1200 Brickell Ave Ste 1950, Miami, FL 33131</p>
-          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-terms-email">contact@hbdr.com</a></p>
-          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline" data-testid="link-terms-phone">(786) 675-6080</a></p>
+          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-terms-email">contact@hbdr.com</a></p>
+          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-terms-phone">(786) 675-6080</a></p>
         </div>
       </section>
       </div>

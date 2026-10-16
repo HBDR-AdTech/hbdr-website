@@ -49,7 +49,7 @@ export function renderPrivacyPolicyPage(): string {
         </ul>
 
         <h3>Cookies & Tracking Technologies</h3>
-        <p class="text-[var(--text-muted)] leading-relaxed">We use cookies, web beacons, pixel tags, and similar tracking technologies to collect and store information about your interactions with our platform. These technologies help us analyze trends, administer our website, track user movements, and gather demographic information. For detailed information about the cookies we use, please see our <a href="/gdpr-cookie-policy" class="text-[var(--accent)] hover:underline">GDPR & Cookie Policy</a>.</p>
+        <p class="text-[var(--text-muted)] leading-relaxed">We use cookies, web beacons, pixel tags, and similar tracking technologies to collect and store information about your interactions with our platform. These technologies help us analyze trends, administer our website, track user movements, and gather demographic information. For detailed information about the cookies we use, please see our <a href="/gdpr-cookie-policy" class="text-[var(--accent)] underline underline-offset-2">GDPR & Cookie Policy</a>.</p>
       </section>
 
       <section class="legal-sec" id="how-we-use-your-information" data-testid="privacy-section-use">
@@ -123,8 +123,8 @@ export function renderPrivacyPolicyPage(): string {
         <div class="space-y-3 text-[var(--text-muted)]">
           <p><strong class="text-white/80">HBDR</strong></p>
           <p>1200 Brickell Ave Ste 1950, Miami, FL 33131</p>
-          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-privacy-email">contact@hbdr.com</a></p>
-          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline" data-testid="link-privacy-phone">(786) 675-6080</a></p>
+          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-privacy-email">contact@hbdr.com</a></p>
+          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-privacy-phone">(786) 675-6080</a></p>
         </div>
       </section>
       </div>
