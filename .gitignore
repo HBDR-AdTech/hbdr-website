@@ -16,3 +16,4 @@ public/assets/styles.css
 
 # agent worktrees
 .claude/worktrees/
+.shots/
