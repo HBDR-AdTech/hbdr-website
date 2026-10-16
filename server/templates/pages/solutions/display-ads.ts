@@ -1,93 +1,125 @@
 import { renderLayout } from "../../layout";
-import { renderPageHero } from "../../components/hero";
+import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection, renderSpecList } from "../../components/blueprint";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 
+// Every unit drawn at the same scale (0.6 px per ad pixel), so the shapes compare at their real proportions
+const S = 0.6;
+const UNITS: { w: number; h: number; x: number; y: number; name: string; inline?: boolean; beside?: boolean }[] = [
+  { w: 728, h: 90, x: 40, y: 60, name: "leaderboard", inline: true },
+  { w: 300, h: 250, x: 40, y: 170, name: "medium rectangle" },
+  { w: 336, h: 280, x: 256, y: 170, name: "large rectangle" },
+  { w: 320, h: 50, x: 40, y: 380, name: "mobile adhesion", beside: true },
+  { w: 160, h: 600, x: 520, y: 60, name: "skyscraper" },
+  { w: 300, h: 600, x: 660, y: 60, name: "half page" },
+];
+// One responsive slot asks for three sizes; the example winner is drawn filled
+const MULTI: [number, number][] = [[300, 600], [336, 280], [300, 250]];
+
+function renderSizeDiagram(): string {
+  const units = UNITS.map((u) => {
+    const w = u.w * S, h = u.h * S, cx = u.x + w / 2, size = `${u.w}×${u.h}`;
+    const label = u.beside
+      ? `<text class="sm-v" x="${u.x + w + 16}" y="${u.y + h / 2 + 5}">${size} · ${u.name}</text>`
+      : u.inline
+        ? `<text class="sm-v" x="${cx}" y="${u.y + h / 2 + 5}" text-anchor="middle">${size} · ${u.name}</text>`
+        : `<text class="sm-v" x="${cx}" y="${u.y + h / 2 - 4}" text-anchor="middle">${size}</text><text class="sm-name" x="${cx}" y="${u.y + h / 2 + 18}" text-anchor="middle">${u.name}</text>`;
+    return `<rect class="sm-unit" x="${u.x}" y="${u.y}" width="${w}" height="${h}" rx="2"/>${label}`;
+  }).join("");
+  const mx = 900, my = 60;
+  const asks = MULTI.map(([w, h]) => `<rect class="sm-unit is-ask" x="${mx}" y="${my}" width="${w * S}" height="${h * S}" rx="2"/>`).join("");
+  return `<svg viewBox="0 0 1180 486" role="img" aria-label="IAB display units drawn at the same scale: 728×90 leaderboard, 300×250 medium rectangle, 336×280 large rectangle, 320×50 mobile adhesion, 160×600 skyscraper and 300×600 half page. Example: one responsive slot requests 300×250, 336×280 and 300×600, and the 300×600 creative serves.">
+            <text class="sm-k" x="40" y="30">IAB standard units</text>
+            ${units}
+            <path class="sm-rule" d="M870 20 V476"/>
+            <text class="sm-k is-win" x="${mx}" y="30">Responsive multi-size slot</text>
+            <rect class="sm-ad" x="${mx}" y="${my}" width="${300 * S}" height="${600 * S}" rx="2"/>
+            ${asks}
+            <text class="sm-v is-win" x="${mx + 300 * S - 8}" y="${my + 600 * S - 12}" text-anchor="end">300×600 serves</text>
+            <text class="sm-v" x="${mx}" y="450">one slot asks for three sizes:</text>
+            <text class="sm-v" x="${mx}" y="472">${MULTI.map(([w, h]) => `${w}×${h}`).reverse().join(" · ")}</text>
+          </svg>`;
+}
+
+const FEATURES = [
+  { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%." },
+  { title: "Mobile-First Design", body: "Responsive ad containers that adapt to any screen size with mobile-specific formats and touch-friendly interactions." },
+  { title: "Brand Safety", body: "Comprehensive category blocking, advertiser exclusions, and malvertising protection to maintain site integrity." },
+  { title: "Core Web Vitals", body: "Optimized ad delivery that protects CLS, LCP, and FID scores, preserving SEO rankings and user experience." },
+];
+
 export function renderDisplayAdsPage(): string {
   const content = `
-  ${renderPageHero("Solutions", "Display Ads", "High-impact display advertising optimized for viewability, engagement, and revenue. From standard IAB units to rich media formats, we maximize every pixel.")}
+  ${renderBlueprintHero({
+    eyebrow: "Solutions",
+    title: "Display Ads",
+    lede: "High-impact display advertising optimized for viewability, engagement, and revenue. From standard IAB units to rich media formats, we maximize every pixel.",
+    actions: [
+      { label: "Get Your Free Analysis", href: "/contact", primary: true, testid: "button-hero-cta" },
+      { label: "See the formats", href: "#formats" },
+    ],
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="display-overview-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-display-overview">
-          <div class="lg:col-span-5">
-            <div class="glass-tag mb-6">Display Monetization</div>
-            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">Beyond the Banner</h2>
-          </div>
-          <div class="lg:col-span-7">
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-              Display advertising remains the backbone of digital monetization, but the landscape has evolved far beyond simple banners. HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device.
-            </p>
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-              Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers achieve 30-50% higher display revenue.
-            </p>
-          </div>
+  <section class="bp-section" data-testid="display-overview-section">
+    <div class="bp-wrap">
+      <div class="bp-grid12 sm-overview" data-testid="card-display-overview">
+        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Display Monetization")}<h2>Beyond the banner.</h2></div>
+        <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
+          <p>Display advertising remains the backbone of digital monetization, but the landscape has evolved far beyond simple banners. HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device.</p>
+          <p>Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers achieve 30-50% higher display revenue.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
+  ${renderSection({
+    id: "formats",
+    testid: "display-formats-section",
+    eyebrow: "Ad Formats",
+    title: "Premium display formats.",
+    lede: "Optimized ad units that balance user experience with maximum revenue potential.",
+    body: `
+      <div class="sm-diagram">${renderDiagramFrame({
+        label: "IAB display units at true proportions, and an example responsive multi-size slot",
+        bar: ["IAB units at true proportions", "Scale 0.6 : 1"],
+        body: renderSizeDiagram(),
+        caption: "Example: the slot asks for three sizes and the highest-paying creative that fits serves.",
+        blueprint: true,
+        testid: "display-size-diagram",
+      })}</div>
+      <div class="sm-after">${renderFeatureRows([
+        { title: "Responsive Multi-Size", body: "Dynamic ad units that request multiple sizes (e.g., 300x250, 336x280, 300x600) and serve the highest-paying creative that fits the available space. Responsive containers ensure clean layouts across all viewports.", testid: "display-format-card-0" },
+        { title: "Sticky & Adhesion Units", body: "Bottom and side adhesion placements that maintain visibility as users scroll, delivering consistently high viewability rates above 85%. Smart dismissal and frequency controls protect user experience.", testid: "display-format-card-1" },
+        { title: "Rich Media & Interstitials", body: "High-impact interstitial and expandable formats for premium campaigns. Web interstitials fire between page navigations with compliant close controls and frequency capping per IAB and Google standards.", testid: "display-format-card-2" },
+      ])}</div>`,
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="display-formats-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Ad Formats</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Premium Display Formats</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Optimized ad units that balance user experience with maximum revenue potential.</p>
-      </div>
+  ${renderSection({
+    testid: "display-features-section",
+    eyebrow: "Key Capabilities",
+    title: "Intelligent display optimization.",
+    lede: "Every tool you need to maximize display revenue while protecting user experience.",
+    body: `
+      <ul class="sm-points" style="--cols:4">${FEATURES.map((f, i) => `
+        <li data-testid="display-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
+      </ul>`,
+  })}
 
-      <div class="grid lg:grid-cols-3 gap-8">
-        ${[
-          { title: "Responsive Multi-Size", desc: "Dynamic ad units that request multiple sizes (e.g., 300x250, 336x280, 300x600) and serve the highest-paying creative that fits the available space. Responsive containers ensure clean layouts across all viewports.", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>' },
-          { title: "Sticky & Adhesion Units", desc: "Bottom and side adhesion placements that maintain visibility as users scroll, delivering consistently high viewability rates above 85%. Smart dismissal and frequency controls protect user experience.", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>' },
-          { title: "Rich Media & Interstitials", desc: "High-impact interstitial and expandable formats for premium campaigns. Web interstitials fire between page navigations with compliant close controls and frequency capping per IAB and Google standards.", icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>' },
-        ].map((f, i) => `
-        <div class="glass-card p-8 animate-on-scroll stagger-${i + 1}" data-testid="display-format-card-${i}">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3">${f.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.desc}</p>
-        </div>`).join("")}
-      </div>
+  <section class="bp-section" data-testid="display-spec-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-5 grid gap-4 content-start">${renderEyebrow("Specifications")}<h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">At a glance.</h2></div>
+      <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
+        { label: "Formats", value: "All IAB standard units" },
+        { label: "Multi-size request", value: '<span class="mono">300×250 · 336×280 · 300×600</span>' },
+        { label: "Adhesion viewability", value: "above 85%" },
+        { label: "Viewability with lazy loading", value: "above 70%" },
+        { label: "Display revenue", value: "30–50%<small>higher</small>" },
+        { label: "Core Web Vitals", value: "CLS · LCP · FID protected" },
+      ])}</div>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="display-features-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Key Capabilities</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Intelligent Display Optimization</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Every tool you need to maximize display revenue while protecting user experience.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        ${[
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>', title: "Viewability Optimization", description: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>', title: "Mobile-First Design", description: "Responsive ad containers that adapt to any screen size with mobile-specific formats and touch-friendly interactions." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>', title: "Brand Safety", description: "Comprehensive category blocking, advertiser exclusions, and malvertising protection to maintain site integrity." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>', title: "Core Web Vitals", description: "Optimized ad delivery that protects CLS, LCP, and FID scores, preserving SEO rankings and user experience." },
-        ].map((f, i) => `
-        <div class="glass-card p-7 group animate-on-scroll stagger-${(i % 3) + 1}" data-testid="display-feature-card-${i}">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderStatsSection()}
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Ready to optimize your display revenue?", "Get Your Free Analysis")}`;
 
@@ -98,4 +130,3 @@ export function renderDisplayAdsPage(): string {
     bodyContent: content,
   });
 }
-
