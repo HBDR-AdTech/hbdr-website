@@ -5,17 +5,31 @@ export function renderPrivacyPolicyPage(): string {
   const content = `
   ${renderPageHero("Legal", "Privacy Policy", "Your privacy is important to us. This policy explains how HBDR collects, uses, and protects your information.")}
 
-  <section class="py-20 lg:py-28" data-testid="privacy-policy-content">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll" data-testid="privacy-last-updated">
+  <section class="bp-section legal" data-testid="privacy-policy-content">
+    <div class="bp-wrap bp-grid12">
+      <nav class="legal-toc" aria-label="On this page">
+        <span class="bp-eyebrow">Contents</span>
+        <ol>
+          <li><a href="#information-we-collect"><span class="mono">01</span>Information We Collect</a></li>
+          <li><a href="#how-we-use-your-information"><span class="mono">02</span>How We Use Your Information</a></li>
+          <li><a href="#information-sharing-and-disclosure"><span class="mono">03</span>Information Sharing and Disclosure</a></li>
+          <li><a href="#data-security"><span class="mono">04</span>Data Security</a></li>
+          <li><a href="#your-rights-and-choices"><span class="mono">05</span>Your Rights and Choices</a></li>
+          <li><a href="#children-s-privacy"><span class="mono">06</span>Children's Privacy</a></li>
+          <li><a href="#changes-to-this-policy"><span class="mono">07</span>Changes to This Policy</a></li>
+          <li><a href="#contact-us"><span class="mono">08</span>Contact Us</a></li>
+        </ol>
+      </nav>
+      <div class="legal-doc">
+      <div class="legal-intro" data-testid="privacy-last-updated">
         <p class="text-[var(--text-muted)] text-sm">Last Updated: February 2026</p>
         <p class="text-[var(--text-muted)] mt-4 leading-relaxed">HBDR ("we," "our," or "us") operates an enterprise ad monetization and header bidding platform. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website, use our platform, or engage with our services.</p>
       </div>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-1" data-testid="privacy-section-collect">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">1. Information We Collect</h2>
+      <section class="legal-sec" id="information-we-collect" data-testid="privacy-section-collect">
+        <h2><span class="mono">01</span>Information We Collect</h2>
 
-        <h3 class="text-xl font-semibold text-white mb-3">Personal Information</h3>
+        <h3>Personal Information</h3>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">We may collect personal information that you voluntarily provide when you register for an account, express interest in obtaining information about us or our products, participate in activities on our platform, or otherwise contact us. This includes:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-6">
           <li>Name, email address, and phone number</li>
@@ -25,7 +39,7 @@ export function renderPrivacyPolicyPage(): string {
           <li>Any other information you choose to provide</li>
         </ul>
 
-        <h3 class="text-xl font-semibold text-white mb-3">Usage Data</h3>
+        <h3>Usage Data</h3>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">We automatically collect certain information when you visit, use, or navigate our platform. This includes:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-6">
           <li>Device and browser information (IP address, browser type, operating system)</li>
@@ -34,12 +48,12 @@ export function renderPrivacyPolicyPage(): string {
           <li>Header bidding auction data and bid response information</li>
         </ul>
 
-        <h3 class="text-xl font-semibold text-white mb-3">Cookies & Tracking Technologies</h3>
+        <h3>Cookies & Tracking Technologies</h3>
         <p class="text-[var(--text-muted)] leading-relaxed">We use cookies, web beacons, pixel tags, and similar tracking technologies to collect and store information about your interactions with our platform. These technologies help us analyze trends, administer our website, track user movements, and gather demographic information. For detailed information about the cookies we use, please see our <a href="/gdpr-cookie-policy" class="text-[var(--accent)] hover:underline">GDPR & Cookie Policy</a>.</p>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-2" data-testid="privacy-section-use">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">2. How We Use Your Information</h2>
+      <section class="legal-sec" id="how-we-use-your-information" data-testid="privacy-section-use">
+        <h2><span class="mono">02</span>How We Use Your Information</h2>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
           <li>To provide, operate, and maintain our ad monetization and header bidding services</li>
@@ -51,10 +65,10 @@ export function renderPrivacyPolicyPage(): string {
           <li>To detect, prevent, and address fraud, unauthorized access, and security issues</li>
           <li>To comply with legal obligations and enforce our terms of service</li>
         </ul>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-3" data-testid="privacy-section-sharing">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">3. Information Sharing and Disclosure</h2>
+      <section class="legal-sec" id="information-sharing-and-disclosure" data-testid="privacy-section-sharing">
+        <h2><span class="mono">03</span>Information Sharing and Disclosure</h2>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">We may share your information in the following circumstances:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
           <li><strong class="text-white/80">Demand Partners & Ad Exchanges:</strong> We share bid request data with demand-side platforms (DSPs), ad exchanges, and advertising networks to facilitate programmatic ad auctions on your behalf.</li>
@@ -63,10 +77,10 @@ export function renderPrivacyPolicyPage(): string {
           <li><strong class="text-white/80">Legal Requirements:</strong> We may disclose your information if required by law, court order, or government regulation, or if we believe disclosure is necessary to protect our rights, safety, or property.</li>
           <li><strong class="text-white/80">With Your Consent:</strong> We may share your information with third parties when you have given us explicit consent to do so.</li>
         </ul>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-1" data-testid="privacy-section-security">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">4. Data Security</h2>
+      <section class="legal-sec" id="data-security" data-testid="privacy-section-security">
+        <h2><span class="mono">04</span>Data Security</h2>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">We implement industry-standard security measures to protect your personal information, including:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
           <li>Encryption of data in transit (TLS/SSL) and at rest</li>
@@ -76,10 +90,10 @@ export function renderPrivacyPolicyPage(): string {
           <li>Employee training on data protection and security best practices</li>
         </ul>
         <p class="text-[var(--text-muted)] leading-relaxed">While we strive to protect your personal information, no method of transmission over the internet or electronic storage is completely secure. We cannot guarantee absolute security but are committed to implementing reasonable safeguards.</p>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-2" data-testid="privacy-section-rights">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">5. Your Rights and Choices</h2>
+      <section class="legal-sec" id="your-rights-and-choices" data-testid="privacy-section-rights">
+        <h2><span class="mono">05</span>Your Rights and Choices</h2>
         <p class="text-[var(--text-muted)] leading-relaxed mb-4">Depending on your jurisdiction, you may have the following rights regarding your personal information:</p>
         <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
           <li><strong class="text-white/80">Access:</strong> Request a copy of the personal data we hold about you.</li>
@@ -91,20 +105,20 @@ export function renderPrivacyPolicyPage(): string {
           <li><strong class="text-white/80">Opt-Out:</strong> Unsubscribe from marketing emails at any time by clicking the unsubscribe link or contacting us.</li>
         </ul>
         <p class="text-[var(--text-muted)] leading-relaxed">To exercise any of these rights, please contact us using the information provided below. We will respond to your request within 30 days.</p>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-3" data-testid="privacy-section-children">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">6. Children's Privacy</h2>
+      <section class="legal-sec" id="children-s-privacy" data-testid="privacy-section-children">
+        <h2><span class="mono">06</span>Children's Privacy</h2>
         <p class="text-[var(--text-muted)] leading-relaxed">Our platform and services are not directed at individuals under the age of 18. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected data from a child under 18, we will take steps to delete such information promptly. If you believe we have collected information from a child, please contact us immediately.</p>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 mb-8 animate-on-scroll stagger-1" data-testid="privacy-section-changes">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">7. Changes to This Policy</h2>
+      <section class="legal-sec" id="changes-to-this-policy" data-testid="privacy-section-changes">
+        <h2><span class="mono">07</span>Changes to This Policy</h2>
         <p class="text-[var(--text-muted)] leading-relaxed">We may update this Privacy Policy from time to time to reflect changes in our practices, technologies, legal requirements, or other factors. We will notify you of material changes by posting the updated policy on this page and updating the "Last Updated" date. We encourage you to review this policy periodically. Your continued use of our services after changes are posted constitutes your acceptance of the revised policy.</p>
-      </div>
+      </section>
 
-      <div class="glass-card p-8 sm:p-12 animate-on-scroll stagger-2" data-testid="privacy-section-contact">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">8. Contact Us</h2>
+      <section class="legal-sec" id="contact-us" data-testid="privacy-section-contact">
+        <h2><span class="mono">08</span>Contact Us</h2>
         <p class="text-[var(--text-muted)] leading-relaxed mb-6">If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
         <div class="space-y-3 text-[var(--text-muted)]">
           <p><strong class="text-white/80">HBDR</strong></p>
@@ -112,6 +126,7 @@ export function renderPrivacyPolicyPage(): string {
           <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-privacy-email">contact@hbdr.com</a></p>
           <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline" data-testid="link-privacy-phone">(786) 675-6080</a></p>
         </div>
+      </section>
       </div>
     </div>
   </section>`;

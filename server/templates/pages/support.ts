@@ -2,6 +2,7 @@ import { sanitizeText } from "../../middleware/sanitize";
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
+import { renderSectionHead } from "../components/blueprint";
 
 // Turnstile site key when the operator has it on (D-016); the support form posts to the same checked endpoint
 export function renderFaqSupportPage(turnstileSiteKey: string | null = null): string {
@@ -34,31 +35,27 @@ export function renderFaqSupportPage(turnstileSiteKey: string | null = null): st
   const content = `
   ${renderPageHero("Support", "FAQ & Support", "Find answers to common questions or reach out to our dedicated support team for personalized assistance.")}
 
-  <section class="py-20 lg:py-28" data-testid="faq-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Frequently Asked Questions</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Browse our most common questions organized by category.</p>
-      </div>
+  <section class="bp-section" data-testid="faq-section">
+    <div class="bp-wrap">${renderSectionHead({ title: "Frequently Asked Questions", lede: "Browse our most common questions organized by category." })}
 
       ${faqs.map((cat, ci) => `
-      <div class="mb-12 animate-on-scroll stagger-${(ci % 3) + 1}" data-testid="faq-category-${ci}">
-        <h3 class="text-2xl font-display text-white mb-6 tracking-tight">${cat.category}</h3>
-        <div class="space-y-3" x-data="{ openFaq: null }">
+      <div class="faq-group bp-grid12" data-testid="faq-category-${ci}">
+        <h3><span class="mono">${String(ci + 1).padStart(2, "0")}</span>${cat.category}</h3>
+        <div class="faq-list" x-data="{ openFaq: null }">
           ${cat.items.map((item, i) => {
             const faqId = `faq-${ci}-${i}`;
             return `
-          <div class="glass-card overflow-hidden" data-testid="${faqId}">
+          <div class="faq-item" data-testid="${faqId}">
             <button
               @click="openFaq = openFaq === '${faqId}' ? null : '${faqId}'"
-              class="w-full text-left p-6 flex items-center justify-between gap-4 cursor-pointer"
+              class="w-full text-left py-5 flex items-center justify-between gap-4 cursor-pointer"
               data-testid="button-${faqId}"
             >
-              <span class="font-semibold text-white/90">${item.q}</span>
+              <span class="font-medium text-[var(--text-primary)]">${item.q}</span>
               <svg class="w-5 h-5 text-[var(--text-muted)] flex-shrink-0 transition-transform duration-300" :class="openFaq === '${faqId}' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div x-show="openFaq === '${faqId}'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-              <div class="px-6 pb-6 text-[var(--text-muted)] leading-relaxed border-t border-white/5 pt-4">${item.a}</div>
+              <div class="pb-6 pr-8 text-[var(--text-muted)] leading-relaxed max-w-[68ch]">${item.a}</div>
             </div>
           </div>`;
           }).join("")}
@@ -67,53 +64,29 @@ export function renderFaqSupportPage(turnstileSiteKey: string | null = null): st
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-20 lg:py-28" data-testid="support-channels-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-4xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Support Channels</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Multiple ways to get the help you need, when you need it.</p>
-      </div>
-      <div class="grid sm:grid-cols-3 gap-6 mb-16">
-        <div class="glass-card p-8 text-center animate-on-scroll stagger-1" data-testid="support-channel-email">
-          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Email Support</h3>
-          <a href="mailto:support@hbdr.com" class="text-[var(--accent)] hover:underline text-sm" data-testid="link-support-email">support@hbdr.com</a>
-          <p class="text-[var(--text-muted)] text-sm mt-2">Response within 24 hours</p>
-        </div>
-        <div class="glass-card p-8 text-center animate-on-scroll stagger-2" data-testid="support-channel-phone">
-          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Phone Support</h3>
-          <a href="tel:+17866756080" class="text-[var(--accent)] hover:underline text-sm" data-testid="link-support-phone">(786) 675-6080</a>
-          <p class="text-[var(--text-muted)] text-sm mt-2">Mon-Fri, 9am-6pm EST</p>
-        </div>
-        <div class="glass-card p-8 text-center animate-on-scroll stagger-3" data-testid="support-channel-priority">
-          <div class="icon-tile flex items-center justify-center mx-auto mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Priority Support</h3>
-          <p class="text-[var(--text-muted)] text-sm">Enterprise clients</p>
-          <p class="text-[var(--text-muted)] text-sm mt-2">Response within 4 hours</p>
-        </div>
+  <section class="bp-section" data-testid="support-channels-section">
+    <div class="bp-wrap">${renderSectionHead({ title: "Support Channels", lede: "Multiple ways to get the help you need, when you need it." })}
+      <div class="bp-table-wrap">
+        <table class="bp-table support-table">
+          <thead><tr><th scope="col">Channel</th><th scope="col">Reach us</th><th scope="col">Service level</th></tr></thead>
+          <tbody>
+            <tr data-testid="support-channel-email"><td>Email Support</td><td><a href="mailto:support@hbdr.com" class="text-[var(--accent)] hover:underline" data-testid="link-support-email">support@hbdr.com</a></td><td>Response within 24 hours</td></tr>
+            <tr data-testid="support-channel-phone"><td>Phone Support</td><td><a href="tel:+17866756080" class="text-[var(--accent)] hover:underline" data-testid="link-support-phone">(786) 675-6080</a></td><td>Mon-Fri, 9am-6pm EST</td></tr>
+            <tr data-testid="support-channel-priority"><td>Priority Support</td><td>Enterprise clients</td><td>Response within 4 hours</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-20 lg:py-28" data-testid="support-form-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 *:max-w-3xl">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Submit a Support Request</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Fill out the form below and our support team will get back to you as soon as possible.</p>
+  <section class="bp-section" data-testid="support-form-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="contact-intro">
+        <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Submit a Support Request</h2>
+        <p class="text-[var(--text-muted)]">Fill out the form below and our support team will get back to you as soon as possible.</p>
       </div>
 
-      <div class="glass-card p-8 sm:p-12 animate-on-scroll stagger-1" data-testid="support-form-card"
+      <div class="contact-form-col support-form-frame" data-testid="support-form-card"
            x-data="{
              formData: { name: '', email: '', subject: '', priority: 'Medium', message: '', _hp_website: '' },
              submitting: false,
@@ -217,8 +190,6 @@ export function renderFaqSupportPage(turnstileSiteKey: string | null = null): st
       </div>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Need a custom solution?", "Contact Our Team")}`;
 
