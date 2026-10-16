@@ -1,1 +1,78 @@
 /* Page styles for the company group (D-020). Shared blocks live in main.css; this file holds only what these pages need. */
+
+/* Long-form lists inside feature rows read top to bottom, not as an inline wrap */
+.bp-rows.co-stack .bp-row-body ul { display: grid; gap: 0.5rem; margin: 0; }
+.co-stack .bp-row-body ul li { display: flex; gap: 0.7rem; align-items: baseline; color: var(--text-secondary); }
+.co-stack .bp-row-body ul li::before { content: ""; width: 10px; height: 1px; background: var(--accent); flex: none; transform: translateY(-0.3em); }
+.co-stack .co-when { display: block; margin-top: 0.35rem; color: var(--accent); }
+
+/* Definition grid: title and text on a hairline, no boxes */
+.co-defs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 2rem; }
+.co-defs > li { display: grid; gap: 0.45rem; align-content: start; padding-top: 1.1rem; border-top: 1px solid var(--hairline); }
+.co-defs h3 { font-size: 1.05rem; line-height: 1.3; font-stretch: 105%; letter-spacing: -0.01em; }
+.co-defs p { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; }
+.co-defs .co-name { color: var(--text-primary); font-size: 0.9375rem; font-weight: 550; }
+.co-defs .co-name + p { font-size: 0.875rem; }
+
+/* Publishers: three short columns fit a phone, so this table does not need the shared 620px minimum */
+.bp-table.co-owner { min-width: 0; }
+@media (max-width: 640px) { .bp-table.co-owner th, .bp-table.co-owner td { padding-inline: 0.75rem; } }
+
+/* Two lists side by side under small headings */
+.co-pair h3 { font-size: 1.15rem; margin-bottom: 1.2rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--hairline); }
+
+/* Accordion questions on hairlines */
+.co-faq { border-top: 1px solid var(--hairline); }
+.co-faq > div { border-bottom: 1px solid var(--hairline); }
+.co-faq button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1.35rem 0; text-align: left; color: var(--text-primary); font-size: 1.0625rem; font-weight: 550; cursor: pointer; background: none; border: 0; }
+.co-faq button:hover { color: var(--accent); }
+.co-faq button svg { width: 18px; height: 18px; flex: none; color: var(--text-muted); transition: transform 0.3s var(--ease-out); }
+.co-faq .co-answer { padding: 0 3rem 1.5rem 0; color: var(--text-muted); line-height: 1.65; max-width: 72ch; }
+
+/* About: milestones on a drafted axis */
+.co-years { list-style: none; margin: 0; padding: 1.5rem 0 0.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); position: relative; }
+.co-years::before { content: ""; position: absolute; top: 1.5rem; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, 0.55); }
+.co-years::after { content: ""; position: absolute; top: calc(1.5rem - 8px); right: 0; width: 1px; height: 17px; background: rgba(255, 255, 255, 0.55); }
+.co-years li { position: relative; display: grid; gap: 0.55rem; align-content: start; padding: 2rem 1.5rem 0 0; }
+.co-years li::before { content: ""; position: absolute; top: -8px; left: 0; width: 1px; height: 17px; background: rgba(255, 255, 255, 0.55); }
+.co-years li::after { content: ""; position: absolute; top: -4px; left: -4px; width: 9px; height: 9px; border-radius: 1px; background: var(--text-secondary); }
+.co-years li.co-now::after { background: var(--accent); }
+.co-years .co-year { font: 500 0.9375rem var(--font-mono); color: var(--text-secondary); letter-spacing: 0.02em; }
+.co-years li.co-now .co-year { color: var(--accent); }
+.co-years h3 { font-size: 1.15rem; line-height: 1.3; font-stretch: 105%; }
+.co-years p { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 38ch; }
+
+/* Flow drawings on this group's pages */
+.co-node { fill: var(--surface); stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.2; }
+.co-node-hi { fill: rgba(0, 250, 168, 0.1); stroke: var(--accent); stroke-width: 1.5; }
+.co-node-dash { fill: rgba(21, 24, 31, 0.55); stroke: rgba(255, 255, 255, 0.35); stroke-width: 1.2; stroke-dasharray: 6 5; }
+.co-title { font: 600 15px var(--font-sans); fill: var(--text-primary); }
+.co-sub { font: 500 12px var(--font-mono); fill: var(--text-muted); letter-spacing: 0.02em; }
+.co-hi { fill: var(--accent); }
+.co-flow { stroke: rgba(255, 255, 255, 0.45); stroke-width: 1.4; fill: none; }
+.co-flow-hi { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+.co-flow-back { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.2; fill: none; stroke-dasharray: 4 5; }
+.co-arrow { fill: rgba(255, 255, 255, 0.55); }
+.co-arrow-hi { fill: var(--accent); }
+.co-wide { min-width: 680px; }
+
+/* Dashboard: example report drawn as a wireframe */
+.co-mock-tab { font: 500 12px var(--font-mono); fill: var(--text-muted); }
+.co-mock-tab-on { fill: var(--text-primary); }
+.co-grid-line { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; }
+.co-trend { stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.6; fill: none; stroke-linejoin: round; }
+.co-callout { stroke: rgba(255, 255, 255, 0.35); stroke-width: 1; fill: none; }
+
+@media (max-width: 960px) {
+  .co-defs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .co-defs { grid-template-columns: 1fr; gap: 1.5rem; }
+  .co-faq .co-answer { padding-right: 0; }
+  .co-years { grid-template-columns: 1fr; gap: 2rem; padding: 0 0 0 1.5rem; }
+  .co-years::before { top: 0; bottom: 0; left: 0; right: auto; width: 1px; height: auto; }
+  .co-years::after { top: auto; bottom: 0; left: -8px; right: auto; width: 17px; height: 1px; }
+  .co-years li { padding: 0; }
+  .co-years li::before { top: 0.45rem; left: -8px; width: 17px; height: 1px; transform: translateX(-1.5rem); }
+  .co-years li::after { top: calc(0.45rem - 4px); left: calc(-1.5rem - 4px); }
+}
