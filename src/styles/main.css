@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* One file per page group so parallel page work never edits the same file */
+@import "./pages/solutions-media.css";
+@import "./pages/solutions-google.css";
+@import "./pages/company.css";
+@import "./pages/resources.css";
+
 /* Tell Tailwind where to scan for class names */
 @source "../../server/**/*.ts";
 @source "../../worker.ts";
