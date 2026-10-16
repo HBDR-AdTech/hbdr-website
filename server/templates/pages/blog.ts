@@ -3,7 +3,8 @@ import { sanitizeText } from "../../middleware/sanitize";
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
-import { BlogPostData, formatDate, getCategoryColor, estimateReadTime } from "../components/blog-helpers";
+import { BlogPostData, formatDate, estimateReadTime } from "../components/blog-helpers";
+import { renderEyebrow } from "../components/blueprint";
 
 export function renderBlogPage(posts: BlogPostData[]): string {
   const categories = Array.from(new Set(posts.map(p => p.category)));
@@ -11,44 +12,32 @@ export function renderBlogPage(posts: BlogPostData[]): string {
   const postCards = posts.map(post => {
     const readTime = estimateReadTime(post.content);
     return `
-    <article class="glass-card overflow-hidden group"
+    <article class="post-row"
              data-category="${sanitizeText(post.category)}"
              data-search="${sanitizeText(`${post.title} ${post.excerpt}`.toLowerCase())}"
              x-show="(!activeCategory || activeCategory === $el.dataset.category) && (!searchQuery || $el.dataset.search.includes(searchQuery.toLowerCase()))"
              x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 scale-95"
-             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
              data-testid="blog-card-${post.slug}">
-      ${post.coverImage ? `
-      <div class="aspect-[16/9] overflow-hidden">
-        <img src="${post.coverImage}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+      <div class="post-row-meta">
+        <span class="mono">${formatDate(post.publishedAt)}</span>
+        <span class="post-cat" data-testid="badge-category">${post.category}</span>
       </div>
-      ` : ""}
-      <div class="p-6 sm:p-8">
-        <div class="flex items-center gap-3 mb-4">
-          <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}" data-testid="badge-category">${post.category}</span>
-          <span class="text-xs text-[var(--text-muted)]">${formatDate(post.publishedAt)}</span>
-          <span class="text-xs text-[var(--text-muted)] flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            ${readTime} min read
-          </span>
-        </div>
-        <a href="/blog/${post.slug}" class="block" data-testid="link-blog-post-${post.slug}">
-          <h2 class="text-xl sm:text-2xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors leading-snug">${post.title}</h2>
+      <div class="post-row-main">
+        <a href="/blog/${post.slug}" data-testid="link-blog-post-${post.slug}">
+          <h2>${post.title}</h2>
         </a>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-5 line-clamp-3">${post.excerpt}</p>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
-              <span class="text-xs font-semibold text-[var(--accent)]">${post.author.split(" ").map(n => n[0]).join("")}</span>
-            </div>
-            <span class="text-sm text-[var(--text-muted)]">${post.author}</span>
-          </div>
-          <a href="/blog/${post.slug}" class="text-sm text-[var(--accent)] font-medium hover:text-[var(--accent-dark)] transition-colors flex items-center gap-1" data-testid="link-read-more-${post.slug}">
-            Read More
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </a>
-        </div>
+        <p class="line-clamp-3">${post.excerpt}</p>
+        <span class="post-row-author">${post.author}</span>
+      </div>
+      <div class="post-row-aside">
+        ${post.coverImage ? `<img src="${post.coverImage}" alt="${post.title}" loading="lazy" />` : ""}
+        <span class="mono">${readTime} min read</span>
+        <a href="/blog/${post.slug}" class="post-more" data-testid="link-read-more-${post.slug}">
+          Read More
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </article>
   `;
@@ -56,8 +45,8 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 
   const categoryFilters = categories.map(cat => `
     <button data-cat="${sanitizeText(cat)}" @click="activeCategory = activeCategory === $el.dataset.cat ? '' : $el.dataset.cat"
-            :class="activeCategory === $el.dataset.cat ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-[var(--text-muted)] hover:text-white hover:border-white/20'"
-            class="text-sm px-4 py-2 rounded-full border transition-all"
+            :class="activeCategory === $el.dataset.cat ? 'is-active' : ''"
+            class="post-filter"
             data-testid="filter-${cat.toLowerCase().replace(/\s+/g, '-')}">
       ${cat}
     </button>
@@ -66,33 +55,31 @@ export function renderBlogPage(posts: BlogPostData[]): string {
   const content = `
   ${renderPageHero("Blog", "Insights & Updates", "Expert perspectives on header bidding, ad monetization, and the future of programmatic advertising.")}
 
-  <section class="py-16 lg:py-24" data-testid="blog-listing" x-data="{ activeCategory: '', searchQuery: '' }">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
-        <div class="relative flex-1 max-w-md">
+  <section class="bp-section bp-section-tight" data-testid="blog-listing" x-data="{ activeCategory: '', searchQuery: '' }">
+    <div class="bp-wrap">
+      <div class="post-toolbar">
+        <div class="relative post-search">
           <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input type="search" aria-label="Search articles" x-model="searchQuery" placeholder="Search articles..."
                  class="glass-input w-full pl-11 pr-4 py-3 text-sm" data-testid="input-blog-search" />
         </div>
+
+        <div class="post-filters" data-testid="blog-filters">
+          <button @click="activeCategory = ''"
+                  :class="!activeCategory ? 'is-active' : ''"
+                  class="post-filter"
+                  data-testid="filter-all">
+            All Posts
+          </button>
+          ${categoryFilters}
+        </div>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3 mb-12" data-testid="blog-filters">
-        <button @click="activeCategory = ''"
-                :class="!activeCategory ? 'bg-[var(--accent)] text-black border-[var(--accent)]' : 'border-white/10 text-[var(--text-muted)] hover:text-white hover:border-white/20'"
-                class="text-sm px-4 py-2 rounded-full border transition-all"
-                data-testid="filter-all">
-          All Posts
-        </button>
-        ${categoryFilters}
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="post-list">
         ${postCards}
       </div>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Want to learn more?", "Contact Us")}`;
 
@@ -106,9 +93,7 @@ export function renderBlogPage(posts: BlogPostData[]): string {
 
 export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostData[]): string {
   const tagsList = post.tags ? post.tags.split(",").map(t => t.trim()).filter(Boolean) : [];
-  const tagsHtml = tagsList.map(tag => `
-    <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-[var(--text-muted)]">${tag}</span>
-  `).join("");
+  const tagsHtml = tagsList.map(tag => `<li>${tag}</li>`).join("");
 
   const readTime = estimateReadTime(post.content);
 
@@ -116,92 +101,72 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
     new Date(post.updatedAt).toDateString() !== new Date(post.publishedAt).toDateString();
 
   const relatedSection = relatedPosts && relatedPosts.length > 0 ? `
-    <div class="mt-16 pt-12 border-t border-white/5">
-      <h2 class="text-2xl font-display text-gradient mb-8" data-testid="related-posts-heading">Related Articles</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <section class="bp-section">
+    <div class="bp-wrap">
+      <div class="bp-head bp-grid12"><div><h2 data-testid="related-posts-heading">Related Articles</h2></div></div>
+      <ul class="res-cols post-related">
         ${relatedPosts.slice(0, 3).map(rp => `
-          <a href="/blog/${rp.slug}" class="glass-card p-6 group block" data-testid="related-post-${rp.slug}">
-            ${rp.coverImage ? `
-            <div class="aspect-[16/9] rounded-lg overflow-hidden mb-4">
-              <img src="${rp.coverImage}" alt="${rp.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-            </div>
-            ` : ""}
-            <span class="text-xs font-medium px-2 py-0.5 rounded-full border ${getCategoryColor(rp.category)} mb-3 inline-block">${rp.category}</span>
-            <h3 class="text-lg font-semibold text-white group-hover:text-[var(--accent)] transition-colors leading-snug mb-2">${rp.title}</h3>
-            <p class="text-sm text-[var(--text-muted)] line-clamp-3">${rp.excerpt}</p>
-            <div class="flex items-center gap-2 mt-3 text-xs text-[var(--text-muted)]">
-              <span>${formatDate(rp.publishedAt)}</span>
-              <span>&middot;</span>
-              <span>${estimateReadTime(rp.content)} min read</span>
-            </div>
+        <li>
+          <a href="/blog/${rp.slug}" class="group" data-testid="related-post-${rp.slug}">
+            ${rp.coverImage ? `<img src="${rp.coverImage}" alt="${rp.title}" loading="lazy" />` : ""}
+            <span class="post-cat">${rp.category}</span>
+            <h3 class="group-hover:text-[var(--accent)]">${rp.title}</h3>
+            <p class="line-clamp-3">${rp.excerpt}</p>
+            <span class="mono">${formatDate(rp.publishedAt)} &middot; ${estimateReadTime(rp.content)} min read</span>
           </a>
-        `).join("")}
-      </div>
+        </li>`).join("")}
+      </ul>
     </div>
+  </section>
   ` : "";
 
   const content = `
-  <article class="pt-28 pb-16" data-testid="blog-post-${post.slug}">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-8" style="animation: fadeInUp 0.6s ease forwards">
-        <a href="/blog" class="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors mb-6" data-testid="link-back-to-blog">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+  <article data-testid="blog-post-${post.slug}">
+    <header class="bp-hero post-hero">
+      <div class="bp-wrap bp-grid12">
+        <a href="/blog" class="post-back" data-testid="link-back-to-blog">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog
         </a>
-        <div class="flex flex-wrap items-center gap-3 mb-6">
-          <span class="text-xs font-medium px-3 py-1 rounded-full border ${getCategoryColor(post.category)}">${post.category}</span>
-          <span class="text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</span>
-          ${showUpdated ? `<span class="text-sm text-[var(--text-muted)]">Updated ${formatDate(post.updatedAt)}</span>` : ""}
-          <span class="text-sm text-[var(--text-muted)] flex items-center gap-1">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            ${readTime} min read
-          </span>
-        </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight text-gradient leading-snug mb-6" data-testid="text-post-title">${post.title}</h1>
-        <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-8">${post.excerpt}</p>
+        ${renderEyebrow(post.category)}
+        <h1 data-testid="text-post-title">${post.title}</h1>
+        <p class="bp-lede">${post.excerpt}</p>
+      </div>
+    </header>
 
-        ${post.coverImage ? `
-        <div class="rounded-2xl overflow-hidden mb-8 border border-white/5">
-          <img src="${post.coverImage}" alt="${post.title}" class="w-full h-auto" />
-        </div>
-        ` : ""}
+    <div class="bp-section bp-section-tight">
+      <div class="bp-wrap bp-grid12">
+        <aside class="post-aside">
+          <dl class="bp-spec">
+            <div><dt>Author</dt><dd data-testid="text-post-author">${post.author}</dd></div>
+            <div><dt>Published</dt><dd class="mono">${formatDate(post.publishedAt)}</dd></div>
+            ${showUpdated ? `<div><dt>Updated</dt><dd class="mono">${formatDate(post.updatedAt)}</dd></div>` : ""}
+            <div><dt>Read time</dt><dd class="mono">${readTime} min read</dd></div>
+          </dl>
+          ${tagsList.length > 0 ? `
+          <div class="post-tags">
+            <span class="mono">Tags:</span>
+            <ul>${tagsHtml}</ul>
+          </div>` : ""}
+        </aside>
 
-        <div class="flex items-center gap-4 pb-8 border-b border-white/5">
-          <div class="w-12 h-12 rounded-full bg-[var(--accent)]/20 flex items-center justify-center">
-            <span class="text-sm font-semibold text-[var(--accent)]">${post.author.split(" ").map(n => n[0]).join("")}</span>
+        <div class="post-body">
+          ${post.coverImage ? `
+          <img src="${post.coverImage}" alt="${post.title}" class="post-cover" />` : ""}
+
+          <div class="prose-content" data-testid="blog-post-content">
+            ${post.content}
           </div>
-          <div>
-            <div class="font-medium text-white" data-testid="text-post-author">${post.author}</div>
-            <div class="text-sm text-[var(--text-muted)]">${formatDate(post.publishedAt)}</div>
-          </div>
+
+          <a href="/blog" class="post-more post-back-bottom" data-testid="link-back-to-blog-bottom">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to All Posts
+          </a>
         </div>
-      </div>
-
-      <div class="prose-content mt-12" style="animation: fadeInUp 0.6s 0.2s ease both" data-testid="blog-post-content">
-        ${post.content}
-      </div>
-
-      ${tagsList.length > 0 ? `
-      <div class="mt-12 pt-8 border-t border-white/5">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm text-[var(--text-muted)] mr-2">Tags:</span>
-          ${tagsHtml}
-        </div>
-      </div>
-      ` : ""}
-
-      ${relatedSection}
-
-      <div class="mt-12 pt-8 border-t border-white/5">
-        <a href="/blog" class="inline-flex items-center gap-2 text-[var(--accent)] font-medium hover:text-[var(--accent-dark)] transition-colors" data-testid="link-back-to-blog-bottom">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          Back to All Posts
-        </a>
       </div>
     </div>
+    ${relatedSection}
   </article>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Ready to maximize your ad revenue?", "Get Started")}`;
 
