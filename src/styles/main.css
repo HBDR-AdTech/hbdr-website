@@ -146,97 +146,6 @@
 
 .glass-btn svg, .glass-btn-outline svg { width: 16px; height: 16px; margin: 0; }
 
-/* Monochrome icon tile (replaces colored gradient tiles) */
-.icon-tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: var(--surface-raised);
-  border: 1px solid var(--hairline);
-  color: var(--text-secondary);
-}
-.icon-tile svg { width: 20px; height: 20px; color: var(--text-secondary); }
-.group:hover .icon-tile svg { color: var(--accent); }
-
-/* Hero: one soft glow at the top, nothing animated */
-.hero-glow {
-  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(0, 250, 168, 0.08), transparent 70%);
-}
-
-/* ── Keyframe Animations ── */
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scrollLogos {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.5; }
-  100% { transform: scale(1.5); opacity: 0; }
-}
-
-/* ── Scroll Animations ── */
-
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.stagger-1 { transition-delay: 0.04s; }
-.stagger-2 { transition-delay: 0.08s; }
-.stagger-3 { transition-delay: 0.12s; }
-.stagger-4 { transition-delay: 0.16s; }
-.stagger-5 { transition-delay: 0.20s; }
-.stagger-6 { transition-delay: 0.24s; }
-
-/* ── Logo Scroll ── */
-
-.logo-scroll {
-  animation: scrollLogos 40s linear infinite;
-}
-.logo-scroll-reverse {
-  animation: scrollLogosReverse 40s linear infinite;
-}
-@keyframes scrollLogosReverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
-}
-
-.logo-scroll:hover, .logo-scroll-reverse:hover { animation-play-state: paused; }
-
-/* ── Headline colors (class names kept; flat white like Linear, accent is solid mint) ── */
-
-.text-gradient { color: var(--text-primary); }
-.text-gradient-accent { color: var(--accent); }
-
-/* ── Dividers ── */
-
-/* Full-bleed hairline between sections, whatever max-width the template sets */
-.section-divider {
-  height: 1px;
-  max-width: none;
-  background: rgba(255, 255, 255, 0.06);
-}
-
 /* ── Prose Content (Blog) ── */
 
 .prose-content h2 {
@@ -303,52 +212,6 @@
   overflow: hidden;
 }
 
-/* Small label above section headings: muted text, hairline pill, mint dot */
-.glass-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--hairline);
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-  font-weight: 510;
-  letter-spacing: -0.01em;
-}
-.glass-tag::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-}
-.glass-tag svg { display: none; }
-
-.check-icon, .x-icon, .partial-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px; height: 20px;
-}
-.check-icon svg { color: var(--accent); }
-.x-icon svg, .partial-icon svg { color: #7d838f; }
-
-.step-number {
-  width: 36px; height: 36px;
-  border-radius: 8px;
-  background: var(--surface-raised);
-  border: 1px solid var(--hairline-strong);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 510;
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-}
-
 .glass-select {
   appearance: none;
   background: var(--surface-elevated);
@@ -371,51 +234,6 @@
 
 .glass-btn:active, .glass-btn-outline:active { transform: translateY(0.5px); }
 
-/* ── Comparison Row ── */
-.comparison-row {
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s var(--ease-out);
-}
-.comparison-row.visible {
-  opacity: 1;
-  transform: none;
-}
-
-/* ── Check Icon Draw ── */
-@keyframes drawCheck {
-  from { stroke-dashoffset: 20; }
-  to { stroke-dashoffset: 0; }
-}
-.check-animate svg path {
-  stroke-dasharray: 20;
-  stroke-dashoffset: 20;
-}
-.check-animate.visible svg path {
-  animation: drawCheck 0.4s ease forwards;
-}
-
-/* ── Step Connector Line ── */
-.step-connector {
-  position: absolute;
-  top: 18px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--hairline);
-}
-
-/* ── Entrance (same restrained fade as animate-on-scroll) ── */
-.animate-scale-in {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
-}
-.animate-scale-in.visible {
-  opacity: 1;
-  transform: none;
-}
-
 /* ── Admin Status Badges ── */
 
 .status-badge {
@@ -433,7 +251,7 @@
 .status-converted { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
 .status-archived { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
 
-/* ── Reduced motion: show everything, no movement ── */
+/* ── Reduced motion: no movement; GSAP pages also skip their scripts and keep the server-rendered finished state ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -441,13 +259,6 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .animate-on-scroll, .animate-scale-in, .comparison-row {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  .check-animate svg path { stroke-dashoffset: 0 !important; }
-  /* partner marquee keeps moving (slow, pauses on hover) */
-  .logo-scroll, .logo-scroll-reverse { animation-duration: 40s !important; animation-iteration-count: infinite !important; }
 }
 
 /* ══ Inventory blueprint system (D-020): one 12-column grid, hairlines, heading left and supporting line right.
@@ -509,7 +320,7 @@
 .bp-frame { position: relative; border: 1px solid var(--hairline); border-radius: 12px; background: var(--surface-elevated); overflow: hidden; }
 .bp-frame-bar { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.7rem 1rem; border-bottom: 1px solid var(--hairline); background: rgba(21, 24, 31, 0.7); color: var(--text-muted); }
 .bp-frame-body { padding: clamp(1rem, 2.5vw, 1.5rem); overflow-x: auto; }
-.bp-frame svg { display: block; width: 100%; height: auto; }
+.bp-frame > svg, .bp-frame-body > svg { display: block; width: 100%; height: auto; }
 .bp-frame figcaption { padding: 0.7rem 1rem; border-top: 1px solid var(--hairline); color: var(--text-muted); }
 .bp-blueprint {
   background-color: #171a22;

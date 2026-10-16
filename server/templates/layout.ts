@@ -44,7 +44,6 @@ function renderHead(options: LayoutOptions): string {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Geist+Mono:wght@400..600&family=Inter:wght@300..800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
-  <noscript><style>.animate-on-scroll,.animate-scale-in,.comparison-row{opacity:1!important;transform:none!important}.check-animate svg path{stroke-dashoffset:0!important}</style></noscript>
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.14.8/dist/cdn.min.js" integrity="sha384-eA6+k1peuuIgxPHwWoQHx6OoDZ7hFJ+SKfMOhop5+zMV4SWR5OWBMatbIdoqA4lZ" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" integrity="sha384-X9kJyAubVxnP0hcA+AMMs21U445qsnqhnUF8EBlEpP3a42Kh/JwWjlv2ZcvGfphb" crossorigin="anonymous"></script>${options.gsap ? GSAP_SCRIPTS : ""}
   <script type="application/ld+json">${JSON.stringify([
@@ -304,64 +303,6 @@ function renderFooter(): string {
 function renderScripts(options: LayoutOptions): string {
   return `
   ${options.cfAnalyticsToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${options.cfAnalyticsToken}"}'></script>` : ""}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Unified scroll observer for all animated elements
-      var observer = new IntersectionObserver(
-        function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              var counter = entry.target.querySelector('[data-count]');
-              if (counter && !counter.dataset.counted) animateCounter(counter);
-            }
-          });
-        },
-        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-      );
-
-      var targets = '.animate-on-scroll, .animate-scale-in, .comparison-row, .check-animate, .step-connector';
-      document.querySelectorAll(targets).forEach(function(el) {
-        observer.observe(el);
-      });
-
-      // Counter animation — eased count from 0 to target
-      function animateCounter(el) {
-        el.dataset.counted = 'true';
-        var target = el.dataset.count;
-        var suffix = el.dataset.suffix || '';
-        var prefix = el.dataset.prefix || '';
-        var num = parseFloat(target);
-        if (isNaN(num)) { el.textContent = target; return; }
-        var duration = 2000;
-        var start = performance.now();
-        var decimals = (target.split('.')[1] || '').length;
-        if (num < 10 && !decimals) return;
-        function update(now) {
-          var elapsed = now - start;
-          var progress = Math.min(elapsed / duration, 1);
-          var ease = 1 - Math.pow(1 - progress, 3);
-          var current = num * ease;
-          el.textContent = prefix + (decimals ? current.toFixed(decimals) : Math.round(current).toLocaleString()) + suffix;
-          if (progress < 1) requestAnimationFrame(update);
-        }
-        requestAnimationFrame(update);
-      }
-
-      // Standalone counter observer for elements not inside animate-on-scroll
-      var counterObserver = new IntersectionObserver(
-        function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting && !entry.target.dataset.counted) animateCounter(entry.target);
-          });
-        },
-        { threshold: 0.3 }
-      );
-      document.querySelectorAll('[data-count]').forEach(function(el) {
-        counterObserver.observe(el);
-      });
-    });
-  </script>
 
 `;
 }
