@@ -88,3 +88,14 @@ Settings are operator controls, not code constants. The contact form (home and /
 5. Each Worker isolate caches the form config for 60 seconds. A cache miss costs 2 queries and reads fewer than 40 rows. An admin write clears the cache in its own isolate; other isolates show the change within 60 seconds. If an override row is not JSON (a hand edit in D1), it is skipped and the field keeps its default, so the row cannot stop lead capture.
 Supersedes: D-014's `LEAD_OPTIONS` (the choice lists now live in `DEFAULT_FORM_FIELDS` plus overrides) and its "the API keeps every qualifying field optional" (now rule 3).
 Rollback: revert the merge. Migration 0004 only adds tables and nullable columns, which the old code ignores. Turnstile is switched off with one toggle on `/admin/form`.
+
+## D-017 — 2026-10-14 — Matt — The site uses the logo's colors
+
+"The jet black background is too deep. I like the mint accent because it goes with the logo. Match it to the logo colors and keep that theme throughout." The palette is sampled from the logo pack (`attached_assets/HBDR_Logo_Pack_all_sizes_-_2…jpeg`): canvas `#15181F` (the logo's slate ground), elevated `#1B1F27`, raised `#222630`, accent `#00FAA8` (the logo mint; the old `#2BDE73` was off-brand), white text `#F5F7FA`, muted text `#959CA8` (at least 5.4:1 on every surface), placeholder `#848B97` (4.8:1 on inputs). Buttons on mint use the canvas color for text (12.9:1). The lead email header, admin pages, calculators, selection, caret, scrollbars and `theme-color` use the same tokens. Tokens live in `src/styles/main.css`; templates reference `var(--accent)`, never a hex.
+Supersedes: D-012's canvas `#08090a` and accent `#2BDE73`. The rest of D-012 (hairlines, Inter, no glass/orbs/gradient text) stands.
+Rollback: revert the commit; only CSS tokens and color literals change.
+
+## D-018 — 2026-10-14 — Matt — Submitter IPs are kept
+
+"Keep the submitter IDs in the database. Make sure they're safe." `contact_leads.ip` stays, kept forever with the lead (D-013); there is no retention job. Checked 2026-10-14: the IP is read only behind Cloudflare Access (admin leads table and `/admin/leads/export`, whose cells are formula-escaped by `csvCell`), never sent in the lead email; `rate_limits` rows are deleted after their 15-minute window; offline exports are mode 600 outside the repo.
+Closes: the "decide IP retention" item in `docs/SECURITY.md`.

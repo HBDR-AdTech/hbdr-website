@@ -208,8 +208,8 @@ export function renderFaqSupportPage(turnstileSiteKey: string | null = null): st
           </form>
         </div>
         <div x-show="submitted" x-cloak class="text-center py-8">
-          <div class="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <div class="w-16 h-16 rounded-full bg-[var(--accent)]/15 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
           </div>
           <h3 class="text-2xl font-display text-white mb-2">Request Submitted</h3>
           <p class="text-[var(--text-muted)]">Our support team will get back to you within 24 hours. Thank you for reaching out.</p>
