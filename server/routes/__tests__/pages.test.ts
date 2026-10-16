@@ -78,6 +78,16 @@ describe("page content structure", () => {
     expect(html).toContain("matchMedia('(prefers-reduced-motion: reduce)')");
   });
 
+  // D-023: reduced-motion visitors still get the hero auction (as fades); the early return comes after it, not before
+  it("homepage plays the hero auction under reduced motion and stops before the other sections", async () => {
+    const html = await (await app.request("/")).text();
+    const hero = html.indexOf("ScrollTrigger.create({ trigger: '.sheet'");
+    const stop = html.indexOf("if (reduce) return;");
+    expect(hero).toBeGreaterThan(-1);
+    expect(stop).toBeGreaterThan(hero);
+    expect(html.indexOf("ScrollTrigger.create({ trigger: '.partner-grid'")).toBeGreaterThan(stop);
+  });
+
   // D-021: no testimonials until Matt supplies real ones
   it("homepage carries no testimonials", async () => {
     const html = await (await app.request("/")).text();
