@@ -290,7 +290,8 @@ export function renderPage(form: FormConfig): string {
   </main>
 
   <script>
-  // Formats work with or without GSAP; everything else is GSAP motion over a finished server-rendered page (D-019, D-020 rule 4)
+  // Formats work with or without GSAP; everything else is GSAP motion over a finished server-rendered page (D-019, D-020 rule 4).
+  // Under reduced motion only the hero auction plays, as fades with nothing moving (D-023).
   document.addEventListener('DOMContentLoaded', function () {
     var formats = ${JSON.stringify(FORMATS)};
     var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -338,11 +339,11 @@ export function renderPage(form: FormConfig): string {
       });
     });
 
-    if (!hasGsap) return; // the server-rendered page is complete on its own
+    if (!window.gsap) return; // the server-rendered page is complete on its own
     gsap.registerPlugin(ScrollTrigger);
 
     // Hero: dimension lines draw once, then the slots are sold one auction at a time
-    document.querySelectorAll('.dims .bp-line').forEach(function (p) {
+    if (!reduce) document.querySelectorAll('.dims .bp-line').forEach(function (p) {
       var len = p.getTotalLength();
       gsap.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.1, ease: 'expo.out', delay: 0.15 });
     });
@@ -365,11 +366,17 @@ export function renderPage(form: FormConfig): string {
           items.forEach(function (li) { li.classList.remove('is-winner'); li.querySelector('.auction-cpm').textContent = '—'; });
           frame.classList.add('is-live');
         }, null, start);
-        tl.fromTo('.auction-timer span', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'none' }, start);
+        if (!reduce) tl.fromTo('.auction-timer span', { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'none' }, start);
         items.forEach(function (li, i) {
           var at = start + 0.1 + Math.random() * 0.85, bar = li.querySelector('.auction-fill');
-          tl.set(bar, { scaleX: 0 }, start);
-          tl.to(bar, { scaleX: vals[i] / 6, duration: 0.45, ease: 'expo.out' }, at);
+          if (reduce) {
+            // each bid fades in at its final length; nothing slides
+            tl.set(bar, { scaleX: vals[i] / 6, opacity: 0 }, start);
+            tl.to(bar, { opacity: 1, duration: 0.25 }, at);
+          } else {
+            tl.set(bar, { scaleX: 0 }, start);
+            tl.to(bar, { scaleX: vals[i] / 6, duration: 0.45, ease: 'expo.out' }, at);
+          }
           tl.call(function () { li.querySelector('.auction-cpm').textContent = money(vals[i]); }, null, at);
         });
         tl.call(function () {
@@ -392,6 +399,7 @@ export function renderPage(form: FormConfig): string {
     function sync() { if (!cycle) return; (inView && !document.hidden) ? cycle.resume() : cycle.pause(); }
     ScrollTrigger.create({ trigger: '.sheet', start: 'top bottom', end: 'bottom top', onToggle: function (self) { inView = self.isActive; if (!cycle && inView) cycle = buildCycle(); sync(); } });
     document.addEventListener('visibilitychange', sync);
+    if (reduce) return; // every other section stays in its finished state
 
     // Partners: dots light in a random order once, like bids arriving; names are always visible
     ScrollTrigger.create({ trigger: '.partner-grid', start: 'top 80%', once: true, onEnter: function () {
