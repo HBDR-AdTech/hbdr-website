@@ -1,108 +1,116 @@
 import { renderLayout } from "../../layout";
-import { renderPageHero } from "../../components/hero";
+import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection, renderSpecList } from "../../components/blueprint";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 
+// SSAI: content segments and the ad pod are stitched into one stream server-side; slots 3 and 4 are the ad break
+const SLOT_X = (i: number) => 200 + i * 108;
+const SLOTS = [0, 1, 2, 3, 4, 5, 6, 7];
+const isAd = (i: number) => i === 3 || i === 4;
+
+function renderSsaiDiagram(): string {
+  let c = 0, a = 0;
+  const label = SLOTS.map((i) => (isAd(i) ? `ad ${++a}` : `c${++c}`));
+  const lane = (y: number, name: string, sub: string, sub2 = "") =>
+    `<text class="sm-name" x="0" y="${y + 18}">${name}</text><text class="sm-v${sub2}" x="0" y="${y + 40}">${sub}</text>`;
+  const seg = (i: number, y: number) => `<rect class="${isAd(i) ? "sm-ad" : "sm-seg"}" x="${SLOT_X(i)}" y="${y}" width="100" height="40" rx="2"/><text class="sm-v${isAd(i) ? " is-win" : ""}" x="${SLOT_X(i) + 50}" y="${y + 25}" text-anchor="middle">${label[i]}</text>`;
+  const content = SLOTS.filter((i) => !isAd(i));
+  const ads = SLOTS.filter(isAd);
+  return `<svg viewBox="0 0 1100 420" role="img" aria-label="Server-side ad insertion: the content stream has an ad break after its third segment, the auction fills the break with a two-ad pod, and both are stitched into one continuous HLS, DASH or CMAF stream.">
+            ${lane(50, "Content", "your stream")}
+            ${content.map((i) => seg(i, 50)).join("")}
+            <rect class="sm-node is-off" x="${SLOT_X(3)}" y="50" width="208" height="40" rx="2" style="fill:none"/>
+            <text class="sm-k" x="${SLOT_X(3) + 104}" y="75" text-anchor="middle">ad break</text>
+            ${lane(170, "Ad pod", "from the auction", " is-win")}
+            ${ads.map((i) => seg(i, 170)).join("")}
+            ${content.map((i) => `<path class="sm-wire is-off" d="M${SLOT_X(i) + 50} 90 V300"/>`).join("")}
+            ${ads.map((i) => `<path class="sm-wire is-win" d="M${SLOT_X(i) + 50} 210 V300"/>`).join("")}
+            ${lane(300, "Stitched stream", "HLS · DASH · CMAF")}
+            ${SLOTS.map((i) => seg(i, 300)).join("")}
+            <path class="sm-rule" d="M200 372 H1056"/>
+            <text class="sm-v" x="200" y="400">One continuous stream to the screen: no buffering between content and ads</text>
+          </svg>`;
+}
+
+const FEATURES = [
+  { title: "Audience Targeting", body: "Leverage first-party data, ACR signals, and contextual metadata to deliver highly targeted ads across CTV environments." },
+  { title: "Unified Reporting", body: "Cross-platform analytics that unify CTV, OTT, and web video performance into a single dashboard with real-time metrics." },
+  { title: "Premium Demand", body: "Direct connections to top-tier video DSPs including The Trade Desk, DV360, Amazon, and brand-direct programmatic guaranteed deals." },
+];
+
 export function renderCtvOttPage(): string {
   const content = `
-  ${renderPageHero("Solutions", "CTV & OTT Advertising", "Tap into the fastest-growing segment of programmatic advertising. Deliver premium video ads across connected TV and streaming platforms with SSAI and server-side ad insertion.")}
+  ${renderBlueprintHero({
+    eyebrow: "Solutions",
+    title: "CTV & OTT Advertising",
+    lede: "Tap into the fastest-growing segment of programmatic advertising. Deliver premium video ads across connected TV and streaming platforms with SSAI and server-side ad insertion.",
+    actions: [
+      { label: "Launch CTV Ads", href: "/contact", primary: true, testid: "button-hero-cta" },
+      { label: "How SSAI works", href: "#ssai" },
+    ],
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="ctv-overview-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="animate-on-scroll">
-        <div class="glass-card p-8 sm:p-12 lg:grid lg:grid-cols-12 lg:gap-16" data-testid="card-ctv-overview">
-          <div class="lg:col-span-5">
-            <div class="glass-tag mb-6">Premium Video</div>
-            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-6 text-gradient">The Future of TV Advertising</h2>
-          </div>
-          <div class="lg:col-span-7">
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed mb-6">
-              Connected TV and OTT platforms represent the most lucrative opportunity in programmatic advertising. With CPMs 5-10x higher than standard display, CTV offers publishers an unparalleled revenue channel. HBDR's CTV solution connects your streaming inventory to premium video demand from leading DSPs, agencies, and brand-direct buyers.
-            </p>
-            <p class="text-lg text-[var(--text-muted)] leading-relaxed">
-              Our server-side ad insertion (SSAI) technology ensures seamless, broadcast-quality ad experiences that match the production value of the surrounding content. No buffering, no latency, no ad blockers — just premium ads delivered to engaged, lean-back audiences on the biggest screen in the house.
-            </p>
-          </div>
+  <section class="bp-section" data-testid="ctv-overview-section">
+    <div class="bp-wrap">
+      <div class="bp-grid12 sm-overview" data-testid="card-ctv-overview">
+        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Premium Video")}<h2>The future of TV advertising.</h2></div>
+        <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
+          <p>Connected TV and OTT platforms represent the most lucrative opportunity in programmatic advertising. With CPMs 5-10x higher than standard display, CTV offers publishers an unparalleled revenue channel. HBDR's CTV solution connects your streaming inventory to premium video demand from leading DSPs, agencies, and brand-direct buyers.</p>
+          <p>Our server-side ad insertion (SSAI) technology ensures seamless, broadcast-quality ad experiences that match the production value of the surrounding content. No buffering, no latency, no ad blockers — just premium ads delivered to engaged, lean-back audiences on the biggest screen in the house.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="section-divider max-w-5xl mx-auto"></div>
+  ${renderSection({
+    id: "ssai",
+    testid: "ctv-capabilities-section",
+    eyebrow: "Capabilities",
+    title: "End-to-end CTV monetization.",
+    lede: "From ad pod management to audience targeting, everything you need to monetize streaming content.",
+    body: `
+      <div class="sm-diagram">${renderDiagramFrame({
+        label: "Server-side ad insertion: content and an ad pod stitched into one stream",
+        bar: ["Server-side ad insertion", "Stitched at the manifest level"],
+        body: renderSsaiDiagram(),
+        caption: "Schematic: segment counts and lengths are illustrative.",
+        blueprint: true,
+        testid: "ctv-ssai-diagram",
+      })}</div>
+      <div class="sm-after">${renderFeatureRows([
+        { title: "Server-Side Ad Insertion (SSAI)", body: "Ads are stitched directly into the content stream at the manifest level, delivering a seamless viewing experience identical to linear TV. SSAI eliminates buffering between content and ads, prevents ad blocking, and supports all major streaming protocols including HLS and DASH.",
+          list: ["Broadcast-quality ad transitions", "Ad-block resistant delivery", "HLS, DASH, and CMAF support"], testid: "card-ssai" },
+        { title: "Ad Pod Management", body: "Intelligent ad pod construction with competitive separation, frequency capping, and optimal pod length configuration. Our system dynamically adjusts pre-roll, mid-roll, and post-roll positions based on content duration, viewer engagement, and revenue optimization models.",
+          list: ["Dynamic pod length optimization", "Competitive separation rules", "Viewer-centric frequency capping"], testid: "card-ad-pods" },
+      ])}</div>`,
+  })}
 
-  <section class="py-24 lg:py-32" data-testid="ctv-capabilities-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Capabilities</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">End-to-End CTV Monetization</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">From ad pod management to audience targeting, everything you need to monetize streaming content.</p>
-      </div>
+  ${renderSection({
+    testid: "ctv-features-section",
+    eyebrow: "Platform Features",
+    title: "Built for streaming scale.",
+    lede: "Enterprise features that power the biggest names in streaming.",
+    body: `
+      <ul class="sm-points">${FEATURES.map((f, i) => `
+        <li data-testid="ctv-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
+      </ul>`,
+  })}
 
-      <div class="grid lg:grid-cols-2 gap-8">
-        <div class="glass-card p-8 animate-on-scroll stagger-1" data-testid="card-ssai">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3">Server-Side Ad Insertion (SSAI)</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
-            Ads are stitched directly into the content stream at the manifest level, delivering a seamless viewing experience identical to linear TV. SSAI eliminates buffering between content and ads, prevents ad blocking, and supports all major streaming protocols including HLS and DASH.
-          </p>
-          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Broadcast-quality ad transitions</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Ad-block resistant delivery</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> HLS, DASH, and CMAF support</li>
-          </ul>
-        </div>
-        <div class="glass-card p-8 animate-on-scroll stagger-2" data-testid="card-ad-pods">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3">Ad Pod Management</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem] mb-4">
-            Intelligent ad pod construction with competitive separation, frequency capping, and optimal pod length configuration. Our system dynamically adjusts pre-roll, mid-roll, and post-roll positions based on content duration, viewer engagement, and revenue optimization models.
-          </p>
-          <ul class="space-y-2 text-[var(--text-muted)] text-[0.9375rem]">
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Dynamic pod length optimization</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Competitive separation rules</li>
-            <li class="flex items-start gap-2"><span class="text-[var(--accent)] mt-1">&#10003;</span> Viewer-centric frequency capping</li>
-          </ul>
-        </div>
-      </div>
+  <section class="bp-section" data-testid="ctv-spec-section">
+    <div class="bp-wrap bp-grid12">
+      <div class="col-span-12 lg:col-span-5 grid gap-4 content-start">${renderEyebrow("Specifications")}<h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">At a glance.</h2></div>
+      <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
+        { label: "Ad insertion", value: "Server-side (SSAI), manifest level" },
+        { label: "Streaming protocols", value: "HLS · DASH · CMAF" },
+        { label: "Ad positions", value: "Pre-roll · mid-roll · post-roll" },
+        { label: "Pod controls", value: "Separation · frequency caps · pod length" },
+        { label: "Video demand", value: "The Trade Desk · DV360 · Amazon" },
+        { label: "CPMs vs. standard display", value: "5–10×<small>higher</small>" },
+      ])}</div>
     </div>
   </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
-
-  <section class="py-24 lg:py-32" data-testid="ctv-features-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-14 lg:mb-16 animate-on-scroll">
-        <div class="glass-tag mb-6">Platform Features</div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display tracking-tight mb-6 text-gradient">Built for Streaming Scale</h2>
-        <p class="text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">Enterprise features that power the biggest names in streaming.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        ${[
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>', title: "Audience Targeting", description: "Leverage first-party data, ACR signals, and contextual metadata to deliver highly targeted ads across CTV environments." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', title: "Unified Reporting", description: "Cross-platform analytics that unify CTV, OTT, and web video performance into a single dashboard with real-time metrics." },
-          { icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', title: "Premium Demand", description: "Direct connections to top-tier video DSPs including The Trade Desk, DV360, Amazon, and brand-direct programmatic guaranteed deals." },
-        ].map((f, i) => `
-        <div class="glass-card p-7 group animate-on-scroll stagger-${i + 1}" data-testid="ctv-feature-card-${i}">
-          <div class="icon-tile flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">${f.icon}</svg>
-          </div>
-          <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-[var(--accent)] transition-colors">${f.title}</h3>
-          <p class="text-[var(--text-muted)] leading-relaxed text-[0.9375rem]">${f.description}</p>
-        </div>`).join("")}
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderStatsSection()}
-
-  <div class="section-divider max-w-5xl mx-auto"></div>
 
   ${renderCTASection("Ready to monetize your streaming content?", "Launch CTV Ads")}`;
 
@@ -113,4 +121,3 @@ export function renderCtvOttPage(): string {
     bodyContent: content,
   });
 }
-
