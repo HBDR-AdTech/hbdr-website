@@ -119,3 +119,9 @@ Rollback: revert the redesign merge; tokens and templates return to the D-017 st
 ## D-021 — 2026-10-16 — Matt — No testimonials until real ones exist
 
 The home page testimonials ("TechMedia Group", "Digital Publishing Co", "Content Network Inc", "Mobile Media Labs", "Gaming Publishers United") are removed in the redesign. Testimonials return only with real quotes, names and companies that Matt supplies. Extends D-005 (no invented clients or quotes).
+
+## D-022 — 2026-10-16 — Matt (via D-020 and HANDOFF-004) — The hero auction runs on GSAP, inside the inventory sheet
+
+The home hero is the approved blueprint sheet (`docs/design/home-blueprint.html`): a publisher page drawn to IAB proportions whose five slots are sold one auction at a time, with the bid ladder over the page copy and a tally ("n of 5 slots sold · page eCPM"). The motion moves from the Web Animations API to GSAP 3.12.5 + ScrollTrigger, loaded from cdnjs with SRI hashes (`GSAP_SCRIPTS` in `server/templates/layout.ts`; `https://cdnjs.cloudflare.com` added to `script-src`) and only on pages that pass `gsap: true` to `renderLayout`. The cycle runs only while the sheet is on screen and the tab is visible. The server renders the finished state (one slot sold at $4.86, one winner), which is what no-JS and reduced-motion visitors see (`server/routes/__tests__/pages.test.ts`). The revenue dashboard and its "Today's Revenue" ticker are gone.
+Supersedes: D-019's "Web Animations API with no GSAP, no new script download and no SRI entry" and its revenue ticker. D-019's example-data rules (Bidder 1–5, random example bids, D-005) stand.
+Rollback: revert the commit; the CSP entry is harmless without the scripts.
