@@ -87,7 +87,7 @@ export async function sendContactNotification(
 
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: #15181f; border-radius: 12px; padding: 30px; margin-bottom: 20px;">
+        <div style="background: #0b1121; border-radius: 12px; padding: 30px; margin-bottom: 20px;">
           <h1 style="color: #00FAA8; margin: 0 0 5px 0; font-size: 24px;">${isSupport ? "New Support Request" : "New Lead from HBDR.com"}</h1>
           <p style="color: rgba(255,255,255,0.5); margin: 0; font-size: 14px;">${sourceLabel}</p>
         </div>
