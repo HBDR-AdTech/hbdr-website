@@ -110,9 +110,9 @@ migrations/                  # D1 database schema (0001 init, 0002 rate limits, 
 
 ## Design System
 
-- **Look**: inventory blueprint (D-020) in the logo's colors (D-017): slate canvas, hairline rules, one 12-column grid, heading left and supporting line right. Informational content flows in sections; a border, fill or radius marks only a real object (table, form, diagram, code, demo). No card grids, icon tiles or tag pills on public pages (`server/routes/__tests__/blueprint.test.ts`). Each solution page carries one teaching object (diagram, spec table or worked example) built from D-005 facts and labelled example data.
+- **Look**: inventory blueprint (D-020) in deep navy (D-024) with the logo mint (D-017): slate canvas, hairline rules, one 12-column grid, heading left and supporting line right. Informational content flows in sections; a border, fill or radius marks only a real object (table, form, diagram, code, demo). No card grids, icon tiles or tag pills on public pages (`server/routes/__tests__/blueprint.test.ts`). Each solution page carries one teaching object (diagram, spec table or worked example) built from D-005 facts and labelled example data.
 - **Accent**: logo mint `#00FAA8` (`var(--accent)`), used sparingly: primary button, eyebrow squares, the one highlighted thing in a diagram
-- **Surfaces**: canvas `#15181f`, elevated `#1b1f27`, raised `#222630`; hairlines `rgba(255,255,255,0.08)` / `0.14`; `.bp-blueprint` adds the 8px drafting grid behind a diagram
+- **Surfaces** (D-024 deep navy): canvas `#0b1121`, elevated `#111a2e`, raised `#18223a`; hairlines `rgba(255,255,255,0.08)` / `0.14`; `.bp-blueprint` adds the 8px drafting grid behind a diagram
 - **Text**: primary `#f5f7fa`, secondary `#d0d6e0`, muted `#959ca8` (>= 4.5:1 on every surface)
 - **Typography**: Archivo for h1-h3 on public pages (admin keeps Inter via `body.is-admin`), Inter body, `.mono` (Geist Mono) only for sizes, prices, timings and codes
 - **Blocks** (`server/templates/components/blueprint.ts`): `renderBlueprintHero`, `renderSection`, `renderSectionHead`, `renderFeatureRows`, `renderSpecList`, `renderStatRow`, `renderDiagramFrame`, `renderSteps`, `renderCtaBand`, `renderActions`; CSS classes `bp-*` in `main.css`
