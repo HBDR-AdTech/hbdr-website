@@ -191,3 +191,26 @@ Matt's answers to the six copy contradictions (HANDOFF-005 §5, HANDOFF-006 §5)
 | 6. Demand sources | 65+ demand sources, replacing "50+ demand partners/SSPs". |
 
 Test: `server/routes/__tests__/claims.test.ts` fails if any superseded wording returns.
+
+## D-028 — 2026-10-23 — Matt — The header bidding calculator prices the timeout
+
+"Wire it to the math." The /tools header bidding calculator's timeout slider (200–3000 ms) now changes the result. It uses the same illustrative assumptions as the home timeout explorer (D-026):
+- **Bids in time** = (timeout − 100 ms) ÷ 1,100 ms, clamped to 0–100%. Bids are assumed to arrive evenly between 100 and 1,200 ms.
+- **Impressions kept** = 1 − 2% per 100 ms of timeout over 300 ms.
+- **New CPM** = current CPM × geo × (1 + uplift × partner factor × method factor × bids in time).
+- **Projected fill** = current fill + improvement × bids in time, capped at 100%.
+- **Header bidding revenue** = impressions × impressions kept ÷ 1,000 × new CPM × projected fill.
+
+The calculator shows "Bids In Time" and "Impressions Kept". The formula table states the model, and the page labels it illustrative.
+
+At the default inputs:
+
+| Timeout | Uplift |
+|---|---|
+| 300 ms | +10% |
+| 1000 ms | +29% |
+| 1200 ms (peak) | +33% |
+| 2000 ms | +7% |
+
+Test: `resources-pages.test.ts` evaluates the calculator's own `x-data` at 300, 1000, 1200 and 3000 ms.
+Rollback: revert the commit.
