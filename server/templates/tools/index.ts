@@ -234,11 +234,13 @@ export function renderPublisherToolsPage(): string {
             get geoMultiplier() { return {us:1, eu:0.75, mixed:0.85, row:0.4}[this.geoMix] || 1 },
             get partnerMultiplier() { return Math.min(1.5, 0.7 + 0.3 * Math.log(this.demandPartners / 5) / Math.log(10)) },
             get methodMultiplier() { return {adsense:1.0, singlessp:0.7, waterfall:0.5}[this.currentMethod] || 1 },
-            get effectiveUpliftPct() { return this.hbUpliftPct * this.partnerMultiplier * this.methodMultiplier },
+            get bidShare() { return Math.min(1, Math.max(0, (this.timeout - 100) / 1100)) },
+            get impressionsKept() { return Math.max(0, 1 - 0.02 * Math.max(0, this.timeout - 300) / 100) },
+            get effectiveUpliftPct() { return this.hbUpliftPct * this.partnerMultiplier * this.methodMultiplier * this.bidShare },
             get currentRevenue() { return (this.monthlyImpressions / 1000) * (this.currentCpm * this.geoMultiplier) * (this.currentFill / 100) },
             get hbCpm() { return (this.currentCpm * this.geoMultiplier) * (1 + this.effectiveUpliftPct / 100) },
-            get hbFill() { return Math.min(100, this.currentFill + this.hbFillBoost) },
-            get hbRevenue() { return (this.monthlyImpressions / 1000) * this.hbCpm * (this.hbFill / 100) },
+            get hbFill() { return Math.min(100, this.currentFill + this.hbFillBoost * this.bidShare) },
+            get hbRevenue() { return (this.monthlyImpressions * this.impressionsKept / 1000) * this.hbCpm * (this.hbFill / 100) },
             get upliftAmount() { return this.hbRevenue - this.currentRevenue },
             get upliftPercent() { return this.currentRevenue > 0 ? ((this.hbRevenue - this.currentRevenue) / this.currentRevenue) * 100 : 0 },
             fmt(n) { return '$' + n.toFixed(2).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',') },
@@ -251,7 +253,7 @@ export function renderPublisherToolsPage(): string {
             renderSliderInput('hbUpliftPct', 'Expected CPM Uplift', '10', '80', '5', '%', 'Your assumption for how much CPMs rise when more buyers bid in one auction. The model scales it by the partner and current-method factors.'),
             renderSliderInput('hbFillBoost', 'Fill Rate Improvement', '0', '30', '1', '%', 'Your assumption for the extra fill, in percentage points, from more competing buyers. Projected fill is capped at 100%.'),
             renderSliderInput('demandPartners', 'Demand Partners', '5', '50', '1', '', 'Demand partners in the wrapper. The model scales the uplift from 0.7x at 5 partners to 1.0x at 50, on a logarithmic curve.'),
-            renderSliderInput('timeout', 'Timeout', '200', '3000', '100', 'ms', 'Auction timeout, shown for reference. This model does not price it; the timeout explorer on the home page shows the trade-off.'),
+            renderSliderInput('timeout', 'Timeout', '200', '3000', '100', 'ms', 'How long bidders get before the ad server is called. Longer catches more bids (the model assumes they arrive evenly from 100 to 1,200 ms) but costs 2% of impressions per 100 ms over 300 ms, the same assumption as the home timeout explorer.'),
             renderSelectInput('currentMethod', 'Current Method', [
               {value: 'adsense', label: 'AdSense Only (1.0x)'},
               {value: 'singlessp', label: 'Single SSP (0.7x)'},
@@ -281,6 +283,10 @@ export function renderPublisherToolsPage(): string {
             <div class="grid grid-cols-2 gap-4">
               ${renderOutputMetric('Revenue Uplift', "fmtPct(upliftPercent)")}
               ${renderOutputMetric('New Effective CPM', "fmt(hbCpm)")}
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              ${renderOutputMetric('Bids In Time', "fmtPct(bidShare * 100)")}
+              ${renderOutputMetric('Impressions Kept', "fmtPct(impressionsKept * 100)")}
             </div>
             <div class="grid grid-cols-2 gap-4">
               ${renderOutputMetric('Current Fill Rate', "fmtPct(currentFill)")}
@@ -561,7 +567,7 @@ export function renderPublisherToolsPage(): string {
           <thead><tr><th scope="col">Calculator</th><th scope="col">Monthly revenue</th><th scope="col">Notes</th></tr></thead>
           <tbody>
             <tr><td>Display</td><td>Pageviews × ad slots × fill rate ÷ 1,000 × adjusted CPM</td><td>Adjusted CPM = base CPM × geo × device × vertical × season. Viewability is reported but does not change revenue. Effective eCPM divides revenue by all ad requests, filled or not. Page RPM = revenue ÷ pageviews × 1,000.</td></tr>
-            <tr><td>Header bidding</td><td>Impressions ÷ 1,000 × new CPM × projected fill</td><td>New CPM = current CPM × geo × (1 + uplift × partner factor × method factor). Projected fill = current fill + improvement, capped at 100%. The timeout input is not priced.</td></tr>
+            <tr><td>Header bidding</td><td>Impressions × impressions kept ÷ 1,000 × new CPM × projected fill</td><td>Bids in time = (timeout − 100 ms) ÷ 1,100 ms, between 0 and 100%. Impressions kept = 1 − 2% per 100 ms of timeout over 300 ms. New CPM = current CPM × geo × (1 + uplift × partner factor × method factor × bids in time). Projected fill = current fill + improvement × bids in time, capped at 100%. Illustrative assumptions, shared with the home timeout explorer.</td></tr>
             <tr><td>Video</td><td>Starts × breaks × ads per break × fill rate × completion rate ÷ 1,000 × adjusted CPM</td><td>Only completed views earn. Adjusted CPM = base CPM × content × position × VAST version.</td></tr>
             <tr><td>In-app</td><td>DAU × sessions × ads per session × fill rate ÷ 1,000 × adjusted eCPM × 30</td><td>Adjusted eCPM = base eCPM × platform × format × engagement. ARPDAU = daily revenue ÷ DAU. MAU is estimated as DAU × 3.2.</td></tr>
             <tr><td>CTV / OTT</td><td>Streams × breaks per stream × ads per break × fill rate ÷ 1,000 × adjusted CPM</td><td>Breaks per stream = stream minutes ÷ minutes between breaks, rounded down. Adjusted CPM = base CPM × genre × direct premium × targetability. Ad load assumes 30-second ads.</td></tr>

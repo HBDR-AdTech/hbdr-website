@@ -22,7 +22,7 @@ Every outside fact on `/tools` (`server/templates/tools/index.ts`). All pages we
 
 ## Model facts stated on the page (read from the code, not outside sources)
 
-Display effective eCPM divides by all ad requests; viewability does not change revenue; the header bidding timeout input is not used in any formula; partner factor runs 0.7x at 5 partners to 1.0x at 50; targetability factor 0.76x–1.3x; MAU = DAU × 3.2; CTV ad load assumes 30-second ads; HBDR uplift line = result × 1.35.
+Display effective eCPM divides by all ad requests; viewability does not change revenue; the header bidding timeout is priced with the home explorer's illustrative assumptions (D-028: bids arrive evenly from 100 to 1,200 ms; 2% of impressions lost per 100 ms over 300 ms); partner factor runs 0.7x at 5 partners to 1.0x at 50; targetability factor 0.76x–1.3x; MAU = DAU × 3.2; CTV ad load assumes 30-second ads; HBDR uplift line = result × 1.35.
 
 ## HBDR claims left as they are (waiting on Matt)
 
