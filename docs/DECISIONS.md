@@ -214,3 +214,23 @@ At the default inputs:
 
 Test: `resources-pages.test.ts` evaluates the calculator's own `x-data` at 300, 1000, 1200 and 3000 ms.
 Rollback: revert the commit.
+
+## D-029 — 2026-10-23 — Matt — Company facts: no certifications, MCM parent, terms, go-live, support, partners
+
+Matt's answers to the HANDOFF-007 §5 questions. These are HBDR facts, extending D-005/D-027. HANDOFF-007's addendum lists the work they create.
+
+| # | Topic | Fact |
+|---|---|---|
+| 1 | Certifications | HBDR has **no** TAG certification, **no** IAB membership, is **not** a Google Certified Publishing Partner, and is **not** a Prebid.org member. Every such claim comes off the site. |
+| 2 | Google | HBDR is an **MCM parent on Google Ad Manager 360** and offers **both Manage Account and Manage Inventory**. "Certified MCM partner" is not real: say "Google MCM partner" or say nothing. |
+| 3 | ads.txt / sellers.json | HBDR's ads.txt lines and sellers.json come from **headerbiddr.com** (copy them over). hbdr.com gets back-end management for both files (operator controls, doctrine 14). |
+| 4 | Revenue share | Applies to **all revenue HBDR is part of**, from HBDR's ad units up to and including the whole page. |
+| 4 | Guarantee | There is **no revenue guarantee**; remove it. |
+| 4 | Fees and lock-in | No setup fee and no lock-in today. Setup fees or lock-ins can be agreed by contract if a publisher prefers that structure. |
+| 4 | Payment | **Net 30 for Google** revenue, **Net 60 for other sources**. Methods: wire, ACH, PayPal and crypto. Crypto is available but not advertised prominently. |
+| 5 | Go-live | **Average 1–3 business days**, depending on the publisher and their current setup. |
+| 6 | Support | **Mon–Fri 9am–6pm ET** for people; **24/7 for tickets and the knowledge base**. A **dedicated account manager** is offered: Matt or Ahmed (spelling to confirm) fills the role. |
+| 7 | Features | Matt wants the full feature list on the site (AI floors, A/B testing, real-time dashboard with alerts and exports, managed Prebid Server, IVT filtering, Confiant/IAS/DoubleVerify, in-app mediation, CTV SSAI, AMP/companion ads), plus other current, impactful publisher ad-tech features. Open: which exist today and which are roadmap (HANDOFF-007 addendum, first question). |
+| 8 | Performance numbers | Check every number against industry standards and best practice. Keep only what HBDR can legitimately claim, and state it the same way on every page. |
+| 9 | Partners | Rename defunct or renamed partners to their current names. HBDR has **no DSP PMP or PG deals yet** (in progress) but has the **capability to access** them. The site may say HBDR works across all geographies with publisher monetization partners, DSPs and SSPs, with broad reach. |
+| — | Blog bylines | Blog authors are HBDR staff: the byline is "HBDR Research" (D-006), never an invented person. |

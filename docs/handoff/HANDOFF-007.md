@@ -159,3 +159,72 @@ LIVE ENV STATE
 ---
 
 End of HANDOFF-007.
+
+---
+
+## Addendum — 2026-10-23 — Matt's answers and the work they create (added at Matt's request; next session runs it)
+
+Matt's answers are recorded as **D-029** in `docs/DECISIONS.md`. That is the source of truth; this list is the work.
+
+### First, ask Matt (one question, before building)
+- **Feature list (D-029 #7):** which features exist today and which are roadmap? Matt wants them all on the site, but D-005 forbids presenting a feature as live when it isn't. Offer two options:
+  - **(a) "Available now" vs "Coming soon"** sections. Recommended.
+  - **(b)** List everything as available once Matt confirms each item is live.
+
+### Content PR (branch `fix/content-answers`)
+1. **Certifications off** (/trust, /advertisers and anywhere else; grep TAG, IAB, GCPP, Prebid.org, "certified"). Replace them with "Standards we follow" rows: ads.txt/app-ads.txt, sellers.json, schain, TCF v2.3, GPP, GPC, COPPA. Those are standards HBDR implements, not memberships. Matt asked "what else can we put in its place"; propose that, and only if it's true.
+2. **MCM:** "certified MCM partner" → "Google MCM partner" (MCM parent on Ad Manager 360, offering both Manage Account and Manage Inventory). Keep the corrected Google definitions from #31.
+3. **Commercial terms everywhere** (/publishers, /support, /how-it-works, home comparison table):
+   - rev share on all revenue from HBDR's ad units up to the whole page;
+   - remove "Revenue Guarantee" (home table row and anywhere else);
+   - no setup fee and no lock-in by default, with contract options on request;
+   - Net 30 for Google, Net 60 for other sources;
+   - wire, ACH, PayPal; crypto only in fine print or the FAQ, not headlines.
+4. **Go-live:** replace every onboarding time (2–3 days, 5–7 days, 1–2 weeks, 2–4 weeks and so on) with "average 1–3 business days, depending on your current setup".
+5. **Support:**
+   - Mon–Fri 9am–6pm ET for people;
+   - 24/7 tickets and knowledge base;
+   - a dedicated account manager.
+
+   Remove "24/7 support" wording that implies live people at night.
+6. **Performance numbers (D-029 #8):** audit every number against the audit report (`.git/content-audit.md`) and `docs/research/`. Keep only legitimate, sourced or D-005/D-027 numbers; state each one the same way on every page. Record the decision per number in `docs/research/performance-claims.md`. Candidates:
+   - the +35% calculator uplift
+   - "20–40% in 30 days"
+   - 95%+ retention
+   - <100 ms
+   - viewability 70% and 85%
+   - 90%+ completion
+   - AdX 2–3× AdSense
+   - CTV 5–10× display
+7. **Partners (D-029 #9):** rename defunct and renamed partners to their current names using `docs/research/partners.md`:
+   - Xandr → Microsoft Monetize
+   - Centro → Basis
+   - MediaMath → Infillion
+   - Amazon APS naming
+   - MOAT and EMX: no successor, so ask Matt or remove them
+
+   Wording: HBDR works across all geographies with publisher monetization partners, SSPs and DSPs, and can access PMP and programmatic guaranteed deals. Never claim an active PMP or PG deal.
+8. **Features:** apply the answer to the first question above.
+9. **Tests:** extend `claims.test.ts` with every removed claim (TAG, IAB member, GCPP, Prebid member, "certified MCM", "Revenue Guarantee", old onboarding times, "24/7 support").
+
+### Blog bylines (prod D1; Matt runs the write)
+- **Byline:** the 5 legacy posts with invented authors (Sarah Chen, Marcus Johnson, Elena Rodriguez, David Park) take the byline "HBDR Research" (D-029, D-006). Give Matt one `UPDATE blog_posts SET author = 'HBDR Research' WHERE …` command with its EXPLAIN, and have him run it.
+- **The invented product-launch post** ("over 200 active bidders", "35%" revenue gains) still carries invented HBDR news after the byline change. Propose to Matt: rewrite it from D-005/D-029 facts, or unpublish it.
+- **Dev seed:** fix the authors in `seedBlogPosts()` (`server/d1Storage.ts:156-215` and the MemStorage seed) to "HBDR Research".
+
+### Build: ads.txt and sellers.json on hbdr.com (separate feature PR)
+- **Source:** fetch HBDR's current ads.txt lines and sellers.json from headerbiddr.com and record them in `docs/research/ads-txt-sellers-json.md`.
+- **Serve:** `/ads.txt` and `/sellers.json` on hbdr.com, generated from D1. Content follows the IAB ads.txt 1.1 and sellers.json specs; sellers.json returns `application/json`.
+- **Manage:**
+  - **Admin page:** an `/admin/supply` page behind Cloudflare Access to add, edit and retire sellers.json entries and ads.txt lines.
+  - **Audit trail:** effective dates and an audit row per change (doctrine 14), following the D-016 `form_config_changes` pattern.
+  - **Migration** with the table; tests; and EXPLAIN plans for the queries.
+- **Publisher guidance:** show the exact ads.txt lines a publisher adds, on /publishers or /support, read from the same table.
+- **Before building:** run the doctrine-1 flow statement (source of truth, one writer, readers), and ask Matt whether hbdr.com or headerbiddr.com is the canonical sellers.json domain. Buyers crawl the domain named in the ads.txt lines.
+
+### Still open (not answered yet)
+- Milestones (the year of 1B a month; the 1T date)
+- Press coverage, open roles, press@hbdr.com
+- The X handle (`x.com/haborMedia`)
+- The legal pages (counsel rewrite or an accurate draft)
+- The spelling of Ahmed's name for the account-manager mention
