@@ -2,27 +2,26 @@ import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderSection, renderEyebrow, renderSpecList } from "../components/blueprint";
 
+// Company figures come from D-005 and D-027 only; no dated releases until real ones exist
 export function renderPressPage(): string {
   const content = `
-  ${renderPageHero("Press", "Press & News", "Latest updates from HBDR. Stay informed about our milestones, product launches, and industry recognition.")}
+  ${renderPageHero("Press", "Press & Media", "Company facts, a media contact and logo files for anyone writing about HBDR.")}
 
   ${renderSection({
-    testid: "press-releases-section",
-    eyebrow: "Latest News",
-    title: "Press Releases",
-    body: `
-      <ol class="res-dated">${[
-        { title: "HBDR Surpasses 1 Trillion Ads Served", date: "January 2026", description: "A major milestone in programmatic advertising as HBDR processes its one trillionth ad impression, demonstrating the scale and reliability of its header bidding platform across 500+ global publishers." },
-        { title: "HBDR Launches AI-Powered Bid Optimization", date: "November 2025", description: "New machine learning capabilities enable real-time bid optimization that automatically adjusts floor prices, demand partner priorities, and auction configurations to maximize publisher revenue by an additional 15-20%." },
-        { title: "HBDR Expands European Operations", date: "September 2025", description: "Opening new offices in London and Berlin to better serve the growing European publisher market, bringing local expertise and GDPR-compliant ad monetization solutions to the region." },
-        { title: "HBDR Named Top Ad Tech Company", date: "June 2025", description: "Industry recognition for innovation in header bidding technology. HBDR was selected from over 200 nominees for its contributions to advancing programmatic advertising and publisher revenue optimization." },
-        { title: "HBDR Partners with Major CTV Platforms", date: "March 2025", description: "Expanding into connected TV advertising with partnerships across leading streaming platforms, enabling publishers to monetize CTV inventory through HBDR's unified auction technology." },
-      ].map((pr, i) => `
-        <li data-testid="press-card-${i}">
-          <span class="mono">${pr.date}</span>
-          <div><h3>${pr.title}</h3><p>${pr.description}</p></div>
-        </li>`).join("")}
-      </ol>`,
+    testid: "press-facts-section",
+    eyebrow: "Fact Sheet",
+    title: "HBDR at a Glance",
+    lede: "Figures stated by HBDR that you can quote. 1B+ is monthly impressions; 1T+ is the total ads served to date.",
+    body: renderSpecList([
+      { label: "Founded", value: '<span class="mono">2015</span>' },
+      { label: "What HBDR does", value: "Header bidding and ad monetization for publishers" },
+      { label: "Ad impressions served", value: '<span class="mono">1B+</span> per month' },
+      { label: "Total ads served", value: '<span class="mono">1T+</span>' },
+      { label: "Publishers", value: '<span class="mono">500+</span>' },
+      { label: "Sites worked with", value: '<span class="mono">47,000+</span>' },
+      { label: "Demand sources", value: '<span class="mono">65+</span>' },
+      { label: "Team experience", value: '<span class="mono">25+</span> years combined' },
+    ]),
   })}
 
   <section class="bp-section" data-testid="press-contact-section">
@@ -30,23 +29,26 @@ export function renderPressPage(): string {
       <div class="res-half" data-testid="card-media-contact">
         ${renderEyebrow("Media Contact")}
         <h2>Get in Touch</h2>
-        <p>For press inquiries, interview requests, or media partnerships, please reach out to our communications team.</p>${renderSpecList([
-          { label: "Email", value: "press@hbdr.com" },
+        <p>For interviews, comment or a fact check, email us. Include your publication, your deadline and the questions you need answered.</p>${renderSpecList([
+          { label: "Email", value: '<a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-press-email">contact@hbdr.com</a>' },
+          { label: "Press email", value: "press@hbdr.com" },
           { label: "Phone", value: '<span class="mono">(786) 675-6080</span>' },
         ])}
       </div>
       <div class="res-half" data-testid="card-brand-assets">
         ${renderEyebrow("Brand Assets")}
-        <h2>Media Kit</h2>
-        <p>Download our official logos, brand guidelines, and media assets for use in press coverage and publications. All assets are available in multiple formats and resolutions.</p>
-        <p>For custom brand asset requests or high-resolution images, please contact our media team at press@hbdr.com.</p>
+        <h2>Logo Files</h2>
+        <p>Two logo files are available to download now. For another format or size, email contact@hbdr.com.</p>${renderSpecList([
+          { label: "Logo on dark background", value: '<a href="/assets/HBDR_Logo_Pack_all_sizes_-_2_1770577514801.jpeg" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-logo-jpeg">JPEG <span class="mono">2048 × 2048</span></a>' },
+          { label: "Wordmark for dark backgrounds", value: '<a href="/assets/HBDR_logo_wo_tagline_crp_370x116_web_1770664100214.png" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-logo-png">PNG <span class="mono">370 × 116</span></a>' },
+        ])}
       </div>
     </div>
   </section>`;
 
   return renderLayout({
-    title: "Press & News - HBDR",
-    description: "Latest news, press releases, and media resources from HBDR. Stay updated on our milestones and industry recognition.",
+    title: "Press & Media - HBDR",
+    description: "Press resources for HBDR: a company fact sheet, a media contact and logo files.",
     canonicalPath: "/press",
     bodyContent: content,
   });

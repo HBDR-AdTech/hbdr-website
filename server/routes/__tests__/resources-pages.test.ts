@@ -3,6 +3,8 @@ import { Hono } from "hono";
 import { registerPageRoutes } from "../pages";
 import { MemStorage } from "../../services/mem-storage";
 import { render404Page, render500Page } from "../../templates/pages/error";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 const app = new Hono();
 const storage = new MemStorage();
@@ -57,5 +59,55 @@ describe("resources pages use the blueprint idiom", () => {
       expect(html).toMatch(new RegExp(`<div class="bp-frame calc" data-testid="tool-${tool}" x-data="`));
       expect(html).toContain(`data-testid="tab-${tab}"`);
     }
+  });
+});
+
+// Content pass: invented press, jobs and benefits stay gone; industry facts stay current and sourced (docs/research/)
+describe("resources pages carry real content", () => {
+  it("/press has a fact sheet from D-005/D-027 and no invented releases", async () => {
+    const html = main(await page("/press"));
+    expect(html).not.toMatch(/London|Berlin|Top Ad Tech Company|AI-Powered|Surpasses 1 Trillion|Major CTV Platforms|200 nominees|Press Releases/);
+    for (const fact of ["2015", "1B+", "1T+", "500+", "47,000+", "65+", "25+"]) expect(html).toContain(fact);
+    expect(html).toContain('href="mailto:contact@hbdr.com"');
+  });
+
+  it("/press links only logo files that exist", async () => {
+    const html = (await page("/press")).split('data-testid="card-brand-assets"')[1];
+    const files = [...html.matchAll(/href="\/assets\/([^"]+)"/g)].map((m) => m[1]);
+    expect(files.length).toBe(2);
+    for (const f of files) expect(existsSync(join(process.cwd(), "public/assets", f)), f).toBe(true);
+  });
+
+  it("/careers lists no invented roles or benefits and says how to send a CV", async () => {
+    const html = main(await page("/careers"));
+    expect(html).not.toMatch(/Full-Stack Engineer|Ad Operations Manager|Product Designer|Data Scientist|New York|San Francisco|unlimited PTO|equity|Apply Now|Remote-First|retreats/i);
+    expect(html).toContain("No open roles are listed right now");
+    expect(html).toContain('href="mailto:contact@hbdr.com"');
+  });
+
+  it("/support states the D-027 minimum and current, sourced industry facts", async () => {
+    const html = main(await page("/support"));
+    expect(html).toContain("500,000+ monthly pageviews");
+    expect(html).not.toMatch(/1 million\+|1M\+ monthly|global leader/);
+    expect(html).not.toMatch(/\bFID\b|First Input Delay/);
+    expect(html).toContain("Interaction to Next Paint (200 milliseconds or less");
+    // Google MCM: MA = parent has access, one parent; MI = no access, up to 15 parents
+    expect(html).toContain("Under Manage Account, the parent has access to your account (except billing)");
+    expect(html).toContain("Under Manage Inventory, the parent has no access to your account and manages the delegated inventory from its own network; you can have up to 15 such parents");
+    expect(html).toContain("Source: Google Ad Manager Help, About Multiple Customer Management");
+  });
+
+  it("/tools explains its formulas and claims no unsourced benchmark", async () => {
+    const html = main(await page("/tools"));
+    expect(html).not.toMatch(/industry benchmarks|20-60%|5-20%|VPAID/);
+    for (const id of ["tools-metrics-table", "tools-formulas-table"]) expect(html).toContain(`data-testid="${id}"`);
+    expect(html).toContain("50% of the ad's pixels in view for at least 1 continuous second");
+    expect(html).toContain("The timeout input is not priced");
+  });
+
+  it("/contact says what to send instead of a slogan", async () => {
+    const html = main(await page("/contact"));
+    expect(html).not.toMatch(/transform your ad revenue/i);
+    expect(html).toContain("a link to your ads.txt file");
   });
 });
