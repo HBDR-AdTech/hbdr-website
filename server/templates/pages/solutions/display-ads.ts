@@ -45,7 +45,7 @@ const FEATURES = [
   { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%. In Google Publisher Tag this is two settings: fetchMarginPercent (how many viewports away a slot is requested) and renderMarginPercent (when it renders)." },
   { title: "Mobile-First Design", body: "Responsive ad containers that adapt to any screen size with mobile-specific formats and touch-friendly interactions." },
   { title: "Brand Safety", body: "Comprehensive category blocking, advertiser exclusions, and malvertising protection to maintain site integrity." },
-  { title: "Core Web Vitals", body: "Optimized ad delivery that protects all three Core Web Vitals: LCP within 2.5 s, INP of 200 ms or less (INP replaced FID in March 2024) and CLS of 0.1 or less, at the 75th percentile of visits. Ads hurt CLS most, so every slot reserves its height before the ad loads." },
+  { title: "Core Web Vitals", body: "Optimized ad delivery that protects all three Core Web Vitals: LCP within 2.5 s, INP of 200 ms or less (INP replaced FID in March 2024) and CLS of 0.1 or less, at the 75th percentile of visits. Ads are one of the largest contributors to layout shift, so every slot reserves its height before the ad loads." },
 ];
 
 export function renderDisplayAdsPage(): string {

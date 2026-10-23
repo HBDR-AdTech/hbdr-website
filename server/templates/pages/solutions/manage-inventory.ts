@@ -21,7 +21,7 @@ const SERVICE_SCOPE: [string, string, string][] = [
 ];
 
 const SERVICES = [
-  { testid: "card-gam-management", title: "GAM setup & configuration", body: "HBDR builds the Google Ad Manager setup for your delegated inventory from the ground up, in our own network: optimized ad units, line item structures and key-value targeting, plus the updated ad tags for your site. If you already run Google Ad Manager, we audit your current setup first so nothing that earns today is lost in the move.",
+  { testid: "card-gam-management", title: "GAM setup & configuration", body: "HBDR builds the Google Ad Manager setup for your delegated inventory from the ground up, in our own network: optimized ad units, line item structures and key-value targeting, plus the ad tags for your site. If you already run Google Ad Manager, we audit your current setup first.",
     list: ["Ad unit creation and placement strategy", "Line item architecture and priority management", "Key-value targeting and audience segmentation"] },
   { testid: "card-demand-management", title: "Demand partner stack", body: "We select, integrate, and manage a curated stack of demand partners tailored to your traffic profile. This includes Prebid.js header bidding, Google AdX through our MCM parent account, Open Bidding partners, and direct SSP relationships — all continuously optimized for your specific audience and content verticals.",
     list: ["Prebid.js configuration and bidder management", "Google AdX access through HBDR parent MCM", "65+ demand source integrations"] },
@@ -101,7 +101,7 @@ export function renderManageInventoryPage(): string {
     lede: "You delegate inventory, update your tags, and our team runs that inventory from HBDR's network.",
     body: renderSteps([
       { title: "MCM inventory link", body: "HBDR sends a Manage Inventory invitation from our parent Google Ad Manager 360 network. You accept it with an email that has admin access to your own Ad Manager network, and Google reviews your account. HBDR gets no access to your account.", testid: "card-mi-step-1" },
-      { title: "HBDR takes over", body: "Our ad ops team audits your current setup, then builds the delegated inventory in HBDR's network — ad units, Prebid configuration, Google AdX, Open Bidding, demand partners, floor pricing, and more — and gives you updated tags with your child network code for your pages.", testid: "card-mi-step-2" },
+      { title: "HBDR takes over", body: "Our ad ops team audits your current setup, then builds the delegated inventory in HBDR's network — ad units, Prebid configuration, Google AdX, Open Bidding, demand partners, floor pricing, and more — and your pages switch to tags with your child network code, which Google requires for Manage Inventory.", testid: "card-mi-step-2" },
       { title: "Continuous optimization", body: "HBDR's team continuously monitors and optimizes your yield using our proprietary tools and real-time data. Google keeps Manage Inventory reporting in the parent network, so you receive it from us as transparent reporting, with a dedicated account manager for ongoing communication.", testid: "card-mi-step-3" },
     ]),
   })}

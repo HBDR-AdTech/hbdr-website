@@ -19,11 +19,11 @@ const FACTS: Record<string, { gone: (string | RegExp)[]; present: string[] }> = 
   },
   "/solutions/mcm": {
     gone: ["We handle the Google approval process", "We handle all Google Ad Manager policy enforcement"],
-    present: ["Google, not the parent, approves each child publisher", "Google enforces its Ad Manager policies", "only available in Google Ad Manager 360"],
+    present: ["Google, not the parent, approves each child publisher", "Google enforces its Ad Manager policies", "MCM parent must run Google Ad Manager 360"],
   },
   "/solutions/open-bidding": {
     gone: [/zero latency/i, "eliminating page latency", "No JavaScript, no browser processing"],
-    present: ["reduces the latency historically associated with header bidding", "net of Google's revenue share", "first-price auctions in 2019", 'data-testid="ob-source"'],
+    present: ["reduces the latency historically associated with header bidding", "net of Google's revenue share", "first-price auction since 2019", 'data-testid="ob-source"'],
   },
   "/solutions/ad-exchange-adx": {
     gone: [/fixed pricing/i, "AdX line items"],

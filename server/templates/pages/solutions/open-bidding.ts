@@ -5,7 +5,7 @@ import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRo
 
 const ADVANTAGES = [
   { title: "Less work in the browser", body: "The page sends one ad request and Ad Manager calls every yield partner server-to-server, so there is no bidder code on the page. Google says this reduces the latency historically associated with header bidding. It does not remove it: the ad response still waits while Ad Manager collects partner bids, and a partner that times out loses the impression." },
-  { title: "Unified auction", body: "Open Bidding partners compete with the Ad Exchange bid and your best eligible line item in one unified auction, and the highest net bid wins. Last look ended for every buyer when Ad Manager moved to unified first-price auctions in 2019, so the choice between Open Bidding and Prebid now comes down to fees, partner coverage and control." },
+  { title: "Unified auction", body: "Open Bidding partners compete with the Ad Exchange bid and your best eligible line item in one unified auction, and the highest net bid wins. Ad Manager has run a unified first-price auction since 2019, so the choice between Open Bidding and Prebid now comes down to fees, partner coverage and control." },
   { title: "Simplified billing", body: "Google pays Open Bidding revenue with your Ad Exchange payment, itemized by exchange, net of Google's revenue share. That share is a cost Prebid does not carry, so compare partners on net revenue. Under the Open Bidding Direct Pay beta, SSPs pay you directly and Google bills a %-media fee instead." },
 ];
 

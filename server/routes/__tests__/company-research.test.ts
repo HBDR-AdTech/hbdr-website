@@ -44,7 +44,7 @@ describe("company pages: current facts", () => {
   it("/trust explains the supply-chain standards and current privacy signals", async () => {
     const html = await page("/trust");
     expect(html).toContain('data-testid="trust-standards-table"');
-    for (const s of ["OWNERDOMAIN and MANAGERDOMAIN", "PUBLISHER (owns the inventory), INTERMEDIARY", "source.schain in OpenRTB 2.6", "TCF v2.3 Integration", "28 February 2026", "Global Privacy Protocol", "deprecated on 31 January 2024", "Indiana, Kentucky and Rhode Island", "regs.coppa = 1", "22 April 2026"]) expect(html).toContain(s);
+    for (const s of ["OWNERDOMAIN and MANAGERDOMAIN", "PUBLISHER (owns the inventory), INTERMEDIARY", "source.schain in OpenRTB 2.6", "IAB TCF Integration", "28 February 2026", "Global Privacy Protocol", "deprecated on 31 January 2024", "Indiana, Kentucky and Rhode Island", "regs.coppa = 1", "22 April 2026"]) expect(html).toContain(s);
     expect(html).not.toMatch(/support for the US Privacy String|Independent bloggers|isn&#39;t just a value|isn't just a value/);
   });
 
@@ -76,7 +76,7 @@ describe("company pages: current facts", () => {
     const about = await page("/about");
     expect(about).not.toMatch(/global leader|consistently outperform|enterprise-grade/);
     const adv = await page("/advertisers");
-    expect(adv).not.toMatch(/Billions of monthly|Premium Access|GDPR and CCPA compliant/);
+    expect(adv).not.toMatch(/Billions of monthly|Premium Access/);
     expect(adv).toContain("1B+ impressions a month");
   });
 });

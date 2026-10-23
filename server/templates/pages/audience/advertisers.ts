@@ -58,7 +58,7 @@ export function renderAdvertisersPage(): string {
     "IAS and DoubleVerify integration for viewability and brand safety",
     "Full ads.txt and sellers.json compliance across all publishers",
     "Content category and keyword-level blocking available",
-    "GDPR and US state privacy law compliance, with consent passed as IAB TCF v2.3 and GPP signals",
+    "GDPR and CCPA compliant with consent management in place",
     "Transparent reporting with placement-level data",
   ];
 

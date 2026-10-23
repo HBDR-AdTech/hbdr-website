@@ -67,7 +67,7 @@ export function renderPartnersPage(): string {
   // Outside facts only, each one sourced in docs/research/partners.md
   const cookieStatus = [
     ["Chrome", "Still supported. In April 2025 Google kept its current approach, a user choice in Chrome settings, and dropped the planned standalone prompt. Incognito mode blocks them by default."],
-    ["Privacy Sandbox", "In October 2025 Google retired most of its APIs, including Topics, Protected Audience and Attribution Reporting. CHIPS and FedCM stay."],
+    ["Privacy Sandbox", "In October 2025 Google announced it is retiring most of its APIs, including Topics, Protected Audience and Attribution Reporting. CHIPS and FedCM stay."],
     ["Safari", "Blocked by default since March 2020 (Safari 13.1, iOS 13.4)."],
     ["Firefox", "Total Cookie Protection by default since June 2022: each website gets a separate cookie jar, so a tracker sees behaviour on one site only."],
   ];
@@ -100,7 +100,7 @@ export function renderPartnersPage(): string {
         </svg>`;
 
   const content = `
-  ${renderPageHero("Partners", "Partners & Integrations", "The SSPs, DSPs, identity, verification and technology vendors in the HBDR stack, and where each one sits on the supply path.")}
+  ${renderPageHero("Partners", "Partners & Integrations", "HBDR's demand partners, technology integrations and data solutions, and where each one sits on the supply path.")}
   ${renderSection({
     testid: "partners-demand-section",
     eyebrow: "Integrated Demand Partners",

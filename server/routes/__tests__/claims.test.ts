@@ -12,7 +12,7 @@ beforeAll(async () => {
 });
 
 // D-027: Matt's answers to the contradicting claims; the superseded wording must not come back
-const SUPERSEDED = [/thousands of premium publisher/i, /average revenue increase of over 50%/i, /30[-–]50%/, /40[-–]60%/, /10M monthly impressions/, /100,000\+ monthly/, /\b50\+ (demand|premium|SSP)/];
+const SUPERSEDED = [/thousands of premium publisher/i, /average revenue increase of over 50%/i, /30[-–]50%/, /40[-–]60%/, /10M monthly impressions/, /100,000\+ monthly/, /\b50\+ (demand|premium|SSP)/, /no (monthly )?minimums/i];
 
 describe("company claims (D-027)", () => {
   PAGE_ROUTES.forEach((route) => {

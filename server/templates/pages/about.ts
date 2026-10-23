@@ -27,7 +27,7 @@ export function renderAboutPage(): string {
         <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Maximizing Publisher Revenue</h2>
       </div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 grid gap-5 text-[1.0625rem] leading-relaxed text-[var(--text-muted)]">
-        <p>HBDR sells publishers' ad inventory through header bidding: each impression goes to 65+ demand sources at once, and the highest bid that arrives in time wins. HBDR serves more than 1 billion impressions a month and has served more than 1 trillion ads in total.</p>
+        <p>HBDR sells publishers' ad inventory through header bidding with 65+ demand sources: buyers bid on an impression in the same auction, and the highest bid that arrives in time wins. HBDR serves more than 1 billion impressions a month and has served more than 1 trillion ads in total.</p>
         <p>Our team brings more than 25 years of combined experience in programmatic advertising, and we pair the technology with hands-on ad operations to outperform traditional ad networks, helping our partners increase revenue by up to 50%.</p>
       </div>
     </div>
