@@ -74,6 +74,16 @@
   --accent-dark: #00c987;
   --placeholder: #848b97;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* D-025 polish: hero glow, lit frame edges, pointer spotlight */
+  --glow-navy: rgb(34 56 110 / 0.42);
+  --glow-mint: rgb(0 250 168 / 0.055);
+  --edge-top: rgba(255, 255, 255, 0.16);
+  --edge-low: rgba(255, 255, 255, 0.02);
+  --edge-inset: rgba(255, 255, 255, 0.05);
+  --spotlight: rgba(255, 255, 255, 0.05);
+  /* Canvas grain: monochrome noise whose mean is the canvas itself (the matrix offsets are --surface's
+     channels 11/17/33 in sRGB), so it breaks up banding without shifting the D-024 color. Retune if --surface changes. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='.08 0 0 0 .003 .08 0 0 0 .027 .08 0 0 0 .089 0 0 0 0 .5'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 /* ── Alpine.js cloak ── */
@@ -470,3 +480,87 @@
 
 .bp-scroll-hint { color: var(--text-muted); padding: 0.6rem 1rem 0; }
 .bp-table-wrap + .bp-scroll-hint, .bp-scroll-hint + .bp-table-wrap { margin-top: 0.4rem; }
+
+/* ══ Polish (D-025): canvas grain, hero glow, lit frame edges with a pointer spotlight, glass nav. Public pages only. ══ */
+
+/* Grain sits in the canvas background, under every section, never over text */
+body:not(.is-admin) { background-image: var(--grain); }
+
+/* One glow per hero: a lifted navy ellipse with a faint mint core, both from the same point */
+body:not(.is-admin) .bp-hero {
+  background:
+    radial-gradient(ellipse 36% 48% at 50% 0%, var(--glow-mint), transparent 70%),
+    radial-gradient(ellipse 70% 85% at 50% 0%, var(--glow-navy), transparent 72%);
+}
+body:not(.is-admin) .bp-home-hero {
+  background:
+    radial-gradient(ellipse 40% 44% at 70% 52%, var(--glow-mint), transparent 70%),
+    radial-gradient(ellipse 58% 62% at 70% 52%, var(--glow-navy), transparent 72%);
+}
+@media (max-width: 960px) {
+  body:not(.is-admin) .bp-home-hero {
+    background:
+      radial-gradient(ellipse 60% 26% at 50% 72%, var(--glow-mint), transparent 70%),
+      radial-gradient(ellipse 90% 40% at 50% 72%, var(--glow-navy), transparent 72%);
+  }
+}
+
+/* Lit frames: the hairline border stays; ::before adds an edge that is brightest at the top (11px = the 12px radius
+   inside the 1px border, where overflow clips), ::after is the spotlight under the content. The selector list
+   matches FRAME_SPOTLIGHT in server/templates/layout.ts. */
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form) {
+  position: relative;
+  isolation: isolate;
+  box-shadow: inset 0 1px 0 var(--edge-inset);
+}
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form)::before,
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 11px;
+  pointer-events: none;
+}
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form)::before {
+  z-index: 2;
+  padding: 1px;
+  background: linear-gradient(180deg, var(--edge-top), var(--edge-low) 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.7;
+  transition: opacity 0.25s var(--ease-out);
+}
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form):hover::before { opacity: 1; }
+body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form)::after {
+  z-index: -1;
+  background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), var(--spotlight), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body:not(.is-admin) :where(.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form):hover::after { opacity: 1; }
+}
+/* At 960px and below a table scrolls inside its wrap and an overlay would scroll with it; the inset highlight
+   and the scroll fades stay. Above 960px no table overflows (checked on every page at 961, 1024 and 1280). */
+@media (max-width: 960px) {
+  body:not(.is-admin) .bp-table-wrap::before, body:not(.is-admin) .bp-table-wrap::after { content: none; }
+}
+
+/* Glass nav. The blur lives on ::before so the nav is not a backdrop root and the dropdowns can blur the page too.
+   Alpha 0.85 keeps the muted nav links at 4.8:1 even over a solid mint slot (4.5:1 over white); menus at 0.8 keep 7:1. */
+body:not(.is-admin) .glass-nav { background: transparent; }
+body:not(.is-admin) .glass-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(var(--surface-rgb) / 0.85);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+body:not(.is-admin) .glass-menu {
+  background: rgb(var(--surface-elevated-rgb) / 0.8);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+}
