@@ -6,6 +6,7 @@
 @import "./pages/solutions-google.css";
 @import "./pages/company.css";
 @import "./pages/resources.css";
+@import "./pages/home.css";
 
 /* Tell Tailwind where to scan for class names */
 @source "../../server/**/*.ts";
@@ -416,9 +417,6 @@
 .tl-req { stroke: rgba(255, 255, 255, 0.4); stroke-width: 2; }
 .tl-wait { stroke: rgba(255, 255, 255, 0.16); stroke-width: 2; stroke-dasharray: 3 5; }
 .tl-dot { fill: var(--text-secondary); }
-.tl-win { stroke: var(--accent); }
-.tl-win-dot { fill: var(--accent); }
-.tl-win-label { fill: var(--accent); }
 .tl-timeout { stroke: rgba(255, 255, 255, 0.5); stroke-width: 1; stroke-dasharray: 4 4; }
 .timeline-points { grid-column: 9 / span 4; display: grid; gap: 1.6rem; align-content: start; }
 .timeline-points > div { display: grid; gap: 0.35rem; padding-top: 1rem; border-top: 1px solid var(--hairline); }
