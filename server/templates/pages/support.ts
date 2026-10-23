@@ -73,7 +73,7 @@ export function renderFaqSupportPage(turnstileSiteKey: string | null = null): st
           <thead><tr><th scope="col">Channel</th><th scope="col">Reach us</th><th scope="col">Service level</th></tr></thead>
           <tbody>
             <tr data-testid="support-channel-email"><td>Email Support</td><td><a href="mailto:support@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-support-email">support@hbdr.com</a></td><td>Response within 24 hours</td></tr>
-            <tr data-testid="support-channel-phone"><td>Phone Support</td><td><a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-support-phone">(786) 675-6080</a></td><td>Mon-Fri, 9am-6pm EST</td></tr>
+            <tr data-testid="support-channel-phone"><td>Phone Support</td><td><a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-support-phone">(786) 675-6080</a></td><td>Mon-Fri, 9am-6pm ET</td></tr>
             <tr data-testid="support-channel-priority"><td>Priority Support</td><td>Enterprise clients</td><td>Response within 4 hours</td></tr>
           </tbody>
         </table>

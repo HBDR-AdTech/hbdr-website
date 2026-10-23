@@ -90,6 +90,9 @@ describe("resources pages carry real content", () => {
     expect(html).toContain("500,000+ monthly pageviews");
     expect(html).not.toMatch(/1 million\+|1M\+ monthly|global leader/);
     expect(html).not.toMatch(/\bFID\b|First Input Delay/);
+    // Eastern Time, not EST, which is wrong half the year
+    expect(html).toContain("Mon-Fri, 9am-6pm ET<");
+    expect(html).not.toMatch(/\bEST\b/);
     expect(html).toContain("Interaction to Next Paint (200 milliseconds or less");
     // Google MCM: MA = parent has access, one parent; MI = no access, up to 15 parents
     expect(html).toContain("Under Manage Account, the parent has access to your account (except billing)");
