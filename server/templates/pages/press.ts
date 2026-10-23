@@ -1,9 +1,15 @@
 import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderSection, renderEyebrow, renderSpecList } from "../components/blueprint";
+import { sanitizeText } from "../../middleware/sanitize";
+import { BlogPostData, formatDate } from "../components/blog-helpers";
 
-// Company figures come from D-005 and D-027 only; no dated releases until real ones exist
-export function renderPressPage(): string {
+// D-031: releases are blog posts in the "Press" category, so the blog CMS is their one writer.
+export const PRESS_CATEGORY = "Press";
+
+// Company figures come from D-005, D-027 and D-030 only; releases appear only once a real one is published
+export function renderPressPage(posts: BlogPostData[] = []): string {
+  const releases = posts.filter((p) => p.category === PRESS_CATEGORY);
   const content = `
   ${renderPageHero("Press", "Press & Media", "Company facts, a media contact and logo files for anyone writing about HBDR.")}
 
@@ -11,19 +17,32 @@ export function renderPressPage(): string {
     testid: "press-facts-section",
     eyebrow: "Fact Sheet",
     title: "HBDR at a Glance",
-    lede: "Figures stated by HBDR that you can quote. 1B+ is monthly impressions; 1T+ is the total ads served to date.",
+    lede: "Figures stated by HBDR that you can quote. 1B+ is monthly impressions, first reached in 2024; 1T+ is the total ads served to date, passed in 2025.",
     body: renderSpecList([
       { label: "Founded", value: '<span class="mono">2015</span>' },
       { label: "What HBDR does", value: "Header bidding and ad monetization for publishers" },
       { label: "Ad impressions served", value: '<span class="mono">1B+</span> per month' },
       { label: "Total ads served", value: '<span class="mono">1T+</span>' },
+      { label: "Milestones", value: '1B a month in <span class="mono">2024</span>; 1T total in <span class="mono">2025</span>' },
       { label: "Publishers", value: '<span class="mono">500+</span>' },
       { label: "Sites worked with", value: '<span class="mono">47,000+</span>' },
       { label: "Demand sources", value: '<span class="mono">65+</span>' },
       { label: "Team experience", value: '<span class="mono">25+</span> years combined' },
     ]),
   })}
-
+${releases.length ? renderSection({
+    testid: "press-releases-section",
+    eyebrow: "Releases",
+    title: "Press Releases",
+    body: `
+      <ul class="bp-rows">${releases.map((r) => `
+        <li data-testid="press-release-${sanitizeText(r.slug)}">
+          <span class="bp-row-index mono">${formatDate(r.publishedAt)}</span>
+          <h3><a href="/blog/${encodeURIComponent(r.slug)}" class="hover:text-[var(--accent)]">${sanitizeText(r.title)}</a></h3>
+          <div class="bp-row-body"><p>${sanitizeText(r.excerpt)}</p></div>
+        </li>`).join("")}
+      </ul>`,
+  }) : ""}
   <section class="bp-section" data-testid="press-contact-section">
     <div class="bp-wrap bp-grid12">
       <div class="res-half" data-testid="card-media-contact">

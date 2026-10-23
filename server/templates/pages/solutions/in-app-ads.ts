@@ -12,7 +12,7 @@ const PHONE: Record<string, string> = {
 };
 
 const FORMATS = [
-  { key: "rewarded", title: "Rewarded Video", size: 'Full screen · <span class="mono">15–30 s</span>', description: "Users opt-in to watch 15-30 second video ads in exchange for in-app rewards. Highest eCPMs with 90%+ completion rates and positive user sentiment." },
+  { key: "rewarded", title: "Rewarded Video", size: 'Full screen · <span class="mono">15–30 s</span>', description: "Users opt in to watch 15–30 second video ads in exchange for in-app rewards." },
   { key: "interstitial", title: "Interstitials", size: "Full screen", description: "Full-screen ads displayed at natural transition points. Smart frequency capping and contextual triggers ensure maximum impact without disrupting app flow." },
   { key: "native", title: "Native Ads", size: "Custom template", description: "Seamlessly integrated ads that match your app's look and feel. Custom templates ensure native placements feel organic while delivering strong eCPMs." },
   { key: "banner", title: "Banner Ads", size: "Standard · adaptive", description: "Standard and adaptive banner placements optimized for mobile viewports. Smart refresh cycles maximize revenue per session while maintaining quality." },

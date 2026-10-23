@@ -7,13 +7,12 @@ export function renderAdvertisersPage(): string {
   const dealTypes = [
     {
       title: "Private Marketplace Deals (PMPs)",
-      what: "Invitation-only auctions where select advertisers bid on premium inventory before it hits the open exchange",
+      what: "Invitation-only auctions where select advertisers bid on selected inventory before it reaches the open exchange",
       benefits: [
-        "Access to premium, brand-safe inventory at priority pricing",
+        "Access to selected, brand-safe inventory at priority pricing",
         "Curated publisher packages by vertical (news, entertainment, sports, tech, finance, etc.)",
         "Custom audience targeting using first-party publisher data",
         "Full transparency on where your ads run",
-        "Higher viewability and engagement vs. open exchange",
       ],
       how: "Work with our team to define your targeting criteria, budget, and preferred publishers. We build a custom PMP deal ID that you activate in your DSP of choice.",
     },
@@ -22,7 +21,7 @@ export function renderAdvertisersPage(): string {
       what: "Fixed-price, guaranteed impressions bought programmatically — combining the efficiency of programmatic with the certainty of a direct deal",
       benefits: [
         "Guaranteed impression volume at a fixed CPM",
-        "Premium placements (homepage takeovers, high-impact units, etc.)",
+        "High-impact placements (homepage takeovers, large units, etc.)",
         "No auction competition — your creative runs guaranteed",
         "Programmatic efficiency with direct-deal certainty",
         "First-look access before PMP and open auction",
@@ -47,16 +46,14 @@ export function renderAdvertisersPage(): string {
     "1B+ impressions a month across our publisher network",
     "Display, Video, Native, and Rich Media formats available",
     "Desktop, Mobile, Tablet, CTV, and In-App inventory",
-    "Premium verticals: News, Entertainment, Sports, Technology, Finance, Lifestyle, Gaming, Health",
-    "Global reach with strong US, UK, EU, LATAM, and APAC coverage",
-    "All inventory is ads.txt authorized and sellers.json verified",
+    "Verticals: News, Entertainment, Sports, Technology, Finance, Lifestyle, Gaming, Health",
+    "Reach across all geographies through SSPs, DSPs and publisher monetization partners",
+    "Sellers listed in HBDR's sellers.json, so a buyer can check who sells each impression",
   ];
 
   const brandSafetyFeatures = [
     "All publishers vetted and approved by HBDR's quality team",
-    "TAG (Trustworthy Accountability Group) certified",
-    "IAS and DoubleVerify integration for viewability and brand safety",
-    "Full ads.txt and sellers.json compliance across all publishers",
+    "Invalid traffic filtering today; IAS and DoubleVerify verification is coming soon",
     "Content category and keyword-level blocking available",
     "GDPR and CCPA compliant with consent management in place",
     "Transparent reporting with placement-level data",
@@ -72,7 +69,7 @@ export function renderAdvertisersPage(): string {
   // Each cell restates the deal copy below; nothing here goes beyond it
   const dealCompare = [
     ["How it is bought", "Invitation-only auction, ahead of the open exchange", "Fixed CPM, no auction competition", "Direct-sold campaign"],
-    ["Delivery", "Priority pricing on premium inventory", "Guaranteed impression volume, first look before PMP and open auction", "Managed by our ad ops team through the flight"],
+    ["Delivery", "Priority pricing on selected inventory", "Guaranteed impression volume, first look before PMP and open auction", "Managed by our ad ops team through the flight"],
     ["Where you activate it", "Custom PMP deal ID in your DSP", "PG deal set up in Google Ad Manager, activated in your DSP", "Trafficked into the publisher's GAM, no DSP required"],
   ];
 
@@ -133,11 +130,11 @@ export function renderAdvertisersPage(): string {
     title: "How to Get Started",
     body: renderSteps(steps.map((s, i) => ({ title: s.title, body: s.desc, testid: `advertiser-step-${i}` }))),
   })}
-  ${renderCTASection("Ready to reach premium audiences?", "Contact Our Sales Team")}`;
+  ${renderCTASection("Ready to reach our publishers' audiences?", "Contact Our Sales Team")}`;
 
   return renderLayout({
     title: "For Advertisers - HBDR",
-    description: "Access premium publisher inventory through HBDR. Run PMPs, Programmatic Guaranteed deals, and direct campaigns across our network.",
+    description: "Access publisher inventory through HBDR. Run PMPs, Programmatic Guaranteed deals, and direct campaigns across our network.",
     canonicalPath: "/advertisers",
     bodyContent: content,
   });

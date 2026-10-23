@@ -49,7 +49,7 @@ export function renderMcmPage(): string {
     <div class="bp-wrap bp-grid12 sg-split" data-testid="card-mcm-overview">
       <div class="col-span-12 lg:col-span-5 grid gap-5 content-start">${renderEyebrow("Google MCM")}<h2>What is Google MCM?</h2></div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 sg-prose">
-        <p>Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. As a certified MCM partner, HBDR provides publishers access to premium Google Ad Exchange demand, advanced yield optimization, and enterprise-level support — even if they don't meet Google's individual eligibility thresholds.</p>
+        <p>Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. HBDR is a Google MCM partner: an MCM parent on Google Ad Manager 360 that offers both Manage Account and Manage Inventory. It gives publishers access to Google Ad Exchange demand, yield optimization and a dedicated account manager, even if they don't meet Google's individual eligibility thresholds.</p>
         <p>Through our MCM relationship, publishers benefit from HBDR's negotiated pricing tiers, priority support channels, and access to exclusive demand that would otherwise be unavailable. We handle all the technical complexity of account provisioning, policy compliance, and revenue reconciliation.</p>
         <p>MCM has two delegation types. Under <a href="/solutions/manage-account">Manage Account</a>, the parent works inside the child's Ad Manager account and the inventory stays there. Under <a href="/solutions/manage-inventory">Manage Inventory</a>, the child delegates inventory to the parent, which manages it in its own account with no access to the child's. A child can have one Manage Account parent and up to 15 Manage Inventory parents, but not the same parent under both.</p>
         <p>The MCM parent must run Google Ad Manager 360 (becoming a child doesn't change the child network's own features), and Google requires MCM whenever a publisher monetizes inventory it doesn't own and operate. Either way, the child needs its own Ad Manager network so Google can identify it and review it against its policies.</p>
@@ -82,13 +82,13 @@ export function renderMcmPage(): string {
     body: `
       <div class="bp-grid12" data-testid="card-mcm-process">
         <div class="col-span-12 lg:col-span-6 sg-prose">
-          <p>We send the MCM invitation and guide you through Google's review of your account — Google, not the parent, approves each child publisher — then configure Ad Manager, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.</p>
-          <p>Our MCM agreement is transparent with no lock-in periods. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.</p>
+          <p>We send the MCM invitation and guide you through Google's review of your account — Google, not the parent, approves each child publisher — then configure Ad Manager, set up demand partnerships, and begin optimization. Average go-live is 1–3 business days, depending on your current setup and Google's review. Publishers retain full ownership of their accounts and data throughout the relationship.</p>
+          <p>Our MCM agreement has no lock-in by default; a fixed term can be agreed in your contract if you prefer one. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.</p>
         </div>
         <div class="col-span-12 lg:col-start-8 lg:col-span-5">${renderSpecList([
           { label: "Child account review", value: "Google" },
           { label: "MCM invitation and Ad Manager setup", value: "HBDR" },
-          { label: "Time to optimization, typically", value: '<span class="mono text-[0.875rem]">5–7 business days</span>' },
+          { label: "Go-live, average", value: '<span class="mono text-[0.875rem]">1–3 business days</span>' },
           { label: "Account and data ownership", value: "Publisher" },
           { label: "Lock-in period", value: "None" },
           { label: "Performance review", value: "Monthly" },

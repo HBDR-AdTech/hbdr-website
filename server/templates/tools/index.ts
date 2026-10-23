@@ -65,6 +65,7 @@ function renderOutputMetric(label: string, value: string, highlight: boolean = f
   </div>`;
 }
 
+// 1.5 = the top of D-027's "up to 50%"; the projection must never exceed the site's stated claim.
 function renderHbdrUplift(currentExpr: string, projectedExpr: string, fmtFn: string): string {
   return `
   <div class="calc-uplift">
@@ -76,10 +77,10 @@ function renderHbdrUplift(currentExpr: string, projectedExpr: string, fmtFn: str
       </div>
       <div class="calc-uplift-arrow" aria-hidden="true">
         <svg viewBox="0 0 64 12"><path class="bp-line" d="M2 6 H60"/><path class="bp-tick" d="M2 1 V11"/><path d="M54 1 L61 6 L54 11" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
-        <span class="mono">+35%</span>
+        <span class="mono">up to +50%</span>
       </div>
       <div>
-        <div class="calc-metric-label">With HBDR</div>
+        <div class="calc-metric-label">With HBDR, up to</div>
         <div class="calc-uplift-to" x-text="${fmtFn}(${projectedExpr})"></div>
       </div>
     </div>
@@ -209,7 +210,7 @@ export function renderPublisherToolsPage(): string {
             <div class="calc-rule"></div>
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
-            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
+            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.5', 'fmt')}
             <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
@@ -295,7 +296,7 @@ export function renderPublisherToolsPage(): string {
             <div class="calc-rule"></div>
             ${renderOutputMetric('Additional Annual Revenue', "'+' + fmt(upliftAmount * 12)", true)}
             <div class="calc-rule"></div>
-            ${renderHbdrUplift('hbRevenue', 'hbRevenue * 1.35', 'fmt')}
+            ${renderHbdrUplift('hbRevenue', 'hbRevenue * 1.5', 'fmt')}
             <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
@@ -372,7 +373,7 @@ export function renderPublisherToolsPage(): string {
             <div class="calc-rule"></div>
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
-            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
+            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.5', 'fmt')}
             <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
@@ -449,7 +450,7 @@ export function renderPublisherToolsPage(): string {
             <div class="calc-rule"></div>
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
-            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
+            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.5', 'fmt')}
             <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
@@ -525,7 +526,7 @@ export function renderPublisherToolsPage(): string {
             <div class="calc-rule"></div>
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
-            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
+            ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.5', 'fmt')}
             <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
@@ -574,7 +575,7 @@ export function renderPublisherToolsPage(): string {
           </tbody>
         </table>
       </div>
-      <p class="mono text-xs text-[var(--text-muted)] mt-4">Each calculator also shows an HBDR uplift line: the result × 1.35.</p>`,
+      <p class="mono text-xs text-[var(--text-muted)] mt-4">Each calculator also shows an HBDR uplift line: the result × 1.5, the top of HBDR's stated range (revenue lifts reach up to 50%). Your result depends on your traffic and setup.</p>`,
   })}
 
   ${renderSection({

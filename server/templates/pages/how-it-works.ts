@@ -2,6 +2,7 @@ import { renderLayout } from "../layout";
 import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
 import { renderDiagramFrame, renderFeatureRows, renderSection, renderSteps } from "../components/blueprint";
+import { renderFeatureLists } from "../components/features";
 
 const STEPS = [
   { title: "Discovery Call", description: "We start with a comprehensive analysis of your current ad setup. Our team reviews your traffic patterns, existing demand partners, ad placement strategy, and revenue performance to identify optimization opportunities and set clear goals.", details: ["Deep dive into your current ad stack", "Traffic and audience analysis", "Revenue goal setting", "Competitive landscape review"] },
@@ -11,16 +12,16 @@ const STEPS = [
 
 const NEXT = [
   { title: "Ongoing Optimization", description: "Our algorithms continuously analyze auction data and adjust configurations to maximize your yield. We A/B test ad placements, floor prices, and demand partner configurations to ensure peak performance." },
-  { title: "Dedicated Support", description: "Every publisher gets a dedicated account manager who monitors your performance daily, provides strategic recommendations, and is available whenever you need assistance with your ad operations." },
-  { title: "Revenue Growth", description: "Through continuous optimization, new demand partner integrations, and advanced bidding strategies, we consistently drive quarter-over-quarter revenue growth for our publisher partners." },
+  { title: "Dedicated Support", description: "Every publisher gets a dedicated account manager who watches your performance and recommends changes. People answer Mon\u2013Fri, 9am\u20136pm ET; tickets and the knowledge base are open 24/7." },
+  { title: "Revenue Growth", description: "We add demand sources, test floors and tune bidding as your traffic changes, and measure every change against your own revenue. Revenue lifts reach up to 50%." },
 ];
 
 const FAQS = [
-  { q: "How long does integration take?", a: "Most integrations are completed within 2-4 weeks, depending on the complexity of your existing ad stack. Our engineering team handles the heavy lifting, and we work closely with your technical team to ensure a smooth transition with zero downtime." },
+  { q: "How long does integration take?", a: "Average go-live is 1\u20133 business days, depending on your current setup. Our engineering team does the integration and works with your technical team on the switch." },
   { q: "Do I need to change my existing ad stack?", a: "No. HBDR works alongside your existing setup. We integrate with your current ad server and add our header bidding layer on top, complementing your existing demand sources while adding HBDR's 65+ demand sources to increase competition and revenue." },
   { q: "What's the minimum traffic requirement?", a: "We work with publishers starting at 500,000 monthly pageviews. This threshold ensures that our optimization algorithms have sufficient data to deliver meaningful revenue improvements. If you're below this threshold, reach out and we'll discuss options." },
-  { q: "How is HBDR different from other solutions?", a: "Unlike traditional ad networks, HBDR uses real-time header bidding technology that creates true competition for every impression. Combined with our proprietary AI-powered bid optimization, managed Prebid server, and dedicated account management, we help publishers increase revenue by up to 50% over alternatives." },
-  { q: "What kind of support do you provide?", a: "Every publisher gets a dedicated account manager who serves as your primary point of contact. You also have access to our 24/7 technical support team, detailed analytics dashboards, and regular performance review meetings to ensure your revenue goals are being met." },
+  { q: "How is HBDR different from other solutions?", a: "Unlike traditional ad networks, HBDR uses real-time header bidding technology that creates true competition for every impression. Combined with dynamic floor prices, A/B testing, managed Prebid Server and a dedicated account manager, we help publishers increase revenue by up to 50%." },
+  { q: "What kind of support do you provide?", a: "Every publisher gets a dedicated account manager as the main point of contact. People answer Mon\u2013Fri, 9am\u20136pm ET; tickets and the knowledge base are open 24/7. You also get hourly reporting with alerts and CSV exports, and regular performance reviews." },
 ];
 
 // Questions a publisher can put to any header bidding vendor; outside facts are sourced in docs/research/how-it-works.md
@@ -120,6 +121,13 @@ export function renderHowItWorksPage(): string {
     title: "What Happens Next",
     lede: "Our partnership doesn't end at implementation. Here's how we continue to drive results.",
     body: renderFeatureRows(NEXT.map((n, i) => ({ title: n.title, body: n.description, testid: `hiw-next-card-${i}` }))),
+  })}
+  ${renderSection({
+    testid: "hiw-features-section",
+    eyebrow: "Features",
+    title: "What runs on your inventory",
+    lede: "What a publisher can use today, and what ships next.",
+    body: renderFeatureLists("hiw-features"),
   })}
   ${renderSection({
     testid: "hiw-faq-section",

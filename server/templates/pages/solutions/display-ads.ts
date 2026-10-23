@@ -42,7 +42,7 @@ function renderSizeDiagram(): string {
 }
 
 const FEATURES = [
-  { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%. In Google Publisher Tag this is two settings: fetchMarginPercent (how many viewports away a slot is requested) and renderMarginPercent (when it renders)." },
+  { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only as they come into view, which raises viewability. In Google Publisher Tag this is two settings: fetchMarginPercent (how many viewports away a slot is requested) and renderMarginPercent (when it renders)." },
   { title: "Mobile-First Design", body: "Responsive ad containers that adapt to any screen size with mobile-specific formats and touch-friendly interactions." },
   { title: "Brand Safety", body: "Comprehensive category blocking, advertiser exclusions, and malvertising protection to maintain site integrity." },
   { title: "Core Web Vitals", body: "Optimized ad delivery that protects all three Core Web Vitals: LCP within 2.5 s, INP of 200 ms or less (INP replaced FID in March 2024) and CLS of 0.1 or less, at the 75th percentile of visits. Ads are one of the largest contributors to layout shift, so every slot reserves its height before the ad loads." },
@@ -89,7 +89,7 @@ export function renderDisplayAdsPage(): string {
       })}</div>
       <div class="sm-after">${renderFeatureRows([
         { title: "Responsive Multi-Size", body: "Dynamic ad units that request multiple sizes (e.g., 300x250, 336x280, 300x600) and serve the highest-paying creative that fits the available space. Responsive containers ensure clean layouts across all viewports.", testid: "display-format-card-0" },
-        { title: "Sticky & Adhesion Units", body: "Bottom and side adhesion placements that maintain visibility as users scroll, delivering consistently high viewability rates above 85%. Smart dismissal and frequency controls protect user experience. On mobile, keep a sticky ad under 30% of the screen: larger sticky ads fail the Better Ads Standards.", testid: "display-format-card-1" },
+        { title: "Sticky & Adhesion Units", body: "Bottom and side adhesion placements that maintain visibility as users scroll, keeping the ad in view while the reader scrolls. Smart dismissal and frequency controls protect user experience. On mobile, keep a sticky ad under 30% of the screen: larger sticky ads fail the Better Ads Standards.", testid: "display-format-card-1" },
         { title: "Rich Media & Interstitials", body: "High-impact interstitial and expandable formats for premium campaigns. Web interstitials fire between page navigations with compliant close controls and frequency capping per IAB and Google standards.", testid: "display-format-card-2" },
       ])}</div>`,
   })}
@@ -103,7 +103,7 @@ export function renderDisplayAdsPage(): string {
       <ul class="sm-points" style="--cols:4">${FEATURES.map((f, i) => `
         <li data-testid="display-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
       </ul>
-      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="display-source">Sources: web.dev, Web Vitals and Optimize Cumulative Layout Shift; web.dev, INP becomes a Core Web Vital on March 12 (2024); Coalition for Better Ads, Better Ads Standards; Google Publisher Tag reference (retrieved October 2026).</p>`,
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="display-source">Sources: web.dev, Web Vitals and Optimize Cumulative Layout Shift; web.dev, INP becomes a Core Web Vital on March 12 (2024); Coalition for Better Ads, Better Ads Standards; Google Publisher Tag reference (retrieved October 2026); Media Rating Council, Viewable Ad Impression Measurement Guidelines v2.0 (2015).</p>`,
   })}
 
   <section class="bp-section" data-testid="display-spec-section">
@@ -112,8 +112,7 @@ export function renderDisplayAdsPage(): string {
       <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
         { label: "Formats", value: "All IAB standard units" },
         { label: "Multi-size request", value: '<span class="mono">300×250 · 336×280 · 300×600</span>' },
-        { label: "Adhesion viewability", value: "above 85%" },
-        { label: "Viewability with lazy loading", value: "above 70%" },
+        { label: "Viewable impression (MRC)", value: '<span class="mono">≥ 50%</span> of pixels for <span class="mono">1 s</span>' },
         { label: "Display revenue", value: "50%<small>up to</small>" },
         { label: "Core Web Vitals, 75th percentile", value: '<span class="mono">LCP ≤ 2.5 s · INP ≤ 200 ms · CLS ≤ 0.1</span>' },
       ])}</div>
