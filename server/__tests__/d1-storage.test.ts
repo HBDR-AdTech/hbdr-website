@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { D1Storage } from "../d1Storage";
 import type { SupplySeller, AdsTxtLine } from "../services/storage";
+import { SUPPLY_SETTING_KEYS, sellerCreateSchema } from "../services/supply";
 
 // D1Storage's real SQL against SQLite with every migration applied, so a typo, a missing column or a
 // write split out of its batch fails here rather than on the first production request.
@@ -170,6 +171,41 @@ describe("D1Storage sellers.json / ads.txt", () => {
     }
     const active = Object.entries(plans).find(([sql]) => sql.includes("WHERE retired_at IS NULL ORDER BY seller_id"))![1];
     expect(active).toBe("SEARCH supply_sellers USING INDEX supply_sellers_active (retired_at=?)");
+  });
+});
+
+describe("seed/supply-sellers-from-headerbiddr-2026-10-23.sql", () => {
+  const seedSql = readFileSync(join(__dirname, "..", "..", "seed", "supply-sellers-from-headerbiddr-2026-10-23.sql"), "utf8");
+
+  it("loads 184 sellers and 3 settings with an audit row each, and a second run changes nothing", async () => {
+    db.exec(seedSql);
+    const sellers = await storage.getActiveSellers();
+    const settings = await storage.getSupplySettings(SUPPLY_SETTING_KEYS);
+    const changes = db.prepare("SELECT COUNT(*) AS n FROM supply_changes").get() as { n: number };
+    expect(sellers).toHaveLength(184);
+    expect(settings).toEqual({
+      contact_email: "contact@hbdr.com",
+      contact_address: "HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131",
+      direct_line_domain: "headerbiddr.com",
+    });
+    expect(changes.n).toBe(187);
+    // every seeded row is one the admin API would accept
+    for (const s of sellers) {
+      const parsed = sellerCreateSchema.safeParse({ sellerId: s.sellerId, name: s.name, domain: s.domain, sellerType: s.sellerType });
+      expect(parsed.success, s.sellerId).toBe(true);
+      expect(parsed.data).toMatchObject({ name: s.name, domain: s.domain });
+    }
+    await storage.updateSeller({ ...sellers[0], name: "Changed by an operator" }, sellers[0], "ops@hbdr.com");
+    db.exec(seedSql);
+    expect((await storage.getActiveSellers()).map((s) => ({ ...s }))).toEqual([{ ...sellers[0], name: "Changed by an operator" }, ...sellers.slice(1).map((s) => ({ ...s }))]);
+    expect((db.prepare("SELECT COUNT(*) AS n FROM supply_changes").get() as { n: number }).n).toBe(188);
+  });
+
+  it("never seeds a seller_id the source repeats", async () => {
+    db.exec(seedSql);
+    for (const id of ["120", "127", "179", "8201HBhispanoadses"]) expect(await storage.getSeller(id)).toBeUndefined();
+    expect((await storage.getSeller("298"))!.domain).toBe("wynk.in");
+    expect((await storage.getSeller("310"))!.domain).toBeNull();
   });
 });
 
