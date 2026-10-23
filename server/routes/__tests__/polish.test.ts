@@ -23,7 +23,8 @@ describe("frame spotlight (D-025)", () => {
     it(`${route} carries the spotlight script once`, async () => {
       const html = await (await app.request(route)).text();
       expect(html).toMatch(SPOTLIGHT);
-      expect(html.match(/addEventListener\('pointermove'/g)).toHaveLength(1);
+      // other pointermove listeners (the home timeout drag) are fine; the spotlight itself appears once
+      expect(html.match(/var FRAMES = '\.bp-frame/g)).toHaveLength(1);
     });
   });
 
