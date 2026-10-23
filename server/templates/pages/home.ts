@@ -273,18 +273,21 @@ export function renderPage(form: FormConfig): string {
       <div class="bp-grid12">
         <figure class="timeline-frame bp-frame" style="margin:0">
           <div class="bp-frame-body">
+          <div class="tl-plot">
           <svg viewBox="0 0 880 400" role="img" aria-label="Example timeline: bid requests go out at 40 milliseconds and six bids return between 190 and 1150 milliseconds. Bids after the timeout are dropped and the highest bid in time wins.">
             <path class="tl-axis" d="M${tx(0)} 360 H${tx(1500)}"/>
             <g class="tl-label">${[0, 250, 500, 750, 1000, 1250, 1500].map((ms) => `<text x="${tx(ms)}" y="388" text-anchor="middle">${ms === 0 ? "0 ms" : ms}</text>`).join("")}</g>
             <g class="tl-rows">${renderTimelineRows(y0)}</g>
             <g class="tl-timeout-g" transform="translate(${tx(tm.defaultTimeout)} 0)" data-testid="timeout-line">
-              <rect class="tl-hit" x="-14" y="10" width="28" height="350"/>
               <path class="tl-timeout" d="M0 30 V360"/>
               <rect class="tl-handle" x="-8" y="317" width="16" height="26" rx="4"/>
               <path class="tl-grip" d="M-2.5 324 V336 M2.5 324 V336"/>
               <text class="tl-label" x="-8" y="22" text-anchor="end">timeout · <tspan data-timeout-text>${tm.defaultTimeout}</tspan> ms</text>
             </g>
           </svg>
+          <!-- HTML grab strip over the timeout line: touch-action works on HTML boxes, not on SVG children, so fingers can drag it while the chart still pans sideways -->
+          <div class="tl-grab" style="left:${(tx(tm.defaultTimeout) / 8.8).toFixed(3)}%" aria-hidden="true" data-testid="timeout-grab"></div>
+          </div>
           </div>
           <div class="tx-control">
             <label for="timeout-slider">Timeout (ms)</label>
@@ -408,7 +411,7 @@ export function renderPage(form: FormConfig): string {
     // yieldAt is the server's timeoutYield, so the page and the server render share one model.
     var tm = ${JSON.stringify(TIMEOUT_MODEL)};
     var yieldAt = ${timeoutYield.toString()};
-    var slider = q('#timeout-slider'), tline = q('.tl-timeout-g'), tsvg = tline.ownerSVGElement;
+    var slider = q('#timeout-slider'), tline = q('.tl-timeout-g'), tsvg = tline.ownerSVGElement, grab = q('.tl-grab');
     var lanes = [].slice.call(document.querySelectorAll('.tl-lane'));
     function usd(v) { return '$' + v.toFixed(2); }
     function setTimeoutMs(ms) {
@@ -419,6 +422,7 @@ export function renderPage(form: FormConfig): string {
       q('[data-timeout-out]').textContent = ms + ' ms';
       q('[data-timeout-text]').textContent = ms;
       tline.setAttribute('transform', 'translate(' + (${TX0} + ms * ${TX_PER_MS}) + ' 0)');
+      grab.style.left = ((${TX0} + ms * ${TX_PER_MS}) / 8.8) + '%';
       lanes.forEach(function (g, i) {
         var b = tm.bidders[i], win = i === r.winner;
         g.classList.toggle('is-out', !r.inTime[i]);
@@ -432,18 +436,20 @@ export function renderPage(form: FormConfig): string {
       q('[data-yield="sessionRpm"]').textContent = usd(r.sessionRpm);
     }
     slider.addEventListener('input', function () { setTimeoutMs(+slider.value); });
-    // The dashed line drags with mouse or touch; pointer capture keeps the drag going off the line
+    // The grab strip over the dashed line drags with mouse or touch; pointer capture keeps the drag going off the line
     function msAt(e) {
       var pt = tsvg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
       return (pt.matrixTransform(tsvg.getScreenCTM().inverse()).x - ${TX0}) / ${TX_PER_MS};
     }
-    tline.addEventListener('pointerdown', function (e) {
-      e.preventDefault(); tline.setPointerCapture(e.pointerId); tline.classList.add('is-dragging'); setTimeoutMs(msAt(e));
+    grab.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); grab.setPointerCapture(e.pointerId); tline.classList.add('is-dragging'); setTimeoutMs(msAt(e));
     });
-    tline.addEventListener('pointermove', function (e) { if (tline.hasPointerCapture(e.pointerId)) setTimeoutMs(msAt(e)); });
-    function endDrag(e) { if (tline.hasPointerCapture(e.pointerId)) tline.releasePointerCapture(e.pointerId); tline.classList.remove('is-dragging'); }
-    tline.addEventListener('pointerup', endDrag);
-    tline.addEventListener('pointercancel', endDrag);
+    grab.addEventListener('pointermove', function (e) { if (grab.hasPointerCapture(e.pointerId)) setTimeoutMs(msAt(e)); });
+    function endDrag(e) { if (grab.hasPointerCapture(e.pointerId)) grab.releasePointerCapture(e.pointerId); tline.classList.remove('is-dragging'); }
+    grab.addEventListener('pointerup', endDrag);
+    grab.addEventListener('pointercancel', endDrag);
+    grab.addEventListener('pointerenter', function () { tline.classList.add('is-hover'); });
+    grab.addEventListener('pointerleave', function () { tline.classList.remove('is-hover'); });
 
     if (!window.gsap) return; // the server-rendered page is complete on its own
     gsap.registerPlugin(ScrollTrigger);

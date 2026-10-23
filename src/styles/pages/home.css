@@ -6,12 +6,15 @@
 .tl-lane.is-out .tl-req, .tl-lane.is-out .tl-wait, .tl-lane.is-out .tl-dot { opacity: 0.3; }
 .tl-lane.is-out .tl-row { fill: var(--text-muted); }
 
-.tl-timeout-g { cursor: ew-resize; touch-action: none; }
-.tl-timeout-g.is-dragging { cursor: grabbing; }
-.tl-hit { fill: transparent; }
+/* the plot box carries the drawing's 560px minimum so the svg fills it exactly and percentage offsets track the line */
+.tl-plot { position: relative; min-width: 560px; }
+.tl-plot > svg { width: 100%; min-width: 0; }
+/* 44px finger target over the line, spanning the plot height (y 10-360 of the 400-unit drawing) */
+.tl-grab { position: absolute; top: 2.5%; height: 87.5%; width: 44px; transform: translateX(-50%); cursor: ew-resize; touch-action: none; }
+.tl-grab:active { cursor: grabbing; }
 .tl-handle { fill: var(--surface-raised); stroke: var(--text-secondary); stroke-width: 1.5; }
 .tl-grip { stroke: var(--text-secondary); stroke-width: 1.5; }
-.tl-timeout-g:hover .tl-handle, .tl-timeout-g.is-dragging .tl-handle { stroke: var(--accent); }
+.tl-timeout-g.is-hover .tl-handle, .tl-timeout-g.is-dragging .tl-handle { stroke: var(--accent); }
 
 .tx-control { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.5rem 1rem; padding: 0.8rem 1rem; border-top: 1px solid var(--hairline); }
 .tx-control label { font-size: 0.875rem; color: var(--text-secondary); }
