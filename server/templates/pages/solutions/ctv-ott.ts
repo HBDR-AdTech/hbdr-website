@@ -43,7 +43,7 @@ export function renderCtvOttPage(): string {
   ${renderBlueprintHero({
     eyebrow: "Solutions",
     title: "CTV & OTT Advertising",
-    lede: "Tap into the fastest-growing segment of programmatic advertising. Deliver premium video ads across connected TV and streaming platforms with SSAI and server-side ad insertion.",
+    lede: "Sell connected TV and streaming inventory programmatically. Deliver premium video ads across connected TV and streaming platforms with server-side ad insertion (SSAI).",
     actions: [
       { label: "Launch CTV Ads", href: "/contact", primary: true, testid: "button-hero-cta" },
       { label: "How SSAI works", href: "#ssai" },
@@ -53,10 +53,10 @@ export function renderCtvOttPage(): string {
   <section class="bp-section" data-testid="ctv-overview-section">
     <div class="bp-wrap">
       <div class="bp-grid12 sm-overview" data-testid="card-ctv-overview">
-        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Premium Video")}<h2>The future of TV advertising.</h2></div>
+        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Premium Video")}<h2>How CTV ads are sold.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>Connected TV and OTT platforms represent the most lucrative opportunity in programmatic advertising. With CPMs 5-10x higher than standard display, CTV offers publishers an unparalleled revenue channel. HBDR's CTV solution connects your streaming inventory to premium video demand from leading DSPs, agencies, and brand-direct buyers.</p>
-          <p>Our server-side ad insertion (SSAI) technology ensures seamless, broadcast-quality ad experiences that match the production value of the surrounding content. No buffering, no latency, no ad blockers — just premium ads delivered to engaged, lean-back audiences on the biggest screen in the house.</p>
+          <p>HBDR's CTV solution connects your streaming inventory to premium video demand from leading DSPs, agencies, and brand-direct buyers. On a TV there is no cookie: buyers bid on the device's advertising ID and its type, the limit-ad-tracking flag, the app bundle they check against your app-ads.txt, and the content being watched. Get those signals right before you tune floors.</p>
+          <p>Our server-side ad insertion (SSAI) technology ensures seamless, broadcast-quality ad experiences that match the production value of the surrounding content, delivered to lean-back audiences on the biggest screen in the house. The trade-off is measurement: with SSAI the stitching server, not the TV, calls the ad server, so it must pass the viewer's IP address and user agent, or buyers may count the impressions as invalid traffic.</p>
         </div>
       </div>
     </div>
@@ -78,9 +78,10 @@ export function renderCtvOttPage(): string {
         testid: "ctv-ssai-diagram",
       })}</div>
       <div class="sm-after">${renderFeatureRows([
-        { title: "Server-Side Ad Insertion (SSAI)", body: "Ads are stitched directly into the content stream at the manifest level, delivering a seamless viewing experience identical to linear TV. SSAI eliminates buffering between content and ads, prevents ad blocking, and supports all major streaming protocols including HLS and DASH.",
+        { title: "Server-Side Ad Insertion (SSAI)", body: "The stitching server requests the ads, conditions them to match the stream and writes them into the HLS or DASH manifest, so the device plays one continuous stream with no hand-off between content and ad. Tracking is the hard part. Either the device fires the VAST tracking events (client-side beaconing) or the server fires them on its behalf (server-side beaconing); VAST 4.1 requires a stitcher to send X-Device-IP and X-Device-User-Agent with those calls.",
           list: ["Broadcast-quality ad transitions", "Ad-block resistant delivery", "HLS, DASH, and CMAF support"], testid: "card-ssai" },
-        { title: "Ad Pod Management", body: "Intelligent ad pod construction with competitive separation, frequency capping, and optimal pod length configuration. Our system dynamically adjusts pre-roll, mid-roll, and post-roll positions based on content duration, viewer engagement, and revenue optimization models.",
+        { title: "Client-Side Ad Insertion (CSAI)", body: "The player pauses the content, requests VAST itself, plays the ad file and resumes. Measurement is simpler, because the device fires its own tracking and can run OM SDK verification, but every break is a hand-off that can stall on a slow connection, and the ad call is visible to ad blockers. CSAI suits apps with a capable player SDK; SSAI suits live streams and devices where switching streams is unreliable." },
+        { title: "Ad Pod Management", body: "Intelligent ad pod construction with competitive separation, frequency capping, and optimal pod length configuration. Our system dynamically adjusts pre-roll, mid-roll, and post-roll positions based on content duration, viewer engagement, and revenue optimization models. In OpenRTB 2.6 each slot in a pod is its own impression sharing a podid; slotinpod marks the first or last slot, poddur and maxseq bound a dynamic pod, and rqddurs lists exact durations so a live break has no dead air.",
           list: ["Dynamic pod length optimization", "Competitive separation rules", "Viewer-centric frequency capping"], testid: "card-ad-pods" },
       ])}</div>`,
   })}
@@ -89,11 +90,25 @@ export function renderCtvOttPage(): string {
     testid: "ctv-features-section",
     eyebrow: "Platform Features",
     title: "Built for streaming scale.",
-    lede: "Enterprise features that power the biggest names in streaming.",
+    lede: "Targeting, reporting and demand for streaming inventory.",
     body: `
       <ul class="sm-points">${FEATURES.map((f, i) => `
         <li data-testid="ctv-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
       </ul>`,
+  })}
+
+  ${renderSection({
+    testid: "ctv-checklist-section",
+    eyebrow: "Seller checklist",
+    title: "What CTV buyers check before they bid.",
+    lede: "Four things to get right in every bid request and every stream.",
+    body: `${renderFeatureRows([
+      { title: "app-ads.txt for every app", body: "Buyers match the app bundle in the bid request to the app's store listing, then read app-ads.txt on the developer website listed there. IAB Tech Lab's app-ads.txt covers mobile and CTV app stores. List every seller you authorize, and keep it current when partners change." },
+      { title: "The device ID and its type", body: "Send the advertising ID in device.ifa with its source in ifa_type: dpid for a device ID such as Roku's rida or Android's aaid, ppid for a publisher ID, sspid, or sessionid for a short-lived ID. Set lmt to 1 when the viewer has limited ad tracking, and pass it on unchanged." },
+      { title: "Pods and content described", body: "Describe each break with the OpenRTB 2.6 pod fields, and describe the content: genre, and livestream (1 for a scheduled, linear broadcast; 0 for on-demand). Buyers use these to choose what to bid on and how much." },
+      { title: "Measurement on the device", body: "The IAB Tech Lab OM SDK covers Android TV and tvOS in native builds, and Samsung and LG TVs through its web video SDK. Where the app supports it, client-side measurement through OM SDK gives verification vendors the signals they need." },
+    ])}
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="ctv-source">Sources: IAB Tech Lab, VAST 4.1 (section on ad stitching headers), VAST 4.x page (updated 18 July 2024), OpenRTB 2.6, ifa_type community extension, ads.txt and app-ads.txt (updated 14 September 2026), Open Measurement SDK (updated 4 November 2025).</p>`,
   })}
 
   <section class="bp-section" data-testid="ctv-spec-section">
@@ -105,7 +120,6 @@ export function renderCtvOttPage(): string {
         { label: "Ad positions", value: "Pre-roll · mid-roll · post-roll" },
         { label: "Pod controls", value: "Separation · frequency caps · pod length" },
         { label: "Video demand", value: "The Trade Desk · DV360 · Amazon" },
-        { label: "CPMs vs. standard display", value: "5–10×<small>higher</small>" },
       ])}</div>
     </div>
   </section>

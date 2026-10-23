@@ -18,7 +18,7 @@ const VALUES = [
 
 export function renderAboutPage(): string {
   const content = `
-  ${renderPageHero("About Us", "About HBDR", "We are a global leader in ad monetization and header bidding solutions, helping publishers maximize their revenue since 2015.")}
+  ${renderPageHero("About Us", "About HBDR", "HBDR runs header bidding and ad monetization for publishers on the web, in apps and on connected TV, and has since 2015.")}
 
   <section class="bp-section" data-testid="about-mission-section">
     <div class="bp-wrap bp-grid12" data-testid="card-mission">
@@ -27,8 +27,8 @@ export function renderAboutPage(): string {
         <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Maximizing Publisher Revenue</h2>
       </div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 grid gap-5 text-[1.0625rem] leading-relaxed text-[var(--text-muted)]">
-        <p>At HBDR, our mission is to empower digital publishers with enterprise-grade ad monetization technology. We believe every publisher deserves access to the most advanced header bidding solutions, transparent analytics, and dedicated support to unlock their full revenue potential.</p>
-        <p>We combine cutting-edge technology with deep industry expertise to deliver solutions that consistently outperform traditional ad networks, helping our partners increase revenue by up to 50%.</p>
+        <p>HBDR sells publishers' ad inventory through header bidding with 65+ demand sources: buyers bid on an impression in the same auction, and the highest bid that arrives in time wins. HBDR serves more than 1 billion impressions a month and has served more than 1 trillion ads in total.</p>
+        <p>Our team brings more than 25 years of combined experience in programmatic advertising, and we pair the technology with hands-on ad operations to outperform traditional ad networks, helping our partners increase revenue by up to 50%.</p>
       </div>
     </div>
   </section>

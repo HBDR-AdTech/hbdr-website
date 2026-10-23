@@ -4,14 +4,14 @@ import { renderCTASection } from "../../components/cta";
 import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection } from "../../components/blueprint";
 
 const ADVANTAGES = [
-  { title: "Zero latency impact", body: "All auction processing happens server-to-server within Google's infrastructure. No JavaScript, no browser processing, no impact on page load speed or Core Web Vitals scores." },
-  { title: "Unified auction", body: "Open Bidding participants compete directly against AdX demand in the same auction, ensuring the highest bid always wins. No more waterfall inefficiencies or last-look advantages." },
-  { title: "Simplified billing", body: "Revenue from all Open Bidding partners is consolidated in your Google Ad Manager payment, reducing reconciliation complexity and providing a single, reliable payment stream." },
+  { title: "Less work in the browser", body: "The page sends one ad request and Ad Manager calls every yield partner server-to-server, so there is no bidder code on the page. Google says this reduces the latency historically associated with header bidding. It does not remove it: the ad response still waits while Ad Manager collects partner bids, and a partner that times out loses the impression." },
+  { title: "Unified auction", body: "Open Bidding partners compete with the Ad Exchange bid and your best eligible line item in one unified auction, and the highest net bid wins. Ad Manager has run a unified first-price auction since 2019, so the choice between Open Bidding and Prebid now comes down to fees, partner coverage and control." },
+  { title: "Simplified billing", body: "Google pays Open Bidding revenue with your Ad Exchange payment, itemized by exchange, net of Google's revenue share. That share is a cost Prebid does not carry, so compare partners on net revenue. Under the Open Bidding Direct Pay beta, SSPs pay you directly and Google bills a %-media fee instead." },
 ];
 
 const FEATURES = [
   { title: "Partner selection", body: "We analyze your traffic profile to identify the ideal Open Bidding yield partners that complement your existing demand stack." },
-  { title: "Hybrid strategy", body: "We configure Open Bidding to work seamlessly alongside Prebid.js, ensuring no demand cannibalization and optimal auction pressure." },
+  { title: "Hybrid strategy", body: "We configure Open Bidding to work seamlessly alongside Prebid.js, ensuring no demand cannibalization and optimal auction pressure. The common mistake is calling the same exchange through both paths, where it can bid against itself for one impression; each partner belongs in the path where it nets more." },
   { title: "Revenue tracking", body: "Detailed reporting on Open Bidding contribution with win rate, CPM trends, and incremental revenue attribution versus other demand channels." },
   { title: "Ongoing tuning", body: "Continuous optimization of yield partner configurations, timeout settings, and floor prices specific to the Open Bidding auction environment." },
 ];
@@ -41,7 +41,7 @@ const AUCTION_SVG = `
             ${PARTNERS.map(([name, x]) => `<rect class="sg-node" x="${x}" y="340" width="200" height="56" rx="6"/>
             <text class="sg-name" x="${x + 100}" y="373" text-anchor="middle" style="font-size:15px">${name}</text>`).join("\n            ")}
             <text class="sg-tag sg-tag-hi" x="262" y="428">Open Bidding · server-to-server</text>
-            <text class="sg-sub" x="914" y="428" text-anchor="end">No JavaScript, no browser processing</text>
+            <text class="sg-sub" x="914" y="428" text-anchor="end">No bidder code on the page</text>
           </svg>`;
 
 export function renderOpenBiddingPage(): string {
@@ -60,7 +60,7 @@ export function renderOpenBiddingPage(): string {
     <div class="bp-wrap bp-grid12 sg-split" data-testid="card-ob-overview">
       <div class="col-span-12 lg:col-span-5 grid gap-5 content-start">${renderEyebrow("Server-to-server bidding")}<h2>What is Open Bidding?</h2></div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 sg-prose">
-        <p>Google Open Bidding (formerly Exchange Bidding Dynamic Allocation, or EBDA) is Google's server-side bidding solution that allows third-party exchanges and SSPs to compete in a unified auction alongside Google Ad Exchange demand — all within Google Ad Manager. Unlike client-side header bidding, Open Bidding happens server-to-server, eliminating page latency while maintaining competitive auction dynamics.</p>
+        <p>Google Open Bidding (formerly Exchange Bidding Dynamic Allocation, or EBDA) is Google's server-side bidding solution that allows third-party exchanges and SSPs to compete in a unified auction alongside Google Ad Exchange demand — all within Google Ad Manager. Unlike client-side header bidding, Open Bidding happens server-to-server, which takes bidder code off the page. The trade-offs are Google's revenue share on every Open Bidding win, a partner list limited to the exchanges Google has onboarded, and a contract you must sign with each partner before it can bid.</p>
         <p>HBDR configures and manages your Open Bidding setup to complement your existing header bidding stack, creating a multi-layered auction strategy that maximizes competition and revenue. Our hybrid approach ensures you capture demand from partners that perform better in server-side environments while maintaining the transparency benefits of client-side Prebid.</p>
       </div>
     </div>
@@ -79,11 +79,12 @@ export function renderOpenBiddingPage(): string {
     testid: "ob-advantages-section",
     eyebrow: "Advantages",
     title: "Why Open Bidding matters.",
-    lede: "Combine the best of server-side speed with the scale of Google's ecosystem.",
+    lede: "What Open Bidding changes in your auction, and what it costs.",
     body: `
       <div class="sg-cols" style="--cols:3">${ADVANTAGES.map((a, i) => `
         <div data-testid="ob-advantage-card-${i}"><h3>${a.title}</h3><p>${a.body}</p></div>`).join("")}
-      </div>`,
+      </div>
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="ob-source">Sources: Google Ad Manager Help, Introduction to Open Bidding, How Open Bidding works, Open Bidding payments, Open Bidding Direct Pay (Beta) and Auction model; Google Ad Manager blog, first-price auctions, 5 September 2019.</p>`,
   })}
 
   ${renderSection({
@@ -100,7 +101,7 @@ export function renderOpenBiddingPage(): string {
 
   return renderLayout({
     title: "Open Bidding Solutions - HBDR",
-    description: "Maximize revenue with Google Open Bidding. Server-to-server real-time auctions with zero latency impact and unified auction dynamics in Google Ad Manager.",
+    description: "Google Open Bidding brings third-party exchanges into Google Ad Manager's unified auction server-to-server. How it compares with Prebid on latency, fees and control.",
     canonicalPath: "/solutions/open-bidding",
     bodyContent: content,
   });

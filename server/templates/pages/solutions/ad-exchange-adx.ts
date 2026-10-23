@@ -3,19 +3,19 @@ import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 import { renderBlueprintHero, renderEyebrow, renderFeatureRows, renderSection } from "../../components/blueprint";
 
-// The two lists the page always had, paired row by row; AdX is the page's subject, so its column is the mint one
+// AdX (through Google Ad Manager) beside AdSense, row by row from Google's own product comparison; AdX is the page's subject, so its column is the mint one
 const COMPARE: [string, string, string][] = [
-  ["Auction", "Real-time auction with thousands of competing buyers", "Fixed pricing with limited competition"],
-  ["Demand", "Access to premium brand and agency demand", "Smaller pool of advertisers"],
-  ["Controls", "Granular floor pricing and blocking controls", "Limited pricing and blocking controls"],
-  ["Private marketplace", "Private marketplace (PMP) deal support", "No private marketplace support"],
-  ["Programmatic deals", "Preferred deal and programmatic guaranteed capabilities", "No programmatic deal capabilities"],
-  ["Reporting", "Advanced reporting with buyer-level insights", "Basic reporting with limited transparency"],
+  ["Auction", "Real-time auction; Ad Exchange buyers compete with your line items and other exchanges", "Real-time auction too: Google shows the highest net bid among advertisers"],
+  ["Demand", "Ad Exchange buyers, plus third-party exchanges and networks through Ad Manager", "Google's ad network demand only; no other networks"],
+  ["Controls", "Granular floor pricing and blocking controls", "More automation, fewer controls"],
+  ["Private marketplace", "Private marketplace (PMP) deal support", "No negotiated deals"],
+  ["Programmatic deals", "Preferred deal and programmatic guaranteed capabilities", "No negotiated deals"],
+  ["Reporting", "Advanced reporting with buyer-level insights", "Standard AdSense performance reports"],
 ];
 
 const FEATURES = [
-  { title: "Optimized configuration", body: "Expert setup of AdX line items, pricing rules, and creative controls tailored to your specific inventory and traffic patterns for maximum yield." },
-  { title: "Header bidding + AdX", body: "Our hybrid setup ensures AdX competes against Prebid demand in a true unified auction, driving the highest possible clearing prices for every impression." },
+  { title: "Optimized configuration", body: "Expert setup of Ad Exchange pricing rules, blocking protections and creative controls tailored to your specific inventory and traffic patterns for maximum yield. AdX competes through dynamic allocation, not line items, so its floors live in pricing rules." },
+  { title: "Header bidding + AdX", body: "Our hybrid setup lets AdX compete with Prebid demand in Ad Manager's unified first-price auction, where the highest net bid wins. On Ad Manager 360, pass Prebid bids at their true value (header bidding trafficking reads them directly), so AdX has to beat the real price, not a rounded line-item price." },
   { title: "Policy & compliance", body: "Full ads.txt and sellers.json management, content policy monitoring, and proactive compliance reviews to protect your AdX account standing." },
   { title: "Deal management", body: "Set up and manage private marketplace deals, preferred deals, and programmatic guaranteed campaigns to capture premium direct-sold revenue through AdX." },
   { title: "Revenue analytics", body: "Comprehensive AdX performance dashboards with buyer-level insights, price floor analysis, and competitive intelligence to inform optimization strategy." },
@@ -38,8 +38,9 @@ export function renderAdExchangePage(): string {
     <div class="bp-wrap bp-grid12 sg-split" data-testid="card-adx-overview">
       <div class="col-span-12 lg:col-span-5 grid gap-5 content-start">${renderEyebrow("Premium exchange")}<h2>What is Google Ad Exchange?</h2></div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 sg-prose">
-        <p>Google Ad Exchange (AdX) is a premium programmatic marketplace that connects publishers with the world's largest pool of brand advertisers and agency demand. Unlike Google AdSense, which serves as an ad network with fixed pricing, AdX operates as a real-time auction exchange where thousands of buyers compete for every impression — resulting in significantly higher CPMs and fill rates.</p>
+        <p>Google Ad Exchange (AdX) is a premium programmatic marketplace that connects publishers with the world's largest pool of brand advertisers and agency demand. AdSense also sells your space in a real-time auction, so the difference is not the auction itself. It is what surrounds it: Google describes AdSense as an ad network built for automation, while AdX through Ad Manager adds negotiated deals, competition from other exchanges and networks, and granular pricing and blocking controls.</p>
         <p>Access to Google AdX requires either direct qualification through Google or partnership with a certified Google MCM or reseller partner like HBDR. Through our partnership, publishers of all sizes gain access to AdX's premium demand, advanced reporting, and granular controls that are otherwise only available to the largest media companies.</p>
+        <p>The rules around AdX are changing. On 2 September 2026 a US federal court rejected breaking up Google's ad tech business and accepted behavioral remedies instead; Google's own proposal included removing unified pricing rules and making real-time AdX bids available to rival publisher ad servers. The final judgment was still being settled in October 2026, and the court expects the remedies to be implemented within 15 months. Until each remedy takes effect under the final judgment, Ad Manager's current rules apply.</p>
       </div>
     </div>
   </section>
@@ -58,7 +59,8 @@ export function renderAdExchangePage(): string {
             <tr><td>${k}</td><td class="hi">${adx}</td><td>${adsense}</td></tr>`).join("")}
           </tbody>
         </table>
-      </div>`,
+      </div>
+      <p class="mono mt-6 text-[var(--text-muted)]" data-testid="adx-source">Sources: Google Ad Manager Help, Google Ad Manager, AdSense, and AdMob; Google AdSense Help, About the ad auction (retrieved October 2026). Court remedies: PPC Land, 3 September and 6 October 2026; Digiday, 10 September 2026.</p>`,
   })}
 
   ${renderSection({

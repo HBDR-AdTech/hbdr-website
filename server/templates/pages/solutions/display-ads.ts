@@ -42,10 +42,10 @@ function renderSizeDiagram(): string {
 }
 
 const FEATURES = [
-  { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%." },
+  { title: "Viewability Optimization", body: "Lazy loading and viewport detection ensure ads load only when visible, boosting viewability rates above 70%. In Google Publisher Tag this is two settings: fetchMarginPercent (how many viewports away a slot is requested) and renderMarginPercent (when it renders)." },
   { title: "Mobile-First Design", body: "Responsive ad containers that adapt to any screen size with mobile-specific formats and touch-friendly interactions." },
   { title: "Brand Safety", body: "Comprehensive category blocking, advertiser exclusions, and malvertising protection to maintain site integrity." },
-  { title: "Core Web Vitals", body: "Optimized ad delivery that protects CLS, LCP, and FID scores, preserving SEO rankings and user experience." },
+  { title: "Core Web Vitals", body: "Optimized ad delivery that protects all three Core Web Vitals: LCP within 2.5 s, INP of 200 ms or less (INP replaced FID in March 2024) and CLS of 0.1 or less, at the 75th percentile of visits. Ads are one of the largest contributors to layout shift, so every slot reserves its height before the ad loads." },
 ];
 
 export function renderDisplayAdsPage(): string {
@@ -65,7 +65,7 @@ export function renderDisplayAdsPage(): string {
       <div class="bp-grid12 sm-overview" data-testid="card-display-overview">
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Display Monetization")}<h2>Beyond the banner.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>Display advertising remains the backbone of digital monetization, but the landscape has evolved far beyond simple banners. HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device.</p>
+          <p>HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device. Three rules decide whether a layout keeps earning: keep mobile ad density at or below 30% of the main content's height, avoid the experiences the Better Ads Standards rule out (pop-ups, prestitials, large sticky ads, autoplay video with sound), and reserve space for every slot so ads never push content.</p>
           <p>Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers can increase display revenue by up to 50%.</p>
         </div>
       </div>
@@ -89,7 +89,7 @@ export function renderDisplayAdsPage(): string {
       })}</div>
       <div class="sm-after">${renderFeatureRows([
         { title: "Responsive Multi-Size", body: "Dynamic ad units that request multiple sizes (e.g., 300x250, 336x280, 300x600) and serve the highest-paying creative that fits the available space. Responsive containers ensure clean layouts across all viewports.", testid: "display-format-card-0" },
-        { title: "Sticky & Adhesion Units", body: "Bottom and side adhesion placements that maintain visibility as users scroll, delivering consistently high viewability rates above 85%. Smart dismissal and frequency controls protect user experience.", testid: "display-format-card-1" },
+        { title: "Sticky & Adhesion Units", body: "Bottom and side adhesion placements that maintain visibility as users scroll, delivering consistently high viewability rates above 85%. Smart dismissal and frequency controls protect user experience. On mobile, keep a sticky ad under 30% of the screen: larger sticky ads fail the Better Ads Standards.", testid: "display-format-card-1" },
         { title: "Rich Media & Interstitials", body: "High-impact interstitial and expandable formats for premium campaigns. Web interstitials fire between page navigations with compliant close controls and frequency capping per IAB and Google standards.", testid: "display-format-card-2" },
       ])}</div>`,
   })}
@@ -102,7 +102,8 @@ export function renderDisplayAdsPage(): string {
     body: `
       <ul class="sm-points" style="--cols:4">${FEATURES.map((f, i) => `
         <li data-testid="display-feature-card-${i}"><h3>${f.title}</h3><p>${f.body}</p></li>`).join("")}
-      </ul>`,
+      </ul>
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="display-source">Sources: web.dev, Web Vitals and Optimize Cumulative Layout Shift; web.dev, INP becomes a Core Web Vital on March 12 (2024); Coalition for Better Ads, Better Ads Standards; Google Publisher Tag reference (retrieved October 2026).</p>`,
   })}
 
   <section class="bp-section" data-testid="display-spec-section">
@@ -114,7 +115,7 @@ export function renderDisplayAdsPage(): string {
         { label: "Adhesion viewability", value: "above 85%" },
         { label: "Viewability with lazy loading", value: "above 70%" },
         { label: "Display revenue", value: "50%<small>up to</small>" },
-        { label: "Core Web Vitals", value: "CLS · LCP · FID protected" },
+        { label: "Core Web Vitals, 75th percentile", value: '<span class="mono">LCP ≤ 2.5 s · INP ≤ 200 ms · CLS ≤ 0.1</span>' },
       ])}</div>
     </div>
   </section>

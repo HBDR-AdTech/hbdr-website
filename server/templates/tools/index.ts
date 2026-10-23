@@ -1,5 +1,5 @@
 import { renderLayout } from "../layout";
-import { renderBlueprintHero, renderEyebrow, renderActions } from "../components/blueprint";
+import { renderBlueprintHero, renderEyebrow, renderActions, renderSection, renderFeatureRows } from "../components/blueprint";
 
 function renderToolCard(id: string, title: string, description: string, alpineData: string, inputs: string, outputs: string): string {
   return `
@@ -92,7 +92,7 @@ export function renderPublisherToolsPage(): string {
     testid: "tools-hero",
     eyebrow: "Publisher Tools",
     title: "Revenue Calculators",
-    lede: "Model your ad revenue across every inventory type. Adjust the sliders to see real-time estimates for display, video, in-app, and CTV/OTT monetization.",
+    lede: "Model ad revenue for display, header bidding, video, in-app and CTV/OTT. Each calculator multiplies your traffic by a fill rate and a CPM you set. The formulas are written out below the calculators.",
   })}
 
   <!-- Tab Navigation + Calculators -->
@@ -162,19 +162,19 @@ export function renderPublisherToolsPage(): string {
             renderSliderInput('pageviews', 'Monthly Pageviews', '10000', '10000000', '10000', '', 'Total monthly pageviews on your site'),
             renderSliderInput('adSlots', 'Ad Slots per Page', '1', '10', '1', '', 'Number of ad units displayed on each page'),
             renderSliderInput('fillRate', 'Fill Rate', '20', '100', '1', '%', 'Percentage of ad requests that return a paid ad'),
-            renderSliderInput('viewability', 'Viewability Rate', '20', '100', '1', '%', 'Percentage of served ads that are actually viewable (50% of pixels in viewport for 1 second)'),
-            renderSliderInput('baseCpm', 'Base CPM', '0.50', '15.00', '0.10', '', 'Base cost per 1,000 impressions before market adjustments'),
+            renderSliderInput('viewability', 'Viewability Rate', '20', '100', '1', '%', 'Share of filled ads that meet the MRC viewable standard: 50% of pixels in view for 1 continuous second. Shown as viewable impressions; it does not change revenue in this model.'),
+            renderSliderInput('baseCpm', 'Base CPM', '0.50', '15.00', '0.10', '', 'Your average CPM before the geo, device, vertical and season multipliers.'),
             renderSelectInput('geoMix', 'Geo Mix', [
               {value: 'us', label: 'US (1.0x)'},
               {value: 'eu', label: 'EU (0.75x)'},
               {value: 'mixed', label: 'Mixed (0.85x)'},
               {value: 'row', label: 'ROW (0.4x)'},
-            ], 'Geographic distribution of your traffic affects CPM rates'),
+            ], 'Illustrative multiplier for where your visitors are.'),
             renderSelectInput('deviceSplit', 'Device Split', [
               {value: 'desktop', label: 'Desktop (1.2x)'},
               {value: 'mobile', label: 'Mobile (0.8x)'},
               {value: '50-50', label: '50-50 (1.0x)'},
-            ], 'Desktop traffic typically commands higher CPMs than mobile'),
+            ], 'Illustrative multiplier for your desktop and mobile mix.'),
             renderSelectInput('vertical', 'Vertical', [
               {value: 'finance', label: 'Finance (2.5x)'},
               {value: 'tech', label: 'Tech (1.8x)'},
@@ -182,13 +182,13 @@ export function renderPublisherToolsPage(): string {
               {value: 'news', label: 'News (1.2x)'},
               {value: 'entertainment', label: 'Entertainment (0.9x)'},
               {value: 'general', label: 'General (0.7x)'},
-            ], 'Content vertical significantly impacts advertiser demand and CPMs'),
+            ], 'Illustrative multiplier for your content category.'),
             renderSelectInput('season', 'Seasonality', [
               {value: 'q1', label: 'Q1 (0.85x)'},
               {value: 'q2', label: 'Q2 (1.0x)'},
               {value: 'q3', label: 'Q3 (0.95x)'},
               {value: 'q4', label: 'Q4 (1.3x)'},
-            ], 'Ad spending peaks in Q4 (holiday season) and dips in Q1'),
+            ], 'Illustrative multiplier for the quarter you are modelling.'),
           ].join(''),
           `
           <div class="space-y-6">
@@ -210,7 +210,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
       </div>
@@ -248,21 +248,21 @@ export function renderPublisherToolsPage(): string {
             renderSliderInput('monthlyImpressions', 'Monthly Impressions', '100000', '50000000', '100000', '', 'Total ad impressions served per month'),
             renderSliderInput('currentCpm', 'Current Average CPM', '0.50', '10.00', '0.10', '', 'Your current average CPM with waterfall or existing setup'),
             renderSliderInput('currentFill', 'Current Fill Rate', '30', '100', '1', '%', 'Your current ad fill rate percentage'),
-            renderSliderInput('hbUpliftPct', 'Expected CPM Uplift', '10', '80', '5', '%', 'Typical header bidding CPM uplift ranges from 20-60% depending on inventory quality'),
-            renderSliderInput('hbFillBoost', 'Fill Rate Improvement', '0', '30', '1', '%', 'Header bidding typically improves fill rates by 5-20% through more demand competition'),
-            renderSliderInput('demandPartners', 'Demand Partners', '5', '50', '1', '', 'Number of demand partners in your header bidding wrapper (diminishing returns above ~20)'),
-            renderSliderInput('timeout', 'Timeout', '200', '3000', '100', 'ms', 'Header bidding auction timeout in milliseconds'),
+            renderSliderInput('hbUpliftPct', 'Expected CPM Uplift', '10', '80', '5', '%', 'Your assumption for how much CPMs rise when more buyers bid in one auction. The model scales it by the partner and current-method factors.'),
+            renderSliderInput('hbFillBoost', 'Fill Rate Improvement', '0', '30', '1', '%', 'Your assumption for the extra fill, in percentage points, from more competing buyers. Projected fill is capped at 100%.'),
+            renderSliderInput('demandPartners', 'Demand Partners', '5', '50', '1', '', 'Demand partners in the wrapper. The model scales the uplift from 0.7x at 5 partners to 1.0x at 50, on a logarithmic curve.'),
+            renderSliderInput('timeout', 'Timeout', '200', '3000', '100', 'ms', 'Auction timeout, shown for reference. This model does not price it; the timeout explorer on the home page shows the trade-off.'),
             renderSelectInput('currentMethod', 'Current Method', [
               {value: 'adsense', label: 'AdSense Only (1.0x)'},
               {value: 'singlessp', label: 'Single SSP (0.7x)'},
               {value: 'waterfall', label: 'Waterfall (0.5x)'},
-            ], 'Your current monetization method affects how much uplift header bidding can deliver'),
+            ], 'Illustrative factor that scales the uplift by how you sell today.'),
             renderSelectInput('geoMix', 'Geo CPM Mix', [
               {value: 'us', label: 'US (1.0x)'},
               {value: 'eu', label: 'EU (0.75x)'},
               {value: 'mixed', label: 'Mixed (0.85x)'},
               {value: 'row', label: 'ROW (0.4x)'},
-            ], 'Geographic distribution of your traffic affects baseline CPMs'),
+            ], 'Illustrative multiplier for where your visitors are.'),
           ].join(''),
           `
           <div class="space-y-6">
@@ -290,7 +290,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Additional Annual Revenue', "'+' + fmt(upliftAmount * 12)", true)}
             <div class="calc-rule"></div>
             ${renderHbdrUplift('hbRevenue', 'hbRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
       </div>
@@ -330,22 +330,22 @@ export function renderPublisherToolsPage(): string {
             renderSliderInput('adsPerPod', 'Ads per Break', '1', '4', '1', '', 'Number of ad slots in each ad break/pod'),
             renderSliderInput('videoFillRate', 'Video Fill Rate', '30', '100', '1', '%', 'Percentage of VAST ad requests that return a creative'),
             renderSliderInput('completionRate', 'Ad Completion Rate (VTR)', '30', '100', '1', '%', 'Percentage of video ads watched to completion (view-through rate)'),
-            renderSliderInput('videoCpm', 'Base Video CPM', '3.00', '35.00', '0.50', '', 'Base CPM for completed video ad views before adjustments'),
+            renderSliderInput('videoCpm', 'Base Video CPM', '3.00', '35.00', '0.50', '', 'Your CPM for completed ad views before the content, position and VAST multipliers.'),
             renderSelectInput('contentType', 'Content Type', [
               {value: 'short', label: 'Short-form (0.7x)'},
               {value: 'long', label: 'Long-form (1.3x)'},
               {value: 'live', label: 'Live (1.5x)'},
-            ], 'Longer and live content commands higher CPMs due to deeper engagement'),
+            ], 'Illustrative multiplier for the kind of video you publish.'),
             renderSelectInput('playerPosition', 'Player Position', [
               {value: 'preroll', label: 'Pre-roll (1.0x)'},
               {value: 'inarticle', label: 'In-article (0.8x)'},
               {value: 'sticky', label: 'Sticky (1.2x)'},
-            ], 'Sticky players maintain viewability; in-article may have lower completion'),
+            ], 'Illustrative multiplier for where the player sits on the page.'),
             renderSelectInput('vastVersion', 'VAST Version', [
               {value: '2.0', label: 'VAST 2.0 (0.8x)'},
               {value: '3.0', label: 'VAST 3.0 (1.0x)'},
               {value: '4.x', label: 'VAST 4.x (1.15x)'},
-            ], 'Newer VAST versions support more ad formats and better viewability measurement'),
+            ], 'VAST 4.1 added Open Measurement for ad verification and VAST 4.2 added SIMID for interactive ads. The multiplier is illustrative.'),
           ].join(''),
           `
           <div class="space-y-6">
@@ -367,7 +367,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
       </div>
@@ -406,23 +406,23 @@ export function renderPublisherToolsPage(): string {
             renderSliderInput('sessionsPerUser', 'Sessions per User/Day', '1', '10', '1', '', 'Average number of app sessions each user has per day'),
             renderSliderInput('adsPerSession', 'Ad Impressions per Session', '1', '15', '1', '', 'Number of ads shown per session (banners, interstitials, rewarded)'),
             renderSliderInput('inappFillRate', 'Fill Rate', '30', '100', '1', '%', 'Percentage of ad requests filled by demand partners'),
-            renderSliderInput('inappEcpm', 'Base eCPM', '0.50', '30.00', '0.50', '', 'Base blended eCPM before platform and format adjustments'),
+            renderSliderInput('inappEcpm', 'Base eCPM', '0.50', '30.00', '0.50', '', 'Your blended eCPM before the platform, format and engagement multipliers.'),
             renderSelectInput('platform', 'Platform', [
               {value: 'ios', label: 'iOS (1.3x)'},
               {value: 'android', label: 'Android (0.8x)'},
               {value: 'both', label: 'Both (1.0x)'},
-            ], 'iOS users typically generate higher eCPMs due to demographics and spending patterns'),
+            ], 'Illustrative multiplier for your iOS and Android mix.'),
             renderSelectInput('adFormat', 'Ad Format Mix', [
               {value: 'banners', label: 'Banners (0.5x)'},
               {value: 'interstitials', label: 'Interstitials (1.5x)'},
               {value: 'rewarded', label: 'Rewarded (2.5x)'},
               {value: 'mixed', label: 'Mixed (1.0x)'},
-            ], 'Rewarded video commands the highest eCPMs; banners are lowest but most scalable'),
+            ], 'Illustrative multiplier for your ad format mix.'),
             renderSelectInput('engagement', 'Engagement Tier', [
               {value: 'casual', label: 'Casual (0.7x)'},
               {value: 'mid', label: 'Mid-Core (1.0x)'},
               {value: 'hardcore', label: 'Hardcore (1.4x)'},
-            ], 'Highly engaged users are more valuable to advertisers'),
+            ], 'Illustrative multiplier for how engaged your users are.'),
           ].join(''),
           `
           <div class="space-y-6">
@@ -444,7 +444,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
       </div>
@@ -492,9 +492,9 @@ export function renderPublisherToolsPage(): string {
               {value: 'sports', label: 'Sports (1.4x)'},
               {value: 'entertainment', label: 'Entertainment (1.1x)'},
               {value: 'lifestyle', label: 'Lifestyle (0.9x)'},
-            ], 'Sports and premium entertainment content command higher CPMs'),
-            renderSliderInput('programmaticPct', 'Programmatic %', '0', '100', '5', '%', 'Percentage of inventory sold programmatically vs direct. Direct sales command up to 40% premium.'),
-            renderSliderInput('targetability', 'Audience Targetability', '1', '10', '1', '', 'How targetable your audience is (1=broad, 10=highly specific). Better targeting increases CPMs.'),
+            ], 'Illustrative multiplier for your content genre.'),
+            renderSliderInput('programmaticPct', 'Programmatic %', '0', '100', '5', '%', 'Share sold programmatically. The model adds a premium of up to 40% for the direct-sold share, as an assumption.'),
+            renderSliderInput('targetability', 'Audience Targetability', '1', '10', '1', '', 'How targetable your audience is (1 = broad, 10 = highly specific). The model multiplies CPM by 0.76x at 1 up to 1.3x at 10.'),
           ].join(''),
           `
           <div class="space-y-6">
@@ -520,7 +520,7 @@ export function renderPublisherToolsPage(): string {
             ${renderOutputMetric('Estimated Annual Revenue', "fmt(monthlyRevenue * 12)", true)}
             <div class="calc-rule"></div>
             ${renderHbdrUplift('monthlyRevenue', 'monthlyRevenue * 1.35', 'fmt')}
-            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Estimates based on industry benchmarks. Actual results may vary.</p>
+            <p class="text-xs text-[var(--text-muted)] mt-4 text-center">Multipliers are illustrative assumptions, not measured benchmarks. Actual results vary.</p>
           </div>`
         )}
       </div>
@@ -528,12 +528,67 @@ export function renderPublisherToolsPage(): string {
     </div>
   </section>
 
+  ${renderSection({
+    testid: "tools-metrics-section",
+    eyebrow: "Definitions",
+    title: "The Metrics",
+    lede: "Standard definitions from the ad platforms. Compare like with like: fill rate and match rate are different numbers.",
+    body: `
+      <div class="bp-table-wrap">
+        <table class="bp-table" data-testid="tools-metrics-table">
+          <thead><tr><th scope="col">Metric</th><th scope="col">Definition</th><th scope="col">Source</th></tr></thead>
+          <tbody>
+            <tr><td>Page RPM</td><td>Earnings ÷ pageviews × 1,000</td><td class="mono">Google AdSense Help, RPM</td></tr>
+            <tr><td>eCPM</td><td>Earnings ÷ impressions × 1,000</td><td class="mono">Google AdMob Help, Glossary</td></tr>
+            <tr><td>Fill rate</td><td>Impressions ÷ ad requests</td><td class="mono">Google Ad Manager Help, sell-through report</td></tr>
+            <tr><td>Match rate</td><td>Matched requests ÷ ad requests. Not every matched ad is shown, so match rate can run above fill rate.</td><td class="mono">Google AdMob Help, Reports glossary</td></tr>
+            <tr><td>Viewable impression, display</td><td>At least 50% of the ad's pixels in view for at least 1 continuous second; 30% for ads of 242,500 pixels or more</td><td class="mono">MRC Viewable Ad Impression Guidelines</td></tr>
+            <tr><td>Viewable impression, video</td><td>At least 50% of the ad's pixels in view for at least 2 continuous seconds</td><td class="mono">MRC Viewable Ad Impression Guidelines</td></tr>
+            <tr><td>ARPDAU</td><td>Ad earnings ÷ daily active users</td><td class="mono">Google AdMob Help, Glossary</td></tr>
+          </tbody>
+        </table>
+      </div>`,
+  })}
+
+  ${renderSection({
+    testid: "tools-formulas-section",
+    eyebrow: "Method",
+    title: "How Each Calculator Works",
+    lede: "Each calculator is a short chain of multiplications, so you can trace any result by hand.",
+    body: `
+      <div class="bp-table-wrap">
+        <table class="bp-table" data-testid="tools-formulas-table">
+          <thead><tr><th scope="col">Calculator</th><th scope="col">Monthly revenue</th><th scope="col">Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Display</td><td>Pageviews × ad slots × fill rate ÷ 1,000 × adjusted CPM</td><td>Adjusted CPM = base CPM × geo × device × vertical × season. Viewability is reported but does not change revenue. Effective eCPM divides revenue by all ad requests, filled or not. Page RPM = revenue ÷ pageviews × 1,000.</td></tr>
+            <tr><td>Header bidding</td><td>Impressions ÷ 1,000 × new CPM × projected fill</td><td>New CPM = current CPM × geo × (1 + uplift × partner factor × method factor). Projected fill = current fill + improvement, capped at 100%. The timeout input is not priced.</td></tr>
+            <tr><td>Video</td><td>Starts × breaks × ads per break × fill rate × completion rate ÷ 1,000 × adjusted CPM</td><td>Only completed views earn. Adjusted CPM = base CPM × content × position × VAST version.</td></tr>
+            <tr><td>In-app</td><td>DAU × sessions × ads per session × fill rate ÷ 1,000 × adjusted eCPM × 30</td><td>Adjusted eCPM = base eCPM × platform × format × engagement. ARPDAU = daily revenue ÷ DAU. MAU is estimated as DAU × 3.2.</td></tr>
+            <tr><td>CTV / OTT</td><td>Streams × breaks per stream × ads per break × fill rate ÷ 1,000 × adjusted CPM</td><td>Breaks per stream = stream minutes ÷ minutes between breaks, rounded down. Adjusted CPM = base CPM × genre × direct premium × targetability. Ad load assumes 30-second ads.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mono text-xs text-[var(--text-muted)] mt-4">Each calculator also shows an HBDR uplift line: the result × 1.35.</p>`,
+  })}
+
+  ${renderSection({
+    testid: "tools-context-section",
+    eyebrow: "Context",
+    title: "What Moves the Numbers",
+    lede: "Three things a model leaves out that change real results.",
+    body: renderFeatureRows([
+      { title: "Auction timeout", body: "The timeout is how long header bidding may run before the ad server is called. Too short and bids are lost; too long and the ad server call comes so late that some visitors have left. If you run Prebid Server, set its timeout to 50–75% of the auction timeout so its bids return in time. Source: Prebid.org, Prebid Timeouts." },
+      { title: "Viewability", body: "Viewability is measured against the MRC standard: 50% of pixels for 1 continuous second for display, 2 continuous seconds for video. Ads that load but are never scrolled into view count as served, not viewable. Source: MRC Viewable Ad Impression Guidelines." },
+      { title: "Video measurement", body: "VAST 4.1 added ad verification through Open Measurement, and VAST 4.2 added SIMID for interactive ads. VAST 4.3 is the latest release listed by IAB Tech Lab, with a 2024 addendum for CTV. Source: IAB Tech Lab, VAST." },
+    ]),
+  })}
+
   <section class="bp-section" data-testid="tools-cta-section">
     <div class="bp-wrap bp-grid12 bp-cta">
       <div class="calc-cta-copy">
         ${renderEyebrow("Ready to Go Beyond Estimates?")}
         <h2>Get Your Personalized Revenue Audit</h2>
-        <p>These calculators provide useful estimates, but every publisher's setup is unique. Our team will analyze your specific inventory, traffic patterns, and demand stack to show you exactly how much more you could be earning with HBDR.</p>
+        <p>The calculators use the numbers you enter and illustrative multipliers. An audit starts from your own reports instead: ad requests, fill rate, CPM by demand partner and viewability by slot. Our team reviews your inventory, traffic and demand stack and shows where revenue is lost.</p>
       </div>
       <div class="bp-actions">
         ${renderActions([
