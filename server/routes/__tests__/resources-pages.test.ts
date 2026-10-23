@@ -105,7 +105,26 @@ describe("resources pages carry real content", () => {
     expect(html).not.toMatch(/industry benchmarks|20-60%|5-20%|VPAID/);
     for (const id of ["tools-metrics-table", "tools-formulas-table"]) expect(html).toContain(`data-testid="${id}"`);
     expect(html).toContain("50% of the ad's pixels in view for at least 1 continuous second");
-    expect(html).toContain("The timeout input is not priced");
+    expect(html).toContain("Bids in time = (timeout − 100 ms) ÷ 1,100 ms");
+  });
+
+  // D-028: the header bidding calculator prices the timeout with the home explorer's assumptions
+  it("/tools header bidding calculator prices the timeout", async () => {
+    const html = await page("/tools");
+    const data = html.match(/data-testid="tool-hb-uplift" x-data="([\s\S]*?)">/)![1];
+    const calc = new Function(`return (${data})`)();
+    calc.timeout = 1000;
+    expect(calc.bidShare).toBeCloseTo(900 / 1100, 6);
+    expect(calc.impressionsKept).toBeCloseTo(0.86, 6);
+    const at1000 = calc.hbRevenue;
+    calc.timeout = 300;
+    expect(calc.impressionsKept).toBe(1);
+    expect(calc.bidShare).toBeCloseTo(200 / 1100, 6);
+    calc.timeout = 1200;
+    expect(calc.bidShare).toBe(1);
+    expect(calc.hbRevenue).not.toBeCloseTo(at1000, 2);
+    calc.timeout = 3000;
+    expect(calc.impressionsKept).toBeCloseTo(0.46, 6);
   });
 
   it("/contact says what to send instead of a slogan", async () => {
