@@ -228,3 +228,34 @@ Matt's answers are recorded as **D-029** in `docs/DECISIONS.md`. That is the sou
 - The X handle (`x.com/haborMedia`)
 - The legal pages (counsel rewrite or an accurate draft)
 - The spelling of Ahmed's name for the account-manager mention
+
+### Addendum, part 2 — Matt's answers 10–14 (D-030)
+1. **Milestones:**
+   - Set "1B impressions a month" to 2024 and "1T ads served" to 2025 everywhere (/about timeline, /press fact sheet, home company facts, meta, JSON-LD).
+   - Add a test.
+2. **Press:**
+   - Keep press@hbdr.com.
+   - Propose a press-release flow for real HBDR news. The recommended option reuses the blog CMS with a "Press" category, so `/press` lists those posts. Get Matt's yes before building.
+   - Write no releases until Matt supplies real news.
+3. **X:**
+   - Remove the X link from the footer (`layout.ts`, `data-testid="button-social-twitter"`) and from the JSON-LD `sameAs`. Update any test that pins it.
+   - Check whether HeaderBiddr has an X account (x.com/headerbiddr or a similar handle), report it to Matt, and link it only on his yes.
+   - Remove the CLAUDE.md "Still Needs Work" footer X handle item.
+4. **Legal pages:** full, accurate rewrite of `/privacy-policy`, `/terms` and `/gdpr-cookie-policy`, marked for counsel review when counsel is engaged. Measure, don't guess:
+   - list the cookies the site really sets (check live response headers and the browser's cookie jar on public pages; admin uses Cloudflare Access cookies, Turnstile when on, the Web Analytics beacon);
+   - the lead data collected and why (D-014/D-016 fields);
+   - retention (D-013 leads kept, D-018 IPs kept, rate_limits deleted after 15 minutes);
+   - processors (Cloudflare Workers/D1/Email Sending);
+   - GDPR rights and the legal basis;
+   - US state-law rights including GPC;
+   - contact address.
+
+   Record every fact's source (code `file:line` or a measured header) in `docs/research/legal.md`.
+5. **Legacy blog posts:** rewrite the 5 posts so each teaches something real and sourced:
+   - byline "HBDR Research";
+   - no invented people, products or numbers;
+   - HBDR facts only from D-005/D-027/D-029/D-030.
+
+   The posts live in prod D1. Produce the updates as one reviewed SQL file in `seed/` (UPDATE by slug, with EXPLAIN) for Matt to run, or edit them through `/admin/blog` if Matt prefers. Fix the dev seeds (`server/d1Storage.ts:156-215`, the MemStorage seed) to match.
+
+All 14 of the original §5 questions are now answered (D-029, D-030). The only open question left is the feature live-vs-roadmap one at the top of this addendum, plus Ahmed's name spelling.

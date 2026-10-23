@@ -234,3 +234,15 @@ Matt's answers to the HANDOFF-007 §5 questions. These are HBDR facts, extending
 | 8 | Performance numbers | Check every number against industry standards and best practice. Keep only what HBDR can legitimately claim, and state it the same way on every page. |
 | 9 | Partners | Rename defunct or renamed partners to their current names. HBDR has **no DSP PMP or PG deals yet** (in progress) but has the **capability to access** them. The site may say HBDR works across all geographies with publisher monetization partners, DSPs and SSPs, with broad reach. |
 | — | Blog bylines | Blog authors are HBDR staff: the byline is "HBDR Research" (D-006), never an invented person. |
+
+## D-030 — 2026-10-23 — Matt — Milestones, press, X, legal pages, legacy blog posts
+
+The rest of Matt's answers to the HANDOFF-007 §5 questions, extending D-029:
+
+| # | Topic | Decision |
+|---|---|---|
+| 10 | Milestones | HBDR reached **1B impressions a month in 2024** and passed **1 trillion ads served in 2025**. Pages that give other years (for example /about's "2020") are wrong. |
+| 11 | Press | press@hbdr.com is a working mailbox. HBDR has no press coverage today; it wants to publish **press releases about its real work**. Only real, dated HBDR news goes out; nothing invented (D-005, D-006). |
+| 12 | X / Twitter | HBDR has **no X account**; the HBDR handle belongs to someone else. Remove the `x.com/haborMedia` link and its JSON-LD `sameAs` entry. If HeaderBiddr has an X account, Matt decides whether to link it. |
+| 13 | Legal pages | Rewrite the privacy policy, terms and GDPR/cookie policy so they describe what the site actually does (cookies actually set, data collected, D-013 retention, D-018 IPs, processors, US state-law rights). There is no counsel yet; the rewrite must be fully accurate, and counsel reviews it when engaged. |
+| 14 | Legacy blog posts | Clean up the 5 legacy posts: byline "HBDR Research" (D-029), remove invented claims and people, and rewrite each so it adds real, sourced value (D-006 rules). |
