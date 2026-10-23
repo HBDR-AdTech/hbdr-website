@@ -120,6 +120,7 @@ export function renderAdminLeadsPage(leads: LeadData[], fields: FormField[] = []
             <a href="/admin/leads" class="text-sm text-[var(--accent)] font-medium" data-testid="link-admin-leads">Leads</a>
             <a href="/admin/blog" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-blog">Blog</a>
             <a href="/admin/form" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-form">Form</a>
+            <a href="/admin/supply" class="text-sm text-[var(--text-muted)] hover:text-white transition-colors" data-testid="link-admin-supply">Supply</a>
             <span class="text-white/10">|</span>
             <a href="/cdn-cgi/access/logout" class="text-sm text-[var(--text-muted)] hover:text-red-400 transition-colors" data-testid="link-admin-logout">Logout</a>
           </div>

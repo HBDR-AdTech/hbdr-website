@@ -1,5 +1,5 @@
 // All API routes — single source of truth
-// Handles contact form, form config admin, blog CRUD, lead management
+// Handles contact form, form config admin, sellers.json / ads.txt admin, blog CRUD, lead management
 
 import type { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
@@ -16,6 +16,9 @@ import {
   fieldUpdateSchema, customFieldSchema, settingsSchema, applyFieldUpdate, newCustomField,
 } from "../services/form-config";
 import { verifyTurnstile } from "../services/turnstile";
+import {
+  SUPPLY_SETTING_KEYS, invalidateSupply, sellerCreateSchema, sellerUpdateSchema, adsTxtLineSchema, supplySettingsSchema,
+} from "../services/supply";
 
 interface ApiConfig {
   email?: SendEmail;
@@ -241,6 +244,111 @@ export function registerApiRoutes(
       .map(([key, value]) => ({ key, value, before: stored[key] ?? null }));
     await storage.saveFormSettings(changes, actor(c));
     invalidateFormConfig();
+    return c.json({ ok: true });
+  });
+
+  // sellers.json / ads.txt admin (D-031). Same guards as the form config: Access on /admin/*, a same-origin Origin
+  // on every mutation. Reads here skip the 60s cache so the admin sees what is stored.
+  app.use("/admin/api/supply/*", async (c, next) => {
+    if (c.req.method !== "GET" && !requireSameOrigin(c.req.raw.headers)) return c.json({ message: "Forbidden" }, 403);
+    await next();
+  });
+
+  const invalid = (c: any, error: Parameters<typeof fromError>[0]) => c.json({ message: fromError(error).toString() }, 400);
+
+  app.get("/admin/api/supply", async (c) => {
+    const storage = getStorage(c);
+    const [sellers, retired, lines, settings, changes] = await Promise.all([
+      storage.getActiveSellers(), storage.getRetiredSellers(), storage.getActiveAdsTxtLines(),
+      storage.getSupplySettings(SUPPLY_SETTING_KEYS), storage.getSupplyChanges(50),
+    ]);
+    return c.json({ sellers, retired, lines, settings, changes });
+  });
+
+  app.post("/admin/api/supply/sellers", async (c) => {
+    const parsed = sellerCreateSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return invalid(c, parsed.error);
+    const storage = getStorage(c);
+    const existing = await storage.getSeller(parsed.data.sellerId);
+    // sellers.json 1.0: one seller_id stands for one entity, so a retired id is never handed to anyone else
+    if (existing) {
+      return c.json({ message: `Seller ID ${parsed.data.sellerId} is already used by ${existing.name}${existing.retiredAt ? " (retired)" : ""}. Seller IDs are never reused.` }, 409);
+    }
+    const seller = {
+      sellerId: parsed.data.sellerId, name: parsed.data.name, domain: parsed.data.domain ?? null, sellerType: parsed.data.sellerType,
+      isConfidential: parsed.data.isConfidential ?? false, comment: parsed.data.comment ?? null,
+      createdAt: new Date().toISOString(), retiredAt: null,
+    };
+    await storage.createSeller(seller, actor(c));
+    invalidateSupply();
+    return c.json(seller, 201);
+  });
+
+  app.post("/admin/api/supply/sellers/:id", async (c) => {
+    const parsed = sellerUpdateSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return invalid(c, parsed.error);
+    const storage = getStorage(c);
+    const before = await storage.getSeller(c.req.param("id"));
+    if (!before) return c.json({ message: "Unknown seller" }, 404);
+    if (before.retiredAt) return c.json({ message: "A retired seller cannot be changed." }, 409);
+    const next = { ...before, ...Object.fromEntries(Object.entries(parsed.data).filter(([, v]) => v !== undefined)) };
+    if (JSON.stringify(next) === JSON.stringify(before)) return c.json(before);
+    await storage.updateSeller(next, before, actor(c));
+    invalidateSupply();
+    return c.json(next);
+  });
+
+  app.post("/admin/api/supply/sellers/:id/retire", async (c) => {
+    const storage = getStorage(c);
+    const before = await storage.getSeller(c.req.param("id"));
+    if (!before) return c.json({ message: "Unknown seller" }, 404);
+    if (before.retiredAt) return c.json({ message: "This seller is already retired." }, 409);
+    await storage.retireSeller(before, actor(c));
+    invalidateSupply();
+    return c.json({ ok: true });
+  });
+
+  app.post("/admin/api/supply/lines", async (c) => {
+    const parsed = adsTxtLineSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return invalid(c, parsed.error);
+    const storage = getStorage(c);
+    const line = {
+      id: crypto.randomUUID(), adSystemDomain: parsed.data.adSystemDomain, accountId: parsed.data.accountId,
+      relationship: parsed.data.relationship, certAuthorityId: parsed.data.certAuthorityId ?? null,
+      comment: parsed.data.comment ?? null, createdAt: new Date().toISOString(), retiredAt: null,
+    };
+    const active = await storage.getActiveAdsTxtLines();
+    if (active.some((l) => l.adSystemDomain === line.adSystemDomain && l.accountId === line.accountId && l.relationship === line.relationship)) {
+      return c.json({ message: "That line is already in the list." }, 409);
+    }
+    await storage.createAdsTxtLine(line, actor(c));
+    invalidateSupply();
+    return c.json(line, 201);
+  });
+
+  app.post("/admin/api/supply/lines/:id/retire", async (c) => {
+    const storage = getStorage(c);
+    const before = await storage.getAdsTxtLine(c.req.param("id"));
+    if (!before) return c.json({ message: "Unknown line" }, 404);
+    if (before.retiredAt) return c.json({ message: "This line is already retired." }, 409);
+    await storage.retireAdsTxtLine(before, actor(c));
+    invalidateSupply();
+    return c.json({ ok: true });
+  });
+
+  app.post("/admin/api/supply/settings", async (c) => {
+    const parsed = supplySettingsSchema.safeParse(await c.req.json().catch(() => null));
+    if (!parsed.success) return invalid(c, parsed.error);
+    const storage = getStorage(c);
+    const stored = await storage.getSupplySettings(SUPPLY_SETTING_KEYS);
+    const requested: Record<string, string | undefined> = {
+      contact_email: parsed.data.contactEmail, contact_address: parsed.data.contactAddress, direct_line_domain: parsed.data.directLineDomain,
+    };
+    const changes = Object.entries(requested)
+      .filter((entry): entry is [string, string] => entry[1] !== undefined && entry[1] !== stored[entry[0]])
+      .map(([key, value]) => ({ key, value, before: stored[key] ?? null }));
+    await storage.saveSupplySettings(changes, actor(c));
+    invalidateSupply();
     return c.json({ ok: true });
   });
 

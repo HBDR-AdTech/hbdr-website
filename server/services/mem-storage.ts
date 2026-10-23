@@ -1,5 +1,8 @@
 // In-memory storage for local development (no database required)
-import type { IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./storage";
+import type {
+  IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange,
+  SupplySeller, AdsTxtLine, SupplyChange,
+} from "./storage";
 import { LEAD_DETAIL_COLUMNS } from "./storage";
 
 export class MemStorage implements IStorage {
@@ -8,6 +11,10 @@ export class MemStorage implements IStorage {
   private fieldOverrides = new Map<string, string>();
   private formSettings = new Map<string, string>();
   private formChanges: FormConfigChange[] = [];
+  private sellers = new Map<string, SupplySeller>();
+  private adsTxtLines = new Map<string, AdsTxtLine>();
+  private supplySettings = new Map<string, string>();
+  private supplyChanges: SupplyChange[] = [];
   private seeded = false;
 
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
@@ -119,6 +126,79 @@ export class MemStorage implements IStorage {
 
   async getFormConfigChanges(limit: number): Promise<FormConfigChange[]> {
     return this.formChanges.slice(-limit).reverse();
+  }
+
+  async getActiveSellers(): Promise<SupplySeller[]> {
+    return [...this.sellers.values()].filter((s) => !s.retiredAt).sort((a, b) => (a.sellerId < b.sellerId ? -1 : 1)).map((s) => ({ ...s }));
+  }
+
+  async getRetiredSellers(): Promise<SupplySeller[]> {
+    return [...this.sellers.values()].filter((s) => s.retiredAt).sort((a, b) => b.retiredAt!.localeCompare(a.retiredAt!)).map((s) => ({ ...s }));
+  }
+
+  async getSeller(sellerId: string): Promise<SupplySeller | undefined> {
+    const seller = this.sellers.get(sellerId);
+    return seller && { ...seller };
+  }
+
+  // same guard as the D1 primary key
+  async createSeller(seller: SupplySeller, actor: string): Promise<void> {
+    if (this.sellers.has(seller.sellerId)) throw new Error("UNIQUE constraint failed: supply_sellers.seller_id");
+    this.sellers.set(seller.sellerId, { ...seller });
+    this.supplyAudit(seller.createdAt, actor, `seller:${seller.sellerId}`, null, JSON.stringify(seller));
+  }
+
+  async updateSeller(seller: SupplySeller, before: SupplySeller, actor: string): Promise<void> {
+    if (this.sellers.get(seller.sellerId)?.retiredAt === null) this.sellers.set(seller.sellerId, { ...seller });
+    this.supplyAudit(new Date().toISOString(), actor, `seller:${seller.sellerId}`, JSON.stringify(before), JSON.stringify(seller));
+  }
+
+  async retireSeller(before: SupplySeller, actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    const seller = this.sellers.get(before.sellerId);
+    if (seller && !seller.retiredAt) seller.retiredAt = at;
+    this.supplyAudit(at, actor, `seller:${before.sellerId}`, JSON.stringify(before), JSON.stringify({ ...before, retiredAt: at }));
+  }
+
+  async getActiveAdsTxtLines(): Promise<AdsTxtLine[]> {
+    return [...this.adsTxtLines.values()].filter((l) => !l.retiredAt).map((l) => ({ ...l }));
+  }
+
+  async getAdsTxtLine(id: string): Promise<AdsTxtLine | undefined> {
+    const line = this.adsTxtLines.get(id);
+    return line && { ...line };
+  }
+
+  async createAdsTxtLine(line: AdsTxtLine, actor: string): Promise<void> {
+    this.adsTxtLines.set(line.id, { ...line });
+    this.supplyAudit(line.createdAt, actor, `line:${line.id}`, null, JSON.stringify(line));
+  }
+
+  async retireAdsTxtLine(before: AdsTxtLine, actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    const line = this.adsTxtLines.get(before.id);
+    if (line && !line.retiredAt) line.retiredAt = at;
+    this.supplyAudit(at, actor, `line:${before.id}`, JSON.stringify(before), JSON.stringify({ ...before, retiredAt: at }));
+  }
+
+  async getSupplySettings(keys: readonly string[]): Promise<Record<string, string>> {
+    return Object.fromEntries([...this.supplySettings].filter(([key]) => keys.includes(key)));
+  }
+
+  async saveSupplySettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    for (const { key, value, before } of changes) {
+      this.supplySettings.set(key, value);
+      this.supplyAudit(at, actor, `setting:${key}`, before, value);
+    }
+  }
+
+  async getSupplyChanges(limit: number): Promise<SupplyChange[]> {
+    return this.supplyChanges.slice(-limit).reverse();
+  }
+
+  private supplyAudit(at: string, actor: string, target: string, before: string | null, after: string) {
+    this.supplyChanges.push({ id: crypto.randomUUID(), at, actor, target, before, after });
   }
 
   async seedBlogPosts(): Promise<void> {

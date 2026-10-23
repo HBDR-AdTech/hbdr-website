@@ -59,4 +59,19 @@ describe("D1 schema", () => {
       /\b(DELETE\s+FROM|UPDATE|DROP\s+TABLE(\s+IF\s+EXISTS)?|TRUNCATE(\s+TABLE)?)\s+form_config_changes\b/i.test(readFileSync(f, "utf8")));
     expect(offenders).toEqual([]);
   });
+
+  // sellers.json / ads.txt (D-031): sellers and lines are retired, never deleted, so a seller_id is never reused;
+  // supply_changes is append-only
+  it("never deletes supply rows, and never changes supply_changes", () => {
+    const files = [...sources(join(root, "server")), join(root, "worker.ts"),
+      ...readdirSync(join(root, "migrations")).map((f) => join(root, "migrations", f)),
+      ...readdirSync(join(root, "seed")).map((f) => join(root, "seed", f))];
+    const removes = /\b(DELETE\s+FROM|DROP\s+TABLE(\s+IF\s+EXISTS)?|TRUNCATE(\s+TABLE)?|REPLACE\s+INTO|INSERT\s+OR\s+REPLACE\s+INTO)\s+(supply_sellers|supply_ads_txt_lines|supply_changes)\b/i;
+    const changesAudit = /\bUPDATE\s+supply_changes\b/i;
+    const offenders = files.filter((f) => {
+      const sql = readFileSync(f, "utf8");
+      return removes.test(sql) || changesAudit.test(sql);
+    });
+    expect(offenders).toEqual([]);
+  });
 });
