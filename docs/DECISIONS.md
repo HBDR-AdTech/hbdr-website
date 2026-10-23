@@ -246,3 +246,19 @@ The rest of Matt's answers to the HANDOFF-007 §5 questions, extending D-029:
 | 12 | X / Twitter | HBDR has **no X account**; the HBDR handle belongs to someone else. Remove the `x.com/haborMedia` link and its JSON-LD `sameAs` entry. If HeaderBiddr has an X account, Matt decides whether to link it. |
 | 13 | Legal pages | Rewrite the privacy policy, terms and GDPR/cookie policy so they describe what the site actually does (cookies actually set, data collected, D-013 retention, D-018 IPs, processors, US state-law rights). There is no counsel yet; the rewrite must be fully accurate, and counsel reviews it when engaged. |
 | 14 | Legacy blog posts | Clean up the 5 legacy posts: byline "HBDR Research" (D-029), remove invented claims and people, and rewrite each so it adds real, sourced value (D-006 rules). |
+
+## D-031 — 2026-10-23 — Matt — Features live today, sellers.json on hbdr.com, no staff names, press through the blog CMS
+
+Matt's answers to the HANDOFF-007 addendum's open questions.
+
+| Topic | Decision |
+|---|---|
+| Feature layout | Feature lists show **"Available now"** and **"Coming soon"** as separate lists. Only "Available now" items are presented as live (D-005). |
+| Available now | AI / dynamic floors; A/B testing; managed Prebid Server; publisher dashboard with **hourly** data (not real time), alerts and exports; IVT filtering; in-app mediation; CTV SSAI; AMP and companion ads; identity modules (SharedID, UID2, ID5, LiveRamp); lazy loading and viewable refresh. |
+| Coming soon | Confiant / IAS / DoubleVerify ad verification; the WordPress plugin. Matt asked how to confirm these and get them live faster (answered in the improvement plan, not on the site). |
+| Dashboard wording | Never "real-time dashboard". Say "hourly reporting". |
+| sellers.json / ads.txt | Build a spec-compliant sellers.json and ads.txt setup on **hbdr.com**, the domain going forward. The hbdr.com admin is the one writer. headerbiddr.com/sellers.json stays as it is until the hbdr.com copy runs beside it and a comparison matches (doctrine 7); then Matt decides the redirect and the ads.txt domain switch. |
+| Account manager | Copy says "a dedicated account manager", with no staff names. |
+| Press releases | Real HBDR news is published through the blog CMS under a **"Press"** category; /press lists those posts. No release is written until Matt supplies the news. |
+
+Rollback: revert the content PR; the sellers.json tables only add data and are not read by any existing path.
