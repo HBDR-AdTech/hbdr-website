@@ -131,3 +131,28 @@ Rollback: revert the commit; the CSP entry is harmless without the scripts.
 Matt saw the hero stand still on his iPhone, which has Reduce Motion on, and chose "play a gentle version" over keeping it still. With `prefers-reduced-motion: reduce`, the home hero auction keeps cycling: each bid fades in at its final bar length, the winning slot fills and its price fades in, and the tally updates. Nothing slides, sweeps or draws. The bid bars don't grow, the timeout bar doesn't sweep, and the dimension lines don't draw. It still runs only while the sheet is on screen and the tab is visible. Every other section keeps its finished state under reduced motion. Visitors without JavaScript or GSAP see the server-rendered finished auction (D-022).
 Amends: D-020 rule 4 and D-022 ("a static finished state under reduced motion") for the hero auction only.
 Rollback: revert the commit; reduced-motion visitors see the static finished auction again.
+
+## D-024 — 2026-10-21 — Matt — The canvas is a deep navy, close to black
+
+"I'd like the background color to be a little darker, almost like a deep navy blue, close to black but not black exactly." The surfaces move from D-017's logo slate to navy:
+
+| Token | Value |
+|---|---|
+| canvas `--surface` | `#0B1121` |
+| elevated | `#111A2E` |
+| raised | `#18223A` |
+| hover | `#15203A` |
+| diagram ground `--surface-blueprint` | `#0E1528` |
+| scrollbar | `#26314A` / `#34405C` |
+
+Mint `#00FAA8`, the white text, hairlines and the text tokens stay as they are. Contrast against the slate:
+
+| | Slate | Navy |
+|---|---|---|
+| Muted text on every surface | 5.5–6.4 : 1 | 5.7–6.8 : 1 |
+| Placeholder on inputs | 4.8 : 1 | 5.0 : 1 |
+| Canvas text on mint buttons | 12.9 : 1 | 13.7 : 1 |
+
+Translucent fills use channel tokens (`rgb(var(--surface-rgb) / a)`), so no slate literal is left in CSS. `theme-color` and the lead email header use the canvas too. The logo PNG is transparent, so it sits on navy with no box.
+Supersedes: D-017's canvas, elevated and raised values. D-017's mint and "templates reference tokens, never a hex" stand.
+Rollback: revert the commit (tokens only, plus `layout.ts` theme-color and the email header color).

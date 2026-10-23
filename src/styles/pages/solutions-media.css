@@ -16,7 +16,7 @@
 
 /* Diagrams: the drawing keeps a readable minimum width and scrolls inside its frame on phones */
 .sm-diagram svg { min-width: 760px; }
-.sm-node { fill: rgba(21, 24, 31, 0.6); stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; }
+.sm-node { fill: rgb(var(--surface-rgb) / 0.6); stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; }
 .sm-node.is-win { fill: rgba(0, 250, 168, 0.1); stroke: var(--accent); }
 .sm-node.is-off { stroke: rgba(255, 255, 255, 0.22); stroke-dasharray: 6 5; }
 .sm-name { font: 500 15px var(--font-sans); fill: var(--text-primary); }
@@ -30,7 +30,7 @@
 .sm-wire.is-win { stroke: var(--accent); }
 .sm-arrowhead { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1.5; }
 .sm-rule { stroke: var(--hairline-strong); }
-.sm-unit { fill: rgba(21, 24, 31, 0.55); stroke: rgba(255, 255, 255, 0.45); stroke-width: 1.5; }
+.sm-unit { fill: rgb(var(--surface-rgb) / 0.55); stroke: rgba(255, 255, 255, 0.45); stroke-width: 1.5; }
 .sm-unit.is-ask { fill: none; stroke: var(--accent); stroke-dasharray: 7 5; }
 .sm-ad { fill: rgba(0, 250, 168, 0.16); stroke: var(--accent); stroke-width: 1.5; }
 .sm-seg { fill: rgba(255, 255, 255, 0.06); stroke: rgba(255, 255, 255, 0.32); stroke-width: 1.2; }
