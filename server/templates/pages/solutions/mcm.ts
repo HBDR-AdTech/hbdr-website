@@ -6,7 +6,7 @@ import { renderBlueprintHero, renderDiagramFrame, renderEyebrow, renderFeatureRo
 const BENEFITS = [
   { title: "Google AdX access", body: "Gain access to Google Ad Exchange premium demand without meeting individual eligibility requirements. Our MCM status opens the door to the world's largest programmatic exchange." },
   { title: "Higher revenue share", body: "Benefit from HBDR's negotiated revenue share tiers that improve as your network grows. Our scale allows us to pass through better economics than publishers could achieve independently." },
-  { title: "Policy compliance", body: "We handle all Google Ad Manager policy enforcement, ads.txt management, and compliance monitoring so publishers can focus on creating content." },
+  { title: "Policy compliance", body: "Google enforces its Ad Manager policies, and each child publisher stays responsible for its own content. We handle ads.txt management and compliance monitoring for every child and fix issues before they turn into enforcement, so publishers can focus on creating content." },
   { title: "Network management", body: "Centralized dashboard to manage all publisher accounts, monitor performance across the network, and identify optimization opportunities at scale." },
   { title: "Dedicated support", body: "Priority access to HBDR's ad operations team and escalation paths to Google for account reviews, policy questions, and technical troubleshooting." },
   { title: "Transparent reporting", body: "Real-time revenue reporting with full breakdowns by publisher, ad unit, geography, and demand source. No hidden fees or opaque revenue calculations." },
@@ -51,6 +51,8 @@ export function renderMcmPage(): string {
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 sg-prose">
         <p>Multiple Customer Management (MCM) is Google's program that allows ad management companies to represent and manage Google Ad Manager accounts on behalf of multiple publishers. As a certified MCM partner, HBDR provides publishers access to premium Google Ad Exchange demand, advanced yield optimization, and enterprise-level support — even if they don't meet Google's individual eligibility thresholds.</p>
         <p>Through our MCM relationship, publishers benefit from HBDR's negotiated pricing tiers, priority support channels, and access to exclusive demand that would otherwise be unavailable. We handle all the technical complexity of account provisioning, policy compliance, and revenue reconciliation.</p>
+        <p>MCM has two delegation types. Under <a href="/solutions/manage-account">Manage Account</a>, the parent works inside the child's Ad Manager account and the inventory stays there. Under <a href="/solutions/manage-inventory">Manage Inventory</a>, the child delegates inventory to the parent, which manages it in its own account with no access to the child's. A child can have one Manage Account parent and up to 15 Manage Inventory parents, but not the same parent under both.</p>
+        <p>MCM is only available in Google Ad Manager 360, and Google requires it whenever a publisher monetizes inventory it doesn't own and operate. Either way, the child needs its own Ad Manager network so Google can identify it and review it against its policies.</p>
       </div>
     </div>
     <div class="bp-wrap mt-14 sg-diagram">${renderDiagramFrame({
@@ -59,7 +61,7 @@ export function renderMcmPage(): string {
       blueprint: true,
       bar: ["Google Multiple Customer Management", "Parent / child structure"],
       body: STRUCTURE_SVG,
-      caption: "Schematic: three child publishers shown for illustration.",
+      caption: "Schematic: three child publishers shown for illustration. MCM rules: Google Ad Manager Help, About Multiple Customer Management and About Manage Inventory (retrieved October 2026).",
     })}
     </div>
   </section>
@@ -80,11 +82,12 @@ export function renderMcmPage(): string {
     body: `
       <div class="bp-grid12" data-testid="card-mcm-process">
         <div class="col-span-12 lg:col-span-6 sg-prose">
-          <p>We handle the Google approval process, configure your Ad Manager account, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.</p>
+          <p>We send the MCM invitation and guide you through Google's review of your account — Google, not the parent, approves each child publisher — then configure Ad Manager, set up demand partnerships, and begin optimization — typically within 5-7 business days. Publishers retain full ownership of their accounts and data throughout the relationship.</p>
           <p>Our MCM agreement is transparent with no lock-in periods. Publishers can review performance monthly and our team provides regular optimization recommendations to continuously improve yield across all demand channels.</p>
         </div>
         <div class="col-span-12 lg:col-start-8 lg:col-span-5">${renderSpecList([
-          { label: "Google approval and Ad Manager setup", value: "HBDR" },
+          { label: "Child account review", value: "Google" },
+          { label: "MCM invitation and Ad Manager setup", value: "HBDR" },
           { label: "Time to optimization, typically", value: '<span class="mono text-[0.875rem]">5–7 business days</span>' },
           { label: "Account and data ownership", value: "Publisher" },
           { label: "Lock-in period", value: "None" },

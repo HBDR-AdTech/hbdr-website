@@ -9,7 +9,7 @@ const ARROW = '<marker id="video-arrow" viewBox="0 0 10 10" refX="9" refY="5" ma
 function renderFlowDiagram(): string {
   const flow: [string, string, number, number][] = [
     ["Player", "instream or outstream", 0, 200], ["Video header bidding", "multiple demand sources", 290, 240],
-    ["Ad response", "VAST · VPAID · VMAP", 620, 220], ["Ad plays", "in the HBDR player", 930, 190],
+    ["Ad response", "VAST · VMAP", 620, 220], ["Ad plays", "in the HBDR player", 930, 190],
   ];
   const nodes = flow.map(([name, sub, x, w], i) => {
     const win = i === flow.length - 1 ? " is-win" : "";
@@ -25,7 +25,7 @@ function renderFlowDiagram(): string {
     : ""}`).join("");
   const copy = [[20, 340, 500], [20, 360, 460], [20, 380, 490], [216, 418, 300], [216, 438, 280], [216, 458, 300], [216, 478, 250], [216, 498, 290]]
     .map(([x, y, w]) => `<rect class="bp-copy" x="${x}" y="${y}" width="${w}" height="10" rx="2"/>`).join("");
-  return `<svg viewBox="0 0 1120 540" role="img" aria-label="The player requests an ad, video header bidding collects bids from multiple demand sources, a VAST or VPAID ad response comes back and the ad plays. Instream: pre-roll, a mid-roll ad pod and post-roll around the content video. Outstream: a player inside the article that starts when it scrolls into view.">
+  return `<svg viewBox="0 0 1120 540" role="img" aria-label="The player requests an ad, video header bidding collects bids from multiple demand sources, a VAST ad response comes back and the ad plays. Instream: pre-roll, a mid-roll ad pod and post-roll around the content video. Outstream: a player inside the article that starts when it scrolls into view.">
             <defs>${ARROW}</defs>
             <text class="sm-k" x="0" y="20">Request flow</text>
             ${nodes}
@@ -51,7 +51,16 @@ const REVENUE = [
   "Multi-demand-source video header bidding",
   "Lazy loading for performance",
   "Adaptive bitrate for quality across connections",
-  "VAST/VPAID/VMAP compliance",
+  "VAST and VMAP ad responses",
+];
+
+// What each current video ad standard is for; VPAID is listed because buyers and players are still moving off it
+const STANDARDS = [
+  { title: "VAST 4.x", body: "The XML response a player reads to play an ad. VAST 4 separated the media file from verification and interactive code and added a mezzanine file for server-side insertion; 4.1 added Open Measurement verification, 4.2 added SIMID interactivity, and 4.3 is the latest 4.x release, with a 2024 CTV addendum." },
+  { title: "OMID (Open Measurement)", body: "One measurement API for viewability and invalid-traffic checks. The player integrates the IAB Tech Lab OM SDK once, and verification vendors read its signals instead of running their own scripts. Web players use the OM Web Video SDK." },
+  { title: "SIMID (interactivity)", body: "Interactive overlays run in their own layer, separate from the video file, so the publisher's player stays in control of the stream. It works on mobile, in server-side insertion and on OTT devices." },
+  { title: "VPAID (replaced)", body: "VPAID ran the ad as executable code inside the player, for measurement and interactivity at once. IAB Tech Lab replaced it with OMID for measurement and SIMID for interactivity. Ask demand partners for VAST with OMID verification instead of VPAID wrappers." },
+  { title: "plcmt (OpenRTB 2.6)", body: "Buyers price on the placement label. Instream (plcmt 1) means sound on by default or a clear choice to watch the content. A player between paragraphs that starts when it scrolls into view is Accompanying Content (2); Interstitial is 3; No Content/Standalone is 4. Label each player honestly." },
 ];
 
 const TECH = [
@@ -82,7 +91,7 @@ export function renderVideoPlayerPage(): string {
       <div class="bp-grid12 sm-overview" data-testid="card-video-overview">
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Custom-Built Player")}<h2>Built for revenue, designed for users.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>HBDR's video player is fully custom-built from the ground up — not a white-labeled third-party solution. Every line of code is optimized for both desktop and mobile, supporting instream and outstream video formats for all OLV (Online Video) purposes.</p>
+          <p>HBDR's video player is fully custom-built from the ground up — not a white-labeled third-party solution. Every line of code is optimized for both desktop and mobile, supporting instream and outstream video formats for online video (OLV).</p>
           <p>The player generates massive RPMs and yield for publishers by delivering high-quality video ads on websites and in apps. With intelligent ad scheduling, viewability optimization, and multi-source header bidding built in, our player turns every video impression into maximum revenue.</p>
         </div>
       </div>
@@ -105,9 +114,9 @@ export function renderVideoPlayerPage(): string {
         testid: "video-flow-diagram",
       })}</div>
       <div class="sm-after">${renderFeatureRows([
-        { title: "Instream Video", body: "Pre-roll, mid-roll, and post-roll ads delivered within content video. Maximize engagement with ads that play alongside premium publisher content for the highest completion rates and CPMs.",
+        { title: "Instream Video", body: "Pre-roll, mid-roll, and post-roll ads delivered within content video. Maximize engagement with ads that play alongside premium publisher content for the highest completion rates and CPMs. Under OpenRTB 2.6, buyers treat a placement as instream only when the content plays sound-on by default or the viewer chose to watch it.",
           list: ["Pre-roll, mid-roll, post-roll support", "Ad pod scheduling for multi-ad breaks", "Companion banner support"], testid: "card-instream" },
-        { title: "Outstream Video", body: "In-article, in-feed, and in-banner video that plays without requiring content video. Unlock video ad revenue on any page, even without native video content.",
+        { title: "Outstream Video", body: "In-article, in-feed, and in-banner video that plays without requiring content video. Unlock video ad revenue on any page, even without native video content. In OpenRTB 2.6 these placements are labelled Accompanying Content, Interstitial or No Content/Standalone, never instream.",
           list: ["In-article and in-feed placements", "No content video required", "Viewability-triggered playback"], testid: "card-outstream" },
         { title: "Floating / Sticky Player", body: "The player follows users as they scroll, maintaining viewability and engagement throughout the entire session. Maximize ad completion rates with a player that stays in view.",
           list: ["Scroll-triggered sticky behavior", "User-dismissible controls", "Configurable position and size"], testid: "card-sticky-player" },
@@ -139,13 +148,22 @@ export function renderVideoPlayerPage(): string {
       </ul>`,
   })}
 
+  ${renderSection({
+    testid: "video-standards-section",
+    eyebrow: "Standards",
+    title: "The video ad standards in use today.",
+    lede: "What each one does, and what replaced VPAID.",
+    body: `${renderFeatureRows(STANDARDS)}
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="video-source">Sources: IAB Tech Lab, VAST (updated 18 July 2024), SIMID (updated 3 January 2024) and Open Measurement SDK (updated 4 November 2025); OpenRTB 2.6 and AdCOM 1.0, Plcmt Subtypes - Video.</p>`,
+  })}
+
   <section class="bp-section" data-testid="video-spec-section">
     <div class="bp-wrap bp-grid12">
       <div class="col-span-12 lg:col-span-5 grid gap-4 content-start">${renderEyebrow("Specifications")}<h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">At a glance.</h2></div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
         { label: "Formats", value: "Instream · outstream · floating" },
         { label: "Ad breaks", value: "Pre-roll · mid-roll · post-roll · pods" },
-        { label: "Standards", value: "VAST · VPAID · VMAP" },
+        { label: "Standards", value: "VAST · VMAP" },
         { label: "Devices", value: "Desktop · mobile · AMP" },
         { label: "Browsers", value: "Chrome · Safari · Firefox · Edge" },
         { label: "Consent", value: "GDPR · CCPA" },

@@ -1,5 +1,5 @@
 import { renderLayout } from "../../layout";
-import { renderBlueprintHero, renderEyebrow, renderSection, renderSpecList } from "../../components/blueprint";
+import { renderBlueprintHero, renderEyebrow, renderFeatureRows, renderSection, renderSpecList } from "../../components/blueprint";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 
@@ -53,7 +53,7 @@ export function renderInAppAdsPage(): string {
       <div class="bp-grid12 sm-overview" data-testid="card-inapp-overview">
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Mobile Monetization")}<h2>Revenue without friction.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution integrates the way your team prefers: through the HBDR in-app SDK, or SDK-less via server-side APIs. Either way your app connects to the full breadth of programmatic demand.</p>
+          <p>For a free app, ads are how you earn from the people who never buy anything. HBDR's in-app solution integrates the way your team prefers: through the HBDR in-app SDK, or SDK-less via server-side APIs. Either way your app connects to the full breadth of programmatic demand.</p>
           <p>Our platform supports all major in-app ad formats — including rewarded video, interstitials, banners, and native ads — with intelligent mediation that maximizes eCPM across every user session. Advanced frequency capping and placement optimization ensure ads enhance rather than interrupt the user experience.</p>
         </div>
       </div>
@@ -75,7 +75,8 @@ export function renderInAppAdsPage(): string {
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Integration")}<h2>SDK or SDK-less, your choice.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
           <p>Teams that want a client-side integration use the HBDR in-app SDK. Teams that prefer to keep their app lean connect SDK-less: the server-side approach reaches our auction engine through lightweight API calls, which keeps the app binary smaller and lets demand configuration change without an app store submission.</p>
-          <p>Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork/Privacy Sandbox compatibility for post-IDFA attribution.</p>
+          <p>Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork compatibility for attribution without the IDFA.</p>
+          <p>Attribution has changed on both platforms. On iOS 14.5 and later, an app must ask through App Tracking Transparency before it can read the IDFA; without permission it gets zeros, and install attribution runs through Apple's AdAttributionKit (iOS 17.4 and later) and SKAdNetwork, which work side by side and share ad network IDs. On Android, Google announced in October 2025 that it is retiring the Privacy Sandbox technologies, including the Attribution Reporting API, Protected Audience, Topics and the SDK Runtime; the Google advertising ID remains, resettable by the user and all zeros once they delete it.</p>
         </div>
       </div>
       <div class="bp-grid12 sm-after">
@@ -83,13 +84,28 @@ export function renderInAppAdsPage(): string {
           { label: "Integration", value: "In-app SDK or server-side API" },
           { label: "Platforms", value: "iOS · Android" },
           { label: "Consent", value: "GDPR · CCPA" },
-          { label: "Attribution", value: "SKAdNetwork · Privacy Sandbox" },
+          { label: "Attribution", value: "SKAdNetwork" },
           { label: "Demand changes", value: "No app store submission" },
           { label: "Formats", value: "Rewarded · interstitial · native · banner" },
         ])}</div>
       </div>
     </div>
   </section>
+
+  ${renderSection({
+    testid: "inapp-checklist-section",
+    eyebrow: "Launch checklist",
+    title: "Before your app serves its first ad.",
+    lede: "The setup buyers and platforms check, whichever integration you choose.",
+    body: `${renderFeatureRows([
+      { title: "Publish app-ads.txt", body: "Put app-ads.txt on the developer website listed on your App Store and Google Play pages, and list every seller authorized to sell your inventory. Buyers check the app's store listing against that file to confirm who may sell its inventory." },
+      { title: "Ask for tracking permission well", body: "On iOS, add a clear NSUserTrackingUsageDescription and show the App Tracking Transparency prompt after the person has seen what the app does, not on first launch. People who decline still see ads; they are just measured through AdAttributionKit or SKAdNetwork." },
+      { title: "Register your ad networks", body: "Configure the app to accept attributable ads from each ad network you sell through. Apple's ad network IDs work for both AdAttributionKit and SKAdNetwork, so one list covers both." },
+      { title: "Pass consent as signals", body: "Your consent platform writes the IAB Europe TCF string (version 2.3 since 2025) for users in Europe and the IAB Tech Lab Global Privacy Protocol (GPP) string for US state laws. Every SDK and server-side call should read and forward those strings, not a yes/no flag." },
+      { title: "Make measurement possible", body: "Ask each demand partner whether it measures through the IAB Tech Lab OM SDK, the standard that gives verification vendors the same viewability and invalid-traffic signals in apps as on web and CTV." },
+    ])}
+      <p class="mono mt-8 text-[var(--text-muted)]" data-testid="inapp-source">Sources: Apple Developer, AdAttributionKit, SKAdNetwork, App Tracking Transparency and advertisingIdentifier; Google, Update on Plans for Privacy Sandbox Technologies (17 October 2025); Google Play Console Help, Advertising ID; IAB Tech Lab, ads.txt and app-ads.txt, Global Privacy Protocol and Open Measurement SDK; IAB Europe, TCF v2.3.</p>`,
+  })}
 
   ${renderStatsSection()}
 
