@@ -38,6 +38,9 @@
     letter-spacing: -0.022em;
     text-wrap: balance;
   }
+  /* Reading measure: Inter averages ~0.44em per character, so 34em wraps body copy near 77 characters; a utility max-w-* still overrides */
+  body:not(.is-admin) p { max-width: 34em; }
+  body:not(.is-admin) p.text-center { margin-inline: auto; }
   /* D-020: public pages set headings in Archivo at expanded widths; admin keeps Inter */
   body:not(.is-admin) :is(h1, h2, h3) { font-family: var(--font-display); font-stretch: 110%; font-weight: 620; letter-spacing: -0.03em; }
   ::selection { background: rgba(0, 250, 168, 0.28); color: #fff; }
