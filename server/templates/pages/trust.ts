@@ -21,11 +21,13 @@ export function renderTrustCompliancePage(): string {
 
   const privacyCards = [
     { title: "GDPR Compliance", desc: "Full compliance with the EU General Data Protection Regulation. We implement proper consent collection, data processing agreements, and user rights management across all European traffic." },
-    { title: "CCPA / CPRA Compliance", desc: "Compliance with California Consumer Privacy Act and California Privacy Rights Act, including support for the US Privacy String and Global Privacy Control signals." },
-    { title: "TCF 2.0 Integration", desc: "Integration with IAB Europe's Transparency and Consent Framework, ensuring proper consent signals are passed through the programmatic supply chain." },
+    { title: "CCPA / CPRA Compliance", desc: "Compliance with California Consumer Privacy Act and California Privacy Rights Act, including support for GPP's US strings and Global Privacy Control signals. California requires a business to treat Global Privacy Control as a valid opt-out of sale and sharing. The older US Privacy String was deprecated on 31 January 2024 in favour of GPP." },
+    { title: "TCF v2.3 Integration", desc: "Integration with IAB Europe's Transparency and Consent Framework, ensuring proper consent signals are passed through the programmatic supply chain. TCF v2.3 is the current version: since 28 February 2026 every TC string must carry the Disclosed Vendors section." },
     { title: "CMP Integration", desc: "We work with leading Consent Management Platforms (OneTrust, Cookiebot, Didomi, etc.) to ensure publishers collect and manage user consent properly." },
-    { title: "GPP Support", desc: "Support for IAB Tech Lab's Global Privacy Platform, a unified framework for handling privacy signals across multiple jurisdictions." },
+    { title: "GPP Support", desc: "Support for IAB Tech Lab's Global Privacy Protocol (GPP), one string that carries the privacy signals of several jurisdictions: the US National section, US state sections, and the TCF for Europe and Canada." },
     { title: "Data Minimization", desc: "We follow data minimization principles — we only collect and process data that is necessary for ad delivery and do not build user profiles or sell personal data." },
+    { title: "US State Privacy Laws", desc: "Twenty US states have a comprehensive privacy law in effect in 2026. Indiana, Kentucky and Rhode Island joined on 1 January 2026. Google Ad Manager accepts only the GPP sections for US National, California, Colorado, Connecticut, Florida and Virginia. An opt-out of sale, sharing or targeted advertising in the US National section makes Google switch to restricted data processing." },
+    { title: "COPPA", desc: "The FTC's amended COPPA Rule took effect on 23 June 2025, and operators had until 22 April 2026 to comply. A child-directed site or app now needs separate verifiable parental consent before it discloses a child's data to third parties such as ad networks. Bid requests for that inventory carry the OpenRTB flag regs.coppa = 1." },
   ];
 
   const certifications = [
@@ -44,7 +46,7 @@ export function renderTrustCompliancePage(): string {
     { title: "Video Advertising", desc: "Instream, outstream, and OTT/CTV video monetization with our custom-built high-performance video player" },
     { title: "Display & Native", desc: "Standard display, rich media, and native ad format optimization for maximum RPMs" },
     { title: "In-App Monetization", desc: "Mobile app ad monetization across banner, interstitial, rewarded video, and native formats" },
-    { title: "Identity Solutions", desc: "Implementation of UID2, LiveRamp, ID5, and other identity solutions for the cookieless future" },
+    { title: "Identity Solutions", desc: "Implementation of UID2, LiveRamp, ID5, and other identity solutions for traffic with no third-party cookie: Safari and Firefox by default, and Chrome users who block them" },
     { title: "Ad Quality & Safety", desc: "Malvertising protection, creative scanning, and brand safety controls across all inventory" },
     { title: "Consent Management", desc: "GDPR/CCPA/GPP compliant consent collection and signal propagation" },
     { title: "Analytics & Reporting", desc: "Real-time revenue dashboard with granular breakdowns by every dimension" },
@@ -62,7 +64,6 @@ export function renderTrustCompliancePage(): string {
     "Education & Reference portals",
     "Health & Wellness publishers",
     "E-commerce & Shopping sites",
-    "Independent bloggers & content creators",
     "Mobile app developers",
     "CTV & OTT content providers",
   ];
@@ -74,6 +75,14 @@ export function renderTrustCompliancePage(): string {
     "Direct-to-consumer (DTC) brands",
     "Enterprise B2B companies",
     "Regional and local businesses seeking targeted reach",
+  ];
+
+  // Outside facts only, each one sourced in docs/research/trust.md
+  const standards = [
+    ["ads.txt", "The publisher's root domain, at /ads.txt", "Which ad systems and account IDs may sell the site. DIRECT means the publisher controls the account; RESELLER means it has authorized another company to sell through it.", "v1.1 (August 2022) adds OWNERDOMAIN and MANAGERDOMAIN"],
+    ["app-ads.txt", "The developer website named in the app store listing", "The same authorization for in-app inventory. Google finds the file only if the store listing names a developer website.", "v1.1, shared with ads.txt"],
+    ["sellers.json", "Each SSP's and exchange's own domain", "Who is behind each seller ID: PUBLISHER (owns the inventory), INTERMEDIARY (resells it) or BOTH. A buyer matches the ID to the ads.txt line.", "Finalized July 2019"],
+    ["SupplyChain object (schain)", "Inside every bid request", "Every company that handled the request, one node each (asi, sid, hp). complete = 1 says the chain reaches back to the inventory owner.", "source.schain in OpenRTB 2.6; source.ext.schain in 2.5"],
   ];
 
   const defs = (items: { title: string; desc: string }[], prefix: string) => `
@@ -100,12 +109,12 @@ export function renderTrustCompliancePage(): string {
         </svg>`;
 
   const content = `
-  ${renderPageHero("Trust & Compliance", "Trust & Compliance", "At HBDR, trust isn't just a value — it's the foundation of everything we build. We maintain the highest standards of transparency, compliance, and security across all our operations.")}
+  ${renderPageHero("Trust & Compliance", "Trust & Compliance", "The supply-chain files, traffic-quality checks and privacy signals behind every impression HBDR sells, and the current version of each standard.")}
 
   <section class="bp-section" data-testid="trust-commitment-section">
     <div class="bp-wrap bp-grid12">
-      <div class="col-span-12 lg:col-span-5">${renderEyebrow("Commitment")}<h2 class="mt-4 text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Built on Trust</h2></div>
-      <p class="col-span-12 lg:col-start-7 lg:col-span-6 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">HBDR operates in one of the most complex ecosystems in digital advertising. With billions of ad transactions happening daily, trust and compliance aren't optional — they're essential. HBDR is committed to maintaining the highest standards across every aspect of our operations, from how we manage publisher inventory to how we handle user data.</p>
+      <div class="col-span-12 lg:col-span-5">${renderEyebrow("Commitment")}<h2 class="mt-4 text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Trust a buyer can check</h2></div>
+      <p class="col-span-12 lg:col-start-7 lg:col-span-6 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">Before a buyer bids, it checks the impression against public files and signals: ads.txt on the publisher's domain, sellers.json on each seller's domain, the SupplyChain object in the bid request and the consent string that travels with it. This page explains each standard as it stands in October 2026 and how HBDR applies it.</p>
     </div>
   </section>
   ${renderSection({
@@ -120,7 +129,17 @@ export function renderTrustCompliancePage(): string {
       body: supplyPath,
       testid: "trust-supply-diagram",
     })}
-      <div class="mt-12">${renderFeatureRows(supplyChainCards.map((c, i) => ({ title: c.title, body: c.desc, testid: `trust-supply-${i}` })))}</div>`,
+      <div class="mt-12">${renderFeatureRows(supplyChainCards.map((c, i) => ({ title: c.title, body: c.desc, testid: `trust-supply-${i}` })))}</div>
+      <h3 class="mt-16 mb-8 text-[1.5rem]">The standards, explained</h3>
+      <div class="bp-table-wrap" data-testid="trust-standards-table">
+        <table class="bp-table">
+          <thead><tr><th scope="col">Standard</th><th scope="col">Where it lives</th><th scope="col">What it tells a buyer</th><th scope="col">Current version</th></tr></thead>
+          <tbody>${standards.map((s) => `
+            <tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td>${s[3]}</td></tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-6 mono text-[0.75rem] text-[var(--text-muted)]">Sources: IAB Tech Lab ads.txt 1.1, sellers.json and SupplyChain object specifications; Google AdMob Help, app-ads.txt.</p>`,
   })}
   ${renderSection({
     testid: "trust-anti-fraud-section",
@@ -132,7 +151,9 @@ export function renderTrustCompliancePage(): string {
     testid: "trust-privacy-section",
     eyebrow: "Privacy",
     title: "Privacy & Data Protection",
-    body: defs(privacyCards, "trust-privacy"),
+    lede: "Consent and opt-out signals travel with each ad request: the TCF string for Europe, GPP for US states, and Global Privacy Control from the browser.",
+    body: `${defs(privacyCards, "trust-privacy")}
+      <p class="mt-8 mono text-[0.75rem] text-[var(--text-muted)]">Sources: IAB Europe, TCF v2.3; IAB Tech Lab, GPP and USPrivacy; Google Ad Manager Help, GPP; California Privacy Protection Agency FAQ; MultiState, Feb 2026; Federal Register, COPPA Rule, 22 Apr 2025; IAB Tech Lab, OpenRTB 2.6.</p>`,
   })}
   ${renderSection({
     testid: "trust-certifications-section",

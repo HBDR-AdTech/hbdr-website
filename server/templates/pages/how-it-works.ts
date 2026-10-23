@@ -17,10 +17,30 @@ const NEXT = [
 
 const FAQS = [
   { q: "How long does integration take?", a: "Most integrations are completed within 2-4 weeks, depending on the complexity of your existing ad stack. Our engineering team handles the heavy lifting, and we work closely with your technical team to ensure a smooth transition with zero downtime." },
-  { q: "Do I need to change my existing ad stack?", a: "No. HBDR works alongside your existing setup. We integrate with your current ad server and add our header bidding layer on top, complementing your existing demand sources while adding new premium demand partners to increase competition and revenue." },
+  { q: "Do I need to change my existing ad stack?", a: "No. HBDR works alongside your existing setup. We integrate with your current ad server and add our header bidding layer on top, complementing your existing demand sources while adding HBDR's 65+ demand sources to increase competition and revenue." },
   { q: "What's the minimum traffic requirement?", a: "We work with publishers starting at 500,000 monthly pageviews. This threshold ensures that our optimization algorithms have sufficient data to deliver meaningful revenue improvements. If you're below this threshold, reach out and we'll discuss options." },
   { q: "How is HBDR different from other solutions?", a: "Unlike traditional ad networks, HBDR uses real-time header bidding technology that creates true competition for every impression. Combined with our proprietary AI-powered bid optimization, managed Prebid server, and dedicated account management, we help publishers increase revenue by up to 50% over alternatives." },
   { q: "What kind of support do you provide?", a: "Every publisher gets a dedicated account manager who serves as your primary point of contact. You also have access to our 24/7 technical support team, detailed analytics dashboards, and regular performance review meetings to ensure your revenue goals are being met." },
+];
+
+// Questions a publisher can put to any header bidding vendor; outside facts are sourced in docs/research/how-it-works.md
+const EVALUATE = [
+  { title: "How the lift will be measured", body: "Ask for a split test: part of your traffic on the new setup and part on the old one, over the same days. A before-and-after comparison mixes in seasonality and news cycles. Compare revenue per session, not CPM alone: a higher CPM on a slower page can still earn less per visit." },
+  { title: "Which demand, and how it connects", body: "Get the list of SSPs and exchanges, and for each one whether it bids in the browser (Prebid.js), from a server (Prebid Server), through Google Open Bidding or through Amazon's TAM or UAM. Browser bidders add page weight; server bidders add a network hop." },
+  { title: "The exact ads.txt lines", body: "Every line the proposal asks you to add should match a seller ID in that exchange's sellers.json. DIRECT is only for accounts you control. An account a partner controls is RESELLER, whatever the partner asks for." },
+  { title: "Timeout and floor settings", body: "Ask for the auction timeout, the Prebid Server timeout and the floor method, with the reason for each. The basics are below." },
+  { title: "Page experience, before and after", body: "Agree a Core Web Vitals baseline from field data before launch. Good is LCP within 2.5 s, INP of 200 ms or less and CLS of 0.1 or less. INP replaced First Input Delay as a Core Web Vital in March 2024." },
+  { title: "Consent handling", body: "Ask what happens to requests without consent. For EEA, UK and Swiss traffic, Google Ad Manager uses the TCF string from a certified CMP; for US states it reads GPP." },
+  { title: "Who owns what if you leave", body: "Name who owns the ad server network, the line items, the demand accounts and the ads.txt lines, and what stays with you on exit." },
+];
+
+const BASICS = [
+  { title: "Auction timeout", body: "How long Prebid.js waits for bids before it calls the ad server. Too short and bidders miss the auction; too long and readers leave before the ad loads. Prebid's guidance is that each publisher sets its own value from time on page, direct sell-through, the value of each channel and its users' network delay. The timeout explorer on the home page shows the trade-off." },
+  { title: "Prebid Server timeout", body: "Set below the auction timeout, so server-side bids get back to the page in time. Prebid suggests 50–75% of the auction timeout; its default is 75%." },
+  { title: "Failsafe timeout", body: "A plain JavaScript timer, much longer than the auction timeout, that calls the ad server anyway if something breaks." },
+  { title: "When bidders time out", body: "Look at timeouts by region first: a bidder hosted far from your readers answers late. Then measure how long the CMP, user ID modules and real-time data modules hold the auction before any bid request goes out." },
+  { title: "Price floors", body: "A floor is the lowest bid you accept. Prebid advises against static floors: they are blunt and go stale. Its Price Floors module sets floors by ad unit, GPT slot, media type, size or domain, and a skip rate leaves a share of auctions without floors as an A/B test." },
+  { title: "Ad Manager pricing rules", body: "Unified pricing rules in Google Ad Manager also apply to Price Priority line items, header bidding trafficking and Open Bidding. Where two rules overlap, the higher price wins, so an old rule can block bids you meant to take." },
 ];
 
 // The integration from the FAQ drawn as a flow: HBDR's header bidding layer sits between the page and the ad server you already run
@@ -56,12 +76,12 @@ function renderFlow(): string {
 export function renderHowItWorksPage(): string {
   const chevron = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
   const content = `
-  ${renderPageHero("Our Process", "How It Works", "Our streamlined onboarding process gets you from discovery to revenue growth in weeks, not months.")}
+  ${renderPageHero("Our Process", "How It Works", "Three steps from first call to launch, what to check in a proposal, and the timeout and floor settings that decide what a header bidding setup earns.")}
   ${renderSection({
     testid: "hiw-steps-section",
     eyebrow: "Getting Started",
     title: "Three Simple Steps",
-    lede: "Getting started with HBDR is simple. Our streamlined process gets you monetizing faster.",
+    lede: "Have these ready: access to your ad server, your current ads.txt file, your consent platform and a few test pages.",
     body: renderSteps(STEPS.map((s, i) => ({ title: s.title, body: s.description, list: s.details, testid: `hiw-step-card-${i}` }))),
   })}
   ${renderSection({
@@ -77,6 +97,22 @@ export function renderHowItWorksPage(): string {
       body: renderFlow(),
       testid: "hiw-flow-diagram",
     }),
+  })}
+  ${renderSection({
+    testid: "hiw-evaluate-section",
+    eyebrow: "Evaluating a proposal",
+    title: "What to check in any header bidding proposal",
+    lede: "The same questions apply to HBDR or any other vendor. Get each answer in writing before you sign.",
+    body: renderFeatureRows(EVALUATE.map((e, i) => ({ title: e.title, body: e.body, testid: `hiw-evaluate-${i}` }))),
+  })}
+  ${renderSection({
+    testid: "hiw-basics-section",
+    eyebrow: "Basics",
+    title: "Timeouts and floors in plain terms",
+    lede: "Two settings decide most of what an auction earns: how long it waits for bids, and the lowest bid it accepts.",
+    body: `${renderFeatureRows(BASICS.map((b, i) => ({ title: b.title, body: b.body, testid: `hiw-basics-${i}` })))}
+      <p class="mt-8 mono text-[0.75rem] text-[var(--text-muted)]">Sources: Prebid.org, Timeouts and Price Floors Module; Google Ad Manager Help, unified pricing rules and GPP; web.dev, Web Vitals and INP.</p>
+      <p class="mt-4"><a href="/#how" class="text-sm text-[var(--text-secondary)] hover:text-white inline-flex items-center gap-1.5" data-testid="link-timeout-explorer">Open the timeout explorer <span aria-hidden="true">→</span></a></p>`,
   })}
   ${renderSection({
     testid: "hiw-next-section",

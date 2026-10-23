@@ -5,12 +5,12 @@ import type { FormConfig } from "../../services/form-config";
 
 // D-005: the strip is titled "Integrated Demand Partners"; names only, no logos
 const PARTNERS = [
-  "Verve", "AppLovin", "Sovrn", "Xandr", "OpenX", "Index Exchange", "Magnite", "Google AdX", "TripleLift", "ShareThrough", "Equativ",
-  "BidSwitch", "InMobi", "Amazon Publisher Services", "Taboola", "Dianomi", "Criteo", "PubMatic", "MGID", "Digital Turbine", "Liftoff", "Bidmachine",
-  "Affinity Global", "Pubpower", "AdMile", "Mobilefuse", "Bigo Ads", "Nexxen", "Freewheel", "Beachfront", "Playbuzz", "Amagi", "MediaFuse",
+  "Verve", "AppLovin", "Sovrn", "Microsoft Monetize", "OpenX", "Index Exchange", "Magnite", "Google AdX", "TripleLift", "Sharethrough", "Equativ",
+  "BidSwitch", "InMobi", "Amazon Publisher Services", "Taboola", "Dianomi", "Criteo", "PubMatic", "MGID", "Digital Turbine", "Liftoff", "BidMachine",
+  "Affinity Global", "Pubpower", "AdMile", "MobileFuse", "Bigo Ads", "Nexxen", "FreeWheel", "Beachfront", "Playbuzz", "Amagi", "MediaFuse",
   "Mintegral", "Improve Digital", "Algorix", "Edge226", "SportX", "Unity Technology", "Perion", "Optima", "Seedtag", "Sun Media", "TaurusX",
   "SilverMob", "CPMStar", "LoopMe", "TopOn", "Actirise", "Gadsme", "Nimbus Ads", "Pixalate", "Media.net", "AdYouLike", "33Across",
-  "Gannett", "Teads.tv", "ConnectAd", "Vistar Media", "GumGum", "Nativo Edge", "E-Planning", "AdMob", "AdColony", "Adform", "Kevel", "Underdog Media",
+  "Gannett", "Teads", "ConnectAd", "Vistar Media", "GumGum", "Nativo Edge", "E-Planning", "AdMob", "AdColony", "Adform", "Kevel", "Underdog Media",
 ];
 
 // Copy from the solution pages; w/h are the format's real size, s scales it into the 760×460 stage
@@ -20,9 +20,9 @@ const FORMATS = {
     list: ["Smart layouts", "Viewability optimization", "Brand safety"], sizes: "300×250 · 728×90 · 160×600 · 320×50", via: "Prebid header bidding" },
   video: { w: 640, h: 360, s: 0.66, play: 1, name: "instream player · VAST", title: "Video ad solutions", href: "/solutions/video-player",
     body: "Instream, outstream and interactive video formats in HBDR’s own player, built for engagement and viewability.",
-    list: ["VAST / VPAID", "High viewability", "Engagement metrics"], sizes: "640×360 · 16:9 instream and outstream", via: "Custom video player" },
+    list: ["VAST 4.x", "OMID for verification", "SIMID for interactivity"], sizes: "640×360 · 16:9 instream and outstream", via: "Custom video player" },
   ctv: { w: 1920, h: 1080, s: 0.24, play: 1, name: "connected TV · 16:9", title: "CTV and OTT monetization", href: "/solutions/ctv-ott",
-    body: "Connected-TV advertising that captures the growing streaming audience with premium video inventory.",
+    body: "Ad breaks in streaming apps on connected TVs, filled with 15- and 30-second spots delivered as VAST.",
     list: ["SSAI support", "Premium buyers", "Cross-platform"], sizes: "1920×1080 · 15s and 30s spots", via: "Server-side ad insertion" },
   app: { w: 320, h: 480, s: 0.58, play: 0, name: "interstitial · in-app", title: "In-app monetization", href: "/solutions/in-app-ads",
     body: "Banner, native, video and app-open ads for mobile apps, with Google AdX integration.",
@@ -72,7 +72,7 @@ const usd = (v: number) => `$${v.toFixed(2)}`;
 const COMPARE: [string, boolean | "partial", boolean | "partial", boolean | "partial"][] = [
   ["Header Bidding Implementation", true, true, false],
   ["Managed Prebid Server", true, false, false],
-  ["In-App SDK (Desktop & Mobile)", true, "partial", false],
+  ["In-App SDK or SDK-less Integration", true, "partial", false],
   ["Real-Time Analytics Dashboard", true, true, true],
   ["Dynamic Floor Pricing", true, false, false],
   ["Custom Video Player", true, "partial", false],
@@ -138,7 +138,7 @@ export function renderPage(form: FormConfig): string {
           { label: "See how an impression is sold", href: "#how", testid: "button-hero-learn" },
         ])}</div>
         <div class="hero-facts">
-          <div data-testid="text-stat-revenue"><b>50%+</b><span>revenue increase</span></div>
+          <div data-testid="text-stat-revenue"><b>Up to 50%</b><span>revenue increase</span></div>
           <div data-testid="text-stat-publishers"><b>500+</b><span>publishers</span></div>
           <div data-testid="text-stat-impressions"><b>1B+</b><span>impressions a month</span></div>
         </div>
@@ -541,9 +541,9 @@ export function renderPage(form: FormConfig): string {
 
   return renderLayout({
     title: "HBDR - Header Bidding & Ad Monetization Solutions",
-    description: "HBDR delivers enterprise-grade ad monetization and header bidding solutions. Maximize your ad revenue with our cutting-edge platform.",
+    description: "HBDR runs header bidding for websites, apps and connected TV: 65+ demand sources, 1B+ impressions a month, serving publishers since 2015.",
     ogTitle: "HBDR - Header Bidding & Ad Monetization Solutions",
-    ogDescription: "Maximize your ad revenue with HBDR's enterprise-grade header bidding platform.",
+    ogDescription: "Header bidding for websites, apps and connected TV, with 65+ demand sources competing for every impression.",
     canonicalPath: "/",
     bodyContent: homepageContent,
     gsap: true,
