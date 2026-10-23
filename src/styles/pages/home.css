@@ -1,0 +1,33 @@
+/* Page styles for the home page. Shared blocks live in main.css; this file holds only what this page needs. */
+
+/* Timeout explorer (D-026): the #how timeline with a draggable timeout and a live yield readout */
+.tl-lane.is-win .tl-req { stroke: var(--accent); }
+.tl-lane.is-win .tl-dot, .tl-lane.is-win .tl-lane-label { fill: var(--accent); }
+.tl-lane.is-out .tl-req, .tl-lane.is-out .tl-wait, .tl-lane.is-out .tl-dot { opacity: 0.3; }
+.tl-lane.is-out .tl-row { fill: var(--text-muted); }
+
+.tl-timeout-g { cursor: ew-resize; touch-action: none; }
+.tl-timeout-g.is-dragging { cursor: grabbing; }
+.tl-hit { fill: transparent; }
+.tl-handle { fill: var(--surface-raised); stroke: var(--text-secondary); stroke-width: 1.5; }
+.tl-grip { stroke: var(--text-secondary); stroke-width: 1.5; }
+.tl-timeout-g:hover .tl-handle, .tl-timeout-g.is-dragging .tl-handle { stroke: var(--accent); }
+
+.tx-control { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.5rem 1rem; padding: 0.8rem 1rem; border-top: 1px solid var(--hairline); }
+.tx-control label { font-size: 0.875rem; color: var(--text-secondary); }
+.tx-control input[type="range"] { width: 100%; height: 1.75rem; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.tx-control output { min-width: 5.5em; text-align: right; color: var(--text-primary); font-size: 0.875rem; }
+
+/* The readout makes the side column taller than the chart; the frame keeps its own height */
+.timeline-frame { align-self: start; }
+.timeline-points > .tx-readout { gap: 0.6rem; padding-top: 0; border-top: 0; }
+.timeline-points .tx-readout > p { font-size: 0.875rem; }
+.tx-readout .bp-spec > div { padding: 0.7rem 0; }
+.tx-readout .bp-spec dd { font-family: var(--font-mono); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.tx-formula { display: block; margin-top: 0.2rem; font-size: 0.75rem; line-height: 1.4; color: var(--text-muted); }
+
+/* Narrow screens: the label and value share a line and the slider takes the full width under them */
+@media (max-width: 640px) {
+  .tx-control { grid-template-columns: minmax(0, 1fr) auto; }
+  .tx-control input[type="range"] { grid-column: 1 / -1; grid-row: 2; }
+}

@@ -30,11 +30,44 @@ const FORMATS = {
 };
 const TABS: [keyof typeof FORMATS, string][] = [["display", "Display"], ["video", "Video"], ["ctv", "CTV &amp; OTT"], ["app", "In-app"]];
 
-// Example timeline (labelled as such): request at 40 ms, responses at fixed times, one bidder misses the 1000 ms timeout
-const LANES: [string, number, number | null, boolean?][] = [
-  ["Bidder 1", 310, 2.41], ["Bidder 2", 520, 4.86, true], ["Bidder 3", 190, 3.37], ["Bidder 4", 760, 1.92], ["Bidder 5", 1150, null], ["Bidder 6", 430, 3.05],
-];
-const tx = (ms: number) => 140 + ms * 0.68;
+// Timeout explorer (D-026). Example data only (D-005): bidders, times, slots per page and the session model are illustrative.
+export const TIMEOUT_MODEL = {
+  requestAt: 40,
+  defaultTimeout: 1000,
+  slotsPerPage: 3,
+  basePages: 4.0,
+  freeMs: 300,
+  lossPer100Ms: 0.02,
+  bidders: [
+    { name: "Bidder 1", at: 310, cpm: 2.41 }, { name: "Bidder 2", at: 520, cpm: 4.86 }, { name: "Bidder 3", at: 190, cpm: 3.37 },
+    { name: "Bidder 4", at: 760, cpm: 1.92 }, { name: "Bidder 5", at: 1150, cpm: 5.2 }, { name: "Bidder 6", at: 430, cpm: 3.05 },
+  ],
+};
+export type TimeoutModel = typeof TIMEOUT_MODEL;
+export type TimeoutYield = { timeout: number; inTime: boolean[]; received: number; winner: number; cpm: number; pageRpm: number; pages: number; sessionRpm: number };
+
+// The page script runs this exact function via toString(), so the body may use only its arguments and
+// builtins, and no inner function expressions (a bundler's keepNames helper would leak into the browser).
+export function timeoutYield(m: TimeoutModel, timeout: number): TimeoutYield {
+  const inTime: boolean[] = [];
+  let received = 0, winner = -1;
+  for (let i = 0; i < m.bidders.length; i++) {
+    const ok = m.bidders[i].at <= timeout;
+    inTime.push(ok);
+    if (!ok) continue;
+    received++;
+    if (winner < 0 || m.bidders[i].cpm > m.bidders[winner].cpm) winner = i;
+  }
+  const cpm = winner < 0 ? 0 : m.bidders[winner].cpm;
+  const pageRpm = cpm * m.slotsPerPage;
+  const pages = m.basePages * (1 - (m.lossPer100Ms * Math.max(0, timeout - m.freeMs)) / 100);
+  return { timeout, inTime, received, winner, cpm, pageRpm, pages, sessionRpm: pageRpm * pages };
+}
+
+// Axis 0–1500 ms drawn from x=140 to x=820
+const TX0 = 140, TX_PER_MS = 680 / 1500;
+const tx = (ms: number) => Math.round((TX0 + ms * TX_PER_MS) * 100) / 100;
+const usd = (v: number) => `$${v.toFixed(2)}`;
 
 const COMPARE: [string, boolean | "partial", boolean | "partial", boolean | "partial"][] = [
   ["Header Bidding Implementation", true, true, false],
@@ -55,18 +88,44 @@ function compareCell(v: boolean | "partial", us = false): string {
   return '<td class="no"><span aria-label="Not included">—</span></td>';
 }
 
-function renderTimelineRows(): string {
-  return LANES.map(([name, at, cpm, win], i) => {
-    const y = 50 + i * 46, end = cpm === null ? 1000 : at;
-    const mark = cpm === null
-      ? `<text class="tl-label" x="${tx(1000) - 8}" y="${y - 8}" text-anchor="end">no bid in time</text>`
-      : `<circle class="${win ? "tl-win-dot" : "tl-dot"}" cx="${tx(at)}" cy="${y}" r="5"/><text class="tl-label${win ? " tl-win-label" : ""}" x="${tx(at) + 10}" y="${y + 4}">$${cpm.toFixed(2)}${win ? " wins" : ""}</text>`;
-    return `<text class="tl-row" x="0" y="${y + 5}">${name}</text><path class="tl-wait" d="M${tx(40)} ${y} H${tx(end)}"/><path class="tl-req${win ? " tl-win" : ""}" data-lane d="M${tx(40)} ${y} H${tx(end)}"/>${mark}`;
+// Lane label text; the page script mirrors these three strings
+function laneLabel(cpm: number, inTime: boolean, win: boolean): string {
+  if (!inTime) return `timed out · ${usd(cpm)} lost`;
+  return win ? `${usd(cpm)} wins` : usd(cpm);
+}
+
+function renderTimelineRows(r: TimeoutYield): string {
+  return TIMEOUT_MODEL.bidders.map(({ name, at, cpm }, i) => {
+    const y = 50 + i * 46, win = i === r.winner, state = r.inTime[i] ? (win ? " is-win" : "") : " is-out";
+    return `<g class="tl-lane${state}"><text class="tl-row" x="0" y="${y + 5}">${name}</text><path class="tl-wait" d="M${tx(TIMEOUT_MODEL.requestAt)} ${y} H${tx(at)}"/><path class="tl-req" data-lane d="M${tx(TIMEOUT_MODEL.requestAt)} ${y} H${tx(at)}"/><circle class="tl-dot" cx="${tx(at)}" cy="${y}" r="5"/><text class="tl-label tl-lane-label" x="${tx(at) + 10}" y="${y + 4}">${laneLabel(cpm, r.inTime[i], win)}</text></g>`;
   }).join("");
+}
+
+// What a screen reader hears as the slider moves; the page script mirrors it
+function valueText(r: TimeoutYield): string {
+  const win = r.winner < 0 ? "no bid in time" : `${usd(r.cpm)} wins`;
+  return `${r.timeout} ms: ${r.received} of ${TIMEOUT_MODEL.bidders.length} bids, ${win}, Session RPM ${usd(r.sessionRpm)}`;
+}
+
+function renderYieldReadout(r: TimeoutYield): string {
+  const m = TIMEOUT_MODEL;
+  const f = (label: string, formula: string) => `${label}<small class="tx-formula">${formula}</small>`;
+  const v = (key: string, text: string, testid?: string) => `<span data-yield="${key}"${testid ? ` data-testid="${testid}"` : ""}>${text}</span>`;
+  return `<div class="tx-readout" data-testid="yield-readout">
+          <h3>Example yield at this timeout</h3>
+          <p>A longer timeout catches more bids, but a slower page means fewer pages per session, so Session RPM peaks just after your best bidders respond.</p>${renderSpecList([
+    { label: f("Bids received", "responses before the timeout"), value: v("received", `${r.received} of ${m.bidders.length}`) },
+    { label: f("Winning CPM", "highest bid in time"), value: v("cpm", r.winner < 0 ? "no bid in time · slot unfilled" : usd(r.cpm)) },
+    { label: f("Page RPM", `winning CPM × ${m.slotsPerPage} ad slots per page`), value: v("pageRpm", usd(r.pageRpm), "page-rpm") },
+    { label: f("Pages per session", `${m.basePages.toFixed(1)} × (1 − ${m.lossPer100Ms * 100}% per 100 ms over ${m.freeMs} ms)`), value: v("pages", r.pages.toFixed(2)) },
+    { label: f("Session RPM", "Page RPM × pages per session"), value: v("sessionRpm", usd(r.sessionRpm), "session-rpm") },
+  ])}
+        </div>`;
 }
 
 export function renderPage(form: FormConfig): string {
   const d = FORMATS.display;
+  const tm = TIMEOUT_MODEL, y0 = timeoutYield(tm, tm.defaultTimeout);
   const homepageContent = `
   <main id="top">
   <section class="bp-home-hero" data-testid="hero-section">
@@ -214,21 +273,27 @@ export function renderPage(form: FormConfig): string {
       <div class="bp-grid12">
         <figure class="timeline-frame bp-frame" style="margin:0">
           <div class="bp-frame-body">
-          <svg viewBox="0 0 860 400" role="img" aria-label="Example timeline: bid requests go out at 40 milliseconds, bids return between 190 and 760 milliseconds, one bidder times out, the highest bid wins and the ad renders">
-            <path class="tl-axis" d="M140 360 H820"/>
-            <g class="tl-label">
-              <text x="140" y="388" text-anchor="middle">0 ms</text><text x="310" y="388" text-anchor="middle">250</text>
-              <text x="480" y="388" text-anchor="middle">500</text><text x="650" y="388" text-anchor="middle">750</text>
-              <text x="820" y="388" text-anchor="middle">1000</text>
+          <svg viewBox="0 0 880 400" role="img" aria-label="Example timeline: bid requests go out at 40 milliseconds and six bids return between 190 and 1150 milliseconds. Bids after the timeout are dropped and the highest bid in time wins.">
+            <path class="tl-axis" d="M${tx(0)} 360 H${tx(1500)}"/>
+            <g class="tl-label">${[0, 250, 500, 750, 1000, 1250, 1500].map((ms) => `<text x="${tx(ms)}" y="388" text-anchor="middle">${ms === 0 ? "0 ms" : ms}</text>`).join("")}</g>
+            <g class="tl-rows">${renderTimelineRows(y0)}</g>
+            <g class="tl-timeout-g" transform="translate(${tx(tm.defaultTimeout)} 0)" data-testid="timeout-line">
+              <rect class="tl-hit" x="-14" y="10" width="28" height="350"/>
+              <path class="tl-timeout" d="M0 30 V360"/>
+              <rect class="tl-handle" x="-8" y="317" width="16" height="26" rx="4"/>
+              <path class="tl-grip" d="M-2.5 324 V336 M2.5 324 V336"/>
+              <text class="tl-label" x="-8" y="22" text-anchor="end">timeout · <tspan data-timeout-text>${tm.defaultTimeout}</tspan> ms</text>
             </g>
-            <path class="tl-timeout" d="M820 30 V360"/>
-            <text class="tl-label" x="812" y="24" text-anchor="end">timeout</text>
-            <g class="tl-rows">${renderTimelineRows()}</g>
           </svg>
           </div>
-          <figcaption class="mono">Example data: response times and bids are illustrative.</figcaption>
+          <div class="tx-control">
+            <label for="timeout-slider">Timeout (ms)</label>
+            <input type="range" id="timeout-slider" min="200" max="1500" step="10" value="${tm.defaultTimeout}" aria-valuetext="${valueText(y0)}" data-testid="timeout-slider">
+            <output class="mono" for="timeout-slider" data-timeout-out>${tm.defaultTimeout} ms</output>
+          </div>
+          <figcaption class="mono">Example data: response times, bids and the session model are illustrative. Page RPM assumes all ${tm.slotsPerPage} ad slots on the page clear at the winning CPM.</figcaption>
         </figure>
-        <div class="timeline-points">
+        <div class="timeline-points">${renderYieldReadout(y0)}
           <div><h3>Everyone bids at once</h3><p>The page sends one request to every partner in parallel instead of offering the slot to networks one after another.</p></div>
           <div><h3>The highest price wins</h3><p>Bids go to your ad server together, so the best offer for that impression is the one that serves.</p></div>
           <div><h3>Timeouts protect page speed</h3><p>A partner that answers too late is skipped for that impression. Readers never wait on a slow bidder.</p></div>
@@ -338,6 +403,47 @@ export function renderPage(form: FormConfig): string {
         if (n) { e.preventDefault(); show(all[(i + n + all.length) % all.length], true); }
       });
     });
+
+    // Timeout explorer (D-026): user-driven, so it works without GSAP and under reduced motion.
+    // yieldAt is the server's timeoutYield, so the page and the server render share one model.
+    var tm = ${JSON.stringify(TIMEOUT_MODEL)};
+    var yieldAt = ${timeoutYield.toString()};
+    var slider = q('#timeout-slider'), tline = q('.tl-timeout-g'), tsvg = tline.ownerSVGElement;
+    var lanes = [].slice.call(document.querySelectorAll('.tl-lane'));
+    function usd(v) { return '$' + v.toFixed(2); }
+    function setTimeoutMs(ms) {
+      ms = Math.round(Math.min(1500, Math.max(200, ms)) / 10) * 10;
+      var r = yieldAt(tm, ms), n = tm.bidders.length;
+      slider.value = ms;
+      slider.setAttribute('aria-valuetext', ms + ' ms: ' + r.received + ' of ' + n + ' bids, ' + (r.winner < 0 ? 'no bid in time' : usd(r.cpm) + ' wins') + ', Session RPM ' + usd(r.sessionRpm));
+      q('[data-timeout-out]').textContent = ms + ' ms';
+      q('[data-timeout-text]').textContent = ms;
+      tline.setAttribute('transform', 'translate(' + (${TX0} + ms * ${TX_PER_MS}) + ' 0)');
+      lanes.forEach(function (g, i) {
+        var b = tm.bidders[i], win = i === r.winner;
+        g.classList.toggle('is-out', !r.inTime[i]);
+        g.classList.toggle('is-win', win);
+        g.querySelector('.tl-lane-label').textContent = !r.inTime[i] ? 'timed out · ' + usd(b.cpm) + ' lost' : win ? usd(b.cpm) + ' wins' : usd(b.cpm);
+      });
+      q('[data-yield="received"]').textContent = r.received + ' of ' + n;
+      q('[data-yield="cpm"]').textContent = r.winner < 0 ? 'no bid in time · slot unfilled' : usd(r.cpm);
+      q('[data-yield="pageRpm"]').textContent = usd(r.pageRpm);
+      q('[data-yield="pages"]').textContent = r.pages.toFixed(2);
+      q('[data-yield="sessionRpm"]').textContent = usd(r.sessionRpm);
+    }
+    slider.addEventListener('input', function () { setTimeoutMs(+slider.value); });
+    // The dashed line drags with mouse or touch; pointer capture keeps the drag going off the line
+    function msAt(e) {
+      var pt = tsvg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      return (pt.matrixTransform(tsvg.getScreenCTM().inverse()).x - ${TX0}) / ${TX_PER_MS};
+    }
+    tline.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); tline.setPointerCapture(e.pointerId); tline.classList.add('is-dragging'); setTimeoutMs(msAt(e));
+    });
+    tline.addEventListener('pointermove', function (e) { if (tline.hasPointerCapture(e.pointerId)) setTimeoutMs(msAt(e)); });
+    function endDrag(e) { if (tline.hasPointerCapture(e.pointerId)) tline.releasePointerCapture(e.pointerId); tline.classList.remove('is-dragging'); }
+    tline.addEventListener('pointerup', endDrag);
+    tline.addEventListener('pointercancel', endDrag);
 
     if (!window.gsap) return; // the server-rendered page is complete on its own
     gsap.registerPlugin(ScrollTrigger);
