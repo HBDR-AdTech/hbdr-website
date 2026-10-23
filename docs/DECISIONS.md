@@ -156,3 +156,24 @@ Mint `#00FAA8`, the white text, hairlines and the text tokens stay as they are. 
 Translucent fills use channel tokens (`rgb(var(--surface-rgb) / a)`), so no slate literal is left in CSS. `theme-color` and the lead email header use the canvas too. The logo PNG is transparent, so it sits on navy with no box.
 Supersedes: D-017's canvas, elevated and raised values. D-017's mint and "templates reference tokens, never a hex" stand.
 Rollback: revert the commit (tokens only, plus `layout.ts` theme-color and the email header color).
+
+## D-025 — 2026-10-23 — Matt — Pro-level finish: hero glow, lit frames, grain, glass nav
+
+Matt picked four elements on top of the navy blueprint. All are CSS plus one small script in `src/styles/main.css` and `server/templates/layout.ts`, scoped away from admin (`body.is-admin`):
+1. **Hero glow:** each hero (`.bp-hero`, `.bp-home-hero`) gets one soft navy ellipse plus a faint mint one (alpha 0.055). No animation.
+2. **Lit frames:** real objects get a lit edge (diagram frames, tables, the hero sheet, and the contact and support forms): a 1px top highlight and a gradient ring that brightens on hover. On mouse devices only, a pointer spotlight follows the cursor inside the frame. `FRAME_SPOTLIGHT`: one passive, rAF-batched `pointermove` listener on public pages. It is off on touch and under reduced motion.
+3. **Grain:** a ~450-byte feTurbulence SVG tiled into the canvas background, zero-mean around `--surface`. Its colour-matrix offsets encode the canvas colour, so retune them when the canvas changes.
+4. **Glass nav:** the nav and its dropdowns are translucent navy (alpha 0.85) with backdrop blur. Nav links measure 5.2–5.3 : 1 over a full mint slot.
+Supersedes: D-012's "no glassmorphism blur" for the nav and its dropdowns only.
+Rollback: revert the merge.
+
+## D-026 — 2026-10-23 — Matt — The home impression timeline is a timeout explorer with Page and Session RPM
+
+"Move the timeout line to see bidders time out and change page yield; show revenue per pageview and revenue per session as page RPM and session RPM." The #how timeline axis runs to 1500 ms.
+- **Controls:** a range input (primary, keyboard and screen reader, 200–1500 ms in 10 ms steps) and the draggable timeout line stay in sync.
+- **Bidders:** a bidder that answers after the timeout dims ("timed out · $x lost"). The highest bid in time wins. Bidder 5 is a late $5.20 bid.
+- **Readout:** bids received, winning CPM, Page RPM (winning CPM × 3 slots), pages per session (4.0 baseline, −2% per 100 ms over 300 ms) and Session RPM (Page RPM × pages per session).
+- **Example data:** every number is labelled example data, and the page says it is an illustrative model, not HBDR data (D-005). Session RPM peaks at 520 ms ($55.75), when the best timely bid arrives. That is the lesson the page teaches.
+- **One source:** the TS model `timeoutYield` renders the default state (1000 ms: $4.86, Page RPM $14.58, 3.44 pages, Session RPM $50.16). The page script runs the same function via `toString()`. Tests check that both agree at every 10 ms step, and guard against inner functions, which esbuild keepNames would wrap in `__name`.
+- **Reduced motion:** interaction works with or without GSAP and under reduced motion, because it is user-driven.
+Rollback: revert the merge.
