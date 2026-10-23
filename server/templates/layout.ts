@@ -102,7 +102,7 @@ function renderNav(): string {
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 translate-y-1"
-                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-64 rounded-lg border border-white/[0.1] bg-[var(--surface-elevated)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-1 z-50" data-testid="solutions-dropdown">
+                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-64 rounded-lg border border-white/[0.1] glass-menu shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-1 z-50" data-testid="solutions-dropdown">
               <a href="/solutions/header-bidding" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-header-bidding">Header Bidding</a>
               <a href="/solutions/display-ads" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-display-ads">Display Ads</a>
               <a href="/solutions/video-player" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-video-player">Video Player</a>
@@ -131,7 +131,7 @@ function renderNav(): string {
                  x-transition:leave="transition ease-in duration-100"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 translate-y-1"
-                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-52 rounded-lg border border-white/[0.1] bg-[var(--surface-elevated)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-1 z-50" data-testid="company-dropdown">
+                 class="absolute top-full left-1/2 -translate-x-1/2 mt-2 before:absolute before:-top-2 before:inset-x-0 before:h-2 before:content-[''] w-52 rounded-lg border border-white/[0.1] glass-menu shadow-[0_8px_32px_rgba(0,0,0,0.5)] p-1 z-50" data-testid="company-dropdown">
               <a href="/about" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-about">About Us</a>
               <a href="/how-it-works" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-how-it-works">How It Works</a>
               <a href="/trust" class="block px-3 py-2 rounded-md text-[0.8125rem] text-[var(--text-secondary)] hover:text-white hover:bg-white/[0.05] transition-colors" data-testid="link-trust">Trust & Compliance</a>
@@ -316,9 +316,32 @@ const SCROLL_HINT = `<script>
   })();
   </script>`;
 
+// Lit frames (D-025): a faint light follows a mouse inside a frame. One passive listener, one read and two
+// custom-property writes per animation frame; touch and reduced-motion visitors get nothing. FRAMES matches main.css.
+const FRAME_SPOTLIGHT = `<script>
+  (function () {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var FRAMES = '.bp-frame, .bp-table-wrap, .sheet, .support-form-frame, #contact form';
+    var last = null, queued = false;
+    function paint() {
+      queued = false;
+      var el = last.target.closest && last.target.closest(FRAMES);
+      if (!el) return;
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (last.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (last.clientY - r.top) + 'px');
+    }
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      last = e;
+      if (!queued) { queued = true; requestAnimationFrame(paint); }
+    }, { passive: true });
+  })();
+  </script>`;
+
 function renderScripts(options: LayoutOptions): string {
   return `
-  ${options.adminPage ? "" : SCROLL_HINT}
+  ${options.adminPage ? "" : SCROLL_HINT + FRAME_SPOTLIGHT}
   ${options.cfAnalyticsToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${options.cfAnalyticsToken}"}'></script>` : ""}
 
 `;
