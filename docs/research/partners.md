@@ -1,6 +1,6 @@
 # /partners: sources
 
-Every outside fact on `/partners` (`server/templates/pages/partners.ts`). All pages were opened and read on 2026-10-23. No partner name was removed: closed, acquired and renamed companies carry a status line so Matt can decide the list (needs-Matt #8 in the content audit).
+Every outside fact on `/partners` (`server/templates/pages/partners.ts`). All pages were opened and read on 2026-10-23. No partner name was removed or annotated on the page. The closed, acquired and renamed companies are listed below, for Matt only: he decides whether to fix or remove each one (needs-Matt #8 in the content audit).
 
 ## Third-party cookie status
 
@@ -13,9 +13,9 @@ Every outside fact on `/partners` (`server/templates/pages/partners.ts`). All pa
 | Firefox Total Cookie Protection by default since June 2022; a separate cookie jar per website | https://blog.mozilla.org/en/mozilla/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/ | Mozilla | 2022-06-14 (updated 2024-08-28) | "Firefox is rolling out Total Cookie Protection by default" / "Total Cookie Protection works by creating a separate "cookie jar" for each website you visit. Instead of allowing trackers to link up your behavior on multiple sites, they just get to see behavior on individual sites." |
 | UID2 is open source and built on encrypted email and phone data | https://unifiedid.com/ | Unified ID 2.0 | retrieved 2026-10-23 | "An open-source identity solution built for the open internet. Unified ID 2.0 leverages encrypted email and phone number data" |
 
-## Partner status marks
+## Defunct or renamed partners (not shown on the page)
 
-| Partner as listed | Status line | URL | Publisher | Date | Supporting quote |
+| Partner as listed | Status | URL | Publisher | Date | Supporting quote |
 |---|---|---|---|---|---|
 | Xandr (Microsoft) | Renamed: now Microsoft Monetize, powered by Xandr | https://learn.microsoft.com/en-us/xandr/ | Microsoft Learn | retrieved 2026-10-23 | "Microsoft Monetize (Powered by Xandr) Product Documentation" |
 | Xandr Invest | Closed 28 Feb 2026 | https://about.ads.microsoft.com/en/blog/post/october-2025/unlocking-more-opportunities-for-partners-and-customers-through-collaboration-with-amazon | Microsoft Advertising blog | October 2025 | "As we transition away from media buying through our DSP, Microsoft Invest, starting on February 28, 2026" |
@@ -36,7 +36,7 @@ Every outside fact on `/partners` (`server/templates/pages/partners.ts`). All pa
 
 ## For Matt (not changed)
 
-- Every partner name stays. Decide whether to drop or rename: Xandr (Microsoft), Xandr Invest, EMX Digital, MediaMath, Basis Technologies (Centro), Lotame Panorama ID, MOAT (Oracle), Amazon APS (A9), "Google Analytics & GA4".
+- Every partner name stays on the page unchanged. Decide whether to drop or rename: Xandr (Microsoft), Xandr Invest, EMX Digital, MediaMath, Basis Technologies (Centro), Lotame Panorama ID, MOAT (Oracle), Amazon APS (A9), "Google Analytics & GA4".
 - Which entries are contracted integrations and which are compatible tools (PA8). "TAG" and "IAB Tech Lab" are standards bodies, not partners.
 - Vendor taglines (PubMatic "Cloud infrastructure platform…", Sharethrough "human-centric advertising", 33Across "Attention-based…") are left; they need per-vendor research to replace.
 - The "Become a Partner" CTA audience (PA11).

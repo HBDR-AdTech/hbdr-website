@@ -48,20 +48,12 @@ describe("company pages: current facts", () => {
     expect(html).not.toMatch(/support for the US Privacy String|Independent bloggers|isn&#39;t just a value|isn't just a value/);
   });
 
-  it("/partners states the real cookie status and marks closed or renamed companies without removing them", async () => {
+  it("/partners states the real cookie status and keeps every partner name unannotated (status list lives in docs/research/partners.md for Matt)", async () => {
     const html = await page("/partners");
     expect(html).toContain('data-testid="partners-cookie-status"');
     for (const s of ["dropped the planned standalone prompt", "Topics, Protected Audience and Attribution Reporting", "Blocked by default since March 2020", "Total Cookie Protection"]) expect(html).toContain(s);
-    const marks: [string, string][] = [
-      ["ssp-6", "Microsoft Monetize"], ["ssp-13", "Chapter 11"], ["dsp-3", "Infillion"], ["dsp-4", "28 February 2026"], ["dsp-6", "Basis"],
-      ["identity-5", "Epsilon"], ["compliance-5", "30 September 2024"], ["tech-2", "Amazon Publisher Services (APS)"], ["tech-7", "1 July 2023"],
-    ];
-    for (const [id, text] of marks) {
-      const at = html.indexOf(`data-testid="partner-${id}-status"`);
-      expect(at, id).toBeGreaterThan(-1);
-      expect(html.slice(at, html.indexOf("</p>", at)), id).toContain(text);
-    }
-    for (const name of ["Xandr (Microsoft)", "EMX Digital", "MediaMath", "Xandr Invest", "Basis Technologies (Centro)", "Lotame Panorama ID", "MOAT (Oracle)", "Amazon APS (A9)"]) expect(html).toContain(name);
+    for (const name of ["Xandr (Microsoft)", "EMX Digital", "MediaMath", "Xandr Invest", "Basis Technologies (Centro)", "Lotame Panorama ID", "MOAT (Oracle)", "Amazon APS (A9)", "Google Analytics & GA4"]) expect(html).toContain(name);
+    expect(html).not.toMatch(/partner-[a-z]+-[0-9]+-status|Closed:|Renamed:|Acquired:|Bankrupt:|are marked/);
     expect(html).not.toMatch(/World-Class|world&#39;s largest|world's largest/);
   });
 

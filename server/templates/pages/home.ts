@@ -16,8 +16,8 @@ const PARTNERS = [
 // Copy from the solution pages; w/h are the format's real size, s scales it into the 760×460 stage
 const FORMATS = {
   display: { w: 300, h: 250, s: 1, play: 0, name: "medium rectangle · IAB", title: "Display advertising", href: "/solutions/display-ads",
-    body: "Standard IAB sizes sold through header bidding, with each slot's height reserved so the page does not shift when an ad loads.",
-    list: ["Reserved slot sizes", "Lazy loading below the fold", "Better Ads density limits"], sizes: "300×250 · 728×90 · 160×600 · 320×50", via: "Prebid header bidding" },
+    body: "Website display monetization with smart layouts that maximize revenue while preserving user experience.",
+    list: ["Smart layouts", "Viewability optimization", "Brand safety"], sizes: "300×250 · 728×90 · 160×600 · 320×50", via: "Prebid header bidding" },
   video: { w: 640, h: 360, s: 0.66, play: 1, name: "instream player · VAST", title: "Video ad solutions", href: "/solutions/video-player",
     body: "Instream, outstream and interactive video formats in HBDR’s own player, built for engagement and viewability.",
     list: ["VAST 4.x", "OMID for verification", "SIMID for interactivity"], sizes: "640×360 · 16:9 instream and outstream", via: "Custom video player" },
