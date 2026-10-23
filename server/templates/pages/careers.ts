@@ -3,65 +3,47 @@ import { renderPageHero } from "../components/hero";
 import { renderCTASection } from "../components/cta";
 import { renderSection, renderFeatureRows } from "../components/blueprint";
 
+// Facts come from D-005 and D-027 only; roles and benefits are listed only when Matt supplies real ones
 export function renderCareersPage(): string {
   const content = `
-  ${renderPageHero("Careers", "Join Our Team", "Shape the future of ad tech. We're building the next generation of ad monetization technology and we want you on our team.")}
-
-  ${renderSection({
-    testid: "careers-why-section",
-    eyebrow: "Why Join Us",
-    title: "Why HBDR",
-    lede: "Join a team that's redefining digital advertising technology.",
-    body: renderFeatureRows([
-      { title: "Cutting-Edge Technology", body: "Work with the latest in ad tech, real-time bidding systems, machine learning optimization, and distributed computing at massive scale." },
-      { title: "Global Impact", body: "Your work impacts billions of ad impressions every month across 500+ publishers worldwide. Build systems that operate at truly global scale." },
-      { title: "Growth & Learning", body: "Continuous learning opportunities, mentorship from industry veterans, and a clear career growth path in one of tech's fastest-growing sectors." },
-    ].map((r, i) => ({ ...r, testid: `careers-why-card-${i}` }))),
-  })}
-
-  ${renderSection({
-    testid: "careers-benefits-section",
-    eyebrow: "Perks & Benefits",
-    title: "Benefits",
-    lede: "We take care of our team so they can focus on doing their best work.",
-    body: `
-      <ul class="res-cols">${[
-        { title: "Remote-First", description: "Work from anywhere in the world with flexible location policies." },
-        { title: "Competitive Pay", description: "Top-of-market compensation with equity and performance bonuses." },
-        { title: "Health & Wellness", description: "Comprehensive health, dental, and vision coverage for you and your family." },
-        { title: "Learning Budget", description: "Annual learning stipend for courses, conferences, and professional development." },
-        { title: "Flexible Hours", description: "Results-oriented culture with flexible working hours and unlimited PTO." },
-        { title: "Team Retreats", description: "Annual company retreats and quarterly team offsites around the world." },
-      ].map((b, i) => `
-        <li data-testid="benefit-card-${i}"><h3>${b.title}</h3><p>${b.description}</p></li>`).join("")}
-      </ul>`,
-  })}
+  ${renderPageHero("Careers", "Careers at HBDR", "No open roles are listed right now. You can still send us your CV for future openings.")}
 
   ${renderSection({
     testid: "careers-positions-section",
     eyebrow: "Open Roles",
     title: "Open Positions",
-    lede: "Find your next opportunity at HBDR.",
+    lede: "Send a CV now to be considered when a role opens.",
     body: `
-      <ul class="res-roles">${[
-        { title: "Senior Full-Stack Engineer", dept: "Engineering", location: "Remote", description: "Build and scale our ad-serving infrastructure handling billions of monthly requests. Work with real-time bidding systems, distributed architectures, and performance-critical code." },
-        { title: "Ad Operations Manager", dept: "Operations", location: "New York", description: "Manage publisher relationships and optimize ad configurations for maximum revenue. Analyze performance data and implement strategic improvements across our publisher network." },
-        { title: "Product Designer", dept: "Design", location: "Remote", description: "Shape the user experience of our publisher dashboard and internal tools. Design intuitive interfaces that make complex ad tech data accessible and actionable." },
-        { title: "Data Scientist", dept: "Data", location: "San Francisco", description: "Develop ML models for bid optimization and revenue prediction. Build and iterate on algorithms that process billions of data points to maximize publisher yield." },
-      ].map((pos, i) => `
-        <li data-testid="position-card-${i}">
-          <div class="res-role-main"><h3>${pos.title}</h3><p>${pos.description}</p></div>
-          <dl class="res-role-meta"><div><dt>Team</dt><dd>${pos.dept}</dd></div><div><dt>Location</dt><dd>${pos.location}</dd></div></dl>
-          <a href="/contact" class="glass-btn-outline text-sm" data-testid="button-apply-${i}">Apply Now</a>
-        </li>`).join("")}
-      </ul>`,
+      <div class="bp-grid12">
+        <div class="res-half" data-testid="careers-apply">
+          <p>To be considered for future roles, email your CV to <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-careers-email">contact@hbdr.com</a> with "Careers" in the subject line.</p>
+          <ul class="bp-list">
+            <li>The kind of work you do: engineering, ad operations, sales or another area</li>
+            <li>What you have built or run, with links to work you can share</li>
+            <li>Where you are based</li>
+          </ul>
+        </div>
+      </div>`,
   })}
 
-  ${renderCTASection("Don't see your role? Reach out anyway.", "Contact Us")}`;
+  ${renderSection({
+    testid: "careers-why-section",
+    eyebrow: "The Work",
+    title: "What HBDR Does",
+    lede: "HBDR has run header bidding and ad monetization for publishers since 2015.",
+    body: renderFeatureRows([
+      { title: "Header bidding for publishers", body: "HBDR runs the auctions in which demand sources bid for a publisher's ad space before the ad server picks a winner. It connects 65+ demand sources and works with 500+ publishers." },
+      { title: "Scale", body: "HBDR serves 1B+ ad impressions a month and has served 1T+ ads in total. It has worked with 47,000+ sites." },
+      { title: "Formats", body: "Display, video, in-app and CTV/OTT. For apps, HBDR offers an in-app SDK or an SDK-less server-side integration." },
+      { title: "The team", body: "The team has 25+ years of combined ad-tech experience." },
+    ].map((r, i) => ({ ...r, testid: `careers-why-card-${i}` }))),
+  })}
+
+  ${renderCTASection("Questions about working at HBDR?", "Contact Us")}`;
 
   return renderLayout({
     title: "Careers - HBDR",
-    description: "Join the HBDR team and shape the future of ad tech. Explore open positions in engineering, design, operations, and data science.",
+    description: "Careers at HBDR. No open roles are listed right now; send your CV to contact@hbdr.com for future openings.",
     canonicalPath: "/careers",
     bodyContent: content,
   });

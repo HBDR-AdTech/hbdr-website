@@ -5,7 +5,7 @@ import type { FormConfig } from "../../services/form-config";
 
 export function renderContactPage(form: FormConfig): string {
   const content = `
-  ${renderPageHero("Contact", "Get In Touch", "Ready to transform your ad revenue? Our team is here to help you get started with HBDR.")}
+  ${renderPageHero("Contact", "Get In Touch", "Tell us about your site and how you sell ads today. Include your monthly pageviews, your ad server (Google Ad Manager or AdSense) and a link to your ads.txt file so the first reply can be specific.")}
 
   ${renderContactFormSection(form)}`;
 
