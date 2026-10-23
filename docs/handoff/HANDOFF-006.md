@@ -138,3 +138,16 @@ LIVE ENV STATE
 ---
 
 End of HANDOFF-006.
+
+---
+
+## Addendum — 2026-10-23 — Matt's answers to §5 (added at Matt's request)
+
+1. **Sites:** "We've worked with 47,000+ sites overall, not all were great quality." → /advertisers says 47,000+ sites, without "premium".
+2. **/about:** yes, "up to 50%".
+3. **Revenue lift:** both read "up to 50%" (/how-it-works and /solutions/header-bidding). /solutions/display-ads had the same "30–50%" and gets the same fix.
+4. **Minimum traffic:** 500,000+ monthly pageviews, on both /how-it-works and /publishers.
+5. **In-app integration:** "We can do SDK-less or in-app SDK, either one depending on what they want." → the in-app page offers both.
+6. **Demand sources:** 65+.
+
+Recorded as D-027. Applied on `fix/content-claims` in the commit after this addendum. The line-length item stays queued.
