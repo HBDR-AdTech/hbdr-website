@@ -66,7 +66,7 @@ export function renderPublishersPage(): string {
 
   const requirements = [
     { title: "Quality Content", desc: "Original, regularly updated content that provides value to readers" },
-    { title: "Minimum Traffic", desc: "Generally 100,000+ monthly page views (we make exceptions for high-quality niche sites)" },
+    { title: "Minimum Traffic", desc: "Generally 500,000+ monthly pageviews (we make exceptions for high-quality niche sites)" },
     { title: "Clean Traffic", desc: "Legitimate, organic traffic without bots or invalid activity" },
     { title: "Google Compliance", desc: "Site must comply with Google Ad Manager and AdSense policies" },
     { title: "User Experience", desc: "Willingness to maintain a good user experience alongside monetization" },

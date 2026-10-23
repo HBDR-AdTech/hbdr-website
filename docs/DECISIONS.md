@@ -177,3 +177,17 @@ Rollback: revert the merge.
 - **One source:** the TS model `timeoutYield` renders the default state (1000 ms: $4.86, Page RPM $14.58, 3.44 pages, Session RPM $50.16). The page script runs the same function via `toString()`. Tests check that both agree at every 10 ms step, and guard against inner functions, which esbuild keepNames would wrap in `__name`.
 - **Reduced motion:** interaction works with or without GSAP and under reduced motion, because it is user-driven.
 Rollback: revert the merge.
+
+## D-027 — 2026-10-23 — Matt — Company claims: sites, revenue lift, minimum traffic, in-app integration, demand sources
+
+Matt's answers to the six copy contradictions (HANDOFF-005 §5, HANDOFF-006 §5). These extend D-005:
+
+| Topic | Answer |
+|---|---|
+| 1. Sites | HBDR has worked with 47,000+ sites overall ("not all were great quality"), so they are never called "premium". The 500+ publishers figure stands beside it. |
+| 2–3. Revenue lift | Every revenue or CPM lift on the site reads "up to 50%". That replaces "average over 50%" (/about), "30–50%" (/how-it-works, /solutions/display-ads) and "40–60%" (/solutions/header-bidding). |
+| 4. Minimum traffic | 500,000+ monthly pageviews. That replaces 10M monthly impressions (/how-it-works) and 100,000+ monthly page views (/publishers). |
+| 5. In-app integration | HBDR offers an in-app SDK or an SDK-less server-side integration, whichever the publisher wants. |
+| 6. Demand sources | 65+ demand sources, replacing "50+ demand partners/SSPs". |
+
+Test: `server/routes/__tests__/claims.test.ts` fails if any superseded wording returns.

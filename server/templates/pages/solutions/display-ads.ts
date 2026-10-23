@@ -66,7 +66,7 @@ export function renderDisplayAdsPage(): string {
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Display Monetization")}<h2>Beyond the banner.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
           <p>Display advertising remains the backbone of digital monetization, but the landscape has evolved far beyond simple banners. HBDR's display solution optimizes across all IAB standard formats — from leaderboards and skyscrapers to high-impact adhesion units and responsive multi-size placements — ensuring maximum fill rates and CPMs across every device.</p>
-          <p>Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers achieve 30-50% higher display revenue.</p>
+          <p>Our proprietary viewability engine ensures ads are only served when they have the highest probability of being seen, improving advertiser satisfaction and commanding premium pricing. Combined with lazy loading, smart refresh, and responsive ad unit management, publishers can increase display revenue by up to 50%.</p>
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ export function renderDisplayAdsPage(): string {
         { label: "Multi-size request", value: '<span class="mono">300×250 · 336×280 · 300×600</span>' },
         { label: "Adhesion viewability", value: "above 85%" },
         { label: "Viewability with lazy loading", value: "above 70%" },
-        { label: "Display revenue", value: "30–50%<small>higher</small>" },
+        { label: "Display revenue", value: "50%<small>up to</small>" },
         { label: "Core Web Vitals", value: "CLS · LCP · FID protected" },
       ])}</div>
     </div>
