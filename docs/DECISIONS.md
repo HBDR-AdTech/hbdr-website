@@ -262,3 +262,7 @@ Matt's answers to the HANDOFF-007 addendum's open questions.
 | Press releases | Real HBDR news is published through the blog CMS under a **"Press"** category; /press lists those posts. No release is written until Matt supplies the news. |
 
 Rollback: revert the content PR; the sellers.json tables only add data and are not read by any existing path.
+
+## D-032 — 2026-10-23 — Matt — Legal entity, address and venue
+
+The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131**. The privacy policy, terms and cookie policy name it, and the terms keep **Florida law with venue in Miami (Miami-Dade County)**. The hbdr.com sellers.json `contact_address` uses the same text. The older headerbiddr.com/sellers.json says "HeaderBiddr a Division of Ortolani Enterprises Inc., 301 W Bay St Ste 14131, Jacksonville, FL 32202"; it is out of date.
