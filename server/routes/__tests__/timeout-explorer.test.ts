@@ -94,6 +94,13 @@ describe("timeout explorer server render (D-026)", () => {
     for (let ms = 150; ms <= 1500; ms += 10) expect(clientYield(JSON.parse(tmSrc), ms)).toEqual(at(ms));
   });
 
+  // An inner function would get esbuild keepNames' __name() call in the Worker bundle, which the browser copy cannot resolve
+  it("timeoutYield has no inner functions", () => {
+    const src = timeoutYield.toString();
+    expect(src).toMatch(/^function timeoutYield\(/);
+    expect(src.slice(src.indexOf("{") + 1)).not.toMatch(/=>|\bfunction\b/);
+  });
+
   // Interaction is user-driven, so it is wired before the script stops for a missing GSAP
   it("wires the slider and line before the GSAP early return", () => {
     const stop = html.indexOf("if (!window.gsap) return;");
