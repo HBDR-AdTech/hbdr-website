@@ -108,4 +108,9 @@ describe("timeout explorer server render (D-026)", () => {
     expect(html.indexOf("slider.addEventListener('input'")).toBeLessThan(stop);
     expect(html.indexOf("tline.addEventListener('pointerdown'")).toBeLessThan(stop);
   });
+  // Touch drag needs an HTML box: Chrome ignores touch-action on SVG children, so a finger drag on the line became a scroll
+  it("the timeout line has an HTML grab strip placed on the default timeout", async () => {
+    const html = await (await app.request("/")).text();
+    expect(html).toMatch(/<div class="tl-grab" style="left:67\.424%" aria-hidden="true" data-testid="timeout-grab"><\/div>/);
+  });
 });
