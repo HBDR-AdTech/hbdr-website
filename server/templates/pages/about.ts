@@ -28,7 +28,7 @@ export function renderAboutPage(): string {
       </div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 grid gap-5 text-[1.0625rem] leading-relaxed text-[var(--text-muted)]">
         <p>At HBDR, our mission is to empower digital publishers with enterprise-grade ad monetization technology. We believe every publisher deserves access to the most advanced header bidding solutions, transparent analytics, and dedicated support to unlock their full revenue potential.</p>
-        <p>We combine cutting-edge technology with deep industry expertise to deliver solutions that consistently outperform traditional ad networks, helping our partners achieve an average revenue increase of over 50%.</p>
+        <p>We combine cutting-edge technology with deep industry expertise to deliver solutions that consistently outperform traditional ad networks, helping our partners increase revenue by up to 50%.</p>
       </div>
     </div>
   </section>

@@ -45,7 +45,7 @@ const FEATURES = [
   { title: "Granular Analytics", body: "Bid-level reporting across every demand partner, ad unit, device, and geography with real-time dashboards and automated alerting." },
   { title: "A/B Testing Engine", body: "Run controlled experiments on bidder configurations, timeout settings, and floor prices with statistical significance tracking." },
   { title: "Brand Safety Controls", body: "Comprehensive blocklists, category filters, and ads.txt/sellers.json management to ensure only quality demand reaches your inventory." },
-  { title: "Global Demand Network", body: "Access 50+ premium SSPs and exchanges including Google AdX, Amazon TAM, Index Exchange, OpenX, and PubMatic from a single integration." },
+  { title: "Global Demand Network", body: "Access 65+ demand sources including Google AdX, Amazon TAM, Index Exchange, OpenX, and PubMatic from a single integration." },
 ];
 
 export function renderHeaderBiddingPage(): string {
@@ -66,7 +66,7 @@ export function renderHeaderBiddingPage(): string {
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Unified Auctions")}<h2>How header bidding works.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
           <p>Header bidding revolutionizes programmatic advertising by allowing multiple demand sources to bid on your inventory simultaneously, rather than sequentially through a traditional waterfall. HBDR's implementation leverages Prebid.js — the industry-standard open-source framework — combined with our proprietary server-side bidding infrastructure to ensure every impression is sold at the highest possible price.</p>
-          <p>Our unified auction engine processes bids from 50+ demand partners in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution see an average CPM uplift of 40-60% compared to traditional waterfall setups.</p>
+          <p>Our unified auction engine processes bids from 65+ demand sources in under 100 milliseconds, eliminating latency concerns while creating genuine competition for every ad slot. Publishers using HBDR's header bidding solution can see CPM uplift of up to 50% compared to traditional waterfall setups.</p>
         </div>
       </div>
       <div class="sm-figure sm-diagram">${renderDiagramFrame({
@@ -110,9 +110,9 @@ export function renderHeaderBiddingPage(): string {
       <div class="col-span-12 lg:col-start-7 lg:col-span-6">${renderSpecList([
         { label: "Client-side wrapper", value: "Prebid.js" },
         { label: "Server-side bidding", value: "Prebid Server" },
-        { label: "Demand partners", value: "50+" },
+        { label: "Demand sources", value: "65+" },
         { label: "Auction completion", value: '<span class="mono">&lt; 100 ms</span>' },
-        { label: "CPM uplift vs. waterfall", value: "40–60%<small>average</small>" },
+        { label: "CPM uplift vs. waterfall", value: "50%<small>up to</small>" },
         { label: "Brand safety", value: "ads.txt · sellers.json" },
       ])}</div>
     </div>
@@ -124,7 +124,7 @@ export function renderHeaderBiddingPage(): string {
 
   return renderLayout({
     title: "Header Bidding Solutions - HBDR",
-    description: "Maximize ad revenue with HBDR's enterprise header bidding solutions. Prebid.js, server-side bidding, unified auctions, and 50+ demand partners.",
+    description: "Maximize ad revenue with HBDR's enterprise header bidding solutions. Prebid.js, server-side bidding, unified auctions, and 65+ demand sources.",
     canonicalPath: "/solutions/header-bidding",
     bodyContent: content,
   });

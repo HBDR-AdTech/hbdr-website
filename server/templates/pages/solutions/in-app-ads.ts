@@ -41,7 +41,7 @@ export function renderInAppAdsPage(): string {
   ${renderBlueprintHero({
     eyebrow: "Solutions",
     title: "In-App Advertising",
-    lede: "Monetize your mobile app with SDK-less integration, rewarded video, interstitials, and native ad formats that drive revenue without compromising user retention.",
+    lede: "Monetize your mobile app with an in-app SDK or SDK-less integration, rewarded video, interstitials, and native ad formats that drive revenue without compromising user retention.",
     actions: [
       { label: "Start Integration", href: "/contact", primary: true, testid: "button-hero-cta" },
       { label: "See the formats", href: "#formats" },
@@ -53,7 +53,7 @@ export function renderInAppAdsPage(): string {
       <div class="bp-grid12 sm-overview" data-testid="card-inapp-overview">
         <div class="col-span-12 lg:col-span-5">${renderEyebrow("Mobile Monetization")}<h2>Revenue without friction.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution offers lightweight, SDK-less integration via server-side APIs, eliminating the bloat and complexity of traditional SDK stacks while connecting your app to the full breadth of programmatic demand.</p>
+          <p>In-app advertising is the primary revenue driver for the vast majority of free-to-play mobile applications. HBDR's in-app solution integrates the way your team prefers: through the HBDR in-app SDK, or SDK-less via server-side APIs. Either way your app connects to the full breadth of programmatic demand.</p>
           <p>Our platform supports all major in-app ad formats — including rewarded video, interstitials, banners, and native ads — with intelligent mediation that maximizes eCPM across every user session. Advanced frequency capping and placement optimization ensure ads enhance rather than interrupt the user experience.</p>
         </div>
       </div>
@@ -72,15 +72,15 @@ export function renderInAppAdsPage(): string {
   <section class="bp-section" data-testid="inapp-integration-section">
     <div class="bp-wrap" data-testid="card-inapp-integration">
       <div class="bp-grid12 sm-overview">
-        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Integration")}<h2>SDK-less architecture.</h2></div>
+        <div class="col-span-12 lg:col-span-5">${renderEyebrow("Integration")}<h2>SDK or SDK-less, your choice.</h2></div>
         <div class="sm-copy col-span-12 lg:col-start-6 lg:col-span-7">
-          <p>Unlike traditional mediation platforms that require heavy SDK integrations, HBDR's server-side approach connects your app to our auction engine via lightweight API calls. This means smaller app binary sizes, fewer crashes, faster app review cycles, and the ability to update demand configurations without app store submissions.</p>
+          <p>Teams that want a client-side integration use the HBDR in-app SDK. Teams that prefer to keep their app lean connect SDK-less: the server-side approach reaches our auction engine through lightweight API calls, which keeps the app binary smaller and lets demand configuration change without an app store submission.</p>
           <p>Our solution supports both iOS and Android with native-quality rendering, GDPR/CCPA-compliant consent management, and SKAdNetwork/Privacy Sandbox compatibility for post-IDFA attribution.</p>
         </div>
       </div>
       <div class="bp-grid12 sm-after">
         <div class="col-span-12 lg:col-start-6 lg:col-span-7">${renderSpecList([
-          { label: "Integration", value: "Server-side API, no SDK" },
+          { label: "Integration", value: "In-app SDK or server-side API" },
           { label: "Platforms", value: "iOS · Android" },
           { label: "Consent", value: "GDPR · CCPA" },
           { label: "Attribution", value: "SKAdNetwork · Privacy Sandbox" },
@@ -97,7 +97,7 @@ export function renderInAppAdsPage(): string {
 
   return renderLayout({
     title: "In-App Advertising Solutions - HBDR",
-    description: "Monetize mobile apps with rewarded video, interstitials, native ads, and SDK-less integration. Maximize eCPMs while protecting user experience.",
+    description: "Monetize mobile apps with rewarded video, interstitials, native ads, and SDK or SDK-less integration. Maximize eCPMs while protecting user experience.",
     canonicalPath: "/solutions/in-app-ads",
     bodyContent: content,
   });

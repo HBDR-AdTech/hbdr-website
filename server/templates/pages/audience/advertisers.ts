@@ -82,7 +82,7 @@ export function renderAdvertisersPage(): string {
   <section class="bp-section" data-testid="advertisers-intro-section">
     <div class="bp-wrap bp-grid12">
       <div class="col-span-12 lg:col-span-6">${renderEyebrow("Inventory access")}<h2 class="mt-4 text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Premium Access to Quality Inventory</h2></div>
-      <p class="col-span-12 lg:col-start-8 lg:col-span-5 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">HBDR manages monetization for thousands of premium publisher sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
+      <p class="col-span-12 lg:col-start-8 lg:col-span-5 self-end text-[var(--text-muted)] text-[1.0625rem] leading-relaxed">HBDR has managed monetization for 47,000+ sites across verticals. Advertisers can access this inventory through several buying methods — each designed to deliver performance, transparency, and brand safety.</p>
     </div>
   </section>
   ${renderSection({
