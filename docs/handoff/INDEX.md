@@ -17,3 +17,4 @@
 | 003 | 2026-10-14 | Logo palette (D-017), IPs kept (D-018), auction hero (D-019); PRs #21, #22; Turnstile widget + secret; WAF/DNSSEC scripts for operator | — (PRs open) | [HANDOFF-003.md](HANDOFF-003.md) |
 | 004 | 2026-10-16 | Plan + authority for the sitewide blueprint redesign (D-020, D-021); agent merges #21→#22→redesign after checks; 5-agent fan-out approved | — | [HANDOFF-004.md](HANDOFF-004.md) |
 | 005 | 2026-10-16 | Blueprint redesign live on every public page (D-020/21/22); #21 → #22 → #23 merged; 4 builders + skeptic; 228 tests; live lead in prod D1 | `dd3f455` | [HANDOFF-005.md](HANDOFF-005.md) |
+| 006 | 2026-10-23 | Navy canvas (D-024), pro finish (D-025), timeout explorer with page/session RPM (D-026), reduced-motion hero (D-023), touch drag; PRs #24 #26 #27 #28; 271 tests | `8b219c6` | [HANDOFF-006.md](HANDOFF-006.md) |
