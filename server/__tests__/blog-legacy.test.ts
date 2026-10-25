@@ -59,7 +59,9 @@ describe("legacy blog post rewrite (seed/blog-legacy-rewrite-2026-10-24.sql)", (
       expect(row.updated_at).toMatch(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/);
       expect(row.updated_at > post.publishedAt).toBe(true);
     }
-    expect(LEGACY_POSTS.map((p) => [p.slug, p.category, p.publishedAt]).sort()).toEqual(ORIGINALS.map(([s, , , c, at]) => [s, c, at]).sort());
+    // D-037: the old launch post now teaches, so it moves to Education; every other category stays
+    const expected = ORIGINALS.map(([s, , , c, at]) => [s, s === "hbdr-launches-server-side-bidding-platform" ? "Education" : c, at]);
+    expect(LEGACY_POSTS.map((p) => [p.slug, p.category, p.publishedAt]).sort()).toEqual(expected.sort());
 
     const untouched = db.prepare("SELECT * FROM blog_posts WHERE slug = 'header-bidding-timeouts-find-the-right-number'").get() as Record<string, string>;
     expect(untouched).toMatchObject({ title: "Header Bidding Timeouts", content: "<p>x</p>", updated_at: "2025-02-24T13:00:00.000Z" });

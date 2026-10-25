@@ -214,7 +214,8 @@ export const LEGACY_POSTS: LegacyPost[] = [
 <li><a href="https://webkit.org/tracking-prevention/">WebKit, "Tracking Prevention in WebKit"</a></li>
 </ul>`,
     author: "HBDR Research",
-    category: "Product Updates",
+    // Moved from "Product Updates" (D-037): the post teaches; it announces nothing
+    category: "Education",
     tags: "server-side bidding,prebid server,prebid.js,cookie sync,latency",
     publishedAt: "2025-02-01T00:00:00.000Z",
   },
