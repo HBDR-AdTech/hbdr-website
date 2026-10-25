@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one 12-column sheet on HBDR's blueprint system; hairline rules, heading left and supporting line right, objects (table, bar, list) set off only where they are real. */
+/* Layout: one 12-column sheet on HBDR's blueprint system; hairline rules, heading left and supporting line right, objects (table, chart) set off only where they are real. */
 :root {
   --canvas: #f4f6f9;
   --sheet: #ffffff;
@@ -18,7 +18,6 @@
   --warn: #a35a00;
   --warn-fill: #f2a33a;
   --crit: #b3261e;
-  --crit-fill: #e5534b;
   --idle-fill: #c9d0db;
   --faint-fill: #e6eaf0;
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -31,7 +30,7 @@
     --canvas: #0b1121; --sheet: #111a2e; --ink: #f5f7fa; --ink-2: #d0d6e0; --muted: #959ca8;
     --hair: rgba(255,255,255,0.08); --hair-strong: rgba(255,255,255,0.16);
     --accent: #00faa8; --accent-fill: #00faa8; --warn: #f2b25c; --warn-fill: #d98e2b;
-    --crit: #ff8a80; --crit-fill: #d9534b; --idle-fill: #3a4660; --faint-fill: #222c44;
+    --crit: #ff8a80; --idle-fill: #3a4660; --faint-fill: #222c44;
   }
 }
 :root[data-theme="dark"] {
@@ -39,7 +38,7 @@
   --canvas: #0b1121; --sheet: #111a2e; --ink: #f5f7fa; --ink-2: #d0d6e0; --muted: #959ca8;
   --hair: rgba(255,255,255,0.08); --hair-strong: rgba(255,255,255,0.16);
   --accent: #00faa8; --accent-fill: #00faa8; --warn: #f2b25c; --warn-fill: #d98e2b;
-  --crit: #ff8a80; --crit-fill: #d9534b; --idle-fill: #3a4660; --faint-fill: #222c44;
+  --crit: #ff8a80; --idle-fill: #3a4660; --faint-fill: #222c44;
 }
 * { box-sizing: border-box; }
 body {
@@ -51,7 +50,7 @@ h1, h2, h3 { font-family: var(--font-display); font-stretch: 112%; letter-spacin
 h1 { font-size: clamp(2rem, 4.4vw, 3.1rem); line-height: 1.04; font-weight: 750; }
 h2 { font-size: clamp(1.35rem, 2.4vw, 1.75rem); line-height: 1.15; font-weight: 700; }
 h3 { font-size: 1.05rem; line-height: 1.3; font-weight: 650; font-stretch: 105%; }
-p { margin: 0; max-width: 34em; color: var(--ink-2); }
+p { margin: 0; max-width: 36em; color: var(--ink-2); }
 a { color: var(--accent); text-underline-offset: 3px; }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
@@ -63,25 +62,40 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .meta { display: flex; flex-wrap: wrap; gap: 8px 24px; font: 400 0.78rem/1.4 var(--font-mono); color: var(--muted); }
 .formula { font: 500 0.95rem/1.5 var(--font-mono); color: var(--ink); }
 .formula b { color: var(--accent); font-weight: 500; }
+.thesis { font: 600 clamp(1.1rem, 2vw, 1.3rem)/1.45 var(--font-body); color: var(--ink); max-width: 38em; }
 
-/* The audit bar: widths are the publisher counts out of 325, to scale */
-.bar { display: flex; height: 40px; border-radius: 3px; overflow: hidden; border: 1px solid var(--hair-strong); }
-.bar span { display: block; height: 100%; }
-.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; border-top: 1px solid var(--hair); margin-top: 18px; }
-.legend div { display: grid; grid-template-columns: 12px auto 1fr; gap: 10px; align-items: baseline; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hair); }
-.legend i { width: 10px; height: 10px; border-radius: 2px; align-self: center; }
-.legend b { font: 500 1.1rem/1 var(--font-mono); font-variant-numeric: tabular-nums; }
-.legend span { color: var(--muted); font-size: 0.86rem; line-height: 1.35; }
-.c-ok { background: var(--accent-fill); } .c-warn { background: var(--warn-fill); } .c-crit { background: var(--crit-fill); }
-.c-idle { background: var(--idle-fill); } .c-faint { background: var(--faint-fill); }
+/* Findings: three measured facts, label left, figures right */
+.findings { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair-strong); }
+.findings > li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px 32px; padding-block: 26px; border-bottom: 1px solid var(--hair); }
+.findings .lead { grid-column: 1 / span 5; display: grid; gap: 10px; align-content: start; }
+.findings .lead .k { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.findings .detail { grid-column: 6 / span 7; display: grid; gap: 14px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); border-top: 1px solid var(--hair); }
+.stats div { display: grid; gap: 4px; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hair); }
+.stats b { font: 500 1.35rem/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.stats span { color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+.ev { font: 400 0.76rem/1.5 var(--font-mono); color: var(--muted); max-width: 52em; }
+
+/* Competitor chart: bar length is reseller lines out of the largest (164), to scale */
+.chart { display: grid; gap: 6px; padding: 16px; border: 1px solid var(--hair-strong); border-radius: 4px; background: var(--sheet); }
+.chart .row { display: grid; grid-template-columns: minmax(0, 15em) 1fr 3.2em; gap: 12px; align-items: center; font-size: 0.84rem; }
+.chart .name { color: var(--ink-2); overflow-wrap: anywhere; line-height: 1.3; }
+.chart .track { height: 12px; background: var(--faint-fill); border-radius: 2px; overflow: hidden; }
+.chart .fill { height: 100%; background: var(--idle-fill); }
+.chart .fill.in { background: var(--warn-fill); }
+.chart .v { font: 500 0.8rem/1 var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+.chart .cap { font: 400 0.74rem/1.4 var(--font-mono); color: var(--muted); padding-top: 6px; }
+.key { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; }
+.key i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 
 .tablewrap { overflow-x: auto; border: 1px solid var(--hair-strong); border-radius: 4px; background: var(--sheet); }
-table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 0.88rem; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 0.88rem; }
 th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--hair); vertical-align: top; }
 th { font: 500 0.7rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--canvas); }
 tbody tr:last-child td { border-bottom: 0; }
-td.rank { font-family: var(--font-mono); color: var(--accent); width: 44px; }
+td.rank { font-family: var(--font-mono); color: var(--accent); width: 52px; white-space: nowrap; }
 td.size { font-family: var(--font-mono); white-space: nowrap; }
+tr.bet td { font: 500 0.7rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--canvas); }
 .tag { display: inline-block; font: 500 0.7rem/1.6 var(--font-mono); padding: 0 6px; border: 1px solid var(--hair-strong); border-radius: 3px; color: var(--ink-2); white-space: nowrap; }
 .tag.matt { border-color: var(--warn); color: var(--warn); }
 
@@ -92,18 +106,26 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
 .items .body { grid-column: 6 / span 7; display: grid; gap: 10px; }
 .items .body p { font-size: 0.93rem; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px 8px; }
-.ev { font: 400 0.76rem/1.5 var(--font-mono); color: var(--muted); }
-.group { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 28px; }
+.group { display: grid; gap: 6px; padding-top: 32px; padding-bottom: 12px; }
+.group .k { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.group p { font-size: 0.93rem; }
+
+.rejected { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair-strong); }
+.rejected li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px 32px; padding-block: 16px; border-bottom: 1px solid var(--hair); }
+.rejected h3 { grid-column: 1 / span 5; color: var(--ink-2); }
+.rejected p { grid-column: 6 / span 7; font-size: 0.9rem; }
 
 .answer { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px 32px; }
 .answer > div:first-child { grid-column: 1 / span 5; display: grid; gap: 12px; align-content: start; }
 .answer > div:last-child { grid-column: 6 / span 7; display: grid; gap: 16px; }
 .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; color: var(--ink-2); font-size: 0.93rem; max-width: 36em; }
+.sources { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font: 400 0.76rem/1.5 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
 
 @media (max-width: 760px) {
-  .head > :first-child, .head > p, .answer > div:first-child, .answer > div:last-child { grid-column: 1 / -1; }
-  .items .n { grid-column: 1 / -1; }
-  .items h3, .items .body { grid-column: 1 / -1; }
+  .head > :first-child, .head > p, .answer > div:first-child, .answer > div:last-child,
+  .findings .lead, .findings .detail, .rejected h3, .rejected p { grid-column: 1 / -1; }
+  .items .n, .items h3, .items .body { grid-column: 1 / -1; }
+  .chart .row { grid-template-columns: minmax(0, 9em) 1fr 2.8em; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -112,66 +134,94 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
 
   <header class="head">
     <div>
-      <span class="eyebrow">HBDR · plan for Matt</span>
-      <h1>Twenty ways to grow HBDR through hbdr.com</h1>
-      <div class="meta"><span>2026-10-24</span><span>Ranked by value ÷ effort</span><span>Every claim cites a file, a fetch or a decision</span></div>
+      <span class="eyebrow">HBDR · plan for Matt · version 2</span>
+      <h1>Run the auction on Asia's news sites, not one reseller line among seventy</h1>
+      <div class="meta"><span>2026-10-25</span><span>Replaces the 20-item list of 2026-10-24</span><span>Every number cites a fetch, a file or a decision</span></div>
     </div>
-    <p>Each idea moves one term of HBDR's revenue line. Sizes are build estimates: <span class="mono">S</span> under a day, <span class="mono">M</span> a few days, <span class="mono">L</span> weeks. Items tagged <span class="tag matt">Matt</span> need a decision or a fact from you before work starts.</p>
+    <p>Version 1 listed site tweaks. This version starts from who HBDR's publishers are, where HBDR sits on their pages, and what buyers now pay for. Sizes: <span class="mono">S</span> under a day, <span class="mono">M</span> a week, <span class="mono">L</span> several weeks. <span class="tag matt">Matt</span> marks a decision or a fact only you have.</p>
   </header>
 
   <section style="display:grid;gap:18px">
     <span class="eyebrow">The revenue line</span>
-    <p class="formula">Revenue = <b>publishers</b> × ad requests × <b>fill</b> × <b>CPM</b> × HBDR take</p>
-    <p class="ev">Source: ~/code/hbdr-ctv/docs/MONETIZATION-PLAN.md:9</p>
+    <p class="formula">Revenue = <b>publishers</b> × <b>ad requests</b> × fill × <b>CPM</b> × <b>HBDR take</b></p>
+    <p class="thesis">HBDR earns most today as one Google reseller among dozens on large Asian news and streaming sites. Buyers are cutting resellers. The plan moves HBDR from a reseller line to the company that runs the auction, then adds demand that the other resellers do not have.</p>
+    <p class="ev">Formula: ~/code/hbdr-ctv/docs/MONETIZATION-PLAN.md:9. The bold terms are the ones this plan moves.</p>
   </section>
 
   <section style="display:grid;gap:20px">
     <div class="head">
-      <div><span class="eyebrow">Measured tonight</span><h2>HeaderBiddr's own ads.txt lines are leaking money</h2></div>
-      <p>I fetched /ads.txt from all 325 publishers in headerbiddr.com/sellers.json. Buyers match the account ID in each line to a seller_id. At least 55 publishers carry a HeaderBiddr line that fails that match.</p>
+      <div><span class="eyebrow">Measured 2026-10-25</span><h2>Three facts the plan rests on</h2></div>
+      <p>I fetched every publisher's ads.txt and Google's full sellers.json, and read the CTV plan and the repos. Nothing below is an estimate.</p>
     </div>
-    <div class="bar" role="img" aria-label="325 publishers: 65 match, 33 use another publisher's ID, 22 use an unknown ID, 120 have no HeaderBiddr line, 85 could not be read">
-      <span class="c-ok" style="width:20%"></span><span class="c-warn" style="width:10.154%"></span><span class="c-crit" style="width:6.769%"></span><span class="c-idle" style="width:36.923%"></span><span class="c-faint" style="width:26.154%"></span>
-    </div>
-    <div class="legend">
-      <div><i class="c-ok"></i><b>65</b><span>Line matches the publisher's own seller_id</span></div>
-      <div><i class="c-warn"></i><b>33</b><span>Line uses another publisher's seller_id</span></div>
-      <div><i class="c-crit"></i><b>22</b><span>Line uses an ID that is not in sellers.json</span></div>
-      <div><i class="c-idle"></i><b>120</b><span>No HeaderBiddr line. Fine for Google MCM-only sites; a leak otherwise</span></div>
-      <div><i class="c-faint"></i><b>85</b><span>ads.txt unreadable: 404, bot block or site down</span></div>
-    </div>
-    <p class="ev">Example: instinctmagazine.com has seller_id 112 but lists headerbiddr.com, 8201inst, DIRECT. Fetched 2026-10-23; publisher list in docs/research/ads-txt-audit-2026-10-23.md.</p>
+    <ul class="findings">
+      <li>
+        <div class="lead"><span class="k">Fact 1</span><h3>HBDR's base is Asian premium news and streaming</h3></div>
+        <div class="detail">
+          <p>The 173 domains in headerbiddr.com/sellers.json are mostly large news, portal and video sites in India, Indonesia, Vietnam, Thailand, Taiwan, Malaysia and Turkey. Examples: indiatimes.com, news18.com, bangkokpost.com, detik.com, cnnturk.com, gmanetwork.com, vnexpress.net, jpost.com.</p>
+          <p>Five streaming and video apps are already HBDR sellers: ZEE5 (seller 202, ASIA TV USA LTD), Vidio (its Android TV app is listed), Sun NXT (282), MX Player and ShareChat (208).</p>
+          <p class="ev">Source: seed/supply-sellers-from-headerbiddr-2026-10-23.sql (headerbiddr.com/sellers.json as fetched 2026-10-23).</p>
+        </div>
+      </li>
+      <li>
+        <div class="lead"><span class="k">Fact 2</span><h3>On those sites, HBDR is one reseller among dozens</h3></div>
+        <div class="detail">
+          <div class="stats">
+            <div><b>122</b><span>publisher ads.txt files readable</span></div>
+            <div><b>69</b><span>carry a HeaderBiddr Google reseller line</span></div>
+            <div><b>8,942</b><span>Google reseller lines from other companies</span></div>
+            <div><b>~73</b><span>other reseller lines per site</span></div>
+          </div>
+          <div class="chart" role="img" aria-label="Google reseller lines on HBDR's 122 readable publisher sites, top 10 named companies">
+            <div class="row"><span class="name">Medmob</span><span class="track"><span class="fill" style="width:100%;display:block"></span></span><span class="v">164</span></div>
+            <div class="row"><span class="name">Yediot Internet</span><span class="track"><span class="fill" style="width:80.5%;display:block"></span></span><span class="v">132</span></div>
+            <div class="row"><span class="name">Advergame Technologies</span><span class="track"><span class="fill in" style="width:72%;display:block"></span></span><span class="v">118</span></div>
+            <div class="row"><span class="name">Datawrkz</span><span class="track"><span class="fill in" style="width:70.7%;display:block"></span></span><span class="v">116</span></div>
+            <div class="row"><span class="name">Dailymotion Advertising</span><span class="track"><span class="fill" style="width:51.2%;display:block"></span></span><span class="v">84</span></div>
+            <div class="row"><span class="name">Gannett</span><span class="track"><span class="fill" style="width:51.2%;display:block"></span></span><span class="v">84</span></div>
+            <div class="row"><span class="name">Playstream</span><span class="track"><span class="fill" style="width:51.2%;display:block"></span></span><span class="v">84</span></div>
+            <div class="row"><span class="name">SunMedia</span><span class="track"><span class="fill" style="width:51.2%;display:block"></span></span><span class="v">84</span></div>
+            <div class="row"><span class="name">DIDNA</span><span class="track"><span class="fill" style="width:50%;display:block"></span></span><span class="v">82</span></div>
+            <div class="row"><span class="name">Adpushup</span><span class="track"><span class="fill in" style="width:48.8%;display:block"></span></span><span class="v">80</span></div>
+            <div class="cap"><span class="key"><i style="background:var(--warn-fill)"></i>India-based MCM or ad-ops partner</span><span class="key"><i style="background:var(--idle-fill)"></i>other</span>Also present: Mediology (77), Streamlyn (76). A count is reseller lines, so one company can have several lines on one site.</div>
+          </div>
+          <p class="ev">Method: each google.com RESELLER pub ID in a publisher's ads.txt, looked up in realtimebidding.google.com/sellers.json (955,051 sellers, fetched 2026-10-25). 6,659 of 8,942 lines (74%) resolve to a company name. HeaderBiddr LLC is in that file as pub-5040103142722271 and pub-6254331789601537.</p>
+        </div>
+      </li>
+      <li>
+        <div class="lead"><span class="k">Fact 3</span><h3>Buyers are cutting reseller paths</h3></div>
+        <div class="detail">
+          <p>The Trade Desk now classes SSP paths as resellers and scores them as less efficient. It steers spend to direct paths (OpenPath) and a curated set of 500 supply routes. Its rules ask for one seller ID per exchange for each site and the same business domain in every sellers.json.</p>
+          <p>HeaderBiddr's sellers.json repeats 41 seller IDs, and 14 of them name different companies. 55 publishers carry a HeaderBiddr line that fails the buyer's check.</p>
+          <p class="ev">Sources: The Trade Desk partner docs, OpenPath inventory best practices; Digiday on Kokai and supply paths (links at the end). HeaderBiddr data: docs/research/ads-txt-audit-2026-10-23.md.</p>
+        </div>
+      </li>
+    </ul>
   </section>
 
   <section style="display:grid;gap:20px">
     <div class="head">
-      <div><span class="eyebrow">The twenty</span><h2>At a glance</h2></div>
-      <p>Rank is the order I would do them in. Detail and evidence for each follow below.</p>
+      <div><span class="eyebrow">The plan</span><h2>Four bets, eleven moves</h2></div>
+      <p>Each bet answers one fact. The ID is a label, not a rank; the order I recommend is under "Your call".</p>
     </div>
     <div class="tablewrap">
       <table>
-        <thead><tr><th>#</th><th>Idea</th><th>Lever</th><th>Size</th><th>Needs</th></tr></thead>
+        <thead><tr><th>ID</th><th>Move</th><th>Lever</th><th>Size</th><th>Needs</th></tr></thead>
         <tbody>
-          <tr><td class="rank">01</td><td>Fix the 55 broken HeaderBiddr ads.txt lines</td><td>CPM, fill</td><td class="size">S</td><td><span class="tag matt">Matt</span> OK to contact publishers</td></tr>
-          <tr><td class="rank">02</td><td>Make sellers.json valid: one entity per seller_id</td><td>CPM, trust</td><td class="size">S</td><td><span class="tag matt">Matt</span> pick 41 ids, active list</td></tr>
-          <tr><td class="rank">03</td><td>Measure the lead funnel before changing it</td><td>Publishers</td><td class="size">S</td><td><span class="tag matt">Matt</span> run one query</td></tr>
-          <tr><td class="rank">04</td><td>Prove every "Available now" feature</td><td>Trust</td><td class="size">S</td><td><span class="tag matt">Matt</span> one live publisher each</td></tr>
-          <tr><td class="rank">05</td><td>Ship Confiant or IAS through Prebid</td><td>CPM, trust</td><td class="size">M</td><td><span class="tag matt">Matt</span> signed vendor contract</td></tr>
-          <tr><td class="rank">06</td><td>"Email me this estimate" on the calculators</td><td>Publishers</td><td class="size">S</td><td>None</td></tr>
-          <tr><td class="rank">07</td><td>Waitlists for every "Coming soon" item</td><td>Publishers</td><td class="size">S</td><td>None (operator setting)</td></tr>
-          <tr><td class="rank">08</td><td>Booking link for qualified leads</td><td>Publishers</td><td class="size">S</td><td><span class="tag matt">Matt</span> booking URL</td></tr>
-          <tr><td class="rank">09</td><td>Free ads.txt checker on /tools</td><td>Publishers, CPM</td><td class="size">S–M</td><td>None</td></tr>
-          <tr><td class="rank">10</td><td>Switch the seller domain to hbdr.com</td><td>Trust</td><td class="size">M</td><td><span class="tag matt">Matt</span> go after comparison</td></tr>
-          <tr><td class="rank">11</td><td>Supply transparency page</td><td>Trust</td><td class="size">S</td><td>None</td></tr>
-          <tr><td class="rank">12</td><td>/technology page with the real stack</td><td>Trust</td><td class="size">M</td><td>None</td></tr>
-          <tr><td class="rank">13</td><td>Three real case studies</td><td>Publishers</td><td class="size">M</td><td><span class="tag matt">Matt</span> pick and ask publishers</td></tr>
-          <tr><td class="rank">14</td><td>First real press releases</td><td>Trust</td><td class="size">S</td><td><span class="tag matt">Matt</span> the facts</td></tr>
-          <tr><td class="rank">15</td><td>Self-serve site revenue check</td><td>Publishers</td><td class="size">L</td><td>None</td></tr>
-          <tr><td class="rank">16</td><td>Referral program</td><td>Publishers</td><td class="size">S–M</td><td><span class="tag matt">Matt</span> referral rate</td></tr>
-          <tr><td class="rank">17</td><td>Advertiser deal desk</td><td>CPM</td><td class="size">S</td><td>None (operator setting)</td></tr>
-          <tr><td class="rank">18</td><td>CornerCast outstream player as a product</td><td>CPM, take</td><td class="size">M</td><td><span class="tag matt">Matt</span> is it live?</td></tr>
-          <tr><td class="rank">19</td><td>Monthly HBDR Research data note</td><td>Publishers</td><td class="size">M</td><td><span class="tag matt">Matt</span> data access</td></tr>
-          <tr><td class="rank">20</td><td>WordPress plugin on WordPress.org</td><td>Publishers</td><td class="size">L</td><td>None</td></tr>
+          <tr class="bet"><td colspan="5">A · Take the auction on sites HBDR already sells</td></tr>
+          <tr><td class="rank">A1</td><td>Primary-partner offer to the top 20 existing publishers</td><td>Requests, take</td><td class="size">M</td><td><span class="tag matt">Matt</span> 20 accounts with a live contact</td></tr>
+          <tr><td class="rank">A2</td><td>Clean the supply path buyers check</td><td>CPM, fill</td><td class="size">S</td><td><span class="tag matt">Matt</span> 41 seller ID picks; built in #34</td></tr>
+          <tr class="bet"><td colspan="5">B · A competitor map that feeds sales</td></tr>
+          <tr><td class="rank">B1</td><td>Map every site each competitor manages in eight markets</td><td>Publishers</td><td class="size">M</td><td>None</td></tr>
+          <tr><td class="rank">B2</td><td>Prove-it trial: a share of traffic, measured, no contract</td><td>Publishers</td><td class="size">S</td><td><span class="tag matt">Matt</span> trial share and length</td></tr>
+          <tr><td class="rank">B3</td><td>Win back the 47,000 past sites</td><td>Publishers</td><td class="size">S</td><td><span class="tag matt">Matt</span> OK to read the old site list</td></tr>
+          <tr><td class="rank">B4</td><td>Quarterly "Prebid in Asia" report from the map</td><td>Publishers</td><td class="size">S</td><td>B1 first</td></tr>
+          <tr class="bet"><td colspan="5">C · Demand the other resellers do not bring</td></tr>
+          <tr><td class="rank">C1</td><td>CTV charter publishers from the streaming apps HBDR already sells</td><td>Publishers, CPM</td><td class="size">M</td><td><span class="tag matt">Matt</span> which apps have a warm contact</td></tr>
+          <tr><td class="rank">C2</td><td>Curated deals: Asian news by market, topic and event</td><td>CPM, take</td><td class="size">L</td><td><span class="tag matt">Matt</span> DSP seats; publisher OK to be named</td></tr>
+          <tr><td class="rank">C3</td><td>Article topic labels in the bid request, if news bids less</td><td>Fill, CPM</td><td class="size">M</td><td>Measure first</td></tr>
+          <tr class="bet"><td colspan="5">D · Terms that win switches</td></tr>
+          <tr><td class="rank">D1</td><td>Faster payment for a fee</td><td>Publishers, take</td><td class="size">S</td><td><span class="tag matt">Matt</span> yes, rate, cash</td></tr>
+          <tr><td class="rank">D2</td><td>Publish the supply path on hbdr.com once A2 is done</td><td>CPM</td><td class="size">S</td><td>A2 first</td></tr>
         </tbody>
       </table>
     </div>
@@ -179,83 +229,80 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
 
   <section style="display:grid;gap:4px">
     <div class="head" style="margin-bottom:8px">
-      <div><span class="eyebrow">Detail</span><h2>What each one changes, and the proof behind it</h2></div>
-      <p>Nothing here gets built without your yes. Each idea names what it reads and writes, so you can judge the cost.</p>
+      <div><span class="eyebrow">Detail</span><h2>What each move does, what it uses, and the proof</h2></div>
+      <p>Nothing here gets built without your yes. Each move names the existing code it reuses, so you can see what is new.</p>
     </div>
 
-    <div class="group">Stop the leaks</div>
+    <div class="group"><span class="k">Bet A · Take the auction on sites HBDR already sells</span><p>Answers fact 2. A reseller line gets whatever is left after the site's main partner. The company that runs the wrapper sets the auction and the floors.</p></div>
     <ul class="items">
-      <li><span class="n">01</span><h3>Fix the 55 broken HeaderBiddr ads.txt lines</h3><div class="body">
-        <p>Send each of the 55 publishers the exact line with their own seller_id. Buyers that cross-check ads.txt against sellers.json can treat a mismatched line as unauthorized and skip the bid.</p>
-        <div class="facts"><span class="tag">Reads: publisher ads.txt files</span><span class="tag">Writes: nothing on our side</span></div>
-        <p class="ev">Evidence: audit above; 33 lines point to another publisher's ID, 22 to IDs missing from sellers.json.</p></div></li>
-      <li><span class="n">02</span><h3>Make sellers.json valid: one entity per seller_id</h3><div class="body">
-        <p>headerbiddr.com/sellers.json has 325 rows but only 225 distinct seller_ids. 41 ids repeat, and 14 of them name different companies under one id. The spec calls that invalid. Pick one entity per id, give the others new ids, and retire sellers that are gone (85 publishers returned no readable ads.txt). The new /admin/supply page does all of this and keeps the history.</p>
-        <div class="facts"><span class="tag">Writes: sellers table (new ids, retired_at)</span><span class="tag matt">Matt: one entity per id</span></div>
-        <p class="ev">Evidence: jq over the fetched file (325 rows, 225 ids; repeated across companies: 120 127 136 157 170 173 179 181 186 207 217 223 224 234). Spec: "It is invalid for a seller_id to represent multiple entities." The seed in seed/supply-sellers-from-headerbiddr-2026-10-23.sql lists every repeated row.</p></div></li>
-      <li><span class="n">03</span><h3>Measure the lead funnel before changing it</h3><div class="body">
-        <p>Count leads per month, split by contact form and support form, plus top referrers from Cloudflare Web Analytics. Every conversion idea below is judged against this number.</p>
-        <div class="facts"><span class="tag">Reads: contact_leads, one grouped count</span></div>
-        <p class="ev">Blocked tonight: the Cloudflare connector was not connected, so I could not run it. The command for you is in HANDOFF-008.</p></div></li>
-      <li><span class="n">04</span><h3>Prove every "Available now" feature</h3><div class="body">
-        <p>Name one live publisher for each of the ten features listed as available. CTV SSAI is listed before launch by your decision (D-033); this list is how we know when that changes. It also feeds the case studies in 13.</p>
-        <p class="ev">Evidence: D-031, D-033; server/templates/components/features.ts.</p></div></li>
+      <li><span class="n">A1</span><h3>Primary-partner offer to the top 20 existing publishers</h3><div class="body">
+        <p>Offer each publisher HBDR's Prebid.js wrapper and managed Prebid Server on a share of their traffic. HBDR measures revenue per thousand pageviews against their current setup. If HBDR wins, it takes more traffic and becomes the main partner, not one line in seventy.</p>
+        <p>Start with sites where HBDR already has a line and a relationship: the 69 sites with a HeaderBiddr Google line are the pool.</p>
+        <div class="facts"><span class="tag">Reuses: wrapper A/B split (packages/edge/src/delivery/lib/ab-test.ts)</span><span class="tag">Reuses: floor rules (packages/console/src/routes/config/floors.tsx)</span></div>
+        <p class="ev">Evidence: fact 2. D-029 row 2: HBDR offers Manage Inventory as well as Manage Account.</p></div></li>
+      <li><span class="n">A2</span><h3>Clean the supply path buyers check</h3><div class="body">
+        <p>Give each of the 41 repeated seller IDs to one company, give the others new IDs, and send the 55 publishers with broken lines their correct line. Until this is done, a buyer that follows The Trade Desk's rules can mark HBDR's path as invalid, and every other move earns less.</p>
+        <div class="facts"><span class="tag">Built: /admin/supply in PR #34</span><span class="tag">Writes: supply_sellers, supply_changes</span></div>
+        <p class="ev">Evidence: fact 3; docs/research/ads-txt-audit-2026-10-23.md.</p></div></li>
     </ul>
 
-    <div class="group">Ship what buyers check</div>
+    <div class="group"><span class="k">Bet B · A competitor map that feeds sales</span><p>Answers facts 1 and 2. The same lookup that showed who sits beside HBDR works on any site in Asia.</p></div>
     <ul class="items">
-      <li><span class="n">05</span><h3>Ship Confiant or IAS through Prebid</h3><div class="body">
-        <p>This answers your question on getting verification live faster. Confiant and IAS both have Prebid.js real-time data modules; DoubleVerify has none. The fastest path is a module in the wrapper's Prebid build, not custom code.</p>
-        <ol class="steps"><li>Sign with one vendor and get its account ID.</li><li>Add <span class="mono">confiantRtdProvider</span> or <span class="mono">iasRtdProvider</span> to the Prebid build in HBDR-prebid-wrapper.</li><li>Turn it on for one publisher and compare revenue with an A/B split for a week.</li><li>Roll it out and move the item to "Available now".</li></ol>
-        <p class="ev">Evidence: docs.prebid.org module pages (Confiant and IAS return 200; DoubleVerify 404), fetched 2026-10-24. hbdr-api/…/creative/quality/confiant.ts is a stub waiting on "vendor onboarding". The vendored prebid.js has neither module.</p></div></li>
-      <li><span class="n">10</span><h3>Switch the seller domain to hbdr.com</h3><div class="body">
-        <p>Run hbdr.com/sellers.json beside headerbiddr.com/sellers.json, compare them, then redirect the old file and change the domain in publisher lines. Do 01 first, so publishers get one corrected line, not two changes.</p>
-        <p class="ev">Evidence: D-031; doctrine 7 (build, run beside, delete).</p></div></li>
-      <li><span class="n">11</span><h3>Supply transparency page</h3><div class="body">
-        <p>One public page with links to sellers.json and ads.txt, the lines a publisher adds, and the demand source count. It reads the same table as /sellers.json, so it cannot drift.</p></div></li>
+      <li><span class="n">B1</span><h3>Map every site each competitor manages in eight markets</h3><div class="body">
+        <p>Take the top sites by traffic in India, Indonesia, Vietnam, Thailand, Taiwan, Malaysia, the Philippines and Turkey. Read each site's ads.txt and name every Google reseller through Google's sellers.json. Load the home page once and record whether it runs Prebid.js and which bidders it calls.</p>
+        <p>The result is a sales list: every site that Adpushup, Datawrkz, Streamlyn, Mediology and the others manage, sized by traffic, with what the site runs today.</p>
+        <div class="facts"><span class="tag">Reads: public ads.txt, Google sellers.json, CrUX country rank lists</span><span class="tag">Cost: one fetch per site per run</span><span class="tag">Runs on request; no schedule</span></div>
+        <p class="ev">Evidence: the method in fact 2 resolved 74% of 8,942 lines on HBDR's own sites. Tested 2026-10-25.</p></div></li>
+      <li><span class="n">B2</span><h3>Prove-it trial: a share of traffic, measured, no contract</h3><div class="body">
+        <p>Offer every site from B1 the same test as A1: HBDR runs a share of traffic for a set number of days, and the publisher sees the split result. The share and the length are operator settings that you set, not values in code.</p>
+        <p class="ev">Evidence: D-029 row 4 (no setup fee, no lock-in); doctrine 14 (settings are operator controls).</p></div></li>
+      <li><span class="n">B3</span><h3>Win back the 47,000 past sites</h3><div class="body">
+        <p>HBDR has worked with 47,000+ sites and 173 domains remain in sellers.json. Run B1's lookup over the old list. Keep sites that are still live and above 500,000 monthly pageviews, and show who manages each one now.</p>
+        <div class="facts"><span class="tag">Reads: the legacy site list (hbdrmcm MySQL)</span></div>
+        <p class="ev">Evidence: D-027 row 1 (47,000+ sites), row 4 (500,000+ pageviews minimum).</p></div></li>
+      <li><span class="n">B4</span><h3>Quarterly "Prebid in Asia" report from the map</h3><div class="body">
+        <p>Publish B1's totals by country: share of sites on Prebid.js, the most common bidders, identity modules, and the number of resellers per site. Only HBDR has this table for these markets. It goes out as a Press post and gives sales a reason to call.</p>
+        <p class="ev">Evidence: /press lists Press-category posts (D-031). Public data only, so no publisher permission is needed.</p></div></li>
     </ul>
 
-    <div class="group">Turn visitors into qualified leads</div>
+    <div class="group"><span class="k">Bet C · Demand the other resellers do not bring</span><p>Answers fact 3. A buyer keeps a path that brings something unique. Video and packaged deals are what HBDR can bring.</p></div>
     <ul class="items">
-      <li><span class="n">06</span><h3>"Email me this estimate" on the calculators</h3><div class="body">
-        <p>The /tools calculators already ask for pageviews, CPM and fill. One button sends the visitor's inputs into the existing contact form, so the lead arrives with its numbers.</p>
-        <div class="facts"><span class="tag">Writes: contact_leads (existing table)</span></div></div></li>
-      <li><span class="n">07</span><h3>Waitlists for every "Coming soon" item</h3><div class="body">
-        <p>Add a custom form field, "Interested in: ad verification / WordPress plugin", from /admin/form. No code change. It tells you which roadmap item has paying demand before you build it.</p>
-        <p class="ev">Evidence: D-016 allows up to 20 custom fields from /admin/form.</p></div></li>
-      <li><span class="n">08</span><h3>Booking link for qualified leads</h3><div class="body">
-        <p>When a lead reports 500,000+ monthly pageviews, the thank-you message shows your booking link. The link is an operator setting, not a constant.</p>
-        <p class="ev">Evidence: D-027 minimum traffic; doctrine 14.</p></div></li>
-      <li><span class="n">09</span><h3>Free ads.txt checker on /tools</h3><div class="body">
-        <p>A publisher enters a domain; the Worker fetches its ads.txt once and shows missing or wrong lines against HBDR's table. It is a lead magnet and the same tool fixes 01 at scale.</p>
-        <div class="facts"><span class="tag">Cost: one outbound fetch per check</span><span class="tag">Rate limited per IP</span></div></div></li>
-      <li><span class="n">15</span><h3>Self-serve site revenue check</h3><div class="body">
-        <p>Extend 09: detect Prebid.js and its version, Google Publisher Tag, the CMP and Core Web Vitals field data, then offer the call. Bigger build; do it after 09 shows demand.</p></div></li>
-      <li><span class="n">16</span><h3>Referral program</h3><div class="body">
-        <p>The live MCM dashboard already has a Referrer role. A /partners referral section and a rate you set would make that public.</p>
-        <p class="ev">Evidence: ~/code/hbdr-suite/ECOSYSTEM.md:16 (Admin/Publisher/Referrer roles).</p></div></li>
-      <li><span class="n">17</span><h3>Advertiser deal desk</h3><div class="body">
-        <p>HBDR can access PMP and PG deals but has none live (D-029). A form field for vertical, geography and budget collects buyer demand to take to DSPs.</p></div></li>
+      <li><span class="n">C1</span><h3>CTV charter publishers from the streaming apps HBDR already sells</h3><div class="body">
+        <p>The CTV plan starts with cold outreach. ZEE5, Vidio, Sun NXT, MX Player and ShareChat already work with HBDR. Offer them the VAST tag first: no SDK, and it works in any player that accepts a tag URL.</p>
+        <p>One code gap blocks billing: the CTV event recorder is still a placeholder, so there are no numbers to invoice yet.</p>
+        <div class="facts"><span class="tag">Reuses: hbdr-ctv /vast/tag, 8 SSP adapters</span><span class="tag">Blocker: analytics.recordEvent placeholder</span></div>
+        <p class="ev">Evidence: fact 1; ~/code/hbdr-ctv/docs/MONETIZATION-PLAN.md §0 and Phase 0. D-033: CTV SSAI is shown as live before launch, so this also makes that claim true.</p></div></li>
+      <li><span class="n">C2</span><h3>Curated deals: Asian news by market, topic and event</h3><div class="body">
+        <p>Package impressions across HBDR's publishers into deal IDs that DSPs and agency desks buy directly. Examples: Indian cricket during the IPL, Southeast Asia elections, Diwali, Ramadan, Lunar New Year. A deal carries a higher CPM than the open auction, and HBDR sets the deal price.</p>
+        <p>hbdr.com gets one buyer page listing markets, formats and monthly volume. A publisher is named there only with their written OK.</p>
+        <div class="facts"><span class="tag">Reuses: prebid-server internal/deals (manager.go)</span><span class="tag">Today: no deals live (D-029 row 9)</span></div>
+        <p class="ev">Evidence: fact 3 (buyers favor curated routes); D-029 row 9 (HBDR can access PMP and PG deals).</p></div></li>
+      <li><span class="n">C3</span><h3>Article topic labels in the bid request, if news bids less</h3><div class="body">
+        <p>First, measure: compare bid rate and CPM on hard-news pages with other pages on the same sites. If news earns clearly less, label each article with its IAB content category and send it in the bid request, so buyers can target topics instead of blocking keywords. The labels also feed C2.</p>
+        <p>This is a test of an idea, not a fact. If the gap is small, stop after the measurement.</p>
+        <div class="facts"><span class="tag">Reads: ClickHouse bid_events</span></div></div></li>
     </ul>
 
-    <div class="group">Show the technology</div>
+    <div class="group"><span class="k">Bet D · Terms that win switches</span><p>Business terms. Little or no code.</p></div>
     <ul class="items">
-      <li><span class="n">12</span><h3>/technology page with the real stack</h3><div class="body">
-        <p>One diagram of the Prebid.js wrapper, Prebid Server, edge delivery, identity modules, floors, A/B tests and hourly reporting, drawn from what the repos contain.</p>
-        <p class="ev">Evidence: ~/code/hbdr-suite/ECOSYSTEM.md (wrapper phases 1–8 complete; Prebid Server phases 1–6 complete).</p></div></li>
-      <li><span class="n">13</span><h3>Three real case studies</h3><div class="body">
-        <p>Three publishers who agree to be named, measured with the split test the site already recommends. Real results replace the testimonials D-021 keeps off the site.</p></div></li>
-      <li><span class="n">14</span><h3>First real press releases</h3><div class="body">
-        <p>Candidates: passing 1 trillion ads served (2025), hbdr.com sellers.json going live, the CTV launch. Each one is a blog post in the Press category and shows on /press automatically.</p>
-        <p class="ev">Evidence: D-030, D-031; /press lists Press posts as of this branch.</p></div></li>
-      <li><span class="n">18</span><h3>CornerCast outstream player as a product</h3><div class="body">
-        <p>A one-line outstream video player using the IMA SDK. A demo page with a test VAST ad would show it working. It is not in the D-031 list, so first tell me whether publishers run it today.</p>
-        <p class="ev">Evidence: ~/code/hbdr-cornercast spec (V6.1.7).</p></div></li>
-      <li><span class="n">19</span><h3>Monthly HBDR Research data note</h3><div class="body">
-        <p>Aggregate figures only HBDR has: median timeout, bidder response time, share of server-side bids. Real data gives the blog a reason to exist. D-006 rules apply: real, dated figures only.</p></div></li>
-      <li><span class="n">20</span><h3>WordPress plugin on WordPress.org</h3><div class="body">
-        <p>The plugin covers placements, ads.txt and onboarding; phases 8–10 (diagnostics, accessibility and i18n, submission) remain. A WordPress.org listing is a free distribution channel.</p>
-        <p class="ev">Evidence: ~/code/hbdr-suite/ECOSYSTEM.md:23.</p></div></li>
+      <li><span class="n">D1</span><h3>Faster payment for a fee</h3><div class="body">
+        <p>Non-Google revenue pays Net 60 today. Offer Net 15 for a fee. For a mid-size publisher, cash in hand sooner is a reason to switch that the resellers in fact 2 do not offer. This needs cash to cover the gap, so it is your call before any work.</p>
+        <p class="ev">Evidence: D-029 row 4 (Net 30 Google, Net 60 other sources).</p></div></li>
+      <li><span class="n">D2</span><h3>Publish the supply path on hbdr.com once A2 is done</h3><div class="body">
+        <p>A public page with HBDR's sellers.json, ads.txt lines and the line each publisher adds, read from the same table as /sellers.json. Buyers and publishers can check the path in one place.</p>
+        <p class="ev">Evidence: D-031, D-034; /sellers.json and /ads.txt built in PR #34.</p></div></li>
+    </ul>
+  </section>
+
+  <section style="display:grid;gap:20px">
+    <div class="head">
+      <div><span class="eyebrow">Left out</span><h2>Ideas I checked and dropped</h2></div>
+      <p>Each one fails on a number or on a missing piece.</p>
+    </div>
+    <ul class="rejected">
+      <li><h3>Charge AI crawlers for publishers' pages</h3><p>An April 2026 analysis of Cloudflare's pay per crawl put revenue at tens to low hundreds of dollars a month for a site with 1 million pageviews. In July 2026 Cloudflare moved to an experimental pay-per-use model. Too small to move HBDR's revenue.</p></li>
+      <li><h3>Sell HBDR's stack to other networks under their brand</h3><p>Prebid Server phases 7–9 (multi-region, production hardening) are not done (~/code/hbdr-suite/ECOSYSTEM.md). Look again after that.</p></li>
+      <li><h3>Version 1's site tweaks</h3><p>The calculator email, waitlist field, booking link, referral page and /technology page stay as small tasks. None of them changes a term of the revenue line alone.</p></li>
     </ul>
   </section>
 
@@ -263,12 +310,28 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
     <div><span class="eyebrow">Your call</span><h2>What I need from you</h2></div>
     <div>
       <ol class="steps">
-        <li>Pick the first five to build. I recommend 01, 02, 06, 07 and 09: they fix measured leaks or reuse what exists.</li>
-        <li>Approve contacting the 55 publishers in 01, or tell me who sends it.</li>
-        <li>Say which verification vendor you are closest to signing (05).</li>
-        <li>Tell me whether CornerCast runs for publishers today (18).</li>
+        <li>Say yes or no to the direction: HBDR runs the auction, not a reseller line.</li>
+        <li>Recommended order: A2 (built, waits on your 41 picks), then B1 (one week), then A1 and B2 on the first targets. Run C1 in parallel because the CTV launch is close.</li>
+        <li>Name the 20 accounts for A1 that have a live contact.</li>
+        <li>Name the streaming apps for C1 that have a warm contact.</li>
+        <li>Set the B2 trial share of traffic and its length.</li>
+        <li>Say if I may read the old site list for B3, and where it lives.</li>
+        <li>Say yes or no to D1, and the fee.</li>
       </ol>
     </div>
+  </section>
+
+  <section style="display:grid;gap:12px">
+    <span class="eyebrow">Sources</span>
+    <ol class="sources">
+      <li>Google sellers.json: https://realtimebidding.google.com/sellers.json (fetched 2026-10-25)</li>
+      <li>HeaderBiddr sellers.json and publisher ads.txt: docs/research/ads-txt-audit-2026-10-23.md; publisher ads.txt fetched again 2026-10-25</li>
+      <li>The Trade Desk, OpenPath inventory best practices: https://partner.thetradedesk.com/v3/portal/openpath/doc/InventoryOpenPath</li>
+      <li>Digiday, The Trade Desk's redefinition of supply paths: https://digiday.com/marketing/the-trade-desks-redefinition-of-supply-paths-ripples-across-ad-tech/</li>
+      <li>Cloudflare, Introducing pay per crawl: https://blog.cloudflare.com/introducing-pay-per-crawl/</li>
+      <li>Pay-per-crawl revenue figures: https://presenc.ai/research/cloudflare-pay-per-crawl-state-2026 and https://ppc.land/cloudflare-stops-charging-ai-per-crawl-and-starts-paying-per-answer/</li>
+      <li>HBDR facts: docs/DECISIONS.md D-027, D-029, D-031, D-033; ~/code/hbdr-ctv/docs/MONETIZATION-PLAN.md</li>
+    </ol>
   </section>
 
 </div>
