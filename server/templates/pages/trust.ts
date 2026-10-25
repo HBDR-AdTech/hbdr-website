@@ -5,18 +5,16 @@ import { renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection } f
 
 export function renderTrustCompliancePage(): string {
   const supplyChainCards = [
-    { title: "ads.txt Management", desc: "Every publisher in our network maintains an up-to-date ads.txt file listing HBDR as an authorized seller. We proactively monitor and manage ads.txt entries to prevent unauthorized inventory reselling and ensure buyers always know they're purchasing legitimate inventory." },
-    { title: "sellers.json Compliance", desc: "HBDR maintains a complete and transparent sellers.json file, providing buyers with full visibility into who is selling inventory on our platform. Every publisher relationship is documented and verifiable." },
+    { title: "ads.txt Management", desc: "Each publisher gets the exact ads.txt lines to add for HBDR and its demand partners. Buyers check each line against the seller's sellers.json entry, so the account ID in the line must match the seller ID exactly." },
+    { title: "sellers.json Compliance", desc: "HBDR publishes a sellers.json file that lists each publisher it sells for, with its seller ID, name, domain and seller type, so a buyer can see who is selling the impression." },
     { title: "app-ads.txt for Mobile", desc: "For our in-app publishers, we implement and maintain app-ads.txt to authorize legitimate ad sources and prevent mobile ad fraud across our app inventory." },
     { title: "SupplyChain Object (schain)", desc: "We pass complete supply chain objects in every bid request, giving DSPs and advertisers full transparency into every node in the supply path from publisher to buyer." },
   ];
 
   const antiFraudCards = [
-    { title: "Invalid Traffic (IVT) Detection", desc: "We use multiple layers of fraud detection including pre-bid filtering, real-time monitoring, and post-bid analysis to identify and block bot traffic, click fraud, and other forms of invalid traffic." },
-    { title: "Confiant Integration", desc: "Real-time creative security scanning that detects and blocks malicious ads, forced redirects, and cryptomining scripts before they reach users." },
-    { title: "AdLightning Protection", desc: "Automated malvertising protection that scans every creative for quality, security, and compliance violations in real time." },
-    { title: "TAG Anti-Fraud Certification", desc: "HBDR adheres to TAG's anti-fraud guidelines and participates in industry-wide efforts to combat ad fraud and protect advertiser spend." },
-    { title: "Traffic Quality Monitoring", desc: "Continuous monitoring of traffic patterns across all publisher properties to identify anomalies, suspicious spikes, and potential fraud indicators." },
+    { title: "Invalid Traffic (IVT) Filtering", desc: "Invalid traffic, such as bots, is detected and filtered so buyers do not pay for it." },
+    { title: "Traffic Quality Monitoring", desc: "Traffic patterns across publisher properties are watched for anomalies and sudden spikes." },
+    { title: "Ad Verification (coming soon)", desc: "Creative scanning and verification through Confiant, IAS or DoubleVerify is on the roadmap. It is not live today." },
   ];
 
   const privacyCards = [
@@ -25,31 +23,33 @@ export function renderTrustCompliancePage(): string {
     { title: "IAB TCF Integration", desc: "Integration with IAB Europe's Transparency and Consent Framework, ensuring proper consent signals are passed through the programmatic supply chain. TCF v2.3 is the current version: since 28 February 2026 every TC string must carry the Disclosed Vendors section." },
     { title: "CMP Integration", desc: "We work with leading Consent Management Platforms (OneTrust, Cookiebot, Didomi, etc.) to ensure publishers collect and manage user consent properly." },
     { title: "GPP Support", desc: "Support for IAB Tech Lab's Global Privacy Protocol (GPP), one string that carries the privacy signals of several jurisdictions: the US National section, US state sections, and the TCF for Europe and Canada." },
-    { title: "Data Minimization", desc: "We follow data minimization principles — we only collect and process data that is necessary for ad delivery and do not build user profiles or sell personal data." },
+    { title: "Data Minimization", desc: "We follow data minimization principles: we only collect and process data that is necessary for ad delivery." },
     { title: "US State Privacy Laws", desc: "Twenty US states have a comprehensive privacy law in effect in 2026. Indiana, Kentucky and Rhode Island joined on 1 January 2026. Google Ad Manager accepts only the GPP sections for US National, California, Colorado, Connecticut, Florida and Virginia. An opt-out of sale, sharing or targeted advertising in the US National section makes Google switch to restricted data processing." },
     { title: "COPPA", desc: "The FTC's amended COPPA Rule took effect on 23 June 2025, and operators had until 22 April 2026 to comply. A child-directed site or app now needs separate verifiable parental consent before it discloses a child's data to third parties such as ad networks. Bid requests for that inventory carry the OpenRTB flag regs.coppa = 1." },
   ];
 
-  const certifications = [
-    { title: "TAG Certified", desc: "Trustworthy Accountability Group certification across anti-fraud, brand safety, and anti-piracy programs" },
-    { title: "IAB Member", desc: "Active member of the Interactive Advertising Bureau, participating in industry standards development" },
-    { title: "IAB Tech Lab", desc: "Compliance with IAB Tech Lab specifications including OpenRTB, ads.txt, sellers.json, and prebid standards" },
-    { title: "Google Certified Publishing Partner (GCPP)", desc: "Certified by Google as a trusted partner for publisher monetization through Google Ad Manager and AdX" },
-    { title: "Prebid Member", desc: "Active participant in the Prebid.org community, contributing to open-source header bidding standards" },
-    { title: "Coalition for Better Ads", desc: "Adherence to the Coalition for Better Ads standards, ensuring ad formats meet user experience guidelines" },
+  // D-029: HBDR holds no certifications or memberships; list only standards it implements.
+  const standardsWeFollow = [
+    { title: "ads.txt and app-ads.txt (IAB Tech Lab)", desc: "Publishers list HBDR and its demand partners as authorized sellers, on the website or the app's developer site." },
+    { title: "sellers.json (IAB Tech Lab)", desc: "HBDR publishes each seller it represents, with seller ID, name, domain and seller type." },
+    { title: "SupplyChain object (IAB Tech Lab)", desc: "Bid requests carry each node on the supply path from the publisher to the buyer." },
+    { title: "OpenRTB (IAB Tech Lab)", desc: "Server-side bid requests use OpenRTB; child-directed inventory carries regs.coppa = 1." },
+    { title: "TCF v2.3 (IAB Europe)", desc: "The consent string from the publisher's CMP travels with each request for EEA, UK and Swiss traffic." },
+    { title: "GPP and Global Privacy Control", desc: "US state privacy signals travel with each request." },
+    { title: "Better Ads Standards (Coalition for Better Ads)", desc: "Ad layouts follow the Better Ads Standards, including the 30% ad density limit on mobile." },
   ];
 
   const capabilities = [
     { title: "Header Bidding", desc: "Client-side and server-side header bidding setup, optimization, and management using Prebid.js and server-to-server integrations" },
-    { title: "Google Ad Manager (GAM)", desc: "Complete GAM account setup, configuration, yield management, and ongoing ad operations" },
-    { title: "Programmatic Monetization", desc: "Open exchange, PMP, PG, and Preferred Deal management across all major SSPs and exchanges" },
+    { title: "Google Ad Manager (GAM)", desc: "GAM setup, yield management and ad operations. HBDR is a Google MCM partner: an MCM parent on Ad Manager 360 offering Manage Account and Manage Inventory" },
+    { title: "Programmatic Monetization", desc: "Open exchange demand from SSPs and DSPs in every geography, with the ability to access PMP and programmatic guaranteed deals" },
     { title: "Video Advertising", desc: "Instream, outstream, and OTT/CTV video monetization with our custom-built high-performance video player" },
     { title: "Display & Native", desc: "Standard display, rich media, and native ad format optimization for maximum RPMs" },
     { title: "In-App Monetization", desc: "Mobile app ad monetization across banner, interstitial, rewarded video, and native formats" },
     { title: "Identity Solutions", desc: "Implementation of UID2, LiveRamp, ID5, and other identity solutions for traffic with no third-party cookie: Safari and Firefox by default, and Chrome users who block them" },
-    { title: "Ad Quality & Safety", desc: "Malvertising protection, creative scanning, and brand safety controls across all inventory" },
+    { title: "Ad Quality & Safety", desc: "Invalid traffic filtering today; creative verification through Confiant, IAS or DoubleVerify is coming soon" },
     { title: "Consent Management", desc: "GDPR/CCPA/GPP compliant consent collection and signal propagation" },
-    { title: "Analytics & Reporting", desc: "Real-time revenue dashboard with granular breakdowns by every dimension" },
+    { title: "Analytics & Reporting", desc: "Hourly revenue and bidder reporting, with alerts and CSV exports" },
     { title: "Ad Layout Optimization", desc: "Data-driven ad placement and layout testing to maximize revenue without hurting UX" },
     { title: "Floor Price Management", desc: "Dynamic and rule-based floor pricing strategies to capture maximum value from every impression" },
   ];
@@ -156,15 +156,16 @@ export function renderTrustCompliancePage(): string {
       <p class="mt-8 mono text-[0.75rem] text-[var(--text-muted)]">Sources: IAB Europe, TCF v2.3; IAB Tech Lab, GPP and USPrivacy; Google Ad Manager Help, GPP; California Privacy Protection Agency FAQ; MultiState, Feb 2026; Federal Register, COPPA Rule, 22 Apr 2025; IAB Tech Lab, OpenRTB 2.6.</p>`,
   })}
   ${renderSection({
-    testid: "trust-certifications-section",
-    eyebrow: "Industry",
-    title: "Industry Partnerships & Certifications",
+    testid: "trust-standards-we-follow-section",
+    eyebrow: "Standards",
+    title: "Standards We Follow",
+    lede: "The industry standards HBDR implements in its own stack.",
     body: `
       <div class="bp-table-wrap">
         <table class="bp-table">
-          <thead><tr><th scope="col">Program</th><th scope="col">Scope</th></tr></thead>
-          <tbody>${certifications.map((c, i) => `
-            <tr data-testid="trust-cert-${i}"><td>${c.title}</td><td>${c.desc}</td></tr>`).join("")}
+          <thead><tr><th scope="col">Standard</th><th scope="col">How HBDR applies it</th></tr></thead>
+          <tbody>${standardsWeFollow.map((c, i) => `
+            <tr data-testid="trust-follow-${i}"><td>${c.title}</td><td>${c.desc}</td></tr>`).join("")}
           </tbody>
         </table>
       </div>`,
@@ -196,7 +197,7 @@ export function renderTrustCompliancePage(): string {
 
   return renderLayout({
     title: "Trust & Compliance - HBDR",
-    description: "HBDR's commitment to transparency, compliance, and trust in ad technology. Learn about our certifications, policies, and industry partnerships.",
+    description: "HBDR's commitment to transparency, compliance, and trust in ad technology. Learn about the standards we follow and how we handle supply chain, traffic quality and privacy.",
     canonicalPath: "/trust",
     bodyContent: content,
   });

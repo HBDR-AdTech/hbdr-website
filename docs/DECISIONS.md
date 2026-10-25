@@ -267,6 +267,11 @@ Rollback: revert the content PR; the sellers.json tables only add data and are n
 
 The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131**. The privacy policy, terms and cookie policy name it, and the terms keep **Florida law with venue in Miami (Miami-Dade County)**. The hbdr.com sellers.json `contact_address` uses the same text. The older headerbiddr.com/sellers.json says "HeaderBiddr a Division of Ortolani Enterprises Inc., 301 W Bay St Ste 14131, Jacksonville, FL 32202"; it is out of date.
 
+## D-033 — 2026-10-24 — Matt — MCM access confirmed; CTV SSAI shown as available before launch
+
+1. **MCM:** the hbdr-ctv docs call MCM "reinstatement" a launch gate (`~/code/hbdr-ctv/CLAUDE.md:6,128`). Matt: "we have access still, leave it." The site keeps "Google MCM partner, MCM parent on Ad Manager 360" (D-029 row 2).
+2. **CTV SSAI:** not live on 2026-10-24 (hbdr-ctv prod `ads.hbdr.io` serves nothing yet). Matt: "we are going live soon, keep it showing live on site." It stays in `FEATURES_NOW` (`server/templates/components/features.ts`) by Matt's direction, an exception to D-031's rule that only live items are listed as available. Review at each handoff; if launch slips, move it to `FEATURES_SOON`.
+
 ## D-034 — 2026-10-24 — Matt (D-029 row 3, D-031) — hbdr.com serves sellers.json and ads.txt from D1, managed at /admin/supply
 
 hbdr.com publishes `/sellers.json` (sellers.json 1.0) and `/ads.txt` (ads.txt 1.1). Both are built from D1 tables that `/admin/supply` writes (migration 0006, the D-016 pattern): Cloudflare Access, a same-origin Origin on mutations, Zod validation against the spec rules in `docs/research/ads-txt-sellers-json.md`, and one D1 batch per change with an append-only `supply_changes` row whose actor is the Access email. Rules:
@@ -278,3 +283,28 @@ hbdr.com publishes `/sellers.json` (sellers.json 1.0) and `/ads.txt` (ads.txt 1.
 6. The first load is `seed/supply-sellers-from-headerbiddr-2026-10-23.sql`, which Matt runs once on remote D1 after the migration deploys. headerbiddr.com/sellers.json has 325 rows but 225 distinct seller_ids: 41 ids repeat, and 14 of them name different companies. The seed loads the 184 ids that appear once; the 141 rows of the 41 repeated ids are listed, commented out, for Matt to choose one entity per id. headerbiddr.com/sellers.json stays as it is until the two files are compared (D-031, doctrine 7).
 7. Edits correct the same company's name or domain; a different company always gets a new seller_id, never an edited one (D-037). The admin page says so above the seller list.
 Rollback: revert the merge. Migration 0006 only adds tables; no existing path reads them, and `/sellers.json` and `/ads.txt` were 404 on hbdr.com before.
+
+## D-035 — 2026-10-24 — Matt (D-030 row 13, D-032) — The legal pages state only measured facts
+
+The privacy policy, terms and GDPR & cookie policy (`server/templates/pages/legal/`) describe what hbdr.com does, and `docs/research/legal.md` sources every fact (code `file:line`, a measured header, or a quoted URL). Measured 2026-10-23: public pages set no cookies (29 routes on dev and live, plus 92 live blog posts); the admin area sets Cloudflare Access's `CF_AppSession` (and `CF_Authorization` after sign-in); the site loads Google Fonts and jsDelivr on every page, cdnjs on the home page, and Turnstile only while an operator has it on. The entity is HeaderBiddr LLC (D-032); the terms use Florida law with venue in Miami-Dade County. Rules:
+1. A change that sets a cookie, adds a third-party script or tag, collects a new field or adds a processor updates these pages and `docs/research/legal.md` in the same PR.
+2. No DPO, EU/UK representative, certification or response-time promise appears until Matt decides it.
+3. `server/routes/__tests__/legal-pages.test.ts` fails if an unmeasured cookie, the February 2026 date or the DPO returns.
+The lead email no longer carries the submitter IP, so the code matches D-018 (D-036). Deletion requests are honored (D-036). Counsel reviews the pages when engaged.
+Supersedes: the February 2026 legal text.
+Rollback: revert the merge.
+
+## D-036 — 2026-10-25 — Matt — Phone number, IP out of the lead email, deletion on request, repeated seller_ids
+
+1. **Phone:** (786) 675-6080 is HBDR's phone number; /support and /press keep it.
+2. **IP in the lead email:** Matt: keep it unless it is a compliance issue. It is one: GDPR Art. 5(1)(c) requires data "limited to what is necessary in relation to the purposes for which they are processed ('data minimisation')" (gdpr-info.eu/art-5-gdpr, fetched 2026-10-25). The IP is kept in D1 for abuse review (D-018), so an inbox copy is not necessary, and every inbox copy would also need erasing under Art. 17. The notification email stops carrying the IP; D-018's "never sent in the lead email" stands and the code now matches it.
+3. **Deletion on request (exception to D-013):** a request from the person a lead belongs to is honored. Matt (or an operator) deletes that `contact_leads` row and the matching notification email, and keeps a note of the date and request with no personal data in it. Every other D-013 rule stands: nothing else deletes leads.
+4. **Repeated seller_ids:** Matt picks one entity per repeated id from /admin/supply (D-034 rule 6) and gives the other entities new ids.
+
+## D-037 — 2026-10-25 — Matt — Rewritten posts show their update date; Education category; blog fields escaped; seller edits
+
+1. **Updated date:** the five rewritten legacy posts (D-030 row 14) show an "Updated" date and a new sitemap lastmod. `seed/blog-legacy-rewrite-2026-10-24.sql` stamps `updated_at` when Matt runs it.
+2. **Category:** the old launch post (`/blog/hbdr-launches-server-side-bidding-platform`) now teaches client-side vs server-side bidding. It keeps its URL and moves from "Product Updates" to "Education".
+3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `\u003c`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
+4. **Seller edits (/admin/supply):** edits stay allowed, because a company can change its legal name or domain. A *different* company always gets a new seller_id, never an edited one (sellers.json 1.0: one seller_id, one entity). Every edit is in `supply_changes`.
+||||||| e4e860b

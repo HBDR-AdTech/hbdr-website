@@ -16,6 +16,15 @@ function mailer(send = vi.fn().mockResolvedValue({ messageId: "m1" })) {
 }
 
 describe("sendContactNotification", () => {
+  it("never puts the submitter's IP in the email (D-018, D-036)", async () => {
+    const m = mailer();
+    await sendContactNotification(m, lead);
+    const msg = m.send.mock.calls[0][0];
+    expect(msg.html).not.toContain("203.0.113.7");
+    expect(msg.html).not.toMatch(/IP Address/i);
+    expect(JSON.stringify(msg)).not.toContain("203.0.113.7");
+  });
+
   it("sends contact leads to contact@ with reply-to set to the submitter", async () => {
     const m = mailer();
     expect(await sendContactNotification(m, lead)).toBe(true);
