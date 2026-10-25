@@ -103,3 +103,11 @@ Visitors' browsers send their IP address and user agent to every host they downl
 ## Removed because nothing supports them
 
 Data Protection Officer, "respond within 30 days", "we honor Do Not Track", billing and payment information, ad performance and auction data, web beacons and pixel tags, SCCs and partner contracts, security audits and penetration testing, employee training, encryption at rest, 30-day notice of changes, account terms, 30-day termination and 60-day settlement, the 12-month fees liability cap, indemnification, and the phone number (786) 675-6080 (not in DECISIONS; the brief names contact@hbdr.com as the contact).
+
+## Corrections after review (2026-10-25)
+
+| Change | Evidence |
+|---|---|
+| `CF_AppSession` scope: set on an admin address, then sent with every hbdr.com request for 24 hours | The live `Set-Cookie` carries `Path=/` (row above, re-read by the reviewer on 2026-10-25) |
+| Removed "processed in the United States" for form data | No source shows the D1 database region; the page now names HBDR and the listed providers only |
+| Terms no longer say HeaderBiddr LLC owns the "HBDR name and logo" | No trademark record was checked. For counsel: confirm who owns the HBDR mark before the terms claim it |

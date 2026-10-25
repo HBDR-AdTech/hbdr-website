@@ -27,7 +27,7 @@ export function renderTermsPage(): string {
     {
       id: "intellectual-property", title: "Content and Trademarks", testid: "terms-section-ip",
       body: `
-        ${p(`The text, design, graphics and HBDR name and logo on this site belong to ${LEGAL_ENTITY} or to those who license them to us.`)}
+        ${p(`The text, design and graphics on this site belong to ${LEGAL_ENTITY} or to those who license them to us.`)}
         ${p(`You may read the site, link to it and share its pages. You may not copy, republish or sell its content as your own without our written permission.`)}
         ${p(`Other companies' names and logos on this site belong to their owners. They appear to identify the platforms and partners HBDR works with.`)}`,
     },

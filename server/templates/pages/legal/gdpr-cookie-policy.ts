@@ -8,7 +8,7 @@ export const MEASURED_COOKIES = [
   {
     name: "CF_AppSession",
     setBy: "Cloudflare Access",
-    where: "Admin addresses only (such as /admin), before sign-in",
+    where: "Set when you open an admin address (such as /admin); for 24 hours your browser then sends it with every request to hbdr.com",
     purpose: "Security token that protects the staff sign-in",
     duration: "24 hours",
   },
@@ -99,11 +99,11 @@ export function renderGdprCookiePolicyPage(): string {
           "Give you your data in a machine-readable format (portability).",
           "Stop using your data where we rely on legitimate interests (objection).",
         ])}
-        ${p(`Each right has limits set by the GDPR. To make a request, email ${mail("link-gdpr-dpo-email")}.`)}
+        ${p(`Each right has limits set by the GDPR. To make a request, email ${mail("link-gdpr-rights-email")}.`)}
         <h3>Complaints</h3>
         ${p(`You can complain to a data protection supervisory authority, in particular in the country where you live or work, or where you think the problem happened.`)}
         <h3>Transfers outside Europe</h3>
-        ${p(`${LEGAL_ENTITY} is based in the United States. Information you send through this site is processed in the United States, and by the service providers listed in the <a href="/privacy-policy#information-sharing-and-disclosure" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a> in the countries where they operate.`)}`,
+        ${p(`${LEGAL_ENTITY} is based in the United States. Information you send through this site is processed by HBDR and by the service providers listed in the <a href="/privacy-policy#information-sharing-and-disclosure" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a> in the countries where they operate.`)}`,
     },
     {
       id: "contact", title: "Contact", testid: "gdpr-section-contact",
