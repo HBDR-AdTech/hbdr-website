@@ -9,7 +9,8 @@ export const PRESS_CATEGORY = "Press";
 
 // Company figures come from D-005, D-027 and D-030 only; releases appear only once a real one is published
 export function renderPressPage(posts: BlogPostData[] = []): string {
-  const releases = posts.filter((p) => p.category === PRESS_CATEGORY);
+  // The admin category is free text, so "press" or " Press " still counts
+  const releases = posts.filter((p) => p.category.trim().toLowerCase() === PRESS_CATEGORY.toLowerCase());
   const content = `
   ${renderPageHero("Press", "Press & Media", "Company facts, a media contact and logo files for anyone writing about HBDR.")}
 

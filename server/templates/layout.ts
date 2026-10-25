@@ -70,7 +70,8 @@ function renderHead(options: LayoutOptions): string {
       "url": SITE_URL
     },
     ...(Array.isArray(options.jsonLd) ? options.jsonLd : options.jsonLd ? [options.jsonLd] : [])
-  ])}</script>
+  // "<" as \u003c keeps an admin-written title containing </script> inside the JSON
+  ]).replace(/</g, "\\u003c")}</script>
 </head>`;
 }
 
