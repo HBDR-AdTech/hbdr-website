@@ -273,6 +273,6 @@ The privacy policy, terms and GDPR & cookie policy (`server/templates/pages/lega
 1. A change that sets a cookie, adds a third-party script or tag, collects a new field or adds a processor updates these pages and `docs/research/legal.md` in the same PR.
 2. No DPO, EU/UK representative, certification or response-time promise appears until Matt decides it.
 3. `server/routes/__tests__/legal-pages.test.ts` fails if an unmeasured cookie, the February 2026 date or the DPO returns.
-Open for Matt: D-018 says the IP is "never sent in the lead email", but `server/services/email.ts:71-72` adds an "IP Address" row; the policy states what the code does until Matt decides which one changes. Counsel reviews the pages when engaged.
+The lead email no longer carries the submitter IP, so the code matches D-018 (D-036). Deletion requests are honored (D-036). Counsel reviews the pages when engaged.
 Supersedes: the February 2026 legal text.
 Rollback: revert the merge.
