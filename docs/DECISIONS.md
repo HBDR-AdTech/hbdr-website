@@ -278,3 +278,10 @@ The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33
 2. **IP in the lead email:** Matt: keep it unless it is a compliance issue. It is one: GDPR Art. 5(1)(c) requires data "limited to what is necessary in relation to the purposes for which they are processed ('data minimisation')" (gdpr-info.eu/art-5-gdpr, fetched 2026-10-25). The IP is kept in D1 for abuse review (D-018), so an inbox copy is not necessary, and every inbox copy would also need erasing under Art. 17. The notification email stops carrying the IP; D-018's "never sent in the lead email" stands and the code now matches it.
 3. **Deletion on request (exception to D-013):** a request from the person a lead belongs to is honored. Matt (or an operator) deletes that `contact_leads` row and the matching notification email, and keeps a note of the date and request with no personal data in it. Every other D-013 rule stands: nothing else deletes leads.
 4. **Repeated seller_ids:** Matt picks one entity per repeated id from /admin/supply (D-034 rule 6) and gives the other entities new ids.
+
+## D-037 — 2026-10-25 — Matt — Rewritten posts show their update date; Education category; blog fields escaped; seller edits
+
+1. **Updated date:** the five rewritten legacy posts (D-030 row 14) show an "Updated" date and a new sitemap lastmod. `seed/blog-legacy-rewrite-2026-10-24.sql` stamps `updated_at` when Matt runs it.
+2. **Category:** the old launch post (`/blog/hbdr-launches-server-side-bidding-platform`) now teaches client-side vs server-side bidding. It keeps its URL and moves from "Product Updates" to "Education".
+3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `<`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
+4. **Seller edits (/admin/supply):** edits stay allowed, because a company can change its legal name or domain. A *different* company always gets a new seller_id, never an edited one (sellers.json 1.0: one seller_id, one entity). Every edit is in `supply_changes`.
