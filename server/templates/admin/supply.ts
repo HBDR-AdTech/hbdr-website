@@ -118,7 +118,7 @@ export function renderSupplyPage(): string {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <div>
         <h1 class="text-3xl font-semibold text-white" data-testid="heading-supply">sellers.json and ads.txt</h1>
-        <p class="text-[var(--text-muted)] mt-1">What <a href="/sellers.json" class="text-[var(--accent)]">/sellers.json</a> and <a href="/ads.txt" class="text-[var(--accent)]">/ads.txt</a> publish. Sellers and lines are retired, never deleted. Every change is logged below.</p>
+        <p class="text-[var(--text-muted)] mt-1">What <a href="/sellers.json" class="text-[var(--accent)]">/sellers.json</a> and <a href="/ads.txt" class="text-[var(--accent)]">/ads.txt</a> publish. Sellers and lines are retired, never deleted. Edit a seller only to correct the same company's name or domain; a different company always gets a new seller ID. Every change is logged below.</p>
       </div>
 
       <div x-show="error" x-cloak x-text="error" role="alert" class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm" data-testid="text-supply-error"></div>

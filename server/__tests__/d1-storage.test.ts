@@ -128,6 +128,17 @@ describe("D1Storage sellers.json / ads.txt", () => {
     expect(await storage.getSupplySettings(["contact_email"])).toEqual({});
   });
 
+  it("keeps a seller edit or retirement and its audit row in one batch", async () => {
+    await storage.createSeller(seller("1"), "ops@hbdr.com");
+    await storage.createAdsTxtLine(line("1"), "ops@hbdr.com");
+    db.exec("ALTER TABLE supply_changes RENAME TO supply_changes_gone");
+    await expect(storage.updateSeller(seller("1", { name: "Renamed" }), seller("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.retireSeller(seller("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.retireAdsTxtLine(line("1"), "ops@hbdr.com")).rejects.toThrow();
+    expect({ ...(await storage.getSeller("1"))! }).toEqual(seller("1"));
+    expect(await storage.getActiveAdsTxtLines()).toHaveLength(1);
+  });
+
   it("stores lines and settings; reads only the named settings", async () => {
     await storage.createAdsTxtLine(line("2"), "ops@hbdr.com");
     await storage.createAdsTxtLine(line("1"), "ops@hbdr.com");
