@@ -283,5 +283,5 @@ The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33
 
 1. **Updated date:** the five rewritten legacy posts (D-030 row 14) show an "Updated" date and a new sitemap lastmod. `seed/blog-legacy-rewrite-2026-10-24.sql` stamps `updated_at` when Matt runs it.
 2. **Category:** the old launch post (`/blog/hbdr-launches-server-side-bidding-platform`) now teaches client-side vs server-side bidding. It keeps its URL and moves from "Product Updates" to "Education".
-3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `<`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
+3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `\u003c`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
 4. **Seller edits (/admin/supply):** edits stay allowed, because a company can change its legal name or domain. A *different* company always gets a new seller_id, never an edited one (sellers.json 1.0: one seller_id, one entity). Every edit is in `supply_changes`.
