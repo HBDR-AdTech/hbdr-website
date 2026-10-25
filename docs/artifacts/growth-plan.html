@@ -153,7 +153,7 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
         <thead><tr><th>#</th><th>Idea</th><th>Lever</th><th>Size</th><th>Needs</th></tr></thead>
         <tbody>
           <tr><td class="rank">01</td><td>Fix the 55 broken HeaderBiddr ads.txt lines</td><td>CPM, fill</td><td class="size">S</td><td><span class="tag matt">Matt</span> OK to contact publishers</td></tr>
-          <tr><td class="rank">02</td><td>Retire inactive sellers from sellers.json</td><td>CPM</td><td class="size">S</td><td><span class="tag matt">Matt</span> active publisher list</td></tr>
+          <tr><td class="rank">02</td><td>Make sellers.json valid: one entity per seller_id</td><td>CPM, trust</td><td class="size">S</td><td><span class="tag matt">Matt</span> pick 41 ids, active list</td></tr>
           <tr><td class="rank">03</td><td>Measure the lead funnel before changing it</td><td>Publishers</td><td class="size">S</td><td><span class="tag matt">Matt</span> run one query</td></tr>
           <tr><td class="rank">04</td><td>Prove every "Available now" feature</td><td>Trust</td><td class="size">S</td><td><span class="tag matt">Matt</span> one live publisher each</td></tr>
           <tr><td class="rank">05</td><td>Ship Confiant or IAS through Prebid</td><td>CPM, trust</td><td class="size">M</td><td><span class="tag matt">Matt</span> signed vendor contract</td></tr>
@@ -189,10 +189,10 @@ td.size { font-family: var(--font-mono); white-space: nowrap; }
         <p>Send each of the 55 publishers the exact line with their own seller_id. Buyers that cross-check ads.txt against sellers.json can treat a mismatched line as unauthorized and skip the bid.</p>
         <div class="facts"><span class="tag">Reads: publisher ads.txt files</span><span class="tag">Writes: nothing on our side</span></div>
         <p class="ev">Evidence: audit above; 33 lines point to another publisher's ID, 22 to IDs missing from sellers.json.</p></div></li>
-      <li><span class="n">02</span><h3>Retire inactive sellers from sellers.json</h3><div class="body">
-        <p>85 publishers returned no readable ads.txt. Some will be gone. A seller that no longer sells should be retired, which the new /admin/supply page does without deleting history.</p>
-        <div class="facts"><span class="tag">Writes: sellers table (retired_at)</span></div>
-        <p class="ev">Evidence: audit above; /admin/supply is being built on feat/supply-files.</p></div></li>
+      <li><span class="n">02</span><h3>Make sellers.json valid: one entity per seller_id</h3><div class="body">
+        <p>headerbiddr.com/sellers.json has 325 rows but only 225 distinct seller_ids. 41 ids repeat, and 14 of them name different companies under one id. The spec calls that invalid. Pick one entity per id, give the others new ids, and retire sellers that are gone (85 publishers returned no readable ads.txt). The new /admin/supply page does all of this and keeps the history.</p>
+        <div class="facts"><span class="tag">Writes: sellers table (new ids, retired_at)</span><span class="tag matt">Matt: one entity per id</span></div>
+        <p class="ev">Evidence: jq over the fetched file (325 rows, 225 ids; repeated across companies: 120 127 136 157 170 173 179 181 186 207 217 223 224 234). Spec: "It is invalid for a seller_id to represent multiple entities." The seed in seed/supply-sellers-from-headerbiddr-2026-10-23.sql lists every repeated row.</p></div></li>
       <li><span class="n">03</span><h3>Measure the lead funnel before changing it</h3><div class="body">
         <p>Count leads per month, split by contact form and support form, plus top referrers from Cloudflare Web Analytics. Every conversion idea below is judged against this number.</p>
         <div class="facts"><span class="tag">Reads: contact_leads, one grouped count</span></div>
