@@ -109,7 +109,7 @@ migrations/                  # D1 database schema (0001 init, 0002 rate limits, 
 8. **Migrations deploy with the code** -- CI applies `migrations/` to the remote D1 before `wrangler deploy` (D-010). Never ship code that needs a table without its migration file.
 9. **Lead capture never fails silently (D-011)** -- form failures return non-2xx and show the error; every queried table has a migration (`server/__tests__/schema.test.ts`); after any deploy touching the form or email path, submit once live and confirm it lands in contact@hbdr.com.
 10. **The contact form is operator config, cached 60s (D-016)** -- fields come from `DEFAULT_FORM_FIELDS` plus `form_field_overrides`/`form_settings`, cached per isolate for 60 seconds. An admin write clears its own isolate only, so other isolates show it within a minute. Tests that write overrides straight to storage must call `invalidateFormConfig()` first. Absent fields are accepted, blank required ones refused.
-11. **sellers.json and ads.txt are operator data, cached 60s (D-034)** -- `/admin/supply` is the only writer. Sellers and lines are retired, never deleted; a seller_id is never reused. hbdr.com's own `/ads.txt` is the "no ads" placeholder; partner lines are only for publishers (`getPublisherAdsTxtLines`). Tests that write supply rows straight to storage must call `invalidateSupply()` first.
+12. **sellers.json and ads.txt are operator data, cached 60s (D-034)** -- `/admin/supply` is the only writer. Sellers and lines are retired, never deleted; a seller_id is never reused. hbdr.com's own `/ads.txt` is the "no ads" placeholder; partner lines are only for publishers (`getPublisherAdsTxtLines`). Tests that write supply rows straight to storage must call `invalidateSupply()` first.
 
 ## Design System
 
