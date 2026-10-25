@@ -271,3 +271,10 @@ The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33
 
 1. **MCM:** the hbdr-ctv docs call MCM "reinstatement" a launch gate (`~/code/hbdr-ctv/CLAUDE.md:6,128`). Matt: "we have access still, leave it." The site keeps "Google MCM partner, MCM parent on Ad Manager 360" (D-029 row 2).
 2. **CTV SSAI:** not live on 2026-10-24 (hbdr-ctv prod `ads.hbdr.io` serves nothing yet). Matt: "we are going live soon, keep it showing live on site." It stays in `FEATURES_NOW` (`server/templates/components/features.ts`) by Matt's direction, an exception to D-031's rule that only live items are listed as available. Review at each handoff; if launch slips, move it to `FEATURES_SOON`.
+
+## D-036 — 2026-10-25 — Matt — Phone number, IP out of the lead email, deletion on request, repeated seller_ids
+
+1. **Phone:** (786) 675-6080 is HBDR's phone number; /support and /press keep it.
+2. **IP in the lead email:** Matt: keep it unless it is a compliance issue. It is one: GDPR Art. 5(1)(c) requires data "limited to what is necessary in relation to the purposes for which they are processed ('data minimisation')" (gdpr-info.eu/art-5-gdpr, fetched 2026-10-25). The IP is kept in D1 for abuse review (D-018), so an inbox copy is not necessary, and every inbox copy would also need erasing under Art. 17. The notification email stops carrying the IP; D-018's "never sent in the lead email" stands and the code now matches it.
+3. **Deletion on request (exception to D-013):** a request from the person a lead belongs to is honored. Matt (or an operator) deletes that `contact_leads` row and the matching notification email, and keeps a note of the date and request with no personal data in it. Every other D-013 rule stands: nothing else deletes leads.
+4. **Repeated seller_ids:** Matt picks one entity per repeated id from /admin/supply (D-034 rule 6) and gives the other entities new ids.
