@@ -266,3 +266,13 @@ Rollback: revert the content PR; the sellers.json tables only add data and are n
 ## D-032 — 2026-10-23 — Matt — Legal entity, address and venue
 
 The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131**. The privacy policy, terms and cookie policy name it, and the terms keep **Florida law with venue in Miami (Miami-Dade County)**. The hbdr.com sellers.json `contact_address` uses the same text. The older headerbiddr.com/sellers.json says "HeaderBiddr a Division of Ortolani Enterprises Inc., 301 W Bay St Ste 14131, Jacksonville, FL 32202"; it is out of date.
+
+## D-035 — 2026-10-24 — Matt (D-030 row 13, D-032) — The legal pages state only measured facts
+
+The privacy policy, terms and GDPR & cookie policy (`server/templates/pages/legal/`) describe what hbdr.com does, and `docs/research/legal.md` sources every fact (code `file:line`, a measured header, or a quoted URL). Measured 2026-10-23: public pages set no cookies (29 routes on dev and live, plus 92 live blog posts); the admin area sets Cloudflare Access's `CF_AppSession` (and `CF_Authorization` after sign-in); the site loads Google Fonts and jsDelivr on every page, cdnjs on the home page, and Turnstile only while an operator has it on. The entity is HeaderBiddr LLC (D-032); the terms use Florida law with venue in Miami-Dade County. Rules:
+1. A change that sets a cookie, adds a third-party script or tag, collects a new field or adds a processor updates these pages and `docs/research/legal.md` in the same PR.
+2. No DPO, EU/UK representative, certification or response-time promise appears until Matt decides it.
+3. `server/routes/__tests__/legal-pages.test.ts` fails if an unmeasured cookie, the February 2026 date or the DPO returns.
+Open for Matt: D-018 says the IP is "never sent in the lead email", but `server/services/email.ts:71-72` adds an "IP Address" row; the policy states what the code does until Matt decides which one changes. Counsel reviews the pages when engaged.
+Supersedes: the February 2026 legal text.
+Rollback: revert the merge.
