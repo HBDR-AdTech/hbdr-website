@@ -266,3 +266,8 @@ Rollback: revert the content PR; the sellers.json tables only add data and are n
 ## D-032 — 2026-10-23 — Matt — Legal entity, address and venue
 
 The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131**. The privacy policy, terms and cookie policy name it, and the terms keep **Florida law with venue in Miami (Miami-Dade County)**. The hbdr.com sellers.json `contact_address` uses the same text. The older headerbiddr.com/sellers.json says "HeaderBiddr a Division of Ortolani Enterprises Inc., 301 W Bay St Ste 14131, Jacksonville, FL 32202"; it is out of date.
+
+## D-033 — 2026-10-24 — Matt — MCM access confirmed; CTV SSAI shown as available before launch
+
+1. **MCM:** the hbdr-ctv docs call MCM "reinstatement" a launch gate (`~/code/hbdr-ctv/CLAUDE.md:6,128`). Matt: "we have access still, leave it." The site keeps "Google MCM partner, MCM parent on Ad Manager 360" (D-029 row 2).
+2. **CTV SSAI:** not live on 2026-10-24 (hbdr-ctv prod `ads.hbdr.io` serves nothing yet). Matt: "we are going live soon, keep it showing live on site." It stays in `FEATURES_NOW` (`server/templates/components/features.ts`) by Matt's direction, an exception to D-031's rule that only live items are listed as available. Review at each handoff; if launch slips, move it to `FEATURES_SOON`.
