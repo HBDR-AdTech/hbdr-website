@@ -32,11 +32,11 @@ const SERVICES = [
 ];
 
 const TOOLS = [
-  { title: "Real-time analytics platform", body: "HBDR's proprietary analytics dashboard gives our team (and you) real-time visibility into revenue, CPMs, fill rates, and bidder performance across every ad unit, geo, and device." },
-  { title: "ML-powered floor engine", body: "Our machine learning floor pricing engine analyzes billions of bid signals to set optimal floors per impression, adjusting dynamically for time of day, seasonality, user value, and market conditions." },
+  { title: "Hourly reporting", body: "HBDR's reporting gives our team (and you) hourly revenue and bidder performance, with alerts and CSV exports." },
+  { title: "Dynamic floor prices", body: "Floor prices set by a model for each impression or traffic segment, tested with A/B splits before they reach all your traffic." },
   { title: "Monitoring & alerts", body: "Automated checks raise alerts for fill rate drops, traffic anomalies, demand partner issues and policy flags. Our team acts on them Mon–Fri, 9am–6pm ET." },
   { title: "Automated A/B testing", body: "HBDR runs continuous multivariate tests on bidder configurations, timeout settings, ad layouts, and refresh strategies — compounding incremental gains into significant long-term revenue growth." },
-  { title: "Dedicated account manager", body: "Your dedicated HBDR account manager provides monthly performance reviews, recommendations and direct communication for any questions or requests, Mon–Fri, 9am–6pm ET." },
+  { title: "Dedicated account manager", body: "Your dedicated HBDR account manager provides performance reviews, recommendations and direct communication for any questions or requests, Mon–Fri, 9am–6pm ET." },
   { title: "Transparent reporting", body: "No black boxes. You get full access to your revenue data, see exactly how every demand source performs, and receive clear explanations for every optimization decision HBDR makes on your behalf." },
 ];
 

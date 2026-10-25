@@ -21,7 +21,7 @@ const FAQS = [
   { q: "Do I need to change my existing ad stack?", a: "No. HBDR works alongside your existing setup. We integrate with your current ad server and add our header bidding layer on top, complementing your existing demand sources while adding HBDR's 65+ demand sources to increase competition and revenue." },
   { q: "What's the minimum traffic requirement?", a: "We work with publishers starting at 500,000 monthly pageviews. This threshold ensures that our optimization algorithms have sufficient data to deliver meaningful revenue improvements. If you're below this threshold, reach out and we'll discuss options." },
   { q: "How is HBDR different from other solutions?", a: "Unlike traditional ad networks, HBDR uses real-time header bidding technology that creates true competition for every impression. Combined with dynamic floor prices, A/B testing, managed Prebid Server and a dedicated account manager, we help publishers increase revenue by up to 50%." },
-  { q: "What kind of support do you provide?", a: "Every publisher gets a dedicated account manager as the main point of contact. People answer Mon\u2013Fri, 9am\u20136pm ET; tickets and the knowledge base are open 24/7. You also get hourly reporting with alerts and CSV exports, and regular performance reviews." },
+  { q: "What kind of support do you provide?", a: "Every publisher gets a dedicated account manager as the main point of contact. People answer Mon\u2013Fri, 9am\u20136pm ET; tickets and the knowledge base are open 24/7. You also get hourly reporting with alerts and CSV exports, and performance reviews with your account manager." },
 ];
 
 // Questions a publisher can put to any header bidding vendor; outside facts are sourced in docs/research/how-it-works.md

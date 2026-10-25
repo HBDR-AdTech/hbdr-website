@@ -602,7 +602,7 @@ export function renderPublisherToolsPage(): string {
           { label: "Request a Free Audit", href: "/contact", primary: true, testid: "link-tools-contact" },
           { label: "Learn More for Publishers", href: "/publishers", testid: "link-tools-publishers" },
         ])}
-        <p class="calc-cta-note">No commitment required. Results typically delivered within 48 hours.</p>
+        <p class="calc-cta-note">No commitment required.</p>
       </div>
     </div>
   </section>`;

@@ -27,7 +27,7 @@ export function renderAdExchangePage(): string {
   ${renderBlueprintHero({
     eyebrow: "Solutions",
     title: "Google Ad Exchange (AdX)",
-    lede: "Access the world's largest programmatic exchange with premium demand, real-time auctions, and CPMs that outperform standard AdSense by 2-3x. HBDR is your gateway to Google AdX.",
+    lede: "Access Google Ad Exchange demand and its real-time auctions through HBDR, a Google MCM partner.",
     actions: [
       { label: "Get AdX Access", href: "/contact", primary: true, testid: "button-hero-cta" },
       { label: "Compare AdX and AdSense", href: "#compare", testid: "button-hero-learn" },
@@ -50,7 +50,7 @@ export function renderAdExchangePage(): string {
     testid: "adx-comparison-section",
     eyebrow: "AdX vs AdSense",
     title: "Why AdX outperforms AdSense.",
-    lede: "The key differences that drive 2-3x higher revenue for publishers.",
+    lede: "The key differences between Ad Exchange and AdSense for a publisher.",
     body: `
       <div class="bp-table-wrap" data-testid="adx-comparison-table">
         <table class="bp-table sg-table">
@@ -77,7 +77,7 @@ export function renderAdExchangePage(): string {
 
   return renderLayout({
     title: "Google Ad Exchange (AdX) - HBDR",
-    description: "Access Google Ad Exchange premium demand through HBDR. Real-time auctions, 2-3x higher CPMs than AdSense, and expert AdX management for publishers.",
+    description: "Access Google Ad Exchange demand through HBDR, a Google MCM partner: real-time auctions and AdX management for publishers.",
     canonicalPath: "/solutions/ad-exchange-adx",
     bodyContent: content,
   });

@@ -40,7 +40,7 @@ function renderAuctionDiagram(): string {
 }
 
 const FEATURES = [
-  { title: "Dynamic Floor Pricing", body: "AI-driven floor prices that adapt in real time to market conditions, bid density, and historical performance to maximize CPMs." },
+  { title: "Dynamic Floor Pricing", body: "Floor prices set by a model for each impression or traffic segment." },
   { title: "Auto-Refresh Optimization", body: "Intelligent ad refresh cycles that maximize viewable impressions without sacrificing user experience or violating demand partner policies." },
   { title: "Granular Analytics", body: "Bid-level reporting across every demand partner, ad unit, device, and geography with hourly reporting and automated alerts." },
   { title: "A/B Testing Engine", body: "Run controlled experiments on bidder configurations, timeout settings, and floor prices with statistical significance tracking." },
@@ -87,7 +87,7 @@ export function renderHeaderBiddingPage(): string {
     lede: "We deploy a hybrid architecture that combines the transparency of client-side auctions with the speed and scale of server-to-server connections.",
     body: renderFeatureRows([
       { title: "Client-Side (Prebid.js)", body: "Our optimized Prebid.js wrapper runs directly in the browser, enabling full auction transparency. We configure bid adapters for each demand partner, implement smart timeout management, and utilize price granularity settings tailored to your inventory. Cookie-based targeting works only where browsers allow it: Chrome still offers third-party cookies, while Safari blocks them all by default, so Prebid's User ID modules and first-party data carry targeting there.",
-        list: ["Full bid-level reporting and transparency", "Cookie-based audience targeting support", "Real-time bid debugging and analytics"], testid: "card-client-side" },
+        list: ["Full bid-level reporting and transparency", "Cookie-based audience targeting support", "Bid-level debugging in the browser"], testid: "card-client-side" },
       { title: "Server-Side (Prebid Server)", body: "Our Prebid Server infrastructure handles high-volume server-to-server connections and moves bidder work off the page. This enables more demand partners to participate without impacting user experience or Core Web Vitals scores. Server-side bidders recognise users through cookie syncing or IDs passed from the page, and the server call still has to return inside the page's auction timeout.",
         list: ["One browser request for every server-side bidder", "More demand partners without more browser requests", "Bidder code runs on the server, not the page"], testid: "card-server-side" },
     ]),

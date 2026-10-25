@@ -13,7 +13,7 @@ const DIMENSIONS = [
 ];
 
 const VIEWS = [
-  { testid: "card-adx-revenue", title: "AdX Revenue & Performance", description: "Google Ad Exchange metrics including CPMs, fill rates, revenue, and impression-level data. Track your AdX performance in real time with full transparency into auction dynamics." },
+  { testid: "card-adx-revenue", title: "AdX Revenue & Performance", description: "Google Ad Exchange metrics including CPMs, fill rates, revenue, and impression-level data. Track your AdX performance hour by hour." },
   { testid: "card-adserver-revenue", title: "Ad Server Revenue & Performance", description: "Overall ad server (GAM) metrics and delivery data. Monitor line item pacing, total impressions served, and overall ad server revenue across all demand channels." },
   { testid: "card-ssp-revenue", title: "SSP Performance", description: "Individual SSP and demand partner performance comparison. Evaluate bid rates, win rates, CPMs, and revenue contribution from each partner to optimize your demand stack." },
 ];
@@ -75,7 +75,7 @@ export function renderDashboardPage(): string {
       </div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 grid gap-5 text-[1.0625rem] leading-relaxed text-[var(--text-muted)]">
         <p>HBDR's proprietary analytics dashboard is a comprehensive data suite that gives publishers complete visibility into their ad performance. From hourly revenue tracking to breakdowns by geography, device, and demand source, every metric you need is at your fingertips.</p>
-        <p>The dashboard is fully web-based, updates in real time, and is accessible from anywhere. Whether you manage a single site or a portfolio of properties, our command center consolidates all your data into one powerful interface.</p>
+        <p>The dashboard is fully web-based, updates every hour, and is accessible from anywhere. Whether you manage a single site or a portfolio of properties, our command center consolidates all your data into one powerful interface.</p>
         <div><a href="https://dashboard.hbdr.com" target="_blank" rel="noopener noreferrer" class="glass-btn text-[0.9375rem]" data-testid="link-dashboard-external">Access Dashboard${EXTERNAL}</a></div>
       </div>
     </div>

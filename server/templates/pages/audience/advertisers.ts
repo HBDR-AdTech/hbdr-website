@@ -14,7 +14,7 @@ export function renderAdvertisersPage(): string {
         "Custom audience targeting using first-party publisher data",
         "Full transparency on where your ads run",
       ],
-      how: "Work with our team to define your targeting criteria, budget, and preferred publishers. We build a custom PMP deal ID that you activate in your DSP of choice.",
+      how: "Work with our team to define your targeting criteria, budget, and preferred publishers. HBDR can create a PMP deal ID that you activate in your DSP of choice.",
     },
     {
       title: "Programmatic Guaranteed (PG)",
@@ -26,7 +26,7 @@ export function renderAdvertisersPage(): string {
         "Programmatic efficiency with direct-deal certainty",
         "First-look access before PMP and open auction",
       ],
-      how: "Agree on CPM, volume, targeting, and flight dates with our team. We set up the PG deal in Google Ad Manager, and you activate it in your DSP. Delivery is guaranteed.",
+      how: "Agree on CPM, volume, targeting, and flight dates with our team. HBDR can set up the PG deal in Google Ad Manager for you to activate in your DSP.",
     },
     {
       title: "Direct Sales & Direct Placements",
@@ -35,7 +35,6 @@ export function renderAdvertisersPage(): string {
         "Run campaigns directly in publisher GAM accounts for maximum control",
         "Custom ad formats (skins, interstitials, native, rich media, video)",
         "Sponsorship and takeover opportunities",
-        "Direct relationship — no intermediary fees",
         "Custom reporting and optimization by our ad ops team",
       ],
       how: "Share your campaign brief, creative assets, and targeting requirements. Our ad operations team traffics the campaign directly into the publisher's GAM, manages delivery, provides reporting, and optimizes throughout the flight.",
@@ -134,7 +133,7 @@ export function renderAdvertisersPage(): string {
 
   return renderLayout({
     title: "For Advertisers - HBDR",
-    description: "Access publisher inventory through HBDR. Run PMPs, Programmatic Guaranteed deals, and direct campaigns across our network.",
+    description: "Access publisher inventory through HBDR. Request PMPs, Programmatic Guaranteed deals and direct campaigns across our network.",
     canonicalPath: "/advertisers",
     bodyContent: content,
   });

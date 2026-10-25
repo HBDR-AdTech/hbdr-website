@@ -40,6 +40,13 @@ const REMOVED = [
   /x\.com\/haborMedia/, /incremental revenue we generate/, /Net-60/, /minimum payment threshold/, /retention rate/i,
   /Sub-100ms|&lt; 100 ms|less than 100ms/, /above (70|85)%/, /90%\+ completion/, /\+35%|× 1\.35/, /AdLightning/,
   /Xandr Invest|EMX Digital|MOAT \(Oracle\)/,
+  // Gaps the 2026-10-25 verifier found by putting each claim back: these must fail too
+  /real[- ]time (analytics|revenue|reporting|dashboard|metrics|visibility)|(dashboard|reporting|metrics)[^.<]{0,40}real[- ]time|(updates?|updated|track[^.<]{0,40}) in real time/i,
+  /Amazon APS \(A9\)/, /(?<!Infillion \(|acquired )MediaMath/, /(?<!formerly )\bCentro\b/,
+  /\$100 (minimum|threshold)|minimum payment/i, /\b95%/, /viewability (rates? )?(above|over|of) \d{2}%|\d{2}%\+? viewability/i,
+  /(go[- ]live|live|delivered|replies|get back to you|sent) within \d+(\s?[-–]\s?\d+)? (hours|weeks)/i, /\b(2[-–]3|5[-–]10)\s?[x×]/i,
+  /billions of bid signals|pricing tiers|priority support channels|exclusive demand|no intermediary fees/i,
+  /We build a custom PMP|Delivery is guaranteed|malvertising protection/i,
 ];
 
 describe("company facts (D-029, D-030, D-031)", () => {
@@ -65,7 +72,7 @@ describe("company facts (D-029, D-030, D-031)", () => {
   it("shows only live features as available now (D-031)", async () => {
     const { FEATURES_NOW, FEATURES_SOON } = await import("../../templates/components/features");
     const now = JSON.stringify(FEATURES_NOW);
-    expect(now).not.toMatch(/Confiant|IAS|DoubleVerify|WordPress|real-time/i);
+    expect(now).not.toMatch(/Confiant|IAS|DoubleVerify|WordPress|real[- ]time/i);
     expect(JSON.stringify(FEATURES_SOON)).toMatch(/Confiant/);
     for (const r of ["/publishers", "/how-it-works"]) {
       const html = await text(r);
