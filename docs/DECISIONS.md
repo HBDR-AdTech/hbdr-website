@@ -272,6 +272,16 @@ The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33
 1. **MCM:** the hbdr-ctv docs call MCM "reinstatement" a launch gate (`~/code/hbdr-ctv/CLAUDE.md:6,128`). Matt: "we have access still, leave it." The site keeps "Google MCM partner, MCM parent on Ad Manager 360" (D-029 row 2).
 2. **CTV SSAI:** not live on 2026-10-24 (hbdr-ctv prod `ads.hbdr.io` serves nothing yet). Matt: "we are going live soon, keep it showing live on site." It stays in `FEATURES_NOW` (`server/templates/components/features.ts`) by Matt's direction, an exception to D-031's rule that only live items are listed as available. Review at each handoff; if launch slips, move it to `FEATURES_SOON`.
 
+## D-035 — 2026-10-24 — Matt (D-030 row 13, D-032) — The legal pages state only measured facts
+
+The privacy policy, terms and GDPR & cookie policy (`server/templates/pages/legal/`) describe what hbdr.com does, and `docs/research/legal.md` sources every fact (code `file:line`, a measured header, or a quoted URL). Measured 2026-10-23: public pages set no cookies (29 routes on dev and live, plus 92 live blog posts); the admin area sets Cloudflare Access's `CF_AppSession` (and `CF_Authorization` after sign-in); the site loads Google Fonts and jsDelivr on every page, cdnjs on the home page, and Turnstile only while an operator has it on. The entity is HeaderBiddr LLC (D-032); the terms use Florida law with venue in Miami-Dade County. Rules:
+1. A change that sets a cookie, adds a third-party script or tag, collects a new field or adds a processor updates these pages and `docs/research/legal.md` in the same PR.
+2. No DPO, EU/UK representative, certification or response-time promise appears until Matt decides it.
+3. `server/routes/__tests__/legal-pages.test.ts` fails if an unmeasured cookie, the February 2026 date or the DPO returns.
+The lead email no longer carries the submitter IP, so the code matches D-018 (D-036). Deletion requests are honored (D-036). Counsel reviews the pages when engaged.
+Supersedes: the February 2026 legal text.
+Rollback: revert the merge.
+
 ## D-036 — 2026-10-25 — Matt — Phone number, IP out of the lead email, deletion on request, repeated seller_ids
 
 1. **Phone:** (786) 675-6080 is HBDR's phone number; /support and /press keep it.
@@ -285,3 +295,4 @@ The legal entity is **HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33
 2. **Category:** the old launch post (`/blog/hbdr-launches-server-side-bidding-platform`) now teaches client-side vs server-side bidding. It keeps its URL and moves from "Product Updates" to "Education".
 3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `\u003c`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
 4. **Seller edits (/admin/supply):** edits stay allowed, because a company can change its legal name or domain. A *different* company always gets a new seller_id, never an edited one (sellers.json 1.0: one seller_id, one entity). Every edit is in `supply_changes`.
+||||||| e4e860b
