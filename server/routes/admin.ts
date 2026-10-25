@@ -6,6 +6,7 @@ import type { IStorage } from "../services/storage";
 import { renderAdminLeadsPage } from "../templates/admin/leads";
 import { renderBlogAdminPage, renderBlogEditorPage } from "../templates/admin/blog";
 import { renderFormSettingsPage } from "../templates/admin/form";
+import { renderSupplyPage } from "../templates/admin/supply";
 import { getFormConfig } from "../services/form-config";
 import { render404Page } from "../templates/pages/error";
 
@@ -30,6 +31,9 @@ export function registerAdminRoutes(
 
   // Form settings; the page loads its data from /admin/api/form-config
   app.get("/admin/form", (c) => c.html(renderFormSettingsPage()));
+
+  // sellers.json / ads.txt; the page loads its data from /admin/api/supply
+  app.get("/admin/supply", (c) => c.html(renderSupplyPage()));
 
   // CSV export
   app.get("/admin/leads/export", async (c) => {

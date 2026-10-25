@@ -35,6 +35,34 @@ export interface FormConfigChange {
   after: string | null;
 }
 
+// /sellers.json and /ads.txt (migrations/0006_supply.sql). Rows are retired, never deleted.
+export type SellerType = "PUBLISHER" | "INTERMEDIARY" | "BOTH";
+
+export interface SupplySeller {
+  sellerId: string;
+  name: string;
+  domain: string | null;
+  sellerType: SellerType;
+  isConfidential: boolean;
+  comment: string | null;
+  createdAt: string;
+  retiredAt: string | null;
+}
+
+export interface AdsTxtLine {
+  id: string;
+  adSystemDomain: string;
+  accountId: string;
+  relationship: "DIRECT" | "RESELLER";
+  certAuthorityId: string | null;
+  comment: string | null;
+  createdAt: string;
+  retiredAt: string | null;
+}
+
+// One row of the append-only supply_changes audit log; same shape as form_config_changes
+export type SupplyChange = FormConfigChange;
+
 export interface ContactLead extends LeadDetails {
   id: string;
   name: string;
@@ -101,4 +129,18 @@ export interface IStorage {
   saveFieldOverride(key: string, config: string, before: string | null, actor: string): Promise<void>;
   saveFormSettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void>;
   getFormConfigChanges(limit: number): Promise<FormConfigChange[]>;
+  // sellers.json / ads.txt; every write lands with its supply_changes row atomically
+  getActiveSellers(): Promise<SupplySeller[]>;
+  getRetiredSellers(): Promise<SupplySeller[]>;
+  getSeller(sellerId: string): Promise<SupplySeller | undefined>;
+  createSeller(seller: SupplySeller, actor: string): Promise<void>;
+  updateSeller(seller: SupplySeller, before: SupplySeller, actor: string): Promise<void>;
+  retireSeller(before: SupplySeller, actor: string): Promise<void>;
+  getActiveAdsTxtLines(): Promise<AdsTxtLine[]>;
+  getAdsTxtLine(id: string): Promise<AdsTxtLine | undefined>;
+  createAdsTxtLine(line: AdsTxtLine, actor: string): Promise<void>;
+  retireAdsTxtLine(before: AdsTxtLine, actor: string): Promise<void>;
+  getSupplySettings(keys: readonly string[]): Promise<Record<string, string>>;
+  saveSupplySettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void>;
+  getSupplyChanges(limit: number): Promise<SupplyChange[]>;
 }

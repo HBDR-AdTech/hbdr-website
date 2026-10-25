@@ -3,6 +3,8 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { D1Storage } from "../d1Storage";
+import type { SupplySeller, AdsTxtLine } from "../services/storage";
+import { SUPPLY_SETTING_KEYS, sellerCreateSchema } from "../services/supply";
 
 // D1Storage's real SQL against SQLite with every migration applied, so a typo, a missing column or a
 // write split out of its batch fails here rather than on the first production request.
@@ -80,6 +82,141 @@ describe("D1Storage form config", () => {
     const plan = db.prepare(`EXPLAIN QUERY PLAN ${sql}`).all(50).map((r: any) => r.detail).join("\n");
     expect(plan).toContain("USING INDEX form_config_changes_at");
     expect(plan).not.toContain("TEMP B-TREE");
+  });
+});
+
+describe("D1Storage sellers.json / ads.txt", () => {
+  const seller = (sellerId: string, over: Partial<SupplySeller> = {}): SupplySeller => ({
+    sellerId, name: `Seller ${sellerId}`, domain: `s${sellerId}.com`, sellerType: "PUBLISHER", isConfidential: false,
+    comment: null, createdAt: "2026-10-23T00:00:00.000Z", retiredAt: null, ...over,
+  });
+  const line = (id: string): AdsTxtLine => ({
+    id, adSystemDomain: "google.com", accountId: `pub-${id}`, relationship: "RESELLER", certAuthorityId: "f08c47fec0942fa0",
+    comment: null, createdAt: `2026-10-23T00:00:0${id}.000Z`, retiredAt: null,
+  });
+
+  it("stores, updates and retires sellers with an audit row each; active reads are in seller_id order", async () => {
+    await storage.createSeller(seller("2"), "ops@hbdr.com");
+    await storage.createSeller(seller("1", { domain: null, isConfidential: true }), "ops@hbdr.com");
+    await storage.updateSeller(seller("2", { name: "Renamed" }), seller("2"), "matt@hbdr.com");
+    await storage.retireSeller(seller("1", { domain: null, isConfidential: true }), "matt@hbdr.com");
+    expect((await storage.getActiveSellers()).map((s) => ({ ...s }))).toEqual([seller("2", { name: "Renamed" })]);
+    const [retired] = await storage.getRetiredSellers();
+    expect({ ...retired }).toMatchObject({ sellerId: "1", domain: null, isConfidential: true });
+    expect(retired.retiredAt).toMatch(/^\d{4}-/);
+    // a retired row is never changed again
+    await storage.updateSeller(seller("1", { name: "Someone else" }), retired, "x");
+    expect((await storage.getSeller("1"))!.name).toBe("Seller 1");
+    expect((await storage.getSupplyChanges(50)).length).toBe(5);
+  });
+
+  it("refuses a second row for a taken seller_id at the database, retired or not, and writes no audit row", async () => {
+    await storage.createSeller(seller("1"), "ops@hbdr.com");
+    await storage.retireSeller(seller("1"), "ops@hbdr.com");
+    await expect(storage.createSeller(seller("1", { name: "Someone else" }), "ops@hbdr.com")).rejects.toThrow(/UNIQUE|PRIMARY/);
+    expect((await storage.getSeller("1"))!.name).toBe("Seller 1");
+    expect(await storage.getSupplyChanges(50)).toHaveLength(2);
+  });
+
+  it("writes neither the change nor its audit row when the batch fails", async () => {
+    db.exec("ALTER TABLE supply_changes RENAME TO supply_changes_gone");
+    await expect(storage.createSeller(seller("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.createAdsTxtLine(line("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.saveSupplySettings([{ key: "contact_email", value: "contact@hbdr.com", before: null }], "ops@hbdr.com")).rejects.toThrow();
+    expect(await storage.getActiveSellers()).toEqual([]);
+    expect(await storage.getActiveAdsTxtLines()).toEqual([]);
+    expect(await storage.getSupplySettings(["contact_email"])).toEqual({});
+  });
+
+  it("keeps a seller edit or retirement and its audit row in one batch", async () => {
+    await storage.createSeller(seller("1"), "ops@hbdr.com");
+    await storage.createAdsTxtLine(line("1"), "ops@hbdr.com");
+    db.exec("ALTER TABLE supply_changes RENAME TO supply_changes_gone");
+    await expect(storage.updateSeller(seller("1", { name: "Renamed" }), seller("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.retireSeller(seller("1"), "ops@hbdr.com")).rejects.toThrow();
+    await expect(storage.retireAdsTxtLine(line("1"), "ops@hbdr.com")).rejects.toThrow();
+    expect({ ...(await storage.getSeller("1"))! }).toEqual(seller("1"));
+    expect(await storage.getActiveAdsTxtLines()).toHaveLength(1);
+  });
+
+  it("stores lines and settings; reads only the named settings", async () => {
+    await storage.createAdsTxtLine(line("2"), "ops@hbdr.com");
+    await storage.createAdsTxtLine(line("1"), "ops@hbdr.com");
+    await storage.retireAdsTxtLine(line("2"), "ops@hbdr.com");
+    expect((await storage.getActiveAdsTxtLines()).map((l) => ({ ...l }))).toEqual([line("1")]);
+    expect((await storage.getAdsTxtLine("2"))!.retiredAt).not.toBeNull();
+    await storage.saveSupplySettings([{ key: "contact_email", value: "contact@hbdr.com", before: null }, { key: "other", value: "x", before: null }], "ops@hbdr.com");
+    expect(await storage.getSupplySettings(["contact_email", "direct_line_domain"])).toEqual({ contact_email: "contact@hbdr.com" });
+  });
+
+  // Doctrine 5: every supply query is an index SEARCH. The one exception is the audit log's newest-50 read, an
+  // index walk that stops at LIMIT (50 rows however long the log grows), the same plan as form_config_changes.
+  it("runs every supply query on an index: no table SCAN", async () => {
+    await storage.createSeller(seller("1"), "a");
+    await storage.updateSeller(seller("1", { name: "B" }), seller("1"), "a");
+    await storage.retireSeller(seller("1"), "a");
+    await storage.createAdsTxtLine(line("1"), "a");
+    await storage.retireAdsTxtLine(line("1"), "a");
+    await storage.saveSupplySettings([{ key: "contact_email", value: "contact@hbdr.com", before: null }], "a");
+    seen.length = 0;
+    await Promise.all([
+      storage.getActiveSellers(), storage.getRetiredSellers(), storage.getSeller("1"), storage.getActiveAdsTxtLines(),
+      storage.getAdsTxtLine("1"), storage.getSupplySettings(["contact_email", "contact_address", "direct_line_domain"]), storage.getSupplyChanges(50),
+    ]);
+    await storage.updateSeller(seller("1", { name: "C" }), seller("1"), "a");
+    await storage.retireSeller(seller("1"), "a");
+    await storage.retireAdsTxtLine(line("1"), "a");
+    const queries = [...new Set(seen.filter((s) => /\bsupply_/.test(s) && !/^INSERT/.test(s)))];
+    expect(queries.length).toBe(10);
+    const params = (sql: string) => Array((sql.match(/\?/g) ?? []).length).fill("1");
+    const plans = Object.fromEntries(queries.map((sql) =>
+      [sql, db.prepare(`EXPLAIN QUERY PLAN ${sql}`).all(...params(sql)).map((r: any) => r.detail).join(" | ")]));
+    for (const [sql, plan] of Object.entries(plans)) {
+      if (sql.includes("FROM supply_changes")) {
+        expect(plan).toBe("SCAN supply_changes USING INDEX supply_changes_at");
+        expect(sql).toMatch(/ORDER BY at DESC LIMIT \?$/);
+        continue;
+      }
+      expect(plan, sql).toMatch(/^SEARCH /);
+      expect(plan, sql).not.toMatch(/\bSCAN\b|TEMP B-TREE/);
+    }
+    const active = Object.entries(plans).find(([sql]) => sql.includes("WHERE retired_at IS NULL ORDER BY seller_id"))![1];
+    expect(active).toBe("SEARCH supply_sellers USING INDEX supply_sellers_active (retired_at=?)");
+  });
+});
+
+describe("seed/supply-sellers-from-headerbiddr-2026-10-23.sql", () => {
+  const seedSql = readFileSync(join(__dirname, "..", "..", "seed", "supply-sellers-from-headerbiddr-2026-10-23.sql"), "utf8");
+
+  it("loads 184 sellers and 3 settings with an audit row each, and a second run changes nothing", async () => {
+    db.exec(seedSql);
+    const sellers = await storage.getActiveSellers();
+    const settings = await storage.getSupplySettings(SUPPLY_SETTING_KEYS);
+    const changes = db.prepare("SELECT COUNT(*) AS n FROM supply_changes").get() as { n: number };
+    expect(sellers).toHaveLength(184);
+    expect(settings).toEqual({
+      contact_email: "contact@hbdr.com",
+      contact_address: "HeaderBiddr LLC, 1200 Brickell Ave, Ste 1950, Miami, FL 33131",
+      direct_line_domain: "headerbiddr.com",
+    });
+    expect(changes.n).toBe(187);
+    // every seeded row is one the admin API would accept
+    for (const s of sellers) {
+      const parsed = sellerCreateSchema.safeParse({ sellerId: s.sellerId, name: s.name, domain: s.domain, sellerType: s.sellerType });
+      expect(parsed.success, s.sellerId).toBe(true);
+      expect(parsed.data).toMatchObject({ name: s.name, domain: s.domain });
+    }
+    await storage.updateSeller({ ...sellers[0], name: "Changed by an operator" }, sellers[0], "ops@hbdr.com");
+    db.exec(seedSql);
+    expect((await storage.getActiveSellers()).map((s) => ({ ...s }))).toEqual([{ ...sellers[0], name: "Changed by an operator" }, ...sellers.slice(1).map((s) => ({ ...s }))]);
+    expect((db.prepare("SELECT COUNT(*) AS n FROM supply_changes").get() as { n: number }).n).toBe(188);
+  });
+
+  it("never seeds a seller_id the source repeats", async () => {
+    db.exec(seedSql);
+    for (const id of ["120", "127", "179", "8201HBhispanoadses"]) expect(await storage.getSeller(id)).toBeUndefined();
+    expect((await storage.getSeller("298"))!.domain).toBe("wynk.in");
+    expect((await storage.getSeller("310"))!.domain).toBeNull();
   });
 });
 

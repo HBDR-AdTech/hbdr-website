@@ -1,6 +1,10 @@
 // In-memory storage for local development (no database required)
-import type { IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange } from "./storage";
+import type {
+  IStorage, ContactLead, BlogPost, InsertContactLead, InsertBlogPost, LeadDetails, FormConfigChange,
+  SupplySeller, AdsTxtLine, SupplyChange,
+} from "./storage";
 import { LEAD_DETAIL_COLUMNS } from "./storage";
+import { LEGACY_POSTS } from "./legacy-posts";
 
 export class MemStorage implements IStorage {
   private contactLeads = new Map<string, ContactLead>();
@@ -8,6 +12,10 @@ export class MemStorage implements IStorage {
   private fieldOverrides = new Map<string, string>();
   private formSettings = new Map<string, string>();
   private formChanges: FormConfigChange[] = [];
+  private sellers = new Map<string, SupplySeller>();
+  private adsTxtLines = new Map<string, AdsTxtLine>();
+  private supplySettings = new Map<string, string>();
+  private supplyChanges: SupplyChange[] = [];
   private seeded = false;
 
   async createContactLead(lead: InsertContactLead & { ip?: string; source?: string }): Promise<ContactLead> {
@@ -121,68 +129,85 @@ export class MemStorage implements IStorage {
     return this.formChanges.slice(-limit).reverse();
   }
 
+  async getActiveSellers(): Promise<SupplySeller[]> {
+    return [...this.sellers.values()].filter((s) => !s.retiredAt).sort((a, b) => (a.sellerId < b.sellerId ? -1 : 1)).map((s) => ({ ...s }));
+  }
+
+  async getRetiredSellers(): Promise<SupplySeller[]> {
+    return [...this.sellers.values()].filter((s) => s.retiredAt).sort((a, b) => b.retiredAt!.localeCompare(a.retiredAt!)).map((s) => ({ ...s }));
+  }
+
+  async getSeller(sellerId: string): Promise<SupplySeller | undefined> {
+    const seller = this.sellers.get(sellerId);
+    return seller && { ...seller };
+  }
+
+  // same guard as the D1 primary key
+  async createSeller(seller: SupplySeller, actor: string): Promise<void> {
+    if (this.sellers.has(seller.sellerId)) throw new Error("UNIQUE constraint failed: supply_sellers.seller_id");
+    this.sellers.set(seller.sellerId, { ...seller });
+    this.supplyAudit(seller.createdAt, actor, `seller:${seller.sellerId}`, null, JSON.stringify(seller));
+  }
+
+  async updateSeller(seller: SupplySeller, before: SupplySeller, actor: string): Promise<void> {
+    if (this.sellers.get(seller.sellerId)?.retiredAt === null) this.sellers.set(seller.sellerId, { ...seller });
+    this.supplyAudit(new Date().toISOString(), actor, `seller:${seller.sellerId}`, JSON.stringify(before), JSON.stringify(seller));
+  }
+
+  async retireSeller(before: SupplySeller, actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    const seller = this.sellers.get(before.sellerId);
+    if (seller && !seller.retiredAt) seller.retiredAt = at;
+    this.supplyAudit(at, actor, `seller:${before.sellerId}`, JSON.stringify(before), JSON.stringify({ ...before, retiredAt: at }));
+  }
+
+  async getActiveAdsTxtLines(): Promise<AdsTxtLine[]> {
+    return [...this.adsTxtLines.values()].filter((l) => !l.retiredAt).map((l) => ({ ...l }));
+  }
+
+  async getAdsTxtLine(id: string): Promise<AdsTxtLine | undefined> {
+    const line = this.adsTxtLines.get(id);
+    return line && { ...line };
+  }
+
+  async createAdsTxtLine(line: AdsTxtLine, actor: string): Promise<void> {
+    this.adsTxtLines.set(line.id, { ...line });
+    this.supplyAudit(line.createdAt, actor, `line:${line.id}`, null, JSON.stringify(line));
+  }
+
+  async retireAdsTxtLine(before: AdsTxtLine, actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    const line = this.adsTxtLines.get(before.id);
+    if (line && !line.retiredAt) line.retiredAt = at;
+    this.supplyAudit(at, actor, `line:${before.id}`, JSON.stringify(before), JSON.stringify({ ...before, retiredAt: at }));
+  }
+
+  async getSupplySettings(keys: readonly string[]): Promise<Record<string, string>> {
+    return Object.fromEntries([...this.supplySettings].filter(([key]) => keys.includes(key)));
+  }
+
+  async saveSupplySettings(changes: { key: string; value: string; before: string | null }[], actor: string): Promise<void> {
+    const at = new Date().toISOString();
+    for (const { key, value, before } of changes) {
+      this.supplySettings.set(key, value);
+      this.supplyAudit(at, actor, `setting:${key}`, before, value);
+    }
+  }
+
+  async getSupplyChanges(limit: number): Promise<SupplyChange[]> {
+    return this.supplyChanges.slice(-limit).reverse();
+  }
+
+  private supplyAudit(at: string, actor: string, target: string, before: string | null, after: string) {
+    this.supplyChanges.push({ id: crypto.randomUUID(), at, actor, target, before, after });
+  }
+
   async seedBlogPosts(): Promise<void> {
     if (this.seeded || this.blogPosts.size > 0) return;
     this.seeded = true;
     console.log("Seeding blog posts (in-memory)...");
 
-    const posts: Array<InsertBlogPost & { publishedAt: string }> = [
-      {
-        title: "The Future of Header Bidding: Trends to Watch in 2025",
-        slug: "future-of-header-bidding-2025",
-        excerpt: "Header bidding continues to evolve rapidly. From server-side auctions to AI-powered optimization, discover the key trends shaping the future of programmatic advertising.",
-        content: `<h2>The Evolving Landscape of Header Bidding</h2><p>Header bidding has revolutionized the way publishers monetize their digital inventory.</p><h3>1. Server-Side Header Bidding Takes Center Stage</h3><p>The shift from client-side to server-side header bidding continues to accelerate.</p><h3>2. AI-Powered Bid Optimization</h3><p>Machine learning algorithms are becoming essential tools for optimizing bid responses.</p><h3>3. Privacy-First Monetization</h3><p>With the deprecation of third-party cookies, the industry is adapting.</p><h3>4. Video and Connected TV Integration</h3><p>Header bidding is expanding beyond traditional display advertising.</p>`,
-        author: "Sarah Chen",
-        category: "Industry Trends",
-        tags: "header bidding,programmatic,trends,2025",
-        published: "true",
-        publishedAt: "2025-01-15T00:00:00.000Z",
-      },
-      {
-        title: "How Publishers Can Maximize Ad Revenue Without Sacrificing User Experience",
-        slug: "maximize-ad-revenue-user-experience",
-        excerpt: "Balancing ad revenue with user experience is one of the biggest challenges publishers face.",
-        content: `<h2>The Revenue vs. Experience Balancing Act</h2><p>Every publisher faces the same fundamental challenge.</p><h3>Strategic Ad Placement</h3><p>Not all ad placements are created equal.</p><h3>Core Web Vitals Optimization</h3><p>Google's Core Web Vitals directly impact search rankings.</p>`,
-        author: "Marcus Johnson",
-        category: "Best Practices",
-        tags: "user experience,ad revenue,optimization",
-        published: "true",
-        publishedAt: "2025-01-08T00:00:00.000Z",
-      },
-      {
-        title: "Understanding Programmatic Advertising: A Complete Guide",
-        slug: "understanding-programmatic-advertising-guide",
-        excerpt: "New to programmatic advertising? This guide breaks down everything publishers need to know.",
-        content: `<h2>What is Programmatic Advertising?</h2><p>Programmatic advertising is the automated buying and selling of digital ad inventory.</p><h3>Key Components</h3><p><strong>SSPs</strong> help publishers manage inventory. <strong>DSPs</strong> let advertisers bid.</p>`,
-        author: "Elena Rodriguez",
-        category: "Education",
-        tags: "programmatic,RTB,header bidding,guide",
-        published: "true",
-        publishedAt: "2024-12-20T00:00:00.000Z",
-      },
-      {
-        title: "HBDR Launches Next-Generation Server-Side Bidding Platform",
-        slug: "hbdr-launches-server-side-bidding-platform",
-        excerpt: "We're excited to announce the launch of our next-generation server-side bidding platform.",
-        content: `<h2>Introducing HBDR Server-Side Bidding 2.0</h2><p>Today, we're thrilled to announce the launch of our next-generation platform.</p><h3>What's New</h3><ul><li>Ultra-Low Latency Auctions</li><li>200+ Active Bidders</li><li>Intelligent Floor Pricing</li></ul>`,
-        author: "David Park",
-        category: "Product Updates",
-        tags: "product launch,server-side bidding,platform",
-        published: "true",
-        publishedAt: "2025-02-01T00:00:00.000Z",
-      },
-      {
-        title: "5 Common Header Bidding Mistakes and How to Avoid Them",
-        slug: "common-header-bidding-mistakes",
-        excerpt: "Even experienced publishers make these header bidding mistakes.",
-        content: `<h2>Are You Leaving Money on the Table?</h2><p>Header bidding is powerful, but only as effective as its implementation.</p><h3>Mistake #1: Too Many Demand Partners</h3><p>More isn't always better.</p><h3>Mistake #2: Static Timeout Settings</h3><p>Implementing dynamic timeouts can increase bid responses by 15-20%.</p>`,
-        author: "Sarah Chen",
-        category: "Best Practices",
-        tags: "header bidding,mistakes,optimization,tips",
-        published: "true",
-        publishedAt: "2025-01-22T00:00:00.000Z",
-      },
-    ];
+    const posts: Array<InsertBlogPost & { publishedAt: string }> = LEGACY_POSTS.map((post) => ({ ...post, published: "true" }));
 
     for (const post of posts) {
       await this.createBlogPost(post);

@@ -14,6 +14,7 @@ interface ContactNotificationData extends Partial<LeadDetails> {
   impressions: string;
   message: string | null;
   source: string | null;
+  // Stored in D1 for abuse review; never printed in the email (D-018, D-036 data minimisation)
   ip: string | null;
 }
 
@@ -41,7 +42,6 @@ function parseSupportCompany(company: string): { subject: string; priority: stri
 function buildDetailRows(data: ContactNotificationData, fields: FormField[]): string {
   const safeName = data.name;
   const safeEmail = sanitizeText(data.email);
-  const safeIp = data.ip ? sanitizeText(data.ip) : null;
 
   const row = (label: string, value: string, isEmail = false) =>
     `<tr><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; font-weight: 600; color: #333; width: 140px;">${label}</td><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #555;">${isEmail ? `<a href="mailto:${value}" style="color: #00FAA8;">${value}</a>` : value}</td></tr>`;
@@ -67,10 +67,6 @@ function buildDetailRows(data: ContactNotificationData, fields: FormField[]): st
   }
 
   if (data.botCheck) rows += row("Bot check", data.botCheck);
-
-  if (safeIp) {
-    rows += `<tr><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; font-weight: 600; color: #333;">IP Address</td><td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; color: #999; font-size: 13px;">${safeIp}</td></tr>`;
-  }
 
   return rows;
 }

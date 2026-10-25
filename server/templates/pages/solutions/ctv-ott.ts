@@ -34,8 +34,8 @@ function renderSsaiDiagram(): string {
 
 const FEATURES = [
   { title: "Audience Targeting", body: "Leverage first-party data, ACR signals, and contextual metadata to deliver highly targeted ads across CTV environments." },
-  { title: "Unified Reporting", body: "Cross-platform analytics that unify CTV, OTT, and web video performance into a single dashboard with real-time metrics." },
-  { title: "Premium Demand", body: "Direct connections to top-tier video DSPs including The Trade Desk, DV360, Amazon, and brand-direct programmatic guaranteed deals." },
+  { title: "Unified Reporting", body: "Cross-platform analytics that unify CTV, OTT, and web video performance into one place with hourly reporting." },
+  { title: "Video Demand", body: "Video demand from SSPs and DSPs in every geography, with the ability to access programmatic guaranteed deals." },
 ];
 
 export function renderCtvOttPage(): string {

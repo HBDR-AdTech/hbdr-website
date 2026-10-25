@@ -1,8 +1,9 @@
-// SEO routes — robots.txt and sitemap.xml
+// SEO and crawler routes — robots.txt, sitemap.xml, sellers.json, ads.txt
 import type { Hono } from "hono";
 import { SITE_URL, PAGE_ROUTES } from "../config";
 import type { IStorage } from "../services/storage";
 import { sanitizeText } from "../middleware/sanitize";
+import { getSupply, renderSellersJson, renderAdsTxt } from "../services/supply";
 
 export function registerSeoRoutes(app: Hono<any>, getStorage: (c: any) => IStorage) {
   app.get("/robots.txt", (c) => {
@@ -28,5 +29,17 @@ Sitemap: ${SITE_URL}/sitemap.xml`);
 ${urls}
 </urlset>`;
     return c.text(xml, 200, { "Content-Type": "application/xml" });
+  });
+
+  // A failed D1 read throws to the 500 handler: crawlers keep their last good copy on an HTTP error
+  // (sellers.json 1.0, Access Method), where an empty list would tell every buyer HBDR has no sellers
+  app.get("/sellers.json", async (c) => {
+    const body = renderSellersJson(await getSupply(getStorage(c)));
+    return c.body(body, 200, { "Content-Type": "application/json; charset=utf-8" });
+  });
+
+  app.get("/ads.txt", async (c) => {
+    const body = renderAdsTxt(await getSupply(getStorage(c)));
+    return c.body(body, 200, { "Content-Type": "text/plain; charset=utf-8" });
   });
 }
