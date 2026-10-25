@@ -64,6 +64,8 @@ describe("legal pages describe what the site does (D-030 row 13, D-032)", () => 
   it("the privacy policy states the retention decisions D-013 and D-018 and the 15-minute rate-limit window", async () => {
     const html = await page("/privacy-policy");
     expect(html).toContain("Form submissions, including your IP address");
+    expect(html).toContain("which includes your answers (not your IP address)");
+    expect(html).toContain("we delete the stored submission and its notification email");
     expect(html).toContain("No set deletion date");
     expect(html).toContain("15 minutes");
   });

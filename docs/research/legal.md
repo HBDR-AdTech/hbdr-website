@@ -46,7 +46,7 @@ Visitors' browsers send their IP address and user agent to every host they downl
 | IP recorded on submit | `server/routes/api.ts:46` (`getClientIp` → `cf-connecting-ip`, `rate-limit.ts:91-95`), stored `api.ts:141` |
 | Rate limit: 5 per 15 minutes, IPv6 by /64 | `server/middleware/rate-limit.ts:6-7`, `bucketKey` lines 31-38, D1 table `migrations/0002_rate_limits.sql` |
 | Rate-limit rows removed after the window, on the next submission | `rate-limit.ts:63-66`: `DELETE FROM rate_limits WHERE window_start < now − 15 min`, run in the same batch as every check; the check runs on every `POST /api/contact` (`api.ts:49`) |
-| Lead email includes all answers **and the IP address** | `server/services/email.ts:41-75` (IP row at lines 71-72); sent to contact@ or support@ (`server/config.ts:10-11`, `email.ts:119-121`) |
+| Lead email includes the answers but **not** the IP address (removed under D-036, GDPR Art. 5(1)(c) data minimisation; matches D-018) | `server/services/email.ts:41-72`; sent to contact@ or support@ (`server/config.ts:10-11`, `email.ts:119-121`) |
 | Request logs hold name and email when a notification is sent; IP when the spam trap fires | `email.ts:126` (`console.log` with name and email), `api.ts:69` (honeypot logs IP), `worker.ts:26` (`logger()` logs method, path, status) |
 | Workers Logs on | `wrangler.toml:11-12` |
 | Workers Logs kept up to 7 days | https://developers.cloudflare.com/workers/observability/logs/workers-logs/ : "Maximum log retention period 7 Days" (Free plan 3 days, Paid 7 days) |

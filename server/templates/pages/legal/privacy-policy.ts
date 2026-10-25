@@ -68,7 +68,7 @@ export function renderPrivacyPolicyPage(): string {
           head: ["Provider", "What it does for this site", "What it receives"],
           rows: [
             ["Cloudflare", "Hosts the site (Workers), stores form submissions (D1), sends form notifications (Email Sending), keeps request logs, protects the admin area (Access), serves the animation library on the home page (cdnjs) and, when switched on, runs the Turnstile bot check", "Everything you send on a form, your IP address and browser details"],
-            ["Google", `Hosts HBDR's mailboxes (${CONTACT_EMAIL} and support@hbdr.com), where form notifications arrive; serves the site's fonts (Google Fonts)`, "The form notification, which includes your answers and IP address; your IP address and browser details when your browser loads the fonts"],
+            ["Google", `Hosts HBDR's mailboxes (${CONTACT_EMAIL} and support@hbdr.com), where form notifications arrive; serves the site's fonts (Google Fonts)`, "The form notification, which includes your answers (not your IP address); your IP address and browser details when your browser loads the fonts"],
             ["jsDelivr", "Serves the Alpine.js script the site uses for forms, menus and calculators", "Your IP address and browser details when your browser loads the script"],
           ],
         })}
@@ -103,7 +103,7 @@ export function renderPrivacyPolicyPage(): string {
     {
       id: "your-rights-and-choices", title: "Your Rights", testid: "privacy-section-rights",
       body: `
-        ${p(`Depending on where you live, the law may give you the right to ask for a copy of your information, to correct it, to delete it, to limit or object to how we use it, or to receive it in a portable format. These rights have limits set by each law.`)}
+        ${p(`Depending on where you live, the law may give you the right to ask for a copy of your information, to correct it, to delete it, to limit or object to how we use it, or to receive it in a portable format. These rights have limits set by each law. If you ask us to delete what you sent through our forms, we delete the stored submission and its notification email, and keep only a note of the date of your request.`)}
         ${p(`To make a request, email ${mail("link-privacy-email-rights")}. Visitors in the European Economic Area and the UK can read the legal bases we rely on and how to complain to a data protection authority in the <a href="/gdpr-cookie-policy#gdpr" class="text-[var(--accent)] underline underline-offset-2">GDPR section</a>.`)}`,
     },
     {
