@@ -32,11 +32,11 @@ const SERVICES = [
 ];
 
 const TOOLS = [
-  { title: "Real-time analytics platform", body: "HBDR's proprietary analytics dashboard gives our team (and you) real-time visibility into revenue, CPMs, fill rates, and bidder performance across every ad unit, geo, and device." },
-  { title: "ML-powered floor engine", body: "Our machine learning floor pricing engine analyzes billions of bid signals to set optimal floors per impression, adjusting dynamically for time of day, seasonality, user value, and market conditions." },
-  { title: "24/7 monitoring & alerts", body: "Automated systems monitor your revenue around the clock. Our team gets instant alerts for fill rate drops, traffic anomalies, demand partner issues, and policy flags — so problems are fixed before you even notice." },
+  { title: "Hourly reporting", body: "HBDR's reporting gives our team (and you) hourly revenue and bidder performance, with alerts and CSV exports." },
+  { title: "Dynamic floor prices", body: "Floor prices set by a model for each impression or traffic segment, tested with A/B splits before they reach all your traffic." },
+  { title: "Monitoring & alerts", body: "Automated checks raise alerts for fill rate drops, traffic anomalies, demand partner issues and policy flags. Our team acts on them Mon–Fri, 9am–6pm ET." },
   { title: "Automated A/B testing", body: "HBDR runs continuous multivariate tests on bidder configurations, timeout settings, ad layouts, and refresh strategies — compounding incremental gains into significant long-term revenue growth." },
-  { title: "Dedicated account manager", body: "Your dedicated HBDR account manager provides monthly performance reviews, strategic recommendations, and direct communication for any questions or requests. Real people, real responsiveness." },
+  { title: "Dedicated account manager", body: "Your dedicated HBDR account manager provides performance reviews, recommendations and direct communication for any questions or requests, Mon–Fri, 9am–6pm ET." },
   { title: "Transparent reporting", body: "No black boxes. You get full access to your revenue data, see exactly how every demand source performs, and receive clear explanations for every optimization decision HBDR makes on your behalf." },
 ];
 
@@ -102,7 +102,7 @@ export function renderManageInventoryPage(): string {
     body: renderSteps([
       { title: "MCM inventory link", body: "HBDR sends a Manage Inventory invitation from our parent Google Ad Manager 360 network. You accept it with an email that has admin access to your own Ad Manager network, and Google reviews your account. HBDR gets no access to your account.", testid: "card-mi-step-1" },
       { title: "HBDR takes over", body: "Our ad ops team audits your current setup, then builds the delegated inventory in HBDR's network — ad units, Prebid configuration, Google AdX, Open Bidding, demand partners, floor pricing, and more — and your pages switch to tags with your child network code, which Google requires for Manage Inventory.", testid: "card-mi-step-2" },
-      { title: "Continuous optimization", body: "HBDR's team continuously monitors and optimizes your yield using our proprietary tools and real-time data. Google keeps Manage Inventory reporting in the parent network, so you receive it from us as transparent reporting, with a dedicated account manager for ongoing communication.", testid: "card-mi-step-3" },
+      { title: "Continuous optimization", body: "HBDR's team continuously monitors and optimizes your yield using our own tools and hourly reporting data. Google keeps Manage Inventory reporting in the parent network, so you receive it from us as transparent reporting, with a dedicated account manager for ongoing communication.", testid: "card-mi-step-3" },
     ]),
   })}
 
