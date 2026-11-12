@@ -295,4 +295,21 @@ Rollback: revert the merge.
 2. **Category:** the old launch post (`/blog/hbdr-launches-server-side-bidding-platform`) now teaches client-side vs server-side bidding. It keeps its URL and moves from "Product Updates" to "Education".
 3. **Escaping:** /blog and post pages escape the admin-written title, excerpt, category and cover image URL, and the layout writes JSON-LD with `<` as `\u003c`. A title can no longer inject markup. Post `content` stays on its allowlist sanitizer.
 4. **Seller edits (/admin/supply):** edits stay allowed, because a company can change its legal name or domain. A *different* company always gets a new seller_id, never an edited one (sellers.json 1.0: one seller_id, one entity). Every edit is in `supply_changes`.
-||||||| e4e860b
+
+## D-038 — 2026-11-12 — Matt — In-app header bidding is not built yet; HBDR wants it for every mobile SDK
+
+1. Matt (2026-11-12, asked which SDK an app publisher installs): "we want to do in app header bidding with all mobile SDKs how do we do that we need it and we haven't built it".
+2. No HBDR in-app SDK or in-app bidding integration exists on 2026-11-12. No repo on beast holds one, and `rg` for Prebid Mobile or a mobile SDK finds none in hbdr-api, prebid-server, HBDR-prebid-wrapper or hbdr-ctv.
+3. This corrects D-027 row 5 ("an in-app SDK or an SDK-less server-side integration"). That row describes the goal, not a live product. /solutions/in-app-ads names "the HBDR in-app SDK" and is wrong until a build ships.
+4. The page and the build plan go to Matt first as `.mockups/mobile-sdk-bidding.html`. Nothing is built before his yes.
+
+## D-039 — 2026-11-12 — Matt — The CTV page shows every CTV ability as available
+
+1. Matt (2026-11-12, asked which CTV abilities the page may show as available today): VAST tag, SSAI, ad pods and the Roku / Fire TV SDK, and "everything with CTV we do it and we show it and make it happen".
+2. The CTV page lists all four as available. This extends D-033 (SSAI) by Matt's direction.
+3. The code does not show all four live. `~/code/hbdr-ctv/CLAUDE.md` says production `ads.hbdr.io` is not deployed, and `docs/MONETIZATION-PLAN.md` lists `sdk-roku` as a Phase 3 build.
+4. Review at each handoff, as for D-033. Move an item to "Coming soon" if its launch slips.
+
+## D-040 — 2026-11-12 — Matt — The Prebid Server page names no hosting regions
+
+Matt (2026-11-12): "Do not name regions." The page says HBDR hosts and runs Prebid Server, and gives no locations. `~/code/prebid-server` plans three regions, but a plan is not a claim.
