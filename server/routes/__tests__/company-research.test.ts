@@ -48,11 +48,13 @@ describe("company pages: current facts", () => {
     expect(html).not.toMatch(/support for the US Privacy String|Independent bloggers|isn&#39;t just a value|isn't just a value/);
   });
 
-  it("/partners states the real cookie status and keeps every partner name unannotated (status list lives in docs/research/partners.md for Matt)", async () => {
+  it("/partners states the real cookie status and uses current partner names (D-029)", async () => {
     const html = await page("/partners");
     expect(html).toContain('data-testid="partners-cookie-status"');
     for (const s of ["dropped the planned standalone prompt", "Topics, Protected Audience and Attribution Reporting", "Blocked by default since March 2020", "Total Cookie Protection"]) expect(html).toContain(s);
-    for (const name of ["Xandr (Microsoft)", "EMX Digital", "MediaMath", "Xandr Invest", "Basis Technologies (Centro)", "Lotame Panorama ID", "MOAT (Oracle)", "Amazon APS (A9)", "Google Analytics & GA4"]) expect(html).toContain(name);
+    // D-029 row 9: current names only; partners with no successor are gone
+    for (const name of ["Microsoft Monetize", "Infillion (MediaMath)", "Basis", "Lotame Panorama ID", "Amazon Publisher Services (APS)", "Google Analytics & GA4"]) expect(html).toContain(name);
+    expect(html).not.toMatch(/Xandr Invest|Xandr \(Microsoft\)|EMX Digital|MOAT \(Oracle\)|Amazon APS \(A9\)|Basis Technologies \(Centro\)|AdLightning|Trustworthy Accountability Group/);
     expect(html).not.toMatch(/partner-[a-z]+-[0-9]+-status|Closed:|Renamed:|Acquired:|Bankrupt:|are marked/);
     expect(html).not.toMatch(/World-Class|world&#39;s largest|world's largest/);
   });

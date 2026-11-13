@@ -3,15 +3,16 @@ import { renderPageHero } from "../../components/hero";
 import { renderStatsSection } from "../../components/stats";
 import { renderCTASection } from "../../components/cta";
 import { renderFeatureRows, renderSection } from "../../components/blueprint";
+import { renderFeatureLists } from "../../components/features";
 
 export function renderPublishersPage(): string {
   const valueProps = [
-    { title: "No Upfront Costs", desc: "Zero setup fees. We invest in your success from day one." },
-    { title: "Revenue Guarantee", desc: "We don't get paid unless your revenue increases. Our success is tied to yours." },
-    { title: "Full Transparency", desc: "Real-time dashboard, detailed reporting, and complete visibility into every impression." },
-    { title: "Dedicated Support", desc: "Your own account manager who understands your business and goals." },
-    { title: "No Lock-In Contracts", desc: "Month-to-month agreements. Stay because of results, not because of contracts." },
-    { title: "Enterprise Technology", desc: "The same ad stack used by the largest publishers in the world, available to everyone." },
+    { title: "No Setup Fee", desc: "There is no setup fee. HBDR is paid through a revenue share on the revenue it is part of, from HBDR's own ad units up to the whole page." },
+    { title: "No Lock-In", desc: "No lock-in by default. If you prefer a fixed term or a different fee structure, we agree it in your contract." },
+    { title: "Clear Reporting", desc: "Hourly reporting of revenue and bidder performance, with alerts and CSV exports." },
+    { title: "Dedicated Support", desc: "A dedicated account manager. People answer Mon–Fri, 9am–6pm ET; tickets and the knowledge base are open 24/7." },
+    { title: "Predictable Payments", desc: "Net 30 for Google revenue and Net 60 for other sources, paid by wire, ACH or PayPal." },
+    { title: "65+ Demand Sources", desc: "Managed Prebid.js and Prebid Server connect your inventory to 65+ demand sources in every geography." },
   ];
 
   const onboardingSteps = [
@@ -29,16 +30,16 @@ export function renderPublishersPage(): string {
       "We handle all the technical work \u2014 you don't need developers",
       "We add our optimized ad tags to your Google Ad Manager (GAM) account",
       "If you don't have GAM, we set one up for you at no cost",
-      "Average integration time: 2-3 business days",
+      "Average go-live: 1\u20133 business days, depending on your current setup",
     ]},
     { num: "4", title: "Testing & Optimization", subtitle: "", bullets: [
       "We run A/B tests to find the optimal ad configuration for your site",
       "Header bidding connections are activated and tuned",
-      "We monitor performance closely during the first 2-4 weeks",
+      "We monitor performance closely in the first weeks after launch",
     ]},
     { num: "5", title: "Go Live & Ongoing Optimization", subtitle: "", bullets: [
       "Your optimized setup goes fully live",
-      "Revenue dashboard access is activated with real-time data",
+      "Reporting access is activated, with data updated every hour",
       "Continuous optimization \u2014 we never stop improving your performance",
       "Regular check-ins with your dedicated account manager",
     ]},
@@ -73,14 +74,14 @@ export function renderPublishersPage(): string {
   ];
 
   const pubFaqs = [
-    { q: "How much does it cost to work with HBDR?", a: "Nothing upfront. HBDR operates on a revenue-share model. We take a percentage of the incremental revenue we generate \u2014 meaning we only make money when you make more money. There are no setup fees and no hidden charges." },
+    { q: "How much does it cost to work with HBDR?", a: "There is no setup fee. HBDR is paid through a revenue share on the revenue it is part of, from HBDR's own ad units up to the whole page. Google revenue is paid Net 30 and other sources Net 60, by wire, ACH or PayPal. Payment in crypto is also available on request." },
     { q: "Will HBDR's ads slow down my site?", a: "No. We prioritize page speed and use lazy loading, asynchronous ad loading, and optimized code to minimize any impact. Most publishers see no change in Core Web Vitals after integration. The three Core Web Vitals are LCP (good within 2.5 s), INP (200 ms or less; it replaced First Input Delay in March 2024) and CLS (0.1 or less). Reserving each ad slot's height in CSS is the main defence against layout shift." },
     { q: "Do I need a Google Ad Manager (GAM) account?", a: "Not necessarily. If you already have one, we integrate directly into it. If you don't, we can set one up for you at no cost as part of our onboarding process." },
     { q: "Can I keep my existing ad partners?", a: "Absolutely. We work alongside your existing setup and add our demand on top. We never ask you to remove existing revenue sources unless they're actively hurting performance." },
-    { q: "What if I'm not happy with the results?", a: "We operate on month-to-month agreements with no lock-in contracts. If you're not seeing the results you want, you can part ways at any time. That said, our publisher retention rate is over 95% because we deliver." },
-    { q: "How quickly will I see revenue improvements?", a: "Most publishers see measurable improvements within the first 2-4 weeks. Full optimization typically takes 30-60 days as we run tests and tune the setup for your specific audience and content." },
-    { q: "What kind of reporting do I get?", a: "You get access to our real-time analytics dashboard with breakdowns by ad unit, geography, device, demand source, and more. We also provide weekly and monthly summary reports." },
-    { q: "Do you work with sites outside the US?", a: "Yes. We work with publishers globally and have demand partners that cover traffic from virtually every country." },
+    { q: "What if I'm not happy with the results?", a: "There is no lock-in by default, so you can leave at any time. If you prefer a fixed term, we can agree one in your contract." },
+    { q: "How quickly will I see revenue improvements?", a: "Average go-live is 1\u20133 business days, depending on your current setup. After launch, we test floors, timeouts and bidders on your own traffic, so results depend on your audience and content. Revenue lifts reach up to 50%." },
+    { q: "What kind of reporting do I get?", a: "You get hourly reporting of revenue and bidder performance, with alerts and CSV exports. Your dedicated account manager reviews the results with you." },
+    { q: "Do you work with sites outside the US?", a: "Yes. HBDR works across all geographies with publisher monetization partners, SSPs and DSPs." },
   ];
 
   // Site preparation any header bidding setup needs; outside facts are sourced in docs/research/publishers.md
@@ -109,10 +110,17 @@ export function renderPublishersPage(): string {
     body: renderFeatureRows(valueProps.map((v, i) => ({ title: v.title, body: v.desc, testid: `publisher-value-${i}` }))),
   })}
   ${renderSection({
+    testid: "publishers-features-section",
+    eyebrow: "Features",
+    title: "What you get",
+    lede: "What a publisher can use today, and what ships next.",
+    body: renderFeatureLists("publishers-features"),
+  })}
+  ${renderSection({
     testid: "publishers-onboarding-section",
     eyebrow: "Onboarding",
     title: "Getting Started Is Simple",
-    lede: "Our onboarding process is designed to be fast and hassle-free. Most publishers are live within 5-7 business days.",
+    lede: "Average go-live is 1\u20133 business days, depending on your current setup.",
     body: `
       <ul class="bp-rows co-stack">${onboardingSteps.map((step, i) => `
         <li data-testid="onboarding-step-${i}">

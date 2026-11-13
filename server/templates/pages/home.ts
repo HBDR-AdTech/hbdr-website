@@ -73,13 +73,12 @@ const COMPARE: [string, boolean | "partial", boolean | "partial", boolean | "par
   ["Header Bidding Implementation", true, true, false],
   ["Managed Prebid Server", true, false, false],
   ["In-App SDK or SDK-less Integration", true, "partial", false],
-  ["Real-Time Analytics Dashboard", true, true, true],
+  ["Hourly Reporting with Alerts and Exports", true, true, true],
   ["Dynamic Floor Pricing", true, false, false],
   ["Custom Video Player", true, "partial", false],
   ["CTV & OTT Support", true, false, false],
-  ["24/7 Technical Support", true, true, "partial"],
+  ["24/7 Tickets, People Mon–Fri 9–6 ET", true, true, "partial"],
   ["Dedicated Account Manager", true, false, false],
-  ["Revenue Guarantee", true, false, false],
 ];
 const CHECK = '<svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Included"><path d="M5 13l4 4L19 7" stroke-dasharray="22"/></svg>';
 function compareCell(v: boolean | "partial", us = false): string {
