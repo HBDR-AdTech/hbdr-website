@@ -313,3 +313,12 @@ Rollback: revert the merge.
 ## D-040 — 2026-11-12 — Matt — The Prebid Server page names no hosting regions
 
 Matt (2026-11-12): "Do not name regions." The page says HBDR hosts and runs Prebid Server, and gives no locations. `~/code/prebid-server` plans three regions, but a plan is not a claim.
+
+## D-041 — 2026-11-19 — Matt — In-app SDK, Prebid Server and CTV are shown as built; company figures on every channel
+
+Matt's answers to the four questions from the page check (`.mockups/notes/VERIFY-site-pages.md`).
+1. **In-app (supersedes D-038):** "We already have this built … we have an SDK that we built out. Just say we have it because we can either use it or we can white label somebody else's tech. Now I need the … absolute best show of how this works." The site shows in-app header bidding through an HBDR SDK as available. D-027 row 5 stands, and FEATURES_NOW keeps "In-app mediation". On 2026-11-19 no SDK repo was found on beast or in the GitHub orgs HBDR-AdTech, mattortolani and hbdrmcm (`gh repo list`). `~/code/hbdr-ctv/packages/sdk-video` is a video SDK.
+2. **Shared lines:** the footer ("websites, apps and CTV") and the stats line ("served ads since 2015 … on the web, in apps and on connected TV", `server/templates/components/stats.ts:8`) are true. Matt: "All of it's true keep it all in."
+3. **Prebid Server:** live for publishers. Matt: "we have it all built out so we're using it all … we have the server side bidding config like it's there." HBDR may use its own server or another vendor's. The pages show managed Prebid Server as live for web, app and CTV. D-040 stands: no regions are named.
+4. **Figures:** "up to 50%" (D-027 rows 2–3) and "1–3 business days" go-live (D-029 row 5) apply to every channel: web, app and CTV.
+5. **CTV:** D-039 covers every CTV ability in `~/code/hbdr-ctv`. Each one is shown as available, in words that match what its code does.
