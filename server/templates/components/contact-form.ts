@@ -80,7 +80,7 @@ export function renderContactFormSection(form: FormConfig): string {
       <div class="contact-intro">
         <span class="bp-eyebrow">Get started</span>
         <h2 class="text-[clamp(1.9rem,3.2vw,2.85rem)] leading-[1.06]">Let's look at your revenue.</h2>
-        <p class="text-[var(--text-muted)]">Tell us about your inventory. Our team replies within 24 hours.</p>
+        <p class="text-[var(--text-muted)]">Tell us about your inventory. Our team replies Mon–Fri, 9am–6pm ET.</p>
         <address>
           <div><span class="mono text-[var(--text-muted)]">Email</span><a href="mailto:contact@hbdr.com" class="text-[var(--text-primary)] hover:text-[var(--accent)]">contact@hbdr.com</a></div>
           <div><span class="mono text-[var(--text-muted)]">Phone</span><a href="tel:+17866756080" class="text-[var(--text-primary)] hover:text-[var(--accent)]">(786) 675-6080</a></div>
@@ -132,7 +132,7 @@ export function renderContactFormSection(form: FormConfig): string {
                 </svg>
               </div>
               <h3 class="text-2xl font-semibold text-white mb-2">Message Sent!</h3>
-              <p class="text-[var(--text-muted)]">We'll get back to you within 24 hours. Thank you for your interest in HBDR.</p>
+              <p class="text-[var(--text-muted)]">Thank you for your interest in HBDR. Our team replies Mon–Fri, 9am–6pm ET.</p>
             </div>
 
             <form x-show="!submitted" @submit.prevent="submitForm()" class="glass-card p-6 sm:p-8 space-y-6" data-testid="contact-form">

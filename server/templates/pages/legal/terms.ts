@@ -1,134 +1,93 @@
 import { renderLayout } from "../../layout";
 import { renderPageHero } from "../../components/hero";
+import { LEGAL_ENTITY, p, list, contactBlock, renderLegalDoc } from "./common";
 
+// Terms of use for the website only; publisher commercial terms live in signed agreements (D-029)
 export function renderTermsPage(): string {
+  const sections = [
+    {
+      id: "acceptance-of-terms", title: "About These Terms", testid: "terms-section-acceptance",
+      body: `
+        ${p(`${LEGAL_ENTITY} ("HBDR", "we", "us") runs hbdr.com. These terms cover your use of this website. By using the site you agree to them. If you do not agree, please do not use the site.`)}
+        ${p(`Our <a href="/privacy-policy" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a> explains what happens to information you send us.`)}`,
+    },
+    {
+      id: "services-description", title: "This Site and HBDR's Services", testid: "terms-section-services",
+      body: `
+        ${p(`This site describes HBDR's header bidding and ad monetization services for publishers of websites, mobile apps and CTV / OTT channels.`)}
+        ${p(`HBDR provides those services only under a separate signed agreement with each publisher. That agreement sets the revenue share, payment terms and every other commercial term. If it conflicts with these terms, the agreement wins.`)}
+        ${p(`Nothing on this site is an offer, a contract or a promise of results. HBDR does not guarantee revenue.`)}`,
+    },
+    {
+      id: "calculators-and-examples", title: "Calculators and Examples", testid: "terms-section-calculators",
+      body: `
+        ${p(`The free <a href="/tools" class="text-[var(--accent)] underline underline-offset-2">publisher calculators</a> give estimates from simple, illustrative models and the numbers you enter. The auction and timeout demos on this site use labelled example data.`)}
+        ${p(`These estimates and examples are not quotes, forecasts or promises of what you will earn. Your results depend on your traffic, your audience, the market and many other things. Do not rely on them alone to make business decisions.`)}`,
+    },
+    {
+      id: "intellectual-property", title: "Content and Trademarks", testid: "terms-section-ip",
+      body: `
+        ${p(`The text, design and graphics on this site belong to ${LEGAL_ENTITY} or to those who license them to us.`)}
+        ${p(`You may read the site, link to it and share its pages. You may not copy, republish or sell its content as your own without our written permission.`)}
+        ${p(`Other companies' names and logos on this site belong to their owners. They appear to identify the platforms and partners HBDR works with.`)}`,
+    },
+    {
+      id: "acceptable-use", title: "Acceptable Use", testid: "terms-section-acceptable-use",
+      body: `
+        ${p(`When you use this site, do not:`)}
+        ${list([
+          "Try to get into the admin area or any part of the site you are not authorized to use.",
+          "Attack, overload or probe the site, or try to get around its security or spam limits.",
+          "Send automated, bulk or spam form submissions.",
+          "Send false information or information about another person without their permission.",
+          "Use the site for anything unlawful.",
+        ])}`,
+    },
+    {
+      id: "information-and-links", title: "Blog, Information and Links", testid: "terms-section-links",
+      body: `
+        ${p(`The blog and other pages give general information about ad technology. They are not legal, financial or tax advice.`)}
+        ${p(`The site links to other websites, such as industry standards and vendor documentation. We do not control those sites and are not responsible for them.`)}`,
+    },
+    {
+      id: "no-warranty", title: "No Warranty", testid: "terms-section-warranty",
+      body: p(`We work to keep this site accurate and available, but we provide it "as is" and "as available". To the fullest extent the law allows, we make no warranties about the site, its content or the calculators, express or implied, including warranties of accuracy, fitness for a particular purpose and non-infringement.`),
+    },
+    {
+      id: "limitation-of-liability", title: "Limitation of Liability", testid: "terms-section-liability",
+      body: p(`To the fullest extent the law allows, ${LEGAL_ENTITY} is not liable for any indirect, incidental, special, consequential or punitive damages, or for any lost revenue, profit or data, that come from your use of this website or your reliance on its content or calculators. Some places do not allow these limits, so they may not all apply to you.`),
+    },
+    {
+      id: "governing-law", title: "Governing Law", testid: "terms-section-governing-law",
+      body: `
+        ${p(`These terms are governed by the laws of the State of Florida, United States, without regard to its conflict of law rules.`)}
+        ${p(`Any dispute about these terms or this website will be decided only in the state or federal courts in Miami-Dade County, Florida. You agree to the jurisdiction of those courts.`)}`,
+    },
+    {
+      id: "changes-to-terms", title: "Changes to These Terms", testid: "terms-section-changes",
+      body: p(`We may change these terms or the site. When we change the terms, we update this page and its "Last updated" date. The terms in force when you use the site apply to that use.`),
+    },
+    {
+      id: "contact-information", title: "Contact", testid: "terms-section-contact",
+      body: `
+        ${p(`Questions about these terms:`)}
+        ${contactBlock("link-terms-email")}`,
+    },
+  ];
+
   const content = `
-  ${renderPageHero("Legal", "Terms & Conditions", "Please read these terms carefully before using HBDR's platform and services.")}
-
-  <section class="bp-section legal" data-testid="terms-content">
-    <div class="bp-wrap bp-grid12">
-      <nav class="legal-toc" aria-label="On this page">
-        <span class="bp-eyebrow">Contents</span>
-        <ol>
-          <li><a href="#acceptance-of-terms"><span class="mono">01</span>Acceptance of Terms</a></li>
-          <li><a href="#services-description"><span class="mono">02</span>Services Description</a></li>
-          <li><a href="#account-terms"><span class="mono">03</span>Account Terms</a></li>
-          <li><a href="#intellectual-property"><span class="mono">04</span>Intellectual Property</a></li>
-          <li><a href="#limitation-of-liability"><span class="mono">05</span>Limitation of Liability</a></li>
-          <li><a href="#indemnification"><span class="mono">06</span>Indemnification</a></li>
-          <li><a href="#termination"><span class="mono">07</span>Termination</a></li>
-          <li><a href="#governing-law"><span class="mono">08</span>Governing Law</a></li>
-          <li><a href="#changes-to-terms"><span class="mono">09</span>Changes to Terms</a></li>
-          <li><a href="#contact-information"><span class="mono">10</span>Contact Information</a></li>
-        </ol>
-      </nav>
-      <div class="legal-doc">
-      <div class="legal-intro" data-testid="terms-last-updated">
-        <p class="text-[var(--text-muted)] text-sm">Last Updated: February 2026</p>
-        <p class="text-[var(--text-muted)] mt-4 leading-relaxed">These Terms and Conditions ("Terms") govern your access to and use of the HBDR platform, website, and services. By accessing or using our services, you agree to be bound by these Terms. If you do not agree, you may not use our services.</p>
-      </div>
-
-      <section class="legal-sec" id="acceptance-of-terms" data-testid="terms-section-acceptance">
-        <h2><span class="mono">01</span>Acceptance of Terms</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">By creating an account, accessing our platform, or using any of our ad monetization services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our <a href="/privacy-policy" class="text-[var(--accent)] underline underline-offset-2">Privacy Policy</a>. If you are using our services on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.</p>
-        <p class="text-[var(--text-muted)] leading-relaxed">You must be at least 18 years of age and legally capable of entering into binding agreements to use our services.</p>
-      </section>
-
-      <section class="legal-sec" id="services-description" data-testid="terms-section-services">
-        <h2><span class="mono">02</span>Services Description</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">HBDR provides ad monetization services including but not limited to:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
-          <li>Header bidding implementation and optimization (Prebid.js, server-side bidding)</li>
-          <li>Programmatic ad exchange access and demand partner management</li>
-          <li>Google Ad Manager and Google Ad Exchange (AdX) integration</li>
-          <li>Display, video, CTV/OTT, and in-app advertising solutions</li>
-          <li>Ad inventory management, yield optimization, and revenue analytics</li>
-          <li>Multiple Customer Management (MCM) services</li>
-          <li>Technical support, account management, and consulting</li>
-        </ul>
-      </section>
-
-      <section class="legal-sec" id="account-terms" data-testid="terms-section-account">
-        <h2><span class="mono">03</span>Account Terms</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">When you create an account with HBDR, you agree to:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
-          <li>Provide accurate, current, and complete information during registration</li>
-          <li>Maintain and promptly update your account information</li>
-          <li>Maintain the security and confidentiality of your login credentials</li>
-          <li>Accept responsibility for all activities that occur under your account</li>
-          <li>Notify us immediately of any unauthorized access or security breaches</li>
-          <li>Comply with all applicable Google Ad Manager and AdX policies</li>
-          <li>Not use our services for any unlawful or prohibited purpose</li>
-        </ul>
-      </section>
-
-      <section class="legal-sec" id="intellectual-property" data-testid="terms-section-ip">
-        <h2><span class="mono">04</span>Intellectual Property</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">All intellectual property rights in our platform, technology, software, documentation, and related materials are owned by HBDR or our licensors. This includes our proprietary header bidding algorithms, optimization technology, analytics dashboards, and reporting tools.</p>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">You retain ownership of your content, including your website content, ad inventory data, and creative assets. By using our services, you grant HBDR a non-exclusive, worldwide license to use, process, and display your content solely for the purpose of providing our services.</p>
-        <p class="text-[var(--text-muted)] leading-relaxed">You may not copy, modify, distribute, reverse engineer, or create derivative works from our proprietary technology without our written consent.</p>
-      </section>
-
-      <section class="legal-sec" id="limitation-of-liability" data-testid="terms-section-liability">
-        <h2><span class="mono">05</span>Limitation of Liability</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">To the maximum extent permitted by applicable law, HBDR and its directors, officers, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of our services, including but not limited to:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
-          <li>Loss of revenue, profits, or anticipated savings</li>
-          <li>Loss of data or business interruption</li>
-          <li>Fluctuations in ad revenue or CPM rates due to market conditions</li>
-          <li>Third-party actions, including demand partner or ad exchange decisions</li>
-          <li>Service interruptions or downtime beyond our reasonable control</li>
-        </ul>
-        <p class="text-[var(--text-muted)] leading-relaxed">Our total cumulative liability for all claims arising from or related to these Terms shall not exceed the total fees paid by you to HBDR during the twelve (12) months preceding the claim.</p>
-      </section>
-
-      <section class="legal-sec" id="indemnification" data-testid="terms-section-indemnification">
-        <h2><span class="mono">06</span>Indemnification</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed">You agree to indemnify, defend, and hold harmless HBDR, its affiliates, and their respective directors, officers, employees, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or related to your use of our services, your violation of these Terms, your violation of any applicable law or regulation, or your infringement of any intellectual property or other rights of a third party.</p>
-      </section>
-
-      <section class="legal-sec" id="termination" data-testid="terms-section-termination">
-        <h2><span class="mono">07</span>Termination</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">Either party may terminate these Terms at any time with thirty (30) days' written notice. HBDR reserves the right to suspend or terminate your access to our services immediately, without prior notice, if:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
-          <li>You breach any provision of these Terms</li>
-          <li>Your account is flagged for policy violations by Google or other ad platforms</li>
-          <li>We detect fraudulent activity, invalid traffic, or ad policy violations</li>
-          <li>Continued service would expose HBDR to legal or regulatory risk</li>
-        </ul>
-        <p class="text-[var(--text-muted)] leading-relaxed">Upon termination, your right to use our services ceases immediately. HBDR will settle any outstanding revenue balances within sixty (60) days of termination, subject to applicable payment thresholds and deductions for chargebacks or clawbacks.</p>
-      </section>
-
-      <section class="legal-sec" id="governing-law" data-testid="terms-section-governing-law">
-        <h2><span class="mono">08</span>Governing Law</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">These Terms shall be governed by and construed in accordance with the laws of the State of Florida, United States, without regard to its conflict of law provisions.</p>
-        <p class="text-[var(--text-muted)] leading-relaxed">Any disputes arising out of or relating to these Terms or our services shall be resolved exclusively in the state or federal courts located in Miami-Dade County, Florida. You consent to the personal jurisdiction and venue of such courts and waive any objections based on inconvenient forum.</p>
-      </section>
-
-      <section class="legal-sec" id="changes-to-terms" data-testid="terms-section-changes">
-        <h2><span class="mono">09</span>Changes to Terms</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed">We reserve the right to modify these Terms at any time. Material changes will be communicated via email or through a prominent notice on our platform at least thirty (30) days before they take effect. Your continued use of our services after the effective date of revised Terms constitutes your acceptance of the changes. If you do not agree to the revised Terms, you must discontinue use of our services.</p>
-      </section>
-
-      <section class="legal-sec" id="contact-information" data-testid="terms-section-contact">
-        <h2><span class="mono">10</span>Contact Information</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-6">For questions or concerns about these Terms, please contact us:</p>
-        <div class="space-y-3 text-[var(--text-muted)]">
-          <p><strong class="text-white/80">HBDR</strong></p>
-          <p>1200 Brickell Ave Ste 1950, Miami, FL 33131</p>
-          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-terms-email">contact@hbdr.com</a></p>
-          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-terms-phone">(786) 675-6080</a></p>
-        </div>
-      </section>
-      </div>
-    </div>
-  </section>`;
+  ${renderPageHero("Legal", "Terms & Conditions", "The terms for using hbdr.com. Publisher services run under separate signed agreements.")}
+  ${renderLegalDoc({
+    testid: "terms-content",
+    updatedTestid: "terms-last-updated",
+    intro: `These terms cover the hbdr.com website: its pages, blog and free calculators. They do not cover HBDR's publisher services, which run under a separate signed agreement.`,
+    sections,
+  })}`;
 
   return renderLayout({
     title: "Terms & Conditions - HBDR",
-    description: "HBDR Terms and Conditions. Review the terms governing use of our ad monetization platform, header bidding services, and publisher tools.",
+    description: "The terms for using hbdr.com, its blog and free publisher calculators. HBDR's publisher services run under separate signed agreements.",
     canonicalPath: "/terms",
     bodyContent: content,
   });
 }
-

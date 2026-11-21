@@ -1,141 +1,162 @@
 import { renderLayout } from "../../layout";
 import { renderPageHero } from "../../components/hero";
+import { renderSpecList } from "../../components/blueprint";
+import { CONTACT_EMAIL } from "../../../config";
+import { LEGAL_ENTITY, LEGAL_ADDRESS, p, list, link, mail, table, contactBlock, renderLegalDoc } from "./common";
 
+// Every statement here is sourced in docs/research/legal.md (code line, measured header or quoted page)
 export function renderPrivacyPolicyPage(): string {
+  const sections = [
+    {
+      id: "who-we-are", title: "Who We Are", testid: "privacy-section-who",
+      body: `
+        ${p(`${LEGAL_ENTITY} ("HBDR", "we", "us") runs this website, hbdr.com. HBDR decides how the personal information collected through this site is used, so HBDR is responsible for it.`)}
+        <div class="mb-6">${renderSpecList([
+          { label: "Legal entity", value: LEGAL_ENTITY },
+          { label: "Address", value: LEGAL_ADDRESS },
+          { label: "Privacy questions", value: mail("link-privacy-email-who") },
+        ])}</div>
+        ${p(`This policy covers this website only. HBDR's services for publishers run under separate signed agreements, which have their own data terms.`)}`,
+    },
+    {
+      id: "information-we-collect", title: "Information We Collect", testid: "privacy-section-collect",
+      body: `
+        <h3>What you send us</h3>
+        ${p(`You send us information only when you fill in a form. The <a href="/contact" class="text-[var(--accent)] underline underline-offset-2">contact form</a> asks for:`)}
+        ${list([
+          "Your name, work email and company name (always required)",
+          "Your monthly ad impressions (always required)",
+          "Phone number and role (optional)",
+          "Inventory type (website, mobile app, CTV / OTT), your domain, bundle ID or app URL, and your ads.txt or app-ads.txt URL",
+          "App store URLs (optional, for apps and CTV)",
+          "Your current monetization, top traffic region, timeline and how you heard about us (some optional)",
+          "A message, if you write one",
+          "Answers to any extra questions HBDR adds to the form later",
+        ])}
+        ${p(`HBDR can change which questions the form shows. The form you see is the current list.`)}
+        ${p(`The <a href="/support" class="text-[var(--accent)] underline underline-offset-2">support form</a> asks for your name, email, a subject, a priority and a description of the problem.`)}
+        <h3>What your browser sends</h3>
+        ${p(`When you send a form, we record the IP address your request came from. We use it to stop spam and abuse, and we keep it with your submission.`)}
+        ${p(`To limit spam, the site counts form submissions from each IP address (for IPv6, from each /64 network) over 15 minutes. More than 5 in that window are refused.`)}
+        ${p(`Like any web server, the site's host records each request it handles (for example the page address, the time and the result) in short-lived logs. These logs can also hold your name and email address when a form notification is sent.`)}
+        <h3>What we do not collect</h3>
+        ${list([
+          "No analytics: the site runs no analytics or session-recording tools.",
+          "No advertising: the site has no ad tags, tracking pixels or advertising cookies.",
+          "No accounts or payments: you cannot sign up or pay on this site.",
+          `No cookies on public pages. See the <a href="/gdpr-cookie-policy" class="text-[var(--accent)] underline underline-offset-2">GDPR &amp; Cookie Policy</a> for the full list.`,
+        ])}`,
+    },
+    {
+      id: "how-we-use-your-information", title: "How We Use Your Information", testid: "privacy-section-use",
+      body: `
+        ${list([
+          "To reply to your enquiry and talk with you about working together.",
+          "To answer your support request.",
+          "To decide whether your site or app fits HBDR's services (for example from your traffic, inventory type and current setup).",
+          "To protect the forms from spam and abuse (IP address, submission counts and, when it is switched on, a bot check).",
+          "To run, fix and secure the website (request logs).",
+        ])}
+        ${p(`We do not use your information for advertising, and we do not build profiles of visitors.`)}`,
+    },
+    {
+      id: "information-sharing-and-disclosure", title: "Who Receives Your Information", testid: "privacy-section-sharing",
+      body: `
+        ${p(`We do not sell your personal information, and we do not share it for cross-context behavioral advertising. These service providers handle it for us:`)}
+        ${table({
+          testid: "privacy-processors-table",
+          head: ["Provider", "What it does for this site", "What it receives"],
+          rows: [
+            ["Cloudflare", "Hosts the site (Workers), stores form submissions (D1), sends form notifications (Email Sending), keeps request logs, protects the admin area (Access), serves the animation library on the home page (cdnjs) and, when switched on, runs the Turnstile bot check", "Everything you send on a form, your IP address and browser details"],
+            ["Google", `Hosts HBDR's mailboxes (${CONTACT_EMAIL} and support@hbdr.com), where form notifications arrive; serves the site's fonts (Google Fonts)`, "The form notification, which includes your answers (not your IP address); your IP address and browser details when your browser loads the fonts"],
+            ["jsDelivr", "Serves the Alpine.js script the site uses for forms, menus and calculators", "Your IP address and browser details when your browser loads the script"],
+          ],
+        })}
+        ${p(`Google Fonts, jsDelivr and cdnjs see your IP address because your browser downloads files from them. We measured that none of them set a cookie when they serve these files.`)}
+        ${p(`We will disclose information if a law, court order or government request requires it.`)}`,
+    },
+    {
+      id: "how-long-we-keep-it", title: "How Long We Keep It", testid: "privacy-section-retention",
+      body: `
+        ${table({
+          testid: "privacy-retention-table",
+          head: ["Information", "How long"],
+          rows: [
+            ["Form submissions, including your IP address, and HBDR's offline backup copies of them", "No set deletion date: HBDR keeps them as its record of business enquiries"],
+            ["Spam-limit count for your IP address", "15 minutes, then removed the next time anyone sends a form"],
+            ["Request logs at Cloudflare", "Up to 7 days"],
+            ["Database restore history at Cloudflare (D1 Time Travel)", "30 days"],
+          ],
+        })}`,
+    },
+    {
+      id: "data-security", title: "Data Security", testid: "privacy-section-security",
+      body: `
+        ${list([
+          "The site is served only over HTTPS.",
+          "Form submissions are read only by HBDR staff, in HBDR's mailboxes and in the admin area. The admin area sits behind Cloudflare Access, and the site checks each staff sign-in itself.",
+          "The site can send form notifications only to HBDR's own mailboxes.",
+          "Form input is checked and length-limited before it is stored.",
+        ])}
+        ${p(`No system is perfectly secure. If you think your information is at risk, email ${mail("link-privacy-email-security")}.`)}`,
+    },
+    {
+      id: "your-rights-and-choices", title: "Your Rights", testid: "privacy-section-rights",
+      body: `
+        ${p(`Depending on where you live, the law may give you the right to ask for a copy of your information, to correct it, to delete it, to limit or object to how we use it, or to receive it in a portable format. These rights have limits set by each law. If you ask us to delete what you sent through our forms, we delete the stored submission and its notification email, and keep only a note of the date of your request.`)}
+        ${p(`To make a request, email ${mail("link-privacy-email-rights")}. Visitors in the European Economic Area and the UK can read the legal bases we rely on and how to complain to a data protection authority in the <a href="/gdpr-cookie-policy#gdpr" class="text-[var(--accent)] underline underline-offset-2">GDPR section</a>.`)}`,
+    },
+    {
+      id: "us-state-privacy-rights", title: "US State Privacy Rights", testid: "privacy-section-us-states",
+      body: `
+        ${p(`California's Consumer Privacy Act (CCPA, as amended by the CPRA) and similar laws in other US states give residents rights over their personal information. This section describes this website in those terms.`)}
+        ${table({
+          testid: "privacy-us-categories-table",
+          head: ["Category", "What we collect", "Source"],
+          rows: [
+            ["Identifiers", "Name, email address, phone number (optional), IP address", "You, and your browser"],
+            ["Professional information", "Company name, role (optional)", "You"],
+            ["Business information you give us", "Domain or app, ads.txt URL, monthly impressions, current monetization, traffic region, timeline, how you heard about us, your message", "You"],
+            ["Internet activity", "Request logs, kept up to 7 days", "Your browser"],
+          ],
+        })}
+        ${p(`We use these categories only for the purposes listed above, and we disclose them only to the service providers listed above. We do not ask for sensitive personal information.`)}
+        <h3>No sale or sharing</h3>
+        ${p(`We do not sell personal information. We do not share it for cross-context behavioral advertising, and we do not use it for targeted advertising.`)}
+        <h3>Global Privacy Control</h3>
+        ${p(`Your browser may send a Global Privacy Control (GPC) signal, which asks a site not to sell or share your personal information. This site does not sell or share personal information and sets no advertising cookies, so there is nothing for the signal to switch off. The site works the same with or without it.`)}
+        <h3>Your requests</h3>
+        ${p(`Where these laws apply, you can ask to know what we hold about you, to get a copy, to correct it or to delete it. The law does not allow a business to treat you differently because you used these rights. Email ${mail("link-privacy-email-us")} to make a request.`)}`,
+    },
+    {
+      id: "children-s-privacy", title: "Children", testid: "privacy-section-children",
+      body: p(`This site is for publishers and other businesses. It is not directed to children, and the forms ask for business details.`),
+    },
+    {
+      id: "changes-to-this-policy", title: "Changes to This Policy", testid: "privacy-section-changes",
+      body: p(`When the way this site handles personal information changes, we update this page and its "Last updated" date.`),
+    },
+    {
+      id: "contact-us", title: "Contact Us", testid: "privacy-section-contact",
+      body: `
+        ${p(`Questions about this policy or your information:`)}
+        ${contactBlock("link-privacy-email")}`,
+    },
+  ];
+
   const content = `
-  ${renderPageHero("Legal", "Privacy Policy", "Your privacy is important to us. This policy explains how HBDR collects, uses, and protects your information.")}
-
-  <section class="bp-section legal" data-testid="privacy-policy-content">
-    <div class="bp-wrap bp-grid12">
-      <nav class="legal-toc" aria-label="On this page">
-        <span class="bp-eyebrow">Contents</span>
-        <ol>
-          <li><a href="#information-we-collect"><span class="mono">01</span>Information We Collect</a></li>
-          <li><a href="#how-we-use-your-information"><span class="mono">02</span>How We Use Your Information</a></li>
-          <li><a href="#information-sharing-and-disclosure"><span class="mono">03</span>Information Sharing and Disclosure</a></li>
-          <li><a href="#data-security"><span class="mono">04</span>Data Security</a></li>
-          <li><a href="#your-rights-and-choices"><span class="mono">05</span>Your Rights and Choices</a></li>
-          <li><a href="#children-s-privacy"><span class="mono">06</span>Children's Privacy</a></li>
-          <li><a href="#changes-to-this-policy"><span class="mono">07</span>Changes to This Policy</a></li>
-          <li><a href="#contact-us"><span class="mono">08</span>Contact Us</a></li>
-        </ol>
-      </nav>
-      <div class="legal-doc">
-      <div class="legal-intro" data-testid="privacy-last-updated">
-        <p class="text-[var(--text-muted)] text-sm">Last Updated: February 2026</p>
-        <p class="text-[var(--text-muted)] mt-4 leading-relaxed">HBDR ("we," "our," or "us") operates an enterprise ad monetization and header bidding platform. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website, use our platform, or engage with our services.</p>
-      </div>
-
-      <section class="legal-sec" id="information-we-collect" data-testid="privacy-section-collect">
-        <h2><span class="mono">01</span>Information We Collect</h2>
-
-        <h3>Personal Information</h3>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">We may collect personal information that you voluntarily provide when you register for an account, express interest in obtaining information about us or our products, participate in activities on our platform, or otherwise contact us. This includes:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-6">
-          <li>Name, email address, and phone number</li>
-          <li>Company name and job title</li>
-          <li>Billing and payment information</li>
-          <li>Website URLs and publisher account details</li>
-          <li>Any other information you choose to provide</li>
-        </ul>
-
-        <h3>Usage Data</h3>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">We automatically collect certain information when you visit, use, or navigate our platform. This includes:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-6">
-          <li>Device and browser information (IP address, browser type, operating system)</li>
-          <li>Log data such as access times, pages viewed, and referring URLs</li>
-          <li>Ad performance metrics including impressions, clicks, and revenue data</li>
-          <li>Header bidding auction data and bid response information</li>
-        </ul>
-
-        <h3>Cookies & Tracking Technologies</h3>
-        <p class="text-[var(--text-muted)] leading-relaxed">We use cookies, web beacons, pixel tags, and similar tracking technologies to collect and store information about your interactions with our platform. These technologies help us analyze trends, administer our website, track user movements, and gather demographic information. For detailed information about the cookies we use, please see our <a href="/gdpr-cookie-policy" class="text-[var(--accent)] underline underline-offset-2">GDPR & Cookie Policy</a>.</p>
-      </section>
-
-      <section class="legal-sec" id="how-we-use-your-information" data-testid="privacy-section-use">
-        <h2><span class="mono">02</span>How We Use Your Information</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
-          <li>To provide, operate, and maintain our ad monetization and header bidding services</li>
-          <li>To optimize ad delivery, improve bid density, and maximize publisher revenue</li>
-          <li>To process transactions, manage billing, and send invoices</li>
-          <li>To communicate with you about account updates, service changes, and support requests</li>
-          <li>To send marketing and promotional materials (with your consent where required)</li>
-          <li>To analyze platform usage, diagnose technical issues, and improve our services</li>
-          <li>To detect, prevent, and address fraud, unauthorized access, and security issues</li>
-          <li>To comply with legal obligations and enforce our terms of service</li>
-        </ul>
-      </section>
-
-      <section class="legal-sec" id="information-sharing-and-disclosure" data-testid="privacy-section-sharing">
-        <h2><span class="mono">03</span>Information Sharing and Disclosure</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">We may share your information in the following circumstances:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2">
-          <li><strong class="text-white/80">Demand Partners & Ad Exchanges:</strong> We share bid request data with demand-side platforms (DSPs), ad exchanges, and advertising networks to facilitate programmatic ad auctions on your behalf.</li>
-          <li><strong class="text-white/80">Service Providers:</strong> We engage third-party vendors who assist us with hosting, analytics, payment processing, customer support, and other operational functions.</li>
-          <li><strong class="text-white/80">Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred as part of the transaction.</li>
-          <li><strong class="text-white/80">Legal Requirements:</strong> We may disclose your information if required by law, court order, or government regulation, or if we believe disclosure is necessary to protect our rights, safety, or property.</li>
-          <li><strong class="text-white/80">With Your Consent:</strong> We may share your information with third parties when you have given us explicit consent to do so.</li>
-        </ul>
-      </section>
-
-      <section class="legal-sec" id="data-security" data-testid="privacy-section-security">
-        <h2><span class="mono">04</span>Data Security</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">We implement industry-standard security measures to protect your personal information, including:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
-          <li>Encryption of data in transit (TLS/SSL) and at rest</li>
-          <li>Regular security audits and penetration testing</li>
-          <li>Access controls and authentication protocols for platform access</li>
-          <li>Secure data centers with physical and network-level protections</li>
-          <li>Employee training on data protection and security best practices</li>
-        </ul>
-        <p class="text-[var(--text-muted)] leading-relaxed">While we strive to protect your personal information, no method of transmission over the internet or electronic storage is completely secure. We cannot guarantee absolute security but are committed to implementing reasonable safeguards.</p>
-      </section>
-
-      <section class="legal-sec" id="your-rights-and-choices" data-testid="privacy-section-rights">
-        <h2><span class="mono">05</span>Your Rights and Choices</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-4">Depending on your jurisdiction, you may have the following rights regarding your personal information:</p>
-        <ul class="list-disc pl-6 text-[var(--text-muted)] space-y-2 mb-4">
-          <li><strong class="text-white/80">Access:</strong> Request a copy of the personal data we hold about you.</li>
-          <li><strong class="text-white/80">Rectification:</strong> Request correction of inaccurate or incomplete data.</li>
-          <li><strong class="text-white/80">Erasure:</strong> Request deletion of your personal data, subject to legal obligations.</li>
-          <li><strong class="text-white/80">Restriction:</strong> Request that we limit how we use your data.</li>
-          <li><strong class="text-white/80">Portability:</strong> Request a machine-readable copy of your data.</li>
-          <li><strong class="text-white/80">Objection:</strong> Object to processing of your data for certain purposes.</li>
-          <li><strong class="text-white/80">Opt-Out:</strong> Unsubscribe from marketing emails at any time by clicking the unsubscribe link or contacting us.</li>
-        </ul>
-        <p class="text-[var(--text-muted)] leading-relaxed">To exercise any of these rights, please contact us using the information provided below. We will respond to your request within 30 days.</p>
-      </section>
-
-      <section class="legal-sec" id="children-s-privacy" data-testid="privacy-section-children">
-        <h2><span class="mono">06</span>Children's Privacy</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed">Our platform and services are not directed at individuals under the age of 18. We do not knowingly collect personal information from children. If we become aware that we have inadvertently collected data from a child under 18, we will take steps to delete such information promptly. If you believe we have collected information from a child, please contact us immediately.</p>
-      </section>
-
-      <section class="legal-sec" id="changes-to-this-policy" data-testid="privacy-section-changes">
-        <h2><span class="mono">07</span>Changes to This Policy</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed">We may update this Privacy Policy from time to time to reflect changes in our practices, technologies, legal requirements, or other factors. We will notify you of material changes by posting the updated policy on this page and updating the "Last Updated" date. We encourage you to review this policy periodically. Your continued use of our services after changes are posted constitutes your acceptance of the revised policy.</p>
-      </section>
-
-      <section class="legal-sec" id="contact-us" data-testid="privacy-section-contact">
-        <h2><span class="mono">08</span>Contact Us</h2>
-        <p class="text-[var(--text-muted)] leading-relaxed mb-6">If you have questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
-        <div class="space-y-3 text-[var(--text-muted)]">
-          <p><strong class="text-white/80">HBDR</strong></p>
-          <p>1200 Brickell Ave Ste 1950, Miami, FL 33131</p>
-          <p>Email: <a href="mailto:contact@hbdr.com" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-privacy-email">contact@hbdr.com</a></p>
-          <p>Phone: <a href="tel:+17866756080" class="text-[var(--accent)] underline underline-offset-2" data-testid="link-privacy-phone">(786) 675-6080</a></p>
-        </div>
-      </section>
-      </div>
-    </div>
-  </section>`;
+  ${renderPageHero("Legal", "Privacy Policy", "What this website collects, why, who receives it and how long it is kept.")}
+  ${renderLegalDoc({
+    testid: "privacy-policy-content",
+    updatedTestid: "privacy-last-updated",
+    intro: `This policy describes what hbdr.com actually does with personal information. In short: we collect what you type into the contact and support forms, plus your IP address. We use it to reply to you and to stop spam. We set no cookies on public pages, run no analytics and show no ads.`,
+    sections,
+  })}`;
 
   return renderLayout({
     title: "Privacy Policy - HBDR",
-    description: "HBDR Privacy Policy. Learn how we collect, use, and protect your information across our ad monetization and header bidding platform.",
+    description: "What hbdr.com collects through its contact and support forms, why, who receives it, how long it is kept, and your rights under GDPR and US state privacy laws.",
     canonicalPath: "/privacy-policy",
     bodyContent: content,
   });
 }
-

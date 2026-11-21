@@ -22,17 +22,17 @@ export function renderBlogPage(posts: BlogPostData[]): string {
              data-testid="blog-card-${post.slug}">
       <div class="post-row-meta">
         <span class="mono">${formatDate(post.publishedAt)}</span>
-        <span class="post-cat" data-testid="badge-category">${post.category}</span>
+        <span class="post-cat" data-testid="badge-category">${sanitizeText(post.category)}</span>
       </div>
       <div class="post-row-main">
         <a href="/blog/${post.slug}" data-testid="link-blog-post-${post.slug}">
-          <h2>${post.title}</h2>
+          <h2>${sanitizeText(post.title)}</h2>
         </a>
-        <p class="line-clamp-3">${post.excerpt}</p>
+        <p class="line-clamp-3">${sanitizeText(post.excerpt)}</p>
         <span class="post-row-author">${post.author}</span>
       </div>
       <div class="post-row-aside">
-        ${post.coverImage ? `<img src="${post.coverImage}" alt="${post.title}" loading="lazy" />` : ""}
+        ${post.coverImage ? `<img src="${sanitizeText(post.coverImage)}" alt="${sanitizeText(post.title)}" loading="lazy" />` : ""}
         <span class="mono">${readTime} min read</span>
         <a href="/blog/${post.slug}" class="post-more" data-testid="link-read-more-${post.slug}">
           Read More
@@ -47,8 +47,8 @@ export function renderBlogPage(posts: BlogPostData[]): string {
     <button data-cat="${sanitizeText(cat)}" @click="activeCategory = activeCategory === $el.dataset.cat ? '' : $el.dataset.cat"
             :class="activeCategory === $el.dataset.cat ? 'is-active' : ''"
             class="post-filter"
-            data-testid="filter-${cat.toLowerCase().replace(/\s+/g, '-')}">
-      ${cat}
+            data-testid="filter-${sanitizeText(cat.toLowerCase().replace(/\s+/g, '-'))}">
+      ${sanitizeText(cat)}
     </button>
   `).join("");
 
@@ -108,10 +108,10 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
         ${relatedPosts.slice(0, 3).map(rp => `
         <li>
           <a href="/blog/${rp.slug}" class="group" data-testid="related-post-${rp.slug}">
-            ${rp.coverImage ? `<img src="${rp.coverImage}" alt="${rp.title}" loading="lazy" />` : ""}
-            <span class="post-cat">${rp.category}</span>
-            <h3 class="group-hover:text-[var(--accent)]">${rp.title}</h3>
-            <p class="line-clamp-3">${rp.excerpt}</p>
+            ${rp.coverImage ? `<img src="${sanitizeText(rp.coverImage)}" alt="${sanitizeText(rp.title)}" loading="lazy" />` : ""}
+            <span class="post-cat">${sanitizeText(rp.category)}</span>
+            <h3 class="group-hover:text-[var(--accent)]">${sanitizeText(rp.title)}</h3>
+            <p class="line-clamp-3">${sanitizeText(rp.excerpt)}</p>
             <span class="mono">${formatDate(rp.publishedAt)} &middot; ${estimateReadTime(rp.content)} min read</span>
           </a>
         </li>`).join("")}
@@ -128,9 +128,9 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           Back to Blog
         </a>
-        ${renderEyebrow(post.category)}
-        <h1 data-testid="text-post-title">${post.title}</h1>
-        <p class="bp-lede">${post.excerpt}</p>
+        ${renderEyebrow(sanitizeText(post.category))}
+        <h1 data-testid="text-post-title">${sanitizeText(post.title)}</h1>
+        <p class="bp-lede">${sanitizeText(post.excerpt)}</p>
       </div>
     </header>
 
@@ -152,7 +152,7 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
 
         <div class="post-body">
           ${post.coverImage ? `
-          <img src="${post.coverImage}" alt="${post.title}" class="post-cover" />` : ""}
+          <img src="${sanitizeText(post.coverImage)}" alt="${sanitizeText(post.title)}" class="post-cover" />` : ""}
 
           <div class="prose-content" data-testid="blog-post-content">
             ${post.content}
@@ -171,10 +171,10 @@ export function renderBlogPostPage(post: BlogPostData, relatedPosts?: BlogPostDa
   ${renderCTASection("Ready to maximize your ad revenue?", "Get Started")}`;
 
   return renderLayout({
-    title: `${post.title} - HBDR Blog`,
-    description: post.excerpt,
-    ogTitle: post.title,
-    ogDescription: post.excerpt,
+    title: `${sanitizeText(post.title)} - HBDR Blog`,
+    description: sanitizeText(post.excerpt),
+    ogTitle: sanitizeText(post.title),
+    ogDescription: sanitizeText(post.excerpt),
     canonicalPath: `/blog/${post.slug}`,
     bodyContent: content,
     jsonLd: {

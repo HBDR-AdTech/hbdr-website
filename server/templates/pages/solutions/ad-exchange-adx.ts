@@ -27,7 +27,7 @@ export function renderAdExchangePage(): string {
   ${renderBlueprintHero({
     eyebrow: "Solutions",
     title: "Google Ad Exchange (AdX)",
-    lede: "Access the world's largest programmatic exchange with premium demand, real-time auctions, and CPMs that outperform standard AdSense by 2-3x. HBDR is your gateway to Google AdX.",
+    lede: "Access Google Ad Exchange demand and its real-time auctions through HBDR, a Google MCM partner.",
     actions: [
       { label: "Get AdX Access", href: "/contact", primary: true, testid: "button-hero-cta" },
       { label: "Compare AdX and AdSense", href: "#compare", testid: "button-hero-learn" },
@@ -39,7 +39,7 @@ export function renderAdExchangePage(): string {
       <div class="col-span-12 lg:col-span-5 grid gap-5 content-start">${renderEyebrow("Premium exchange")}<h2>What is Google Ad Exchange?</h2></div>
       <div class="col-span-12 lg:col-start-7 lg:col-span-6 sg-prose">
         <p>Google Ad Exchange (AdX) is a premium programmatic marketplace that connects publishers with the world's largest pool of brand advertisers and agency demand. AdSense also sells your space in a real-time auction, so the difference is not the auction itself. It is what surrounds it: Google describes AdSense as an ad network built for automation, while AdX through Ad Manager adds negotiated deals, competition from other exchanges and networks, and granular pricing and blocking controls.</p>
-        <p>Access to Google AdX requires either direct qualification through Google or partnership with a certified Google MCM or reseller partner like HBDR. Through our partnership, publishers of all sizes gain access to AdX's premium demand, advanced reporting, and granular controls that are otherwise only available to the largest media companies.</p>
+        <p>Access to Google AdX requires either direct qualification through Google or partnership with a Google MCM partner like HBDR. Through that partnership, publishers that do not qualify on their own gain access to AdX demand, reporting and controls.</p>
         <p>The rules around AdX are changing. On 2 September 2026 a US federal court rejected breaking up Google's ad tech business and accepted behavioral remedies instead; Google's own proposal included removing unified pricing rules and making real-time AdX bids available to rival publisher ad servers. The final judgment was still being settled in October 2026, and the court expects the remedies to be implemented within 15 months. Until each remedy takes effect under the final judgment, Ad Manager's current rules apply.</p>
       </div>
     </div>
@@ -50,7 +50,7 @@ export function renderAdExchangePage(): string {
     testid: "adx-comparison-section",
     eyebrow: "AdX vs AdSense",
     title: "Why AdX outperforms AdSense.",
-    lede: "The key differences that drive 2-3x higher revenue for publishers.",
+    lede: "The key differences between Ad Exchange and AdSense for a publisher.",
     body: `
       <div class="bp-table-wrap" data-testid="adx-comparison-table">
         <table class="bp-table sg-table">
@@ -77,7 +77,7 @@ export function renderAdExchangePage(): string {
 
   return renderLayout({
     title: "Google Ad Exchange (AdX) - HBDR",
-    description: "Access Google Ad Exchange premium demand through HBDR. Real-time auctions, 2-3x higher CPMs than AdSense, and expert AdX management for publishers.",
+    description: "Access Google Ad Exchange demand through HBDR, a Google MCM partner: real-time auctions and AdX management for publishers.",
     canonicalPath: "/solutions/ad-exchange-adx",
     bodyContent: content,
   });

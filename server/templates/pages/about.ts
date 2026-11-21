@@ -5,8 +5,8 @@ import { renderDiagramFrame, renderEyebrow, renderFeatureRows, renderSection, re
 
 const MILESTONES = [
   { step: "2015", title: "Founded", description: "HBDR was founded with a vision to revolutionize ad monetization for digital publishers through advanced header bidding technology." },
-  { step: "2020", title: "1B Monthly Impressions", description: "Reached the milestone of processing over 1 billion monthly ad impressions across our global network of publishers." },
-  { step: "2025", title: "500+ Publishers Globally", description: "Expanded to serve over 500 publishers worldwide, processing more than 1 trillion ads served across all platforms." },
+  { step: "2024", title: "1B Monthly Impressions", description: "Reached over 1 billion ad impressions a month across our publishers." },
+  { step: "2025", title: "1 Trillion Ads Served", description: "Passed 1 trillion ads served through HBDR across web, app and connected TV." },
 ];
 
 const VALUES = [

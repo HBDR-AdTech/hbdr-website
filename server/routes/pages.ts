@@ -60,7 +60,15 @@ export function registerPageRoutes(app: Hono<any>, getStorage: (c: any) => IStor
   app.get("/about", (c) => c.html(renderAboutPage()));
   app.get("/how-it-works", (c) => c.html(renderHowItWorksPage()));
   app.get("/careers", (c) => c.html(renderCareersPage()));
-  app.get("/press", (c) => c.html(renderPressPage()));
+  // Reads the same published-posts query as /blog (one row per published post) and filters in memory.
+  // A failed read shows the fact sheet without releases rather than an error page.
+  app.get("/press", async (c) => {
+    const posts = await getStorage(c).getBlogPosts(true).catch((error) => {
+      console.error("press: blog read failed", error);
+      return [];
+    });
+    return c.html(renderPressPage(posts));
+  });
   app.get("/contact", async (c) => c.html(renderContactPage(await formConfig(c))));
 
   // Solutions
